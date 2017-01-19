@@ -29,6 +29,15 @@ export default (user) => {
    *     failed(error);
    *   });
    */
+  /*
+   Vue.$http.post('/auth/login', user)
+   .then((response) => {
+   success(response);
+   })
+   .catch((error) => {
+   failed(error);
+   });
+   */
   if (!user.email || !user.password) {
     failed();
   } else {

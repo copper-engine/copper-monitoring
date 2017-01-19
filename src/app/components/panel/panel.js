@@ -21,14 +21,7 @@ export default {
   },
   computed: {
     classNames() {
-      const classNames = ['panel'];
-
-      if (this.contextualStyle) {
-        classNames.push(`panel-${this.contextualStyle}`);
-      } else {
-        classNames.push('panel-default');
-      }
-
+      const classNames = ['card'];
       return classNames;
     },
   },

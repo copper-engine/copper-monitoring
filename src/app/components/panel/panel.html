@@ -1,11 +1,19 @@
 <div :class="classNames">
-  <div class="panel-heading" v-if="hasSlot('heading')">
+  <div class="card-header" v-if="hasSlot('heading')">
     <slot name="heading"></slot>
   </div>
-  <div class="panel-body" v-if="hasSlot('body')">
-    <slot name="body"></slot>
+  <div class="card-block">
+    <div class="card-title" v-if="hasSlot('title')">
+      <slot name="title"></slot>
+    </div>
+    <div class="card-subtitle" v-if="hasSlot('subtitle')">
+      <slot name="subtitle"></slot>
+    </div>
+    <div class="card-text" v-if="hasSlot('body')">
+      <slot name="body"></slot>
+    </div>
   </div>
-  <div class="panel-footer" v-if="hasSlot('footer')">
+  <div class="card-footer" v-if="hasSlot('footer')">
     <slot name="footer"></slot>
   </div>
 </div>

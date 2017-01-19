@@ -20,6 +20,7 @@ export default [
 
     // If the user needs to be authenticated to view this page
     meta: {
+      scrollToTop: true,
       auth: true,
     },
   },

@@ -38,9 +38,10 @@ Axios.defaults.headers.common.Accept = 'application/json';
 Axios.interceptors.response.use(
   response => response,
   (error) => {
-    if (error.response.status === 401) {
+    if (error && error.response && error.response.status === 401) {
       authService.logout();
     }
+    throw error;
   });
 Vue.$http = Axios;
 

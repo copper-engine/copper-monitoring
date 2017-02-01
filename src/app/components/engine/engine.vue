@@ -22,24 +22,29 @@
         return capitalize(this.details.state).replace(/_/, ' ');
       },
       runningSince() {
-        return moment(this.details.running_since).fromNow();
+        return moment(this.details.runningSince).fromNow();
       },
       lastProcessing() {
-        return moment(this.details.last_processing).fromNow();
+        return moment(this.details.lastProcessing).fromNow();
       },
       engineId() {
-        return this.details.engine_id || `${this.target.host}:${this.target.port}`;
+        return this.details.engineId || `${this.target.host}:${this.target.port}`;
       },
     },
     mounted() {
       this.fetchData();
+
+      setInterval(() => {
+        this.fetchData();
+      }, 10000);
     },
     methods: {
       fetchData() {
         engineService(this.target)
           .then((response) => {
-            this.details = response.data;
+            this.details = response;
             this.isLoading = false;
+            this.isError = false;
           })
           .catch(() => {
             this.setError();
@@ -68,11 +73,11 @@
                 <span class="fa-stack fa-sm" style="vertical-align: top;">
 
                     <i v-if="isError" key="error" class="fa fa-exclamation-triangle fa-stack-1x"></i>
-                    <i v-if="isLoading" key="error" class="fa fa-cog fa-spin fa-stack-1x"></i>
-                    <i v-if="details.state == 'stopped'" key="normal" class="fa fa-toggle-off fa-stack-1x"></i>
-                    <i v-if="details.state == 'started'" key="normal" class="fa fa-toggle-on fa-stack-1x"></i>
-                    <i v-if="details.state == 'shutting_down'" key="normal" class="fa fa-hourglass fa-stack-1x"></i>
-                    <i v-if="details.state == 'raw'" key="normal" class="fa fa-cogs fa-stack-1x fa-fw"></i>
+                    <i v-else-if="isLoading" key="error" class="fa fa-cog fa-spin fa-stack-1x"></i>
+                    <i v-else-if="details.state == 'stopped'" key="normal" class="fa fa-toggle-off fa-stack-1x"></i>
+                    <i v-else-if="details.state == 'started'" key="normal" class="fa fa-toggle-on fa-stack-1x"></i>
+                    <i v-else-if="details.state == 'shutting_down'" key="normal" class="fa fa-hourglass fa-stack-1x"></i>
+                    <i v-else-if="details.state == 'raw'" key="normal" class="fa fa-cogs fa-stack-1x fa-fw"></i>
                 </span>
 
                 <transition name="slide-fade" mode="out-in">

@@ -1,10 +1,38 @@
 import Vue from 'vue';
 
-export default target => Vue.$http.post(`http://${target.host}:${target.port}`, { params: target.params })
-    .then((response) => {
-      if (!response || !response.data || !response.data.state || !response.data.type) {
-        throw new Error('invalid response');
-      }
-      return response;
-    });
+const MBEAN = 'copper.engine:name=persistent.engine';
+const url = 'http://localhost:8080/jolokia-war-1.3.5/';
 
+const parse = (response) => {
+  if (!response || !response.data
+    || response.data.length < 2
+    || response.data[0].error || response.data[1].error
+    || !response.data[0].value || !response.data[1].value
+  ) {
+    throw new Error('invalid response!');
+  }
+  return {
+    runningSince: response.data[1].value.startupTS,
+    lastProcessing: response.data[1].value.lastActivityTS,
+    engineId: response.data[0].value.EngineId,
+    type: response.data[0].value.EngineType,
+    instances: response.data[1].value.countWfiLastNMinutes,
+    state: response.data[0].value.State.toLowerCase(),
+  };
+};
+
+const buildRequest = target => [{
+  type: 'read',
+  mbean: MBEAN,
+  attribute: ['EngineId', 'EngineType', 'State'],
+  target: { url: `service:jmx:rmi:///jndi/rmi://${target.host}:${target.port}/jmxrmi` },
+}, {
+  type: 'EXEC',
+  mbean: MBEAN,
+  operation: 'queryEngineActivity',
+  arguments: [5], // 5 minutes
+  target: { url: `service:jmx:rmi:///jndi/rmi://${target.host}:${target.port}/jmxrmi` },
+}];
+
+
+export default target => Vue.$http.post(url, buildRequest(target)).then(parse);

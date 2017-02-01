@@ -1,47 +1,9 @@
 {
   "engines": [
+
     {
-      "host": "thisisalong.hostname.org",
-      "port": "9000"
-    },
-    {
-      "host": "123.123.123.123"
-    },
-    {
-      "host": "123.123.123.123",
-      "port": "12345"
-    },
-    {
-      "host": "123.123.123.123",
-      "port": "12345"
-    },
-    {
-      "host": "234.3.2.53",
-      "port": "12345"
-    },
-    {
-      "host": "apex-simulator",
-      "port": "80"
-    },
-    {
-      "host": "apex-simulator",
-      "port": "80",
-      "params": {"id": 1}
-    },
-    {
-      "host": "apex-simulator",
-      "port": "80",
-      "params": {"id": 2}
-    },
-    {
-      "host": "apex-simulator",
-      "port": "80",
-      "params": {"id": 3}
-    },
-    {
-      "host": "apex-simulator",
-      "port": "80",
-      "params": {"id": 4}
+      "host": "localhost",
+      "port": "1099"
     }
   ]
 }

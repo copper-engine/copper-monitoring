@@ -1,7 +1,7 @@
 {
-  "name": "vue-2-boilerplate",
-  "version": "0.0.0",
-  "description": "A boilerplate for medium to large Vue 2 single page applications",
+  "name": "copper-monitoring",
+  "version": "0.0.1",
+  "description": "A monitoring GUI and server for COPPER",
   "main": "index.js",
   "scripts": {
     "dev": "node build/dev-server.js",
@@ -10,9 +10,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/petervmeijgaard/vue-2-boilerplate.git"
+    "url": "git+https://github.com/copper-engine/copper-monitoring.git"
   },
   "keywords": [
+    "Copper",
+    "Monitoring",
     "Vue",
     "Next",
     "Boilerplate",
@@ -25,12 +27,12 @@
     "Page",
     "Application"
   ],
-  "author": "Peter van Meijgaard <petervanmeijgaard@hotmail.com>",
+  "author": "Patrick Lehnen <patrick.lehnen@scoop-software.de>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/petervmeijgaard/vue-2-boilerplate/issues"
+    "url": "https://github.com/copper-engine/copper-monitoring/issues"
   },
-  "homepage": "https://github.com/petervmeijgaard/vue-2-boilerplate#readme",
+  "homepage": "https://github.com/copper-engine/copper-monitoring",
   "dependencies": {
     "axios": "^0.15.3",
     "babel-runtime": "^6.0.0",

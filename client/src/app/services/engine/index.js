@@ -1,7 +1,7 @@
 import Vue from 'vue';
 
 const MBEAN = 'copper.engine:name=persistent.engine';
-const url = 'http://localhost:8080/jolokia-war-1.3.5/';
+const url = '/api/';
 
 const parse = (response) => {
   if (!response || !response.data

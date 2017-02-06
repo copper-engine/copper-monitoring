@@ -1,23 +1,21 @@
-# vue-2-boilerplate
-> A boilerplate for building medium to large Vue 2.0 single page applications
+# copper-monitoring
+> A monitoring GUI and server for COPPER
 
-This boilerplate is based on the Vue webpack template.
-Common topics are discussed in the Vuejs [docs](http://vuejs-templates.github.io/webpack). Make sure to read it!
+This project is based on the Vue webpack template and vue-2-boilerplate.
+Also it uses jolokia for the server part.
 
 ## Usage
 To get up and running run:
 ``` bash
+$ cd client
 $ npm install
 $ npm run dev
 ```
-Yes, that's it. Only two commands!
 
-If you still think that's too much effort, you could also run:
+Alternatively you could also run:
 ``` bash
 $ npm i && npm run dev
 ```
-But yeah, this will basically do the same as `npm install`.
-If even this is too much of a deal, try creating an alias and bind `npm install && npm run dev` to `npmid`.
 
 ## Configuration ##
 > Wait a minute, you just said that I only need to run npm install?

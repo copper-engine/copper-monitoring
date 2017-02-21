@@ -19,7 +19,7 @@
       </Arg>
     </Call-->
 
-    <Call name="addBean">
+    <!--Call name="addBean">
         <Arg>
             <New class="org.eclipse.jetty.security.HashLoginService">
                 <Set name="name">Test Realm</Set>
@@ -31,5 +31,5 @@
 
     <Get class="org.eclipse.jetty.util.log.Log" name="rootLogger">
       <Call name="info"><Arg>Auth initialized.</Arg></Call>
-    </Get>
+    </Get-->
 </Configure>

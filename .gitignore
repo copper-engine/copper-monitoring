@@ -2,3 +2,9 @@
 **/*.iml
 server/jetty.state
 server/jetty.pid
+.DS_Store
+node_modules/
+dist/
+npm-debug.log
+yarn-error.log
+

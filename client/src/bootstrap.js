@@ -152,6 +152,7 @@ Vue.router = router;
  *
  * https://kazupon.github.io/vue-i18n/
  */
+/*
 import VueI18n from 'vue-i18n';
 import locale from './app/locale';
 
@@ -162,6 +163,13 @@ Vue.config.lang = 'en';
 Object.keys(locale).forEach((lang) => {
   Vue.locale(lang, locale[lang]);
 });
+ */
+
+
+/*
+Vue Moment
+ */
+// Vue.use(require('vue-moment'));
 
 
 /* ============
@@ -172,9 +180,9 @@ Object.keys(locale).forEach((lang) => {
  *
  * http://jquery.com/
  */
-import jQuery from 'jquery';
+// import jQuery from 'jquery';
 
-window.$ = window.jQuery = jQuery;
+// window.$ = window.jQuery = jQuery;
 
 
 /* ============

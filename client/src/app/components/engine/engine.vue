@@ -1,7 +1,8 @@
 <script>
 
-  import moment from 'moment';
+  import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
   import { capitalize } from 'lodash';
+  // import moment from 'vue-moment';
   import engineService from '../../services/engine';
 
   export default {
@@ -19,13 +20,18 @@
       state() {
         if (this.isError) return 'Down/Not reachable';
         else if (this.isLoading) return 'Loading...';
+        // return this.details.state.replace(/_/, ' ');
         return capitalize(this.details.state).replace(/_/, ' ');
       },
       runningSince() {
-        return moment(this.details.runningSince).fromNow();
+        // return moment(this.details.runningSince).fromNow();
+        // return this.details.runningSince;
+        return distanceInWordsToNow(this.details.runningSince, { includeSeconds: true });
       },
       lastProcessing() {
-        return moment(this.details.lastProcessing).fromNow();
+        // return moment(this.details.lastProcessing).fromNow();
+        // return this.details.lastProcessing;
+        return distanceInWordsToNow(this.details.lastProcessing, { includeSeconds: true });
       },
       engineId() {
         return this.details.engineId || `${this.target.host}:${this.target.port}`;
@@ -117,9 +123,11 @@
                     <div class="pb-2 text-muted" style="line-height: 18px">
                         <small>
                             <span style="width: 90px; display: inline-block;">Running since:</span>
+                            <!--span class="ts_running_since text-nowrap" :title="details.running_since">{{runningSince | moment("from", "now", true)}}</span-->
                             <span class="ts_running_since text-nowrap" :title="details.running_since">{{runningSince}}</span>
                             <br>
                             <span style="width: 90px; display: inline-block;">Last processing:</span>
+                            <!--span class="ts_last_processing text-nowrap" :title="details.last_processing">{{lastProcessing | moment("from", "now")}}</span-->
                             <span class="ts_last_processing text-nowrap" :title="details.last_processing">{{lastProcessing}}</span>
                         </small>
                     </div>

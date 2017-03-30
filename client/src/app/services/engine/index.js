@@ -1,7 +1,6 @@
 import Vue from 'vue';
 
 const MBEAN = 'copper.engine:name=persistent.engine';
-const url = '/api/';
 
 const parse = (response) => {
   if (!response || !response.data
@@ -35,4 +34,4 @@ const buildRequest = target => [{
 }];
 
 
-export default target => Vue.$http.post(url, buildRequest(target)).then(parse);
+export default target => Vue.$http.post(process.env.API_NAME, buildRequest(target)).then(parse);

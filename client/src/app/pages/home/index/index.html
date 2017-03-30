@@ -1,8 +1,7 @@
 <v-layout>
     <div class="container pt-5">
         <div class="row">
-            <v-engine v-for="target in engines" :target="target"></v-engine>
+            <v-engine v-for="target in engines" :target="target" :key="target.host + ';' + target.port"></v-engine>
         </div>
     </div>
-
 </v-layout>

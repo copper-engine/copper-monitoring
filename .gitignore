@@ -7,4 +7,11 @@ node_modules/
 dist/
 npm-debug.log
 yarn-error.log
+server/copper/webapps/static/js/
+server/copper/webapps/static/img/
+server/copper/webapps/static/fonts/
+server/copper/webapps/static/dev/
+server/copper/webapps/static/css/
+server/copper/webapps/index.html
+server/copper/webapps/static/engines.json
 

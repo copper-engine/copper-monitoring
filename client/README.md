@@ -4,6 +4,14 @@
 This project is based on the Vue webpack template and vue-2-boilerplate.
 Also it uses jolokia for the server part.
 
+## Notes
+
+build will compile into "/server/copper/webapps".
+This Folder contains a gui.xml which is important!
+ 
+Set "/client/config/index.js: autoOpenBrowser" to true, to enable the automatic browser window after dev build.
+
+
 ## Usage
 To get up and running run:
 ``` bash

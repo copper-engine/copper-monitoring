@@ -180,9 +180,21 @@ Vue Moment
  *
  * http://jquery.com/
  */
-// import jQuery from 'jquery';
+import jQuery from 'jquery';
 
-// window.$ = window.jQuery = jQuery;
+window.$ = window.jQuery = jQuery;
+
+/* ============
+ * Popper
+ * ============
+ *
+ * Require Popper.js for Bootstraps tooltips
+ *
+ * https://popper.js.org/
+ */
+import Popper from 'popper.js';
+
+window.Popper = Popper;
 
 
 /* ============
@@ -193,9 +205,11 @@ Vue Moment
  *
  * http://getbootstrap.com/
  */
-// require('bootstrap');
+
+require('bootstrap');
 // require('bootstrap/less/bootstrap.less');
-require('assets/bootstrap.scss');
+// import './assets/bootstrap.scss';
+import 'bootstrap/dist/css/bootstrap.css';
 
 // import BootstrapVue from 'bootstrap-vue';
 
@@ -229,7 +243,7 @@ require('font-awesome/less/font-awesome.less');
  *
  * http://stylus-lang.com/
  */
-require('./assets/stylus/app.styl');
+// require('./assets/stylus/app.styl');
 
 
 export default {

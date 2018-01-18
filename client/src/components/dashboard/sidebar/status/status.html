@@ -1,0 +1,53 @@
+<v-card color="teal darken-3" class="white--text engine-status">
+    <v-card-title primary-title>
+        
+        <div class="headline"> 
+            <v-icon v-show="status" medium color="light-green accent-4"> mdi-brightness-1</v-icon> 
+            <span v-if="status" class="line header">
+                <span class="engine-id">{{status.engineId}}</span>
+                <span class="type"> ({{status.type}})</span>
+            </span>
+            
+            <v-icon v-show="!status" medium color="red darken-4"> mdi-brightness-1</v-icon> 
+            <span v-show="!status" class="line header">{{ connectionSettings.host + ':' + connectionSettings.port }}</span>
+        </div>
+        <div v-if="status" class="engine-status-info">
+            <div class="line wf-number">
+                <span class="status-title">
+                    WF instances:
+                </span>
+                <span class="value">
+                    {{status.instances}}
+                </span>
+            </div>
+            <div class="line broken">
+                 <span class="status-title">
+                    Broken WF instances:
+                </span>
+                <span class="value">
+                    {{ status.brokenWFCount }}
+                </span>
+            </div>
+            <div class="line last-processing">
+                <span class="status-title">
+                    Last activity:
+                </span>
+                <span class="value">
+                    {{status.lastProcessing | moment("HH:mm DD/MM/YYYY")}}
+                </span>
+            </div>
+            <div class="line running-since">
+                <span class="status-title">
+                    Started:
+                </span>
+                <span class="value">
+                    {{status.runningSince | moment("HH:mm DD/MM/YYYY")}}
+                </span>
+            </div>
+
+        </div>
+    </v-card-title>
+    <!-- <v-card-actions>
+        <v-btn flat dark>Show Workflows</v-btn>
+    </v-card-actions> -->
+</v-card>

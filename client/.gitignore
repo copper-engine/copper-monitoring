@@ -1,6 +1,8 @@
 .DS_Store
 node_modules/
 dist/
-npm-debug.log
-yarn-error.log
-
+coverage/
+src/css
+src/**/*.js
+src/**/*.map
+*.log

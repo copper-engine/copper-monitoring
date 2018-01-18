@@ -1,0 +1,39 @@
+.engine-status {
+    .card__title--primary {
+        padding-bottom: 24px;
+    }
+
+    .engine-id {
+        // font-weight: 700;
+        font-size: 1.1em;
+    }
+    .type {
+        color: #e7e5e5;
+    }
+    
+    .engine-status-info {
+        padding: 16px;
+        
+        .line {
+            padding: 4px 0;
+
+            .value {
+                padding-left: 8px;
+                // font-size: 1.1em;
+                font-weight: 700;
+            }
+        }
+    }
+}
+
+.navigation-drawer--mini-variant {
+    .engine-status {
+        .engine-status-info,
+        .headline .header {
+            display: none;
+        }
+        .headline .icon {
+            margin-left: 14px;
+        }
+    }
+}

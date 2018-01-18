@@ -33,6 +33,15 @@
                 </New>
             </Arg>
         </Call>
+        <Call name="addRule">
+            <Arg>
+                <New class="org.eclipse.jetty.rewrite.handler.RewritePatternRule">
+                    <Set name="pattern">/monitoring-gui/*</Set>
+                    <Set name="replacement">/monitoring-gui/</Set>
+                    <Set name="terminating">true</Set>
+                </New>
+            </Arg>
+        </Call>
 
         <Call name="addRule">
             <Arg>

@@ -1,0 +1,13 @@
+<div class="notifications">
+    <v-snackbar v-for="(notification, i) in notifications" :key="i"
+        :timeout="notification.timeout"
+        :color="notification.color"
+        :vertical="true"
+        :bottom="true"
+        :right="true"
+        v-model="notification.snackbar"
+      >
+      {{ notification.text }} 
+      <v-btn dark dark flat @click.native="notification.snackbar = false">Close</v-btn>
+    </v-snackbar>
+</div>

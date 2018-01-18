@@ -1,0 +1,210 @@
+.workflows {
+    h2 {
+        color: #efefef;
+    }
+
+    .alert {
+        margin: 20px;
+    }
+
+    .summary {
+        .text {
+            font-size: 1.5em;
+            font-weight: 700;
+            padding-top: 8px;
+            color: #efefef;
+            max-width: 430px;
+        }
+    }
+
+    .header {
+        margin-top: 16px;
+        padding: 5px 16px 5px 16px;
+        align-items: center;
+        font-weight: 700;
+        font-size: 1.1em;
+    }
+
+    .workflows-cont {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.59);
+    }
+
+    .workflow {
+        border-top: 1px solid rgba(255, 255, 255, 0.59);
+    }
+    
+    .workflow-layout {
+        padding: 8px 16px;
+        align-items: center;
+        transition: background 1.3s;
+    }
+
+    .highlight-workflow-layout {
+        background: #27695c !important;
+    }
+
+    .number,
+    .data,
+    .priority,
+    .processorPoolId,
+    .state,
+    .timeout,
+    .timestamps,
+    .actions {
+        word-wrap: break-word;
+        // width: 120px;
+        // min-width: 120px;
+        // max-width: 120px;
+        padding: 0 5px;
+    }
+    .number {
+        width: 35px;
+        min-width: 35px;
+        max-width: 35px;
+    }
+    .processorPoolId {
+        width: 120px;
+        min-width: 120px;
+        max-width: 120px;
+    }
+    .actions {
+        width: 150px;
+        min-width: 150px;
+        max-width: 150px;
+
+        button {
+            margin-right: 4px;
+            margin-left: 4px;
+        }
+
+        .close-details-icon {
+            transform: rotate(180deg);
+        }
+    }
+    // .data {
+    //     width: 240px;
+        // min-width: 240px;
+    //     max-width: 240px;
+    // }
+
+    .timestamps {
+        width: 150px;
+        min-width: 150px;
+        max-width: 150px;
+
+        .errorTS,
+        .lastModTS,
+        .creationTS {
+            padding: 3px 0;
+        }
+    }
+    
+    .timeout {
+        width: 80px;
+        min-width: 80px;
+        max-width: 80px;
+    }
+    .priority,
+    .state {
+        width: 65px;
+        min-width: 65px;
+        max-width: 65px;
+    }
+
+
+    .details {
+        background: #4e4e4e;
+        padding: 24px 32px;
+
+        .workflow-detail {
+            padding: 4px;
+        }
+
+        .detail-label {
+            font-weight: 700;
+            width: 200px;
+            min-width: 200px;
+            max-width: 200px;
+        }
+
+        .stacktrace .text {
+            overflow-x: auto;
+        }
+    }
+
+    .custom-loader {
+        animation: loader 1s infinite;
+        display: flex;
+    }
+
+    .pagination-cont {
+        .pagin-config {
+            align-items: center;
+            .per-page-label {
+                font-size: 1.1em;
+                font-weight: 700;
+                padding-left: 16px;
+                padding-bottom: 8px;
+            }
+            .per-page {
+                width: 60px;
+            }
+        }
+
+
+        .pagination li span {
+            float: none;
+            color: #ffffff;
+            background-color: #424242;
+            border: 1px solid #424242;
+        }
+    }
+
+    .list-item {
+        display: inline-block;
+        margin-right: 10px;
+    }
+    .list-enter-active, .list-leave-active {
+        transition: all 1s;
+    }
+    .list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    .list-move {
+        transition: transform 1s;
+    }
+
+    @-moz-keyframes loader {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    @-webkit-keyframes loader {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    @-o-keyframes loader {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    @keyframes loader {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+}

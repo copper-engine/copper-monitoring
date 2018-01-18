@@ -1,0 +1,31 @@
+.sidebar {
+    .navigation-drawer--mini-variant {
+        .settings-btn {
+            display: none;
+        }
+    }
+
+    .list {
+        a {
+            color: #efefef;
+            font-size: 1.2em;
+
+            &:hover {
+                text-decoration: none;
+                color: #afadad
+            }
+        } 
+        
+        .list__tile--active .list__tile__action:first-of-type .icon {
+            color: #efefef;
+        }
+    }
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+  }
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+opacity: 0;
+}
+
+}

@@ -8,6 +8,8 @@ import { store } from './store.vuex';
 import 'vuetify/dist/vuetify.css';
 import 'mdi/css/materialdesignicons.min.css';
 
+import './main.scss';
+
 // Vue.use(date)
 Vue.use(require('vue-moment'));
 Vue.use(Vuetify);
@@ -30,7 +32,7 @@ if (process.env.ENV === 'development' && module.hot) {
 
 
 (<any> window).app = new Vue({
-  el: '#app-main',
+  el: '#app',
   store,
   router: createRouter(),
   components: {

@@ -1,9 +1,15 @@
 .dashboard {
-    padding-left: 300px;
     padding-bottom: 50px;
     background: #303030;
 }
 
 .content {
     margin-top: 0;
+}
+
+footer {
+    border-top: 1px solid #737373;
+    span {
+        padding-right: 24px;
+    }
 }

@@ -1,16 +1,36 @@
 <v-card color="teal darken-3" class="white--text engine-status">
     <v-card-title primary-title>
-        
-        <div class="headline"> 
-            <v-icon v-show="status" medium color="light-green accent-4"> mdi-brightness-1</v-icon> 
-            <span v-if="status" class="line header">
-                <span class="engine-id">{{status.engineId}}</span>
-                <span class="type"> ({{status.type}})</span>
-            </span>
+        <v-layout>
+            <v-flex class="status-icon-cont">
+                <v-icon 
+                    v-show="status" 
+                    class="status-icon" 
+                    color="light-green accent-4">
+                    mdi-brightness-1
+                </v-icon> 
+                <v-icon 
+                    v-show="!status" 
+                    class="status-icon" 
+                    color="red darken-4"> 
+                    mdi-brightness-1
+                </v-icon> 
             
-            <v-icon v-show="!status" medium color="red darken-4"> mdi-brightness-1</v-icon> 
-            <span v-show="!status" class="line header">{{ connectionSettings.host + ':' + connectionSettings.port }}</span>
-        </div>
+            </v-flex>
+
+            <v-flex class="headline">
+                <span v-if="status" class="line header">
+                    <span class="engine-id">{{status.engineId}}</span>
+                    <span class="type">{{status.type}}</span>
+                </span>
+                
+                <span v-show="!status" class="line header">{{ connectionSettings.host + ':' + connectionSettings.port }}</span>
+            </v-flex>
+            <v-flex>
+                <v-btn dark icon @click.stop="$emit('showSettings')" class="settings-btn">
+                    <v-icon v-html="'settings'" :class="{'active': true}"></v-icon>
+                </v-btn>
+            </v-flex>
+        </v-layout>
         <div v-if="status" class="engine-status-info">
             <div class="line wf-number">
                 <span class="status-title">
@@ -47,7 +67,4 @@
 
         </div>
     </v-card-title>
-    <!-- <v-card-actions>
-        <v-btn flat dark>Show Workflows</v-btn>
-    </v-card-actions> -->
 </v-card>

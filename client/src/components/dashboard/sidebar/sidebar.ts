@@ -14,20 +14,17 @@ const configComponent = () => import('./config').then(({ ConfigComponent }) => C
     }
 })
 export class SidebarComponent extends Vue {
-
-    drawer = true;
+    drawer = null;
     miniVariant = false;
-    showSettings = false;
+    settingsShowed = false;
     links: Link[] = [
         new Link('Home', '/dashboard', 'bubble_chart'),
         new Link('Broken Workflows', '/dashboard/workflows', 'mdi-arrow-down-thick'),
       ];
-
-    //   updateTarget() {
+      
       updateTarget(connectionSettings) {
           console.log('updateTarget');
-          this.showSettings = false;
+          this.settingsShowed = false;
           this.$store.commit('updateConnectionSettings', connectionSettings);
       }
-
 }

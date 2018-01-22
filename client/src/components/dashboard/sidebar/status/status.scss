@@ -1,4 +1,17 @@
 .engine-status {
+    .status-icon-cont{
+        width: 35px;
+
+        .status-icon {
+            margin-top: 6px;
+            font-size: 22px;
+        }
+    }
+
+    .settings-btn {
+        margin-top: 0px;
+    }
+
     .card__title--primary {
         padding-bottom: 24px;
     }
@@ -8,7 +21,7 @@
         font-size: 1.1em;
     }
     .type {
-        color: #e7e5e5;
+        color: #ccc;
     }
     
     .engine-status-info {

@@ -4,7 +4,7 @@ import { WorkflowInfo, EngineStatus } from '../../../models/engine';
 import { Notification } from '../../../models/notification';
 import { JmxService } from '../../../services/jmxService';
 
-import './workflow.scss';
+import './workflows.scss';
 import { ConnectionSettings } from '../../../models/connectionSettings';
 
 export class WorkflowContext {

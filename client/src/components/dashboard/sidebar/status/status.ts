@@ -9,8 +9,6 @@ import './status.scss';
     template: require('./status.html'),
 })
 export class StatusComponent extends Vue {
-    
-
     get status() {
         return this.$store.state.engineStatus;
     }

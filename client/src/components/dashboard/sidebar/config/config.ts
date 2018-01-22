@@ -33,7 +33,6 @@ export class ConfigComponent extends Vue {
     }
 
     submit () {
-        console.log('submiting');
         this.$emit('updateTarget', new ConnectionSettings(this.host, this.port, this.fetchPeriod, this.updatePeriod));
     }
 

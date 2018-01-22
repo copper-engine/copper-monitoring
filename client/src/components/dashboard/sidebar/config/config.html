@@ -1,7 +1,7 @@
 <v-card color="teal darken-3" class="white--text engine-connection-config">
     <v-card-title primary-title>
         <div class="headline"> 
-            <v-icon> mdi-settings</v-icon> 
+            <!-- <v-icon> mdi-settings</v-icon>  -->
             <span>Connection config</span>
         </div>
         <v-form v-model="valid" ref="form" lazy-validation>
@@ -28,11 +28,17 @@
                 :rules="numberRules"
             ></v-text-field>
         
-            <v-btn
+            <v-btn 
+                class="first-btn"
                 @click="submit"
                 :disabled="!valid"
             >
                 submit
+            </v-btn>
+            <v-btn
+                @click="$emit('hideSettings')"
+            >
+                Cancel
             </v-btn>
         </v-form>
     </v-card-title>

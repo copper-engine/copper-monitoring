@@ -18,8 +18,8 @@ export class SidebarComponent extends Vue {
     miniVariant = false;
     settingsShowed = false;
     links: Link[] = [
-        new Link('Home', '/dashboard', 'bubble_chart'),
-        new Link('Broken Workflows', '/dashboard/workflows', 'mdi-arrow-down-thick'),
+        new Link('Home', '/dashboard', 'mdi-home'),
+        new Link('Broken Workflows', '/dashboard/workflows', 'mdi-image-broken'),
       ];
       
       updateTarget(connectionSettings) {

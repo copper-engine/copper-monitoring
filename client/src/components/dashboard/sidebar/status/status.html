@@ -19,13 +19,13 @@
 
             <v-flex class="headline">
                 <span v-if="status" class="line header">
-                    <span class="engine-id">{{status.engineId}}</span>
-                    <span class="type">{{status.type}}</span>
+                    <div class="engine-id">{{status.engineId}}</div>
+                    <div class="type">{{status.type}}</div>
                 </span>
                 
                 <span v-show="!status" class="line header">{{ connectionSettings.host + ':' + connectionSettings.port }}</span>
             </v-flex>
-            <v-flex>
+            <v-flex class="settings-btn-cont">
                 <v-btn dark icon @click.stop="$emit('showSettings')" class="settings-btn">
                     <v-icon v-html="'settings'" :class="{'active': true}"></v-icon>
                 </v-btn>

@@ -1,15 +1,20 @@
 .engine-status {
     .status-icon-cont{
         width: 35px;
-
+        max-width: 35px;
+        
         .status-icon {
             margin-top: 6px;
             font-size: 22px;
         }
     }
-
-    .settings-btn {
-        margin-top: 0px;
+    .settings-btn-cont {
+        width: 35px;
+        max-width: 35px;
+        
+        .settings-btn {
+            margin-top: 0px;
+        }
     }
 
     .card__title--primary {
@@ -22,10 +27,11 @@
     }
     .type {
         color: #ccc;
+        font-size: 0.9em;
     }
     
     .engine-status-info {
-        padding: 16px;
+        padding: 16px 16px 0 16px;
         
         .line {
             padding: 4px 0;

@@ -10,6 +10,7 @@ import { ConnectionSettings } from '../../../models/connectionSettings';
 export class WorkflowContext {
     public open: boolean = false;
     public reloading: boolean = false;
+    public deleting: boolean = false;
 }
 
 @Component({
@@ -140,12 +141,21 @@ export class WorkflowsComponent extends Vue {
         this.jmxService.deleteBroken(this.$store.state.connectionSettings, id)
         .then((done) => {
             // this.forceStatusFetch();
-            this.workflows = this.workflows.filter((workflow) => workflow.id !== id);
-            if (done) {
-                this.showSuccess(`Workflow id: ${id} deleted successfully`);
-            } else {
-                this.showError(`Failed to delete workflow id: ${id}`);
+            let wfContext = this.workflowsContext.get(id);
+            if (!wfContext) {
+                wfContext = new WorkflowContext();
             }
+            wfContext.deleting = true; 
+            this.workflowsContext.set(id, wfContext);
+            this.$forceUpdate();
+            setTimeout(() => { 
+                this.workflows = this.workflows.filter((workflow) => workflow.id !== id);
+                if (done) {
+                    this.showSuccess(`Workflow id: ${id} deleted successfully`);
+                } else {
+                    this.showError(`Failed to delete workflow id: ${id}`);
+                }
+            }, 1500);
         }).catch((err) => {
             // TODO show toast
             this.showError(`Failed to delete workflow id: ${id} due to: ${err}`);

@@ -70,9 +70,10 @@
                 </v-alert>
             </v-card-text>
         </v-card>
-        <transition-group name="list" tag="div" mode="out-in">
+        <!-- <transition-group name="list" tag="div" mode="out-in"> -->
             <v-flex class="workflow" v-for="(workflow, i) in workflows" :key="workflow.id">
-                <v-layout class="workflow-layout grey darken-3" :class="{ 'highlight-workflow-layout': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloading }">
+                <v-layout class="workflow-layout grey darken-3" 
+                :class="{ 'highlight-workflow-layout': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloading, 'highlight-workflow-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting }">
                     <v-flex class="number">
                         {{ (page - 1) * perPage + i + 1 }}
                     </v-flex>  
@@ -152,7 +153,7 @@
                 </div>
                 
             </v-flex>
-        </transition-group>
+        <!-- </transition-group> -->
 
     </v-layout>
     <v-card>

@@ -23,7 +23,6 @@ export class SidebarComponent extends Vue {
       ];
       
       updateTarget(connectionSettings) {
-          console.log('updateTarget');
           this.settingsShowed = false;
           this.$store.commit('updateConnectionSettings', connectionSettings);
       }

@@ -36,11 +36,6 @@ export class WorkflowsComponent extends Vue {
 
     mounted() {
         this.sheduleFetchingBrrokenWF();
-        if (this.$store.state.engineStatus) {
-            // this.totalPages =;
-
-            console.log('this.totalPages', this.totalPages);
-        }
     }
 
     get totalPages() {
@@ -58,7 +53,6 @@ export class WorkflowsComponent extends Vue {
     }
 
     created() {
-        console.log('WorkflowsComponent is created');
     }
 
     beforeDestroy() {
@@ -67,7 +61,6 @@ export class WorkflowsComponent extends Vue {
 
     @Watch('$store.state.connectionSettings')
     sheduleFetchingBrrokenWF() {
-        console.log('sheduleFetchingBrrokenWF');
         if (this.fetchBrokenWFInterval) {
             clearInterval(this.fetchBrokenWFInterval);
         }
@@ -115,7 +108,6 @@ export class WorkflowsComponent extends Vue {
     }
 
     restart(id: string) {
-        console.log('Will restart WF with Id ' + id);
         this.jmxService.restart(this.$store.state.connectionSettings, id)
         .then((done) => {
             if (done) {
@@ -145,7 +137,6 @@ export class WorkflowsComponent extends Vue {
     }
 
     deleteBroken(id: string) {
-        console.log('Will delete Broken WF with Id ' + id);
         this.jmxService.deleteBroken(this.$store.state.connectionSettings, id)
         .then((done) => {
             // this.forceStatusFetch();

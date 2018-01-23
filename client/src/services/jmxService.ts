@@ -140,13 +140,10 @@ export class JmxService {
             throw new Error('invalid response!');
         }
 
-        console.log('Restart Response', response);
-
         return response.data[0].status === 200;
     }
 
     private parseEngineStatusResponse = (response): EngineStatus => {
-        console.log(response);
         if (!response || !response.data
             || response.data.length < 3
             || !this.isSubResponseValid(response.data[0])

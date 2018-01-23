@@ -29,7 +29,6 @@ describe('List component', () => {
 
     await directiveTest.execute((vm) => { // ensure Vue has bootstrapped/run change detection
       debugger;
-      console.log(vm.$el.querySelectorAll('.content ul li'));
       expect(vm.$el.querySelectorAll('.content ul li').length).to.equal(3);
     });
   });

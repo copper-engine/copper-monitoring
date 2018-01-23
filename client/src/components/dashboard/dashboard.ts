@@ -32,7 +32,6 @@ export class DashboardComponent extends Vue {
 
     @Watch('$store.state.connectionSettings')
     sheduleFetchingStatus() {
-        console.log('sheduleFetchingStatus');
         if (this.updateStatusInterval) {
             clearInterval(this.updateStatusInterval);
         }

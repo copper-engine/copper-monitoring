@@ -27,8 +27,6 @@
   },
   "dependencies": {
     "axios": "~0.17.1",
-    "jolokia": "^1.0.7",
-    "jquery": "^3.2.1",
     "mdi": "^2.1.19",
     "uiv": "^0.14.1",
     "vue": "~2.5.8",
@@ -39,7 +37,6 @@
     "vue-router": "^3.0.1",
     "vuetify": "1.0.0-beta.3",
     "vuex": "^3.0.1",
-    "vuex-router-sync": "^5.0.0",
     "webpack-war-plugin": "^1.0.0-beta.3"
   },
   "devDependencies": {
@@ -49,7 +46,6 @@
     "@types/webpack-env": "^1.13.2",
     "autoprefixer": "^7.1.6",
     "awesome-typescript-loader": "~3.4.0",
-    "bootstrap-sass": "^3.3.7",
     "chai": "~4.1.2",
     "compression-webpack-plugin": "~1.0.1",
     "copy-webpack-plugin": "~4.2.3",

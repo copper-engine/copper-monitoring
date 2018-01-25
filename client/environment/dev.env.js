@@ -5,5 +5,5 @@ module.exports = {
   API_KEY: '"XXXX-XXXXX-XXXX-XXXX"',
   API_LOCATION: '""', // /static/dev/"
   API_NAME: '"http://localhost:8080/api/"',
-  ROUTING_BASE: '"/"'
+  ROUTING_BASE: '"/#"'
 }

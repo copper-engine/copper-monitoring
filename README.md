@@ -23,7 +23,7 @@ So far provieds you:
 App uses Vue.js with TypeScript and Vuetify as base.
 
 
-# Getting startted
+# Getting started
 ## Using bash script
 * `./start.sh --install` for first use. It will install npm dependencies, build and ship gui to jetty server and then start Jetty server with GUI and Backend
 * `./start.sh` for futher usages. It will start Jetty server with GUI and Backend
@@ -43,10 +43,10 @@ ship client gui to jetty server
 `npm run deploy`
 
 Start jetty server with GUI and Backend
-`cd ../server/copper`
-`java -jar ../start.jar`
+* `cd ../server/copper`
+* `java -jar ../start.jar`
 
 
 For futher uses you can just start Jetty server with GUI and Backend
-`cd server/copper`
-`java -jar ../start.jar`
+* `cd server/copper`
+* `java -jar ../start.jar`

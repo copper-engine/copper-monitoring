@@ -118,8 +118,9 @@ webpackConfig.plugins = [...webpackConfig.plugins,
   }),
   new DefinePlugin({
     'process.env': env
-  }),
-  new WebpackWarPlugin({ archiveName: env.PACKAGE_NAME.substr(1, env.PACKAGE_NAME.length - 2) })
+  })
+  // ,
+  // new WebpackWarPlugin({ archiveName: env.PACKAGE_NAME.substr(1, env.PACKAGE_NAME.length - 2) })
   // ,
   // new FaviconsWebpackPlugin(helpers.root('/src/icon.png'))
 ];

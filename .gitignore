@@ -15,3 +15,5 @@ server/copper/webapps/static/css/
 server/copper/webapps/index.html
 server/copper/webapps/static/engines.json
 client-old/
+server/copper-old/
+server/copper/webapps/ROOT

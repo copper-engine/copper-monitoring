@@ -2,7 +2,8 @@
 
 > Web GUI for Copper Engine
 
-Monitoring GUI for Copper Engine. Uses JMX to connect to your copper application.
+Monitoring GUI for Copper Engine is web application that uses JMX to connect to your copper application and show you current state of it in human friendly mode.
+
 So far provieds you:
 * information about applications current state
     * number of active/broken workflows

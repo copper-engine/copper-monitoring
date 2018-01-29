@@ -31,8 +31,6 @@ if (process.env.ENV === 'development' && module.hot) {
     module.hot.accept('./components/dashboard', () => reload(dashboardModuleId, (<any>require('./components/dashboard')).DashboardComponent)));
 }
 
-// let store = (Vue.$ioc.resolve('store') as Store<StoreState>);
-
 (<any> window).app = new Vue({
   el: '#app',
   store: (Vue.$ioc.resolve('store') as Store<StoreState>),

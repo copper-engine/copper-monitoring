@@ -41,4 +41,4 @@ if (process.env.ENV === 'development' && module.hot) {
     'notifications': notificationsComponent
   }
 });
-(<any> window).app .$vuetify.theme.primary = '#00695b';
+// (<any> window).app .$vuetify.theme.primary = '#00695b';

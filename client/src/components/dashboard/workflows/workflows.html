@@ -1,0 +1,186 @@
+<div class="workflows">
+    <h2>Broken Workflows</h2>
+    <v-layout class="summary">
+        <v-flex class="text">
+            Total number of broken workflows is: {{ status ? status.brokenWFCount : 0}}
+        </v-flex>
+        <v-flex>
+            <v-btn dark
+                color="info"
+                @click="restartAll"
+                >
+                <v-icon left>cached</v-icon>
+                Restart All
+                <span slot="loader" class="custom-loader">
+                    <v-icon light>cached</v-icon>
+                </span>
+            </v-btn>
+            <v-btn dark
+                color="info"
+                @click="deleteAll"
+                >
+                <v-icon left>delete</v-icon>
+                Delete All
+                <span slot="loader" class="custom-loader">
+                    <v-icon light>cached</v-icon>
+                </span>
+            </v-btn>
+        </v-flex>
+    </v-layout>
+
+    <v-layout class="header teal darken-3">
+        <v-flex class="number">
+            #
+        </v-flex>  
+        <v-flex class="data">
+            Data
+        </v-flex>  
+        <v-flex class="priority">
+            Priority
+        </v-flex>
+        <v-flex class="processorPoolId">
+            Processor Pool
+        </v-flex>
+        <v-flex class="state">
+            State
+        </v-flex>
+        <v-flex class="timeout">
+            Timeout
+        </v-flex>
+        <v-flex class="timestamps">
+            <div class="errorTS">
+                Error Time
+            </div>
+            <div class="lastModTS">
+                Last Modification
+            </div>
+            <div class="creationTS">
+                Creation
+            </div>            
+        </v-flex>
+        <v-flex class="actions">
+            Actions
+        </v-flex>
+    </v-layout>
+    <v-layout class="workflows-cont" column>
+        <v-card v-show="!workflows || workflows.length === 0">
+            <v-card-text>
+                <v-alert color="info" icon="info" value="true" >
+                    There are no broken workflows
+                </v-alert>
+            </v-card-text>
+        </v-card>
+        <!-- <transition-group name="list" tag="div" mode="out-in"> -->
+            <v-flex class="workflow" v-for="(workflow, i) in workflows" :key="workflow.id">
+                <v-layout class="workflow-layout grey darken-3" 
+                :class="{ 'highlight-workflow-layout': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloading, 'highlight-workflow-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting }">
+                    <v-flex class="number">
+                        {{ (page - 1) * perPage + i + 1 }}
+                    </v-flex>  
+                    <v-flex class="data">
+                        {{ workflow.dataAsString }}
+                    </v-flex>  
+                    <v-flex class="priority">
+                        {{ workflow.priority }}
+                    </v-flex>
+                    <v-flex class="processorPoolId">
+                        {{ workflow.processorPoolId }}
+                    </v-flex>
+                    <v-flex class="state">
+                        {{ workflow.state }}
+                    </v-flex>
+                    <v-flex class="timeout">
+                        {{ workflow.timeout }}
+                    </v-flex>
+                    <v-flex class="timestamps">
+                        <div class="errorTS">
+                            {{ workflow.errorData.errorTS | moment("HH:mm DD/MM/YYYY") }}
+                        </div>
+                        <div class="lastModTS">
+                            {{ workflow.lastModTS | moment("HH:mm DD/MM/YYYY") }}
+                        </div>
+                        <div class="creationTS">
+                            {{ workflow.creationTS | moment("HH:mm DD/MM/YYYY") }}
+                        </div>
+                    </v-flex>
+                    
+                    <v-flex class="actions ">
+                        <v-btn dark icon
+                            color="info"
+                            @click="restart(workflow.id)"
+                            >
+                            <v-icon>cached</v-icon>
+                        </v-btn>
+                        <v-btn dark icon
+                            color="info"
+                            @click="deleteBroken(workflow.id)"
+                            >
+                            <v-icon>delete</v-icon>
+                        </v-btn>
+                        <v-btn dark icon
+                            color="info"
+                            @click="showDetails(workflow)"
+                            >
+                            <v-icon :class="{ 'close-details-icon': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).open }">details</v-icon>
+                        </v-btn>
+                    </v-flex>
+                </v-layout>
+                <div class="details" v-show="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).open">
+                    <v-layout class="workflow-detail workflow-id">
+                        <v-flex class="detail-label"> Workflow ID:</v-flex>
+                        <v-flex  class="text"> {{workflow.id}} </v-flex>
+                    </v-layout>
+                    <v-layout class="workflow-detail class-info">
+                        <v-flex class="detail-label">Class:</v-flex>
+                        <v-flex class="text">
+                                {{workflow.workflowClassInfo.alias}} ({{workflow.workflowClassInfo.classname}})
+                        </v-flex>                    
+                    </v-layout>
+                    <v-layout class="workflow-detail version">
+                        <v-flex class="detail-label">Version:</v-flex>
+                        <v-flex class="text"> 
+                            {{workflow.workflowClassInfo.majorVersion}}.{{workflow.workflowClassInfo.minorVersion}}.{{workflow.workflowClassInfo.patchLevel}}
+                        </v-flex>
+                    </v-layout>
+                    <v-layout class="workflow-detail stacktrace">
+                        <v-flex class="detail-label">Error Stack Trace:</v-flex>
+                        <v-flex class="text">
+                            <code>
+                                {{ workflow.errorData.exceptionStackTrace }}
+                            </code>
+                        </v-flex>
+                    </v-layout>
+                </div>
+                
+            </v-flex>
+        <!-- </transition-group> -->
+
+    </v-layout>
+    <v-card>
+        <v-card-text>
+            <v-layout justify-center class="pagination-cont">
+                    <v-flex class="text-xs-center">
+                            <v-pagination :length="totalPages" v-model="page" :total-visible="10"></v-pagination>
+                            
+                        </v-flex>
+                <v-flex class="" xs3>
+                    <v-layout justify-center class="pagin-config">
+                        <v-flex>
+                            <div class="per-page-label">Per page</div>
+                        </v-flex>
+                        
+                        <v-flex>
+                            <v-select
+                            class="per-page"
+                            :items="perPageItems"
+                            v-model="perPage"
+                            dark
+                            ></v-select>
+                        </v-flex>
+                    </v-layout>
+                </v-flex>
+                
+            </v-layout>
+        </v-card-text>
+    </v-card>
+</div>

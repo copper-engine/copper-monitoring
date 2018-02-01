@@ -1,0 +1,45 @@
+<v-card color="teal darken-3" class="white--text engine-connection-config">
+    <v-card-title primary-title>
+        <div class="headline"> 
+            <!-- <v-icon> mdi-settings</v-icon>  -->
+            <span>Connection config</span>
+        </div>
+        <v-form v-model="valid" ref="form" lazy-validation>
+            <v-text-field
+                label="Host"
+                v-model="host"
+                :rules="hostRules"
+                required
+            ></v-text-field>
+            <v-text-field
+                label="port"
+                v-model="port"
+                :rules="portRules"
+                required
+            ></v-text-field>
+            <v-text-field
+                label="Update period(seconds)"
+                v-model="updatePeriod"
+                :rules="numberRules"
+            ></v-text-field>
+            <v-text-field
+                label="For period(minutes)"
+                v-model="fetchPeriod"
+                :rules="numberRules"
+            ></v-text-field>
+        
+            <v-btn 
+                class="first-btn"
+                @click="submit"
+                :disabled="!valid"
+            >
+                submit
+            </v-btn>
+            <v-btn
+                @click="$emit('hideSettings')"
+            >
+                Cancel
+            </v-btn>
+        </v-form>
+    </v-card-title>
+</v-card>

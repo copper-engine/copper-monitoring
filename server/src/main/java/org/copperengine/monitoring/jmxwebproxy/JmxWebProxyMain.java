@@ -47,24 +47,17 @@ public class JmxWebProxyMain {
         // create webserver
         URI baseUri = UriBuilder.fromUri("http://0.0.0.0/").port(port).build();
         HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri);
+        Runtime.getRuntime().addShutdownHook(createShutdownHook(server));
 
         // deploy Jolokia servlet
         WebappContext jolokiaWebappContext = createJolokiaWebappContext("/api");
         jolokiaWebappContext.deploy(server);
-        log.info("    - Jolokia servlet deployed");
+        log.info("    - jolokia servlet deployed at /api");
 
         // deploy handler for static resources
         StaticHttpHandler staticResourcesHandler = new StaticHttpHandler(docRoot.getCanonicalPath());
         server.getServerConfiguration().addHttpHandler(staticResourcesHandler);
-        log.info("    - serving static resources from directory: {}", docRoot);
-
-        Runtime.getRuntime().addShutdownHook(new Thread("main server shutdown hook") {
-            @Override
-            public void run() {
-                server.shutdown(30L, TimeUnit.SECONDS);
-                log.info("--- Server stopped.");
-            }
-        });
+        log.info("    - serving static resources at / from directory: {}", docRoot);
 
         server.start();
 
@@ -149,5 +142,15 @@ public class JmxWebProxyMain {
         authFilter.addMappingForServletNames(null, jolokiaServletName);
 
         return webappContext;
+    }
+
+    private Thread createShutdownHook(HttpServer server) {
+        return new Thread("main server shutdown hook") {
+            @Override
+            public void run() {
+                server.shutdown(30L, TimeUnit.SECONDS);
+                log.info("--- Server stopped.");
+            }
+        };
     }
 }

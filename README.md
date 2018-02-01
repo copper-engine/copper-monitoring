@@ -25,28 +25,28 @@ App uses Vue.js with TypeScript and Vuetify as base.
 
 # Getting started
 ## Using bash script
-* `./start.sh --install` for first use. It will install npm dependencies, build and ship gui to jetty server and then start Jetty server with GUI and Backend
-* `./start.sh` for futher usages. It will start Jetty server with GUI and Backend
+* `./start.sh --install` for first use. It will install npm dependencies, build and ship gui to server and then start server with GUI and Backend
+* `./start.sh` for futher usages. It will start server with GUI and Backend
 
-##Muanual instalation and start
+## Manual instalation and start
 Preparations:
 
 `cd client`
 
 install dependencies for client
-`npm instal`
+`npm install`
 
 build client gui
 `npm run build`
 
-ship client gui to jetty server
+ship client gui to server
 `npm run deploy`
 
-Start jetty server with GUI and Backend
+Start server with GUI and Backend
 * `cd ../server/copper`
-* `java -jar ../start.jar`
+* `./gradlew run`
 
 
-For futher uses you can just start Jetty server with GUI and Backend
+For futher uses you can just start server with GUI and Backend
 * `cd server/copper`
-* `java -jar ../start.jar`
+* `./gradlew run`

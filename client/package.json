@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production npm run clean && npm run compile",
-    "deploy": "rm -rf ../server/copper/webapps/ROOT/* && mkdir -p ../server/copper/webapps/ROOT && cp -R dist/* ../server/copper/webapps/ROOT/",
+    "deploy": "rm -rf ../server/static && mkdir -p ../server/static && cp -R dist/* ../server/static/",
     "ci:teamcity": "karma --env=tc start karma.coverage.js && npm run coverage:remap",
     "ci:jenkins": "karma --env=jk start karma.coverage.js && npm run coverage:remap",
     "clean": "rimraf dist && rimraf coverage",

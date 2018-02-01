@@ -13,5 +13,3 @@ dist/
 npm-debug.log
 yarn-error.log
 client-old/
-server/copper-old/
-server/copper/webapps/ROOT

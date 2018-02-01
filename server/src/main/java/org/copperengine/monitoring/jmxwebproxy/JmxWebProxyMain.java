@@ -38,9 +38,9 @@ public class JmxWebProxyMain {
 
         File currentDir = new File(".").getCanonicalFile();
         log.info("    - starting in current directory: {}", currentDir);
-        File docRoot = new File(currentDir, "webapps/ROOT");
+        File docRoot = new File(currentDir, "static");
         if (!docRoot.exists()) {
-            throw new IllegalStateException("Directory webapps/ROOT not found. Maybe you started the process from the wrong directory?!?");
+            throw new IllegalStateException("Directory 'static' not found. Maybe you started the process from the wrong directory?!?");
         }
 
         URI baseUri = UriBuilder.fromUri("http://0.0.0.0/").port(port).build();

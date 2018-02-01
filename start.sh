@@ -8,12 +8,12 @@ then
     echo ""
     echo "---------------------------------------------------------------------------------------------"
     echo ""
-    cd "${x}/client" && npm install && npm run build && npm run deploy && cd ../server/copper && ./gradlew run
+    cd "${x}/client" && npm install && npm run build && npm run deploy && cd ../server && ./gradlew run
 else 
     echo ""
     echo "Starting server"
     echo ""
     echo "---------------------------------------------------------------------------------------------"
     echo ""
-    cd "${x}/server/copper" && ./gradlew run
+    cd "${x}/server" && ./gradlew run
 fi

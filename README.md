@@ -33,20 +33,20 @@ Preparations:
 
 `cd client`
 
-install dependencies for client
-`npm install`
+Install dependencies for client: `npm install`
 
-build client gui
-`npm run build`
+Build client gui: `npm run build`
 
-ship client gui to server
-`npm run deploy`
+Ship client gui to server: `npm run deploy`
 
-Start server with GUI and Backend
-* `cd ../server/copper`
-* `./gradlew run`
+Start server with GUI and Backend:
+```
+cd ../server
+./gradlew run
+```
 
-
-For futher uses you can just start server with GUI and Backend
-* `cd server/copper`
-* `./gradlew run`
+For futher uses you can just start server with GUI and Backend:
+```
+cd server
+./gradlew run
+```

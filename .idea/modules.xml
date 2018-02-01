@@ -3,9 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/copper-monitoring.iml" filepath="$PROJECT_DIR$/copper-monitoring.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/monitoring-jmxwebproxy.iml" filepath="$PROJECT_DIR$/.idea/modules/monitoring-jmxwebproxy.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/monitoring-jmxwebproxy_main.iml" filepath="$PROJECT_DIR$/.idea/modules/monitoring-jmxwebproxy_main.iml" group="monitoring-jmxwebproxy" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/monitoring-jmxwebproxy_test.iml" filepath="$PROJECT_DIR$/.idea/modules/monitoring-jmxwebproxy_test.iml" group="monitoring-jmxwebproxy" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jmxwebproxy.iml" filepath="$PROJECT_DIR$/.idea/modules/jmxwebproxy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jmxwebproxy_main.iml" filepath="$PROJECT_DIR$/.idea/modules/jmxwebproxy_main.iml" group="jmxwebproxy" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jmxwebproxy_test.iml" filepath="$PROJECT_DIR$/.idea/modules/jmxwebproxy_test.iml" group="jmxwebproxy" />
     </modules>
   </component>
 </project>

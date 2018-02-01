@@ -36,6 +36,7 @@ public class JmxWebProxyMain {
     public void run(int port) throws IOException {
         log.info("--- Starting jmx web proxy server on http://localhost:{}/ ...", port);
 
+        // check root dir for static resources
         File currentDir = new File(".").getCanonicalFile();
         log.info("    - starting in current directory: {}", currentDir);
         File docRoot = new File(currentDir, "static");
@@ -43,16 +44,19 @@ public class JmxWebProxyMain {
             throw new IllegalStateException("Directory 'static' not found. Maybe you started the process from the wrong directory?!?");
         }
 
+        // create webserver
         URI baseUri = UriBuilder.fromUri("http://0.0.0.0/").port(port).build();
         HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri);
 
-        StaticHttpHandler staticResourcesHandler = new StaticHttpHandler(docRoot.getCanonicalPath());
-        server.getServerConfiguration().addHttpHandler(staticResourcesHandler);
-        log.info("    - serving static resources from directory: {}", docRoot);
-
+        // deploy Jolokia servlet
         WebappContext jolokiaWebappContext = createJolokiaWebappContext("/api");
         jolokiaWebappContext.deploy(server);
         log.info("    - Jolokia servlet deployed");
+
+        // deploy handler for static resources
+        StaticHttpHandler staticResourcesHandler = new StaticHttpHandler(docRoot.getCanonicalPath());
+        server.getServerConfiguration().addHttpHandler(staticResourcesHandler);
+        log.info("    - serving static resources from directory: {}", docRoot);
 
         Runtime.getRuntime().addShutdownHook(new Thread("main server shutdown hook") {
             @Override

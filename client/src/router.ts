@@ -68,15 +68,15 @@ let store: Store<StoreState> = Vue.$ioc.resolve('store');
 export const createRouter = () => {
   let router = new VueRouter({ mode: 'history', routes: createRoutes(), base: process.env.ROUTING_BASE });
 
-  router.beforeEach((to: Route, from: Route, next) => {
-    let requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  // router.beforeEach((to: Route, from: Route, next) => {
+  //   let requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     
-    if (requiresAuth && !store.state.user) {
-      next('/login');
-    } else {
-      next();
-    }
-  });
+  //   if (requiresAuth && !store.state.user) {
+  //     next('/login');
+  //   } else {
+  //     next();
+  //   }
+  // });
 
   return router;
 };

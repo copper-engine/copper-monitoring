@@ -4,10 +4,10 @@
         <v-toolbar-side-icon @click.stop="$refs.drawer.drawer = !$refs.drawer.drawer"></v-toolbar-side-icon>
         <v-toolbar-title>Copper Monitoring</v-toolbar-title>
         <v-spacer></v-spacer>
-        <div class="user">
+        <div class="user" v-if="!!user">
             Username: <span class="username"> {{ user.name }} </span>
         </div>
-        <v-btn @click="logout">
+        <v-btn @click="logout" v-if="!!user">
             <v-icon>mdi-logout</v-icon>
             Logout
         </v-btn>

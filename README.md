@@ -50,3 +50,14 @@ Start jetty server with GUI and Backend
 For futher uses you can just start Jetty server with GUI and Backend
 * `cd server/copper`
 * `java -jar ../start.jar`
+
+
+# Copper Monitoring With Docker
+Port 8080 should be binded to hosts port 8080 due to internal mapping to jolokia
+`docker run -p 8080:8080 copper-monitoring`
+
+By default, inside Container we are not able to access localhost as host so we should 
+use ip of host in dockerland. We can get it like thar: 
+`docker exec -it <container_id> ip route | awk '/default/ { print $3 }'`
+
+We should use this IP address instead of localhost in our copper monitoring GUI.

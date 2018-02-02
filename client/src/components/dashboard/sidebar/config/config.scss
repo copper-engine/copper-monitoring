@@ -1,7 +1,15 @@
+// .theme--dark .engine-connection-config {
+//     background-color: #505050;
+//     border-bottom: 2px solid #807e7e;
+// }
+
 .engine-connection-config {
     form {
         padding-top: 8px;
         width: 100%;
     }
-
+    
+    .primary--text {
+        color: #c1c1c1 !important; 
+    }
 }

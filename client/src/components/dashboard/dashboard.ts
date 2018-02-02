@@ -17,6 +17,10 @@ const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) =
 export class DashboardComponent extends Vue {
     updateStatusInterval: any;
     
+    get user() {
+        return this.$store.state.user;
+    }
+
     created() {  
         (this.$services.eventHub as Vue).$on('forceStatusFetch', this.forceFetchingStatus);
     }
@@ -28,6 +32,11 @@ export class DashboardComponent extends Vue {
 
     mounted() {
         this.sheduleFetchingStatus();
+    }
+
+    logout() {
+        this.$store.commit('setUser', null);
+        this.$router.replace('/login'); 
     }
 
     @Watch('$store.state.connectionSettings')

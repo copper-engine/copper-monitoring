@@ -1,0 +1,34 @@
+<div class="login">
+    <v-toolbar style="flex: 0 0 auto;" dark class="teal darken-3">
+        <v-icon>mdi-login</v-icon>
+        <h2>Loging</h2>
+    </v-toolbar>
+    <v-alert v-show="!!error" color="error" icon="warning" value="true">
+        {{error}}
+    </v-alert>
+    <v-card class="login-form grey lighten-4" light>
+        <v-form v-model="valid" ref="form" light lazy-validation>
+
+            <v-text-field
+                label="Username"
+                v-model="username"
+                :rules="usernameRules"
+                required
+            ></v-text-field>
+            <v-text-field
+                type="password"
+                label="Password"
+                v-model="password"
+                :rules="passwordRules"
+                required
+            ></v-text-field>
+        
+            <v-btn color=" teal darken-3"
+                @click="submit"
+                :disabled="!valid"
+            >
+                Login
+            </v-btn>
+        </v-form>
+    </v-card>
+</div>

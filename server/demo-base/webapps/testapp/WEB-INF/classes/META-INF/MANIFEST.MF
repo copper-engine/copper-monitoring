@@ -1,0 +1,30 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1481210676872
+Build-Jdk: 1.8.0_111
+Built-By: jesse
+Bundle-ClassPath: .,WEB-INF/classes
+Bundle-Copyright: Copyright (c) 2008-2016 Mort Bay Consulting Pty. Ltd.
+Bundle-Description: Jetty module for Test :: Jetty Test Webapp
+Bundle-DocURL: http://www.eclipse.org/jetty
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0, http://www.e
+ clipse.org/org/documents/epl-v10.php
+Bundle-ManifestVersion: 2
+Bundle-Name: Test :: Jetty Test Webapp
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-SymbolicName: org.eclipse.jetty.tests.webapp
+Bundle-Vendor: Eclipse Jetty Project
+Bundle-Version: 9.4.0.v20161208
+Created-By: Apache Maven Bundle Plugin
+Import-Package: javax.servlet.jsp;version="[2.2.0,3.0)",javax.servlet.js
+ p.tagext;version="[2.2.0,3.0)",org.eclipse.jetty.util;version="[9.4.0,9
+ .4.1)",org.eclipse.jetty.util.log;version="[9.4.0,9.4.1)",org.eclipse.j
+ etty.websocket.api;version="[9.4.0,9.4.1)",org.eclipse.jetty.websocket.
+ api.annotations;version="[9.4.0,9.4.1)",org.eclipse.jetty.websocket.ser
+ vlet;version="[9.4.0,9.4.1)",javax.annotation,javax.servlet;version="[3
+ .1,4)",javax.servlet.annotation;version="[3.1,4)",javax.servlet.http;ve
+ rsion="[3.1,4)",javax.websocket;version="[1.0,2)",javax.websocket.serve
+ r;version="[1.0,2)"
+Originally-Created-By: Apache Maven Bundle Plugin
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+Tool: Bnd-3.0.0.201509101326
+Web-ContextPath: /

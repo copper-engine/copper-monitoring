@@ -1,10 +1,11 @@
 import Vue from 'vue';
+import { Store } from 'vuex';
 // import date from 'vue-date-filter';
+import { StoreState } from './store.vuex';
 import Vuetify from 'vuetify';
 import { makeHot, reload } from './util/hot-reload';
-import { createRouter } from './router';
 import './dependency-injection';
-import { store } from './store.vuex';
+import { createRouter } from './router';
 import 'vuetify/dist/vuetify.css';
 import 'mdi/css/materialdesignicons.min.css';
 
@@ -30,10 +31,9 @@ if (process.env.ENV === 'development' && module.hot) {
     module.hot.accept('./components/dashboard', () => reload(dashboardModuleId, (<any>require('./components/dashboard')).DashboardComponent)));
 }
 
-
 (<any> window).app = new Vue({
   el: '#app',
-  store,
+  store: (Vue.$ioc.resolve('store') as Store<StoreState>),
   router: createRouter(),
   components: {
     // 'navbar': navbarComponent,
@@ -41,3 +41,4 @@ if (process.env.ENV === 'development' && module.hot) {
     'notifications': notificationsComponent
   }
 });
+// (<any> window).app .$vuetify.theme.primary = '#00695b';

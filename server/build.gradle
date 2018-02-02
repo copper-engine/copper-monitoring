@@ -1,0 +1,196 @@
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.14.1'
+}
+
+ext {
+    slf4jVersion = "1.7.21"
+    jersey2Version = "2.25.1"
+    jolokiaVersion = "1.2.2"
+}
+
+buildscript {
+    repositories {
+        jcenter() // needed for gradle-nexus-plugin
+        mavenCentral() // needed for nexus-workflow plugin
+        maven { // needed for license-gradle-plugin
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        // The nexus plugin makes uploading to Sonatype Nexus repository easier.
+        // See https://github.com/bmuschko/gradle-nexus-plugin for documentation
+        classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.7'
+        // The nexus-workflow plugin automates the staging/promotion/release process on Sonatype OSS
+        // by providing the task 'nexusStagingRelease'.
+        // See https://github.com/adaptivecomputing/plugins-gradle/tree/master/nexus-workflow
+        // and http://stackoverflow.com/questions/20432907/automated-release-to-maven-central-with-gradle
+        classpath 'com.adaptc.gradle:nexus-workflow:0.6'
+        // the license plugin, see https://github.com/hierynomus/license-gradle-plugin
+        classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.13.0'
+    }
+}
+
+group = "org.copper-engine"
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+
+apply plugin: 'java'
+apply plugin: 'osgi'
+sourceCompatibility = 1.8
+compileJava.options.encoding = 'utf-8'
+compileJava.sourceCompatibility = JavaVersion.VERSION_1_8
+compileJava.targetCompatibility = JavaVersion.VERSION_1_8
+compileTestJava.options.encoding = 'utf-8'
+compileTestJava.sourceCompatibility = JavaVersion.VERSION_1_8
+compileTestJava.targetCompatibility = JavaVersion.VERSION_1_8
+
+dependencies {
+    compile	"org.slf4j:slf4j-api:$slf4jVersion"
+    compile "org.slf4j:jul-to-slf4j:$slf4jVersion"
+    runtime "org.slf4j:slf4j-log4j12:$slf4jVersion"
+    compile "org.glassfish.jersey.containers:jersey-container-grizzly2-servlet:$jersey2Version"
+    compile "org.jolokia:jolokia-core:$jolokiaVersion"
+    compile "org.jolokia:jolokia-jsr160:$jolokiaVersion"
+}
+
+jar {
+    manifest.attributes provider: 'gradle'
+}
+
+apply plugin: 'application'
+mainClassName = "org.copperengine.monitoring.jmxwebproxy.JmxWebProxyMain"
+
+apply plugin: 'maven'
+task createSourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives createSourcesJar
+}
+
+/* TODO: enable findbugs later
+apply plugin: 'findbugs'
+findbugs {
+    sourceSets = [project.sourceSets.main] // check only main classes, neither tests nor example workflow classes
+    excludeFilter = file("$rootDir/findbugs-exclude-filter.xml")
+    effort = "max"
+    ignoreFailures = true
+}
+tasks.withType(FindBugs) {
+    reports {
+        // Unfortunately FindBugs cannot emit both XML and HTML report simultanously, so by default we emit HTML only.
+        // We emit XML only when -PfindbugsXmlReportEnabled=true, e.g. during Jenkins build
+        def findbugsXmlReportEnabled = project.hasProperty('findbugsXmlReportEnabled') && project.property('findbugsXmlReportEnabled')
+        xml.enabled = findbugsXmlReportEnabled
+        html.enabled = !findbugsXmlReportEnabled
+    }
+}
+*/
+
+apply plugin: 'com.github.hierynomus.license'
+license {
+    // verify that every java file has our Apache License header; fail build if header is missing
+    header file("$rootDir/common/apache-license-file.txt")
+    skipExistingHeaders true
+    ignoreFailures true
+}
+
+if (project.hasProperty('secretKeyRingFileSourceURL')) {
+    // the nexus plugin makes uploading to Sonatype Nexus repository easier
+    // see https://github.com/bmuschko/gradle-nexus-plugin for documentation
+    apply plugin: 'nexus'
+    nexus {
+        attachTests = true
+        sign = true
+    }
+
+    // task to fetch the GPG key to sign the JAR archives
+    // we put the key to build/secring.gpg where it will be picked up by the uploadArchives task of the nexus plugin
+    task fetchSecretKeyRingFile << {
+        file(secretKeyRingFileDestFile).getParentFile().mkdirs()
+        ant.get(src: secretKeyRingFileSourceURL, dest: secretKeyRingFileDestFile, username: secretKeyRingFileSourceURLAuthUsername, password: secretKeyRingFileSourceURLAuthPassword)
+    }
+    afterEvaluate {
+        // always fetch the GPG key before signing archives
+        tasks.signArchives.dependsOn fetchSecretKeyRingFile
+    }
+
+    modifyPom {
+        project {
+            name = 'COPPER high-performance workflow engine'
+            packaging = 'jar'
+            description = 'COPPER is an open-source, powerful, light-weight, and easily configurable workflow engine. The power of COPPER is that it uses Java as a description language for workflows.'
+            url 'http://copper-engine.org/'
+
+            scm {
+                url 'https://github.com/copper-engine/copper-engine'
+                connection 'scm:git@github.com:copper-engine/copper-engine.git'
+            }
+
+            licenses {
+                license {
+                    name = 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+
+            developers {
+                developer {
+                    id 'copper-team'
+                    name = 'Copper Engine Development Team'
+                    roles {
+                        role 'architect'
+                        role 'developer'
+                        role 'tester'
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+// The nexus-workflow plugin automates the staging/promotion/release process on Sonatype OSS
+// by providing the task 'nexusStagingRelease'. We perform "nexusStagingRelease" only if the current
+// version is not a SNAPSHOT release.
+apply plugin: 'nexus-workflow'
+tasks.nexusStagingRelease.onlyIf { !version.endsWith("-SNAPSHOT") }
+
+// task to create source distribution containing all source files
+// note: this task won't run automatically; it must be called explicitely
+task fullSourcesJar(type: Jar) {
+    classifier = 'sources-full'
+    from project.rootDir
+    exclude '**/build/'
+    exclude '**/classes/'
+    exclude '**/generated/'
+    exclude '.gradle/'
+    exclude 'tmp/'
+    exclude '.idea'
+    exclude '**/*.iml'
+    exclude '**/*.log'
+    exclude '**/*.classpath'
+    exclude '**/*.project'
+    exclude '**/*.settings/'
+}
+group 'org.copperengine.monitoring'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

@@ -1,0 +1,13 @@
+<FindBugsFilter>
+
+    <!-- exclude messages with a rank lower than 16. Ranks range from 1 to 20, where 1 is top and 20 is lowest. -->
+    <Match>
+        <Rank value="16" />
+    </Match>
+
+    <!-- exclude messages pertaining to security -->
+    <Match>
+        <Bug category="SECURITY" />
+    </Match>
+
+</FindBugsFilter>

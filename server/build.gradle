@@ -58,11 +58,26 @@ dependencies {
 }
 
 jar {
-    manifest.attributes provider: 'gradle'
+//    manifest.attributes provider: 'gradle'
+    manifest {
+        attributes(
+                provider: 'gradle',
+                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+                'Main-Class': 'org.copperengine.monitoring.jmxwebproxy.JmxWebProxyMain'
+        )
+    }
 }
 
 apply plugin: 'application'
 mainClassName = "org.copperengine.monitoring.jmxwebproxy.JmxWebProxyMain"
+
+distZip {
+    archiveName 'copper-monitoring.zip'
+    into('copper-monitoring') {
+        from '.'
+        include 'static/**/*'
+    }
+}
 
 apply plugin: 'maven'
 task createSourcesJar(type: Jar, dependsOn: classes) {
@@ -166,6 +181,14 @@ tasks.nexusStagingRelease.onlyIf { !version.endsWith("-SNAPSHOT") }
 // task to create source distribution containing all source files
 // note: this task won't run automatically; it must be called explicitely
 task fullSourcesJar(type: Jar) {
+//    print(configurations.compile.collect { it.getName() }.join(' '))
+//                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+    manifest {
+        attributes(
+                provider: 'gradle',
+                'Main-Class': 'org.copperengine.monitoring.jmxwebproxy.JmxWebProxyMain'
+        )
+    }
     classifier = 'sources-full'
     from project.rootDir
     exclude '**/build/'

@@ -25,8 +25,9 @@ App uses Vue.js with TypeScript and Vuetify as base.
 
 # Getting started
 ## Using bash script
-* `./start.sh --install` for first use. It will install npm dependencies, build and ship gui to server and then start server with GUI and Backend
+* `./start.sh --install` for first use. It will install npm dependencies, build and ship gui to server
 * `./start.sh` for futher usages. It will start server with GUI and Backend
+* `./start.sh --dockerize` for creating docker image. It will build client & server parts and will prepare a docker image of copper-monitoring
 
 ## Manual instalation and start
 Preparations:
@@ -53,6 +54,9 @@ cd server
 
 
 # Copper Monitoring With Docker
+Quick creation of docker image can be done by running `./start.sh --dockerize`
+
+## Notes for dockerized Copper Monitoring
 Port 8080 should be binded to hosts port 8080 due to internal mapping to jolokia
 `docker run -p 8080:8080 copper-monitoring`
 

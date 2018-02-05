@@ -27,7 +27,7 @@ then
     cd "${PATH_TO_SCRIPT}/client" && npm install && npm run build && npm run deploy && cd ../server && ./gradlew distZip && cd .. && docker build -t copper-monitoring .
 else 
     echo ""
-    echo "Copper monitoring usage:"
+    echo "Script usage:"
     echo "Run without arguments to start copper monitoring. Will not fetch laters client changes."
     echo "      P.S: use after you runned script with --install parameter."
     echo "--install   : will build client and copy it to server part as a preparation to run the copper-monitoring"

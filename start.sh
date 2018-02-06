@@ -24,7 +24,7 @@ then
     echo ""
     echo "---------------------------------------------------------------------------------------------"
     echo ""
-    cd "${PATH_TO_SCRIPT}/client" && npm install && npm run build && npm run deploy && cd ../server && ./gradlew distZip && cd .. && docker build -t copper-monitoring .
+    cd "${PATH_TO_SCRIPT}/client" && npm install && npm run build && npm run deploy && cd ../server && ./gradlew distZip && cp build/distributions/copper-monitoring.zip ../docker/ && cd ../docker && docker build -t copper-monitoring .
 else 
     echo ""
     echo "Script usage:"

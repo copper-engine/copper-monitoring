@@ -48,7 +48,7 @@ export class LoginComponent extends Vue {
              Axios.request({
                 method: 'get',
                 url: process.env.API_NAME,
-
+                withCredentials: true,
                 auth: {
                   username: '',
                   password: 'YWRtaW46YWRtaW4='

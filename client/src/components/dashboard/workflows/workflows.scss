@@ -38,14 +38,16 @@
     .workflow-layout {
         padding: 8px 16px;
         align-items: center;
-        transition: all 1s;
-        transition: background 1.3s;
     }
 
-    .highlight-workflow-layout {
+    .highlight-workflow-layout >* {
         background: #27695c !important;
+        opacity: 0;
+        transition: background 1.3s;
+        transition: opacity 2s;
     }
-    .highlight-workflow-deleting {
+
+    .highlight-workflow-deleting >* {
         background: #e74615 !important;
         opacity: 0;
         transition: background 1.3s;

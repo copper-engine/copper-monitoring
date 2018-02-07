@@ -71,9 +71,10 @@
             </v-card-text>
         </v-card>
         <!-- <transition-group name="list" tag="div" mode="out-in"> -->
-            <v-flex class="workflow" v-for="(workflow, i) in workflows" :key="workflow.id">
-                <v-layout class="workflow-layout grey darken-3" 
-                :class="{ 'highlight-workflow-layout': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloading, 'highlight-workflow-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting }">
+            <v-flex class="workflow" v-for="(workflow, i) in workflows" :key="workflow.id"
+            :class="{'highlight-workflow-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting, 'highlight-workflow-layout': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloading}"
+            >
+                <v-layout class="workflow-layout grey darken-3">
                     <v-flex class="number">
                         {{ (page - 1) * perPage + i + 1 }}
                     </v-flex>  
@@ -102,8 +103,7 @@
                         <div class="creationTS">
                             {{ workflow.creationTS | moment("HH:mm DD/MM/YYYY") }}
                         </div>
-                    </v-flex>
-                    
+                    </v-flex>                  
                     <v-flex class="actions ">
                         <v-btn dark icon
                             color="info"
@@ -151,10 +151,9 @@
                         </v-flex>
                     </v-layout>
                 </div>
-                
+         
             </v-flex>
         <!-- </transition-group> -->
-
     </v-layout>
     <v-card>
         <v-card-text>

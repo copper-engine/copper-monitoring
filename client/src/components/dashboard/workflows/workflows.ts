@@ -13,10 +13,14 @@ export class WorkflowContext {
     public deleting: boolean = false;
 }
 
+const WorkflowDetail = () => import('./workflowDetails').then(({ WorkflowDetail }) => WorkflowDetail);
+const WorkflowHeading = () => import('./workflowHeading').then(({ WorkflowHeading }) => WorkflowHeading);
 @Component({
     template: require('./workflows.html'),
     services: ['jmxService', 'eventHub'],
     components: {
+        'workflowDetail': WorkflowDetail,
+        'workflowHeading': WorkflowHeading
     }
 })
 export class WorkflowsComponent extends Vue {
@@ -82,6 +86,10 @@ export class WorkflowsComponent extends Vue {
             .then((done) => {
                 this.forceStatusFetch(500);
                 if (done) {
+                    this.workflows.forEach((wf) => {
+                        let currentID = wf.id;
+                        this.highlight(currentID, 'reload');
+                    });
                     this.showSuccess('All workflows restarted successfully');
                 } else {
                     this.showError('Failed to restart all workflows');
@@ -97,11 +105,15 @@ export class WorkflowsComponent extends Vue {
         this.jmxService.deleteAll(this.$store.state.connectionSettings, this.workflows)
         .then((done) => {
             if (done) {
+                this.workflows.forEach((wf) => {
+                    let currentID = wf.id;
+                    this.highlight(currentID, 'delete');
+                });
                 this.showSuccess('All workflows deleted successfully');
             } else {
                 this.showError('Failed to Delete all workflows');
             }
-            this.forceStatusFetch();
+            this.forceStatusFetch(1500);
         }).catch((err) => {
             this.showError('Failed to Delete all workflows due to: ' + err);
             console.error('Failed to Delete all workflows due to:', err);
@@ -112,19 +124,7 @@ export class WorkflowsComponent extends Vue {
         this.jmxService.restart(this.$store.state.connectionSettings, id)
         .then((done) => {
             if (done) {
-                let wfContext = this.workflowsContext.get(id);
-                if (!wfContext) {
-                    wfContext = new WorkflowContext();
-                }
-                wfContext.reloading = true; 
-                this.workflowsContext.set(id, wfContext);
-                this.$forceUpdate();
-                setTimeout(() => { 
-                    wfContext.reloading = false; 
-                    this.workflowsContext.set(id, wfContext);
-                    this.$forceUpdate();
-                }, 800);
-                
+                this.highlight(id, 'reload');
                 this.forceStatusFetch(500);
                 this.showSuccess(`Workflow id: ${id} restarted successfully`);
             } else {
@@ -148,6 +148,7 @@ export class WorkflowsComponent extends Vue {
             wfContext.deleting = true; 
             this.workflowsContext.set(id, wfContext);
             this.$forceUpdate();
+            this.highlight(id, 'delete');
             setTimeout(() => { 
                 this.workflows = this.workflows.filter((workflow) => workflow.id !== id);
                 if (done) {
@@ -160,6 +161,28 @@ export class WorkflowsComponent extends Vue {
             // TODO show toast
             this.showError(`Failed to delete workflow id: ${id} due to: ${err}`);
         });
+    }
+
+    highlight(id: String, type: String) {
+        let wfContext = this.workflowsContext.get(id);
+                if (!wfContext) {
+                    wfContext = new WorkflowContext();
+                }
+                if(type == 'reload'){
+                    wfContext.reloading = true;
+                    this.workflowsContext.set(id, wfContext);
+                    this.$forceUpdate();
+                    setTimeout(() => { 
+                        wfContext.reloading = false; 
+                        this.workflowsContext.set(id, wfContext);
+                        this.$forceUpdate();
+                    }, 800);
+                }
+                if(type == 'delete'){
+                    wfContext.deleting = true;
+                    this.workflowsContext.set(id, wfContext);
+                    this.$forceUpdate();
+                }
     }
 
     showDetails(workflow: WorkflowInfo) {

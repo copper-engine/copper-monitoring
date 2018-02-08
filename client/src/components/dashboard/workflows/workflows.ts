@@ -168,7 +168,7 @@ export class WorkflowsComponent extends Vue {
                 if (!wfContext) {
                     wfContext = new WorkflowContext();
                 }
-                if(type == 'reload'){
+                if (type === 'reload') {
                     wfContext.reloading = true;
                     this.workflowsContext.set(id, wfContext);
                     this.$forceUpdate();
@@ -178,7 +178,7 @@ export class WorkflowsComponent extends Vue {
                         this.$forceUpdate();
                     }, 800);
                 }
-                if(type == 'delete'){
+                if (type === 'delete') {
                     wfContext.deleting = true;
                     this.workflowsContext.set(id, wfContext);
                     this.$forceUpdate();

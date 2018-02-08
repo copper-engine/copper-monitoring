@@ -141,13 +141,6 @@ export class WorkflowsComponent extends Vue {
         this.jmxService.deleteBroken(this.$store.state.connectionSettings, id)
         .then((done) => {
             // this.forceStatusFetch();
-            let wfContext = this.workflowsContext.get(id);
-            if (!wfContext) {
-                wfContext = new WorkflowContext();
-            }
-            wfContext.deleting = true; 
-            this.workflowsContext.set(id, wfContext);
-            this.$forceUpdate();
             this.highlight(id, 'delete');
             setTimeout(() => { 
                 this.workflows = this.workflows.filter((workflow) => workflow.id !== id);

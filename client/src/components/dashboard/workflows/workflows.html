@@ -5,41 +5,7 @@
     @triggerDeleteAll="deleteAll"
     :engineStatus="status">
     </workflowHeading>
-
-    <v-layout class="header teal darken-3">
-        <v-flex class="number">
-            #
-        </v-flex>  
-        <v-flex class="data">
-            Data
-        </v-flex>  
-        <v-flex class="priority">
-            Priority
-        </v-flex>
-        <v-flex class="processorPoolId">
-            Processor Pool
-        </v-flex>
-        <v-flex class="state">
-            State
-        </v-flex>
-        <v-flex class="timeout">
-            Timeout
-        </v-flex>
-        <v-flex class="timestamps">
-            <div class="errorTS">
-                Error Time
-            </div>
-            <div class="lastModTS">
-                Last Modification
-            </div>
-            <div class="creationTS">
-                Creation
-            </div>            
-        </v-flex>
-        <v-flex class="actions">
-            Actions
-        </v-flex>
-    </v-layout>
+    
     <v-layout class="workflows-cont" column>
         <v-card v-show="!workflows || workflows.length === 0">
             <v-card-text>

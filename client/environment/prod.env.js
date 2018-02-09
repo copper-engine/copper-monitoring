@@ -4,7 +4,7 @@ module.exports = {
   DEBUG_MODE: false,
   API_KEY: '"XXXX-XXXXX-XXXX-XXXX"',
   API_LOCATION: '""', // /static/dev/"
-  API_NAME: '"http://localhost:8080/api/"',
+  API_NAME: '"/api/"',
   PACKAGE_NAME: '"monitoring-gui"',
   ROUTING_BASE: '"/#"'
   // ROUTING_BASE: '"/monitoring-gui/"'

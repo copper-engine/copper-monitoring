@@ -98,32 +98,15 @@
          
             </v-flex>
         <!-- </transition-group> -->
-    </v-layout>
-    <v-card>
-        <v-card-text>
-            <v-layout justify-center class="pagination-cont">
-                    <v-flex class="text-xs-center">
-                            <v-pagination :length="totalPages" v-model="page" :total-visible="10"></v-pagination>
-                            
-                        </v-flex>
-                <v-flex class="" xs3>
-                    <v-layout justify-center class="pagin-config">
-                        <v-flex>
-                            <div class="per-page-label">Per page</div>
-                        </v-flex>
-                        
-                        <v-flex>
-                            <v-select
-                            class="per-page"
-                            :items="perPageItems"
-                            v-model="perPage"
-                            dark
-                            ></v-select>
-                        </v-flex>
-                    </v-layout>
-                </v-flex>
-                
-            </v-layout>
-        </v-card-text>
-    </v-card>
+    </v-layout>    
+
+    <workflowFooter
+    @updatePage="page = $event"
+    @updatePerPage="perPage = $event"
+    :page="page"
+    :perPage="perPage"
+    :totalPages="totalPages"
+    :perPageItems="perPageItems">
+    </workflowFooter>
+
 </div>

@@ -14,11 +14,14 @@ export class WorkflowContext {
 }
 
 const WorkflowHeading = () => import('./workflowHeading').then(({ WorkflowHeading }) => WorkflowHeading);
+const WorkflowFooter = () => import('./workflowFooter').then(({ WorkflowFooter }) => WorkflowFooter);
+
 @Component({
     template: require('./workflows.html'),
     services: ['jmxService', 'eventHub'],
     components: {
-        'workflowHeading': WorkflowHeading
+        'workflowHeading': WorkflowHeading,
+        'workflowFooter': WorkflowFooter
     }
 })
 export class WorkflowsComponent extends Vue {
@@ -31,7 +34,6 @@ export class WorkflowsComponent extends Vue {
 
     private jmxService: JmxService = this.$services.jmxService;
     private eventHub: Vue = this.$services.eventHub;
-
 
     get status() {
         return this.$store.state.engineStatus;

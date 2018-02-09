@@ -16,7 +16,7 @@ export class LoginComponent extends Vue {
     passwordRules = [ (v) => !!v || 'Password is required' ];
     error: string = null;
 
-    submit() {
+    submit () {
         if ((this.$refs.form as any).validate()) {
             Axios.get(process.env.API_NAME, {
                 auth: {username: this.username, password: this.password}

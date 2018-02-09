@@ -42,3 +42,8 @@ if (process.env.ENV === 'development' && module.hot) {
   }
 });
 // (<any> window).app .$vuetify.theme.primary = '#00695b';
+
+document.addEventListener('DOMContentLoaded', function(event) { 
+  document.getElementById('appCover').classList.remove('initialHide');
+  document.getElementById('loading').classList.add('initialHide');
+});

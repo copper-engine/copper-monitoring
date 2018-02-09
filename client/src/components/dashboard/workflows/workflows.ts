@@ -13,13 +13,11 @@ export class WorkflowContext {
     public deleting: boolean = false;
 }
 
-const WorkflowDetail = () => import('./workflowDetails').then(({ WorkflowDetail }) => WorkflowDetail);
 const WorkflowHeading = () => import('./workflowHeading').then(({ WorkflowHeading }) => WorkflowHeading);
 @Component({
     template: require('./workflows.html'),
     services: ['jmxService', 'eventHub'],
     components: {
-        'workflowDetail': WorkflowDetail,
         'workflowHeading': WorkflowHeading
     }
 })

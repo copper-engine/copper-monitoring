@@ -13,8 +13,8 @@ export class WorkflowContext {
     public deleting: boolean = false;
 }
 
-const WorkflowHeading = () => import('./workflowHeading').then(({ WorkflowHeading }) => WorkflowHeading);
-const WorkflowFooter = () => import('./workflowFooter').then(({ WorkflowFooter }) => WorkflowFooter);
+const WorkflowHeading = () => import('./workflow-header').then(({ WorkflowHeading }) => WorkflowHeading);
+const WorkflowFooter = () => import('./workflow-footer').then(({ WorkflowFooter }) => WorkflowFooter);
 
 @Component({
     template: require('./workflows.html'),

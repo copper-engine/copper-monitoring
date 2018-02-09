@@ -39,7 +39,6 @@ public class BasicAuthServletFilter implements Filter {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
 
-        log.info(">>>> Method : " + httpServletRequest.getMethod());
         if ("OPTIONS".equals(httpServletRequest.getMethod())) {
     //        httpServletResponse.addHeader("Access-Control-Allow-Origin", "http://localhost:9099");
             httpServletResponse.addHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
@@ -49,7 +48,6 @@ public class BasicAuthServletFilter implements Filter {
             httpServletResponse.addHeader("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, X-Codingpedia");
             return;
         }
-
 
         // Extract authentication credentials
         String authentication = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);

@@ -78,5 +78,7 @@ export const createRouter = () => {
   //   }
   // });
 
+  console.log('Router created', new Date());
+
   return router;
 };

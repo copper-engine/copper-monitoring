@@ -15,7 +15,7 @@ export class JmxService {
             ])
             .then(this.parseEngineStatusResponse)
             .catch(error => {
-                console.error('Error fetching Engine Status:', error);
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
             });
     }
 
@@ -25,7 +25,7 @@ export class JmxService {
             ])
             .then(this.parseBrokenWorkflowsResponse)
             .catch(error => {
-                console.error('Error fetching Broken Workflows:', error);
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
             });
     }
 
@@ -35,7 +35,7 @@ export class JmxService {
                 ])
             .then(this.parseVoidResponse)
             .catch(error => {
-                console.error('Error restarting broken workflows:', error);
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflows:', error);
             });
     }
 
@@ -47,7 +47,7 @@ export class JmxService {
         return Axios.post(process.env.API_NAME, requestList)
             .then(this.parseVoidResponse)
             .catch(error => {
-                console.error('Error restarting broken workflows:', error);
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflows:', error);
             });
     }
 
@@ -56,7 +56,7 @@ export class JmxService {
                 [ this.createJmxExecRequest(connectionSettings, { operation: 'restart', arguments: [ workflowId ] }) ])
             .then(this.parseVoidResponse)
             .catch(error => {
-                console.error('Error restarting broken workflow:', error);
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflow:', error);
             });
     }
 
@@ -65,7 +65,7 @@ export class JmxService {
                 [ this.createJmxExecRequest(connectionSettings, { operation: 'deleteBroken', arguments: [ workflowId ] }) ])
             .then(this.parseVoidResponse)
             .catch(error => {
-                console.error('Error restarting broken workflow:', error);
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflow:', error);
             });
     }
 

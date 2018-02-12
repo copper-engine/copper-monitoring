@@ -6,6 +6,7 @@ import { JmxService } from '../../../services/jmxService';
 
 import './workflows.scss';
 import { ConnectionSettings } from '../../../models/connectionSettings';
+import { User } from '../../../models/user';
 
 export class WorkflowContext {
     public open: boolean = false;
@@ -69,20 +70,20 @@ export class WorkflowsComponent extends Vue {
         if (this.fetchBrokenWFInterval) {
             clearInterval(this.fetchBrokenWFInterval);
         }
-        this.getBrokenWorkflows(this.$store.state.connectionSettings);
+        this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
         this.fetchBrokenWFInterval = setInterval(() => {
-            this.getBrokenWorkflows(this.$store.state.connectionSettings);
+            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
         }, this.$store.state.connectionSettings.updatePeriod * 1000);
     }
 
-    private getBrokenWorkflows(connectionSettings: ConnectionSettings) {
-        this.jmxService.getBrokenWorkflows(connectionSettings, this.perPage, (this.page - 1) * this.perPage).then((response: WorkflowInfo[]) => {
+    private getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User) {
+        this.jmxService.getBrokenWorkflows(connectionSettings, user, this.perPage, (this.page - 1) * this.perPage).then((response: WorkflowInfo[]) => {
             this.workflows = response;
         });
     }
 
     restartAll() {
-        this.jmxService.restartAll(this.$store.state.connectionSettings)
+        this.jmxService.restartAll(this.$store.state.connectionSettings, this.$store.state.user)
             .then((done) => {
                 this.forceStatusFetch(500);
                 if (done) {
@@ -102,7 +103,7 @@ export class WorkflowsComponent extends Vue {
     }
 
     deleteAll() {
-        this.jmxService.deleteAll(this.$store.state.connectionSettings, this.workflows)
+        this.jmxService.deleteAll(this.$store.state.connectionSettings, this.workflows, this.$store.state.user)
         .then((done) => {
             if (done) {
                 this.workflows.forEach((wf) => {
@@ -121,7 +122,7 @@ export class WorkflowsComponent extends Vue {
     }
 
     restart(id: string) {
-        this.jmxService.restart(this.$store.state.connectionSettings, id)
+        this.jmxService.restart(this.$store.state.connectionSettings, id, this.$store.state.user)
         .then((done) => {
             if (done) {
                 this.highlight(id, 'reload');
@@ -138,7 +139,7 @@ export class WorkflowsComponent extends Vue {
     }
 
     deleteBroken(id: string) {
-        this.jmxService.deleteBroken(this.$store.state.connectionSettings, id)
+        this.jmxService.deleteBroken(this.$store.state.connectionSettings, id, this.$store.state.user)
         .then((done) => {
             // this.forceStatusFetch();
             this.highlight(id, 'delete');
@@ -200,7 +201,7 @@ export class WorkflowsComponent extends Vue {
     @Watch('perPage')
     private forceStatusFetch(delay: number = 0) {
         setTimeout(() => {
-            this.getBrokenWorkflows(this.$store.state.connectionSettings);
+            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
         }, delay);
     }
 }

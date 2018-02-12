@@ -24,12 +24,14 @@ export class LoginComponent extends Vue {
                 console.log('login result: ', result);
 
                 if (result.status === 401) {
-                    console.log('Unauthorized');
+                    this.error = 'Username & Password combination is incorect.';
                 } else {
-                    console.log('Welcome ' + this.username);
+                    this.$store.commit('setUser', new User(this.username, this.password));
+                    this.$router.replace('dashboard'); 
                 }
             }).catch(error => {
-                console.error('ERROR catched', error);
+                this.error = 'Username & Password combination is incorect.';
+                // console.error('ERROR catched', error);
             });            
         }
     }

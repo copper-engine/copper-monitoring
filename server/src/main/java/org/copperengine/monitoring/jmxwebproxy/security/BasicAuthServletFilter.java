@@ -64,8 +64,10 @@ public class BasicAuthServletFilter implements Filter {
             httpServletResponse.sendError(UNAUTHORIZED.getStatusCode(), "Invalid syntax for username and password");
             return;
         }
+
         String username = values[0];
         String password = values[1];
+        log.info("Auth attempt: " + username + " pass: " + password);
         if (username == null || password == null) {
             authError(httpServletResponse, "Missing username or password");
             return;

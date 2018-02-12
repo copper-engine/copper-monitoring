@@ -48,25 +48,36 @@
                             {{ workflow.creationTS | moment("HH:mm DD/MM/YYYY") }}
                         </div>
                     </v-flex>                  
-                    <v-flex class="actions ">
-                        <v-btn dark icon
-                            color="info"
-                            @click="restart(workflow.id)"
-                            >
-                            <v-icon>cached</v-icon>
-                        </v-btn>
-                        <v-btn dark icon
-                            color="info"
-                            @click="deleteBroken(workflow.id)"
-                            >
-                            <v-icon>delete</v-icon>
-                        </v-btn>
-                        <v-btn dark icon
-                            color="info"
-                            @click="showDetails(workflow)"
-                            >
-                            <v-icon :class="{ 'close-details-icon': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).open }">details</v-icon>
-                        </v-btn>
+                    <v-flex class="actions">
+                        <v-tooltip top content-class="tooltip-text">
+                            <v-btn dark icon
+                                color="info"
+                                @click="restart(workflow.id)"
+                                slot="activator"
+                                >
+                                <v-icon>cached</v-icon>
+                            </v-btn>
+                            <span>Restart Workflow</span>
+                        </v-tooltip>
+                        <v-tooltip top content-class="tooltip-text">
+                            <v-btn dark icon
+                                color="info"
+                                @click="deleteBroken(workflow.id)"
+                                slot="activator">
+                                <v-icon>delete</v-icon>
+                            </v-btn>
+                            <span>Delete Workflow</span>
+                        </v-tooltip>
+                        <v-tooltip top content-class="tooltip-text">
+                            <v-btn dark icon
+                                color="info"
+                                @click="showDetails(workflow)"
+                                slot="activator"
+                                >
+                                <v-icon :class="{ 'close-details-icon': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).open }">details</v-icon>
+                            </v-btn>
+                            <span>View Details</span>
+                        </v-tooltip>
                     </v-flex>
                 </v-layout>
                 <div class="details" v-show="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).open">

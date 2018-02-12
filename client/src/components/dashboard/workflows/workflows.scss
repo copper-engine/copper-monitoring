@@ -1,3 +1,7 @@
+.tooltip-text {
+    font-size: 1.2em;
+}
+
 .workflows {
     width: 100%;
     
@@ -92,13 +96,14 @@
         .close-details-icon {
             transform: rotate(180deg);
         }
+
     }
     // .data {
     //     width: 240px;
         // min-width: 240px;
     //     max-width: 240px;
     // }
-
+    
     .timestamps {
         width: 150px;
         min-width: 150px;

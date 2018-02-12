@@ -135,11 +135,11 @@ public class JmxWebProxyMain {
         servlet.addMapping("/*");
 
         // add basic auth filter for this Jolokia servlet
-        FilterRegistration authFilter = webappContext.addFilter("authFilter", new BasicAuthServletFilter());
-        authFilter.setInitParameter("realm", "Jolokia JMW Web Proxy");
-        authFilter.setInitParameter("fixedUsername", "admin");
-        authFilter.setInitParameter("fixedPassword", "admin");
-        authFilter.addMappingForServletNames(null, jolokiaServletName);
+//        FilterRegistration authFilter = webappContext.addFilter("authFilter", new BasicAuthServletFilter());
+//        authFilter.setInitParameter("realm", "Jolokia JMW Web Proxy");
+//        authFilter.setInitParameter("fixedUsername", "admin");
+//        authFilter.setInitParameter("fixedPassword", "admin");
+//        authFilter.addMappingForServletNames(null, jolokiaServletName);
 
         return webappContext;
     }

@@ -8,6 +8,32 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
     
     <title>Copper Monitoring</title>
+    <style>
+      body {
+        background: #424242;
+      }
+      .initialHide {
+        display: none;
+      }
+      .loadingAnimation {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100px;
+        width: 100px;
+        animation: rotate 1s infinite linear;
+        border: 10px solid rgb(0, 104, 92);
+        border-right-color: transparent;
+        border-radius: 50%;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+      }
+      @keyframes rotate {
+        0%    { transform: rotate(0deg); }
+        100%  { transform: rotate(360deg); }
+      }
+    </style>
   </head>
 
   <body>
@@ -21,30 +47,3 @@
   </body>
 
 </html>
-
-<style>
-  body {
-    background: #424242;
-  }
-  .initialHide {
-    display: none;
-  }
-  .loadingAnimation {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100px;
-    width: 100px;
-    animation: rotate 1s infinite linear;
-    border: 10px solid rgb(0, 104, 92);
-    border-right-color: transparent;
-    border-radius: 50%;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-  }
-  @keyframes rotate {
-    0%    { transform: rotate(0deg); }
-    100%  { transform: rotate(360deg); }
-  }
-</style>

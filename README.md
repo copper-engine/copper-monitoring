@@ -5,7 +5,7 @@ Monitoring GUI and server for COPPER
 Server so far only simple proxy for jmx. It uses jolokia to handle jmx calls to your copper applikation.
 
 Note that your copper application should be running with turned on jmx. For example it can be runed with next parameters: 
-`-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=1099 -Dcom.sun.management.jmxremote.ssl=false)` 
+`-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=1099 -Dcom.sun.management.jmxremote.ssl=false` 
 
 ## Client 
 

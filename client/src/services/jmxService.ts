@@ -3,66 +3,80 @@ import Axios from 'axios';
 import { State, EngineStatus, WorkflowInfo } from '../models/engine';
 import { ConnectionSettings } from '../models/connectionSettings';
 import moment from 'moment';
+import { User } from '../models/user';
 
 const ENGINE_MBEAN = 'copper.engine:name=persistent.engine';
 
 export class JmxService {
-    getEngineStatus(connectionSettings: ConnectionSettings) {
+    getEngineStatus(connectionSettings: ConnectionSettings, user: User) {
         return Axios.post(process.env.API_NAME, [
                 this.createEngineInfoRequest(connectionSettings), 
                 this.createEngineActivityRequest(connectionSettings),
                 this.createCountBrokenWFRequest(connectionSettings)
-            ])
+            ], {
+                auth: { username: user.name, password: user.password }
+            })
             .then(this.parseEngineStatusResponse)
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
             });
     }
 
-    getBrokenWorkflows(connectionSettings: ConnectionSettings, max: number = 50, offset: number = 0) {
+// TODO logout if wrong credentials...
+    getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User , max: number = 50, offset: number = 0) {
         return Axios.post(process.env.API_NAME, [
                 this.createQueryBrokenWFRequest(connectionSettings, max, offset)
-            ])
+            ], {
+                auth: { username: user.name, password: user.password }
+            })
             .then(this.parseBrokenWorkflowsResponse)
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
             });
     }
 
-    restartAll(connectionSettings: ConnectionSettings) {
+    restartAll(connectionSettings: ConnectionSettings, user: User) {
         return Axios.post(process.env.API_NAME, [
                     this.createJmxExecRequest(connectionSettings, { operation: 'restartAll()' })
-                ])
+                ], {
+                    auth: { username: user.name, password: user.password }
+                })
             .then(this.parseVoidResponse)
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflows:', error);
             });
     }
 
-    deleteAll(connectionSettings: ConnectionSettings, workflows: WorkflowInfo[]) {
+    deleteAll(connectionSettings: ConnectionSettings, workflows: WorkflowInfo[], user: User) {
         let requestList = workflows.map((workflow) => {
             return this.createJmxExecRequest(connectionSettings, { operation: 'deleteBroken', arguments: [ workflow.id ] });
         });
         
-        return Axios.post(process.env.API_NAME, requestList)
+        return Axios.post(process.env.API_NAME, requestList, {
+            auth: { username: user.name, password: user.password }
+        })
             .then(this.parseVoidResponse)
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflows:', error);
             });
     }
 
-    restart(connectionSettings: ConnectionSettings, workflowId: string) {
+    restart(connectionSettings: ConnectionSettings, workflowId: string, user: User) {
         return Axios.post(process.env.API_NAME, 
-                [ this.createJmxExecRequest(connectionSettings, { operation: 'restart', arguments: [ workflowId ] }) ])
+                [ this.createJmxExecRequest(connectionSettings, { operation: 'restart', arguments: [ workflowId ] }) ], {
+                    auth: { username: user.name, password: user.password }
+                })
             .then(this.parseVoidResponse)
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflow:', error);
             });
     }
 
-    deleteBroken(connectionSettings: ConnectionSettings, workflowId: string) {
+    deleteBroken(connectionSettings: ConnectionSettings, workflowId: string, user: User) {
         return Axios.post(process.env.API_NAME, 
-                [ this.createJmxExecRequest(connectionSettings, { operation: 'deleteBroken', arguments: [ workflowId ] }) ])
+                [ this.createJmxExecRequest(connectionSettings, { operation: 'deleteBroken', arguments: [ workflowId ] }) ], {
+                    auth: { username: user.name, password: user.password }
+                })
             .then(this.parseVoidResponse)
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflow:', error);

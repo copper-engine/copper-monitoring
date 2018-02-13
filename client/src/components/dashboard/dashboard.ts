@@ -4,6 +4,7 @@ import { JmxService } from '../../services/jmxService';
 
 import './dashboard.scss';
 import { EngineStatus } from '../../models/engine';
+import { User } from '../../models/user';
 
 const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) => SidebarComponent);
 
@@ -45,20 +46,20 @@ export class DashboardComponent extends Vue {
         if (this.updateStatusInterval) {
             clearInterval(this.updateStatusInterval);
         }
-        this.getEngineStatus(this.$store.state.connectionSettings);
+        this.getEngineStatus(this.$store.state.connectionSettings, this.$store.state.user);
         this.updateStatusInterval = setInterval(() => {
-            this.getEngineStatus(this.$store.state.connectionSettings);
+            this.getEngineStatus(this.$store.state.connectionSettings, this.$store.state.user);
         }, this.$store.state.connectionSettings.updatePeriod * 1000);
     }
 
     forceFetchingStatus(delay: number = 0) {
         setTimeout(() => {
-            this.getEngineStatus(this.$store.state.connectionSettings);
+            this.getEngineStatus(this.$store.state.connectionSettings, this.$store.state.user);
         }, delay);
     }
 
-    private getEngineStatus(connectionSettings: ConnectionSettings) {
-        (this.$services.jmxService as JmxService).getEngineStatus(connectionSettings).then((response: EngineStatus) => {
+    private getEngineStatus(connectionSettings: ConnectionSettings, user: User) {
+        (this.$services.jmxService as JmxService).getEngineStatus(connectionSettings, user).then((response: EngineStatus) => {
             this.$store.commit('updateEngineStatus', response);
         });
     }

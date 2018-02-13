@@ -29,7 +29,6 @@ export class LoginComponent extends Vue {
                 }
             }).catch(error => {
                 this.error = 'Username & Password combination is incorect.';
-                // console.error('ERROR catched', error);
             });            
         }
     }

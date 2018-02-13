@@ -4,11 +4,11 @@
 
 @keyframes slowFade {
     from {opacity: 1}
-    to {opacity: 0.2}
+    to {opacity: 0.4}
 }
 
 .fade {
-    opacity: 0.2;
+    opacity: 0.4;
     animation-name: slowFade;
     animation-duration: 1s;
 }
@@ -57,9 +57,9 @@
 
     .highlight-workflow-layout >* {
         background: #27695c !important;
-        opacity: 0;
-        transition: background 1.3s;
-        transition: opacity 2s;
+        // opacity: 0.2;
+        transition: background 1s;
+        // transition: opacity 1.2s;
     }
 
     .highlight-workflow-deleting >* {

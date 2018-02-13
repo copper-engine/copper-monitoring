@@ -11,14 +11,8 @@ export class WorkflowContext {
     public open: boolean = false;
     public reloading: boolean = false;
     public deleting: boolean = false;
-    public disable: boolean = false;
-    public reloadButton: boolean = true;
-    public deleteButton: boolean = true;
-
-    // get disabled() {
-    //     return this.reloadButton || this.deleteButton;
-    // }
-
+    public reloadButton: boolean = false;
+    public deleteButton: boolean = false;
 }
 
 const WorkflowHeading = () => import('./workflow-header').then(({ WorkflowHeading }) => WorkflowHeading);
@@ -41,7 +35,6 @@ export class WorkflowsComponent extends Vue {
     perPageItems: number[] = [10, 15, 25, 50];
     restartingAll = false;
     deletingAll = false;
-    // disabled = false;
 
     private jmxService: JmxService = this.$services.jmxService;
     private eventHub: Vue = this.$services.eventHub;
@@ -98,10 +91,10 @@ export class WorkflowsComponent extends Vue {
 
     restartAll() {
         this.restartingAll = true;
-        // this.disabled = true;
         setTimeout(() => {
         this.jmxService.restartAll(this.$store.state.connectionSettings)
             .then((done) => {
+                this.restartingAll = false;
                 this.forceStatusFetch(500);
                 if (done) {
                     this.workflows.forEach((wf) => {
@@ -112,23 +105,20 @@ export class WorkflowsComponent extends Vue {
                 } else {
                     this.showError('Failed to restart all workflows');
                 }
-                this.restartingAll = false;
-                // this.disabled = false;
             }).catch((err) => {
                 // TODO show toast
                 this.showError('Failed to restart all workflows due to:' + err);
                 console.error('Failed to restart workflows due to:', err);
                 this.restartingAll = false;
-                // this.disabled = false;
             }); }, 3000);
     }
 
     deleteAll() {
         this.deletingAll = true;
-        // this.disabled = true;
         setTimeout(() => {
         this.jmxService.deleteAll(this.$store.state.connectionSettings, this.workflows)
         .then((done) => {
+            this.deletingAll = false;
             if (done) {
                 this.workflows.forEach((wf) => {
                     let currentID = wf.id;
@@ -139,13 +129,10 @@ export class WorkflowsComponent extends Vue {
                 this.showError('Failed to Delete all workflows');
             }
             this.forceStatusFetch(1500);
-            this.deletingAll = false;
-            // this.disabled = false;
         }).catch((err) => {
             this.showError('Failed to Delete all workflows due to: ' + err);
             console.error('Failed to Delete all workflows due to:', err);
             this.deletingAll = false;
-            // this.disabled = false;
         }); }, 3000);
     }
 
@@ -154,14 +141,14 @@ export class WorkflowsComponent extends Vue {
         setTimeout(() => {
         this.jmxService.restart(this.$store.state.connectionSettings, id)
         .then((done) => {
+            this.toggleButtons(id, 'restart');
             if (done) {
                 this.highlight(id, 'reload');
                 this.forceStatusFetch(500);
                 this.showSuccess(`Workflow id: ${id} restarted successfully`);
             } else {
                 this.showError(`Failed to restart workflow id: ${id}`);
-            }
-            this.toggleButtons(id, 'restart');
+            }    
         }).catch((err) => {
             this.showError(`Failed to restart workflow id: ${id} due to: ${err}`);
             console.error(`Failed to restart workflow id: ${id} due to: ${err}`);
@@ -175,6 +162,7 @@ export class WorkflowsComponent extends Vue {
         this.jmxService.deleteBroken(this.$store.state.connectionSettings, id)
         .then((done) => {
             // this.forceStatusFetch();
+            this.toggleButtons(id, 'delete');
             this.highlight(id, 'delete');
             setTimeout(() => { 
                 this.workflows = this.workflows.filter((workflow) => workflow.id !== id);
@@ -183,7 +171,6 @@ export class WorkflowsComponent extends Vue {
                 } else {
                     this.showError(`Failed to delete workflow id: ${id}`);
                 }
-                this.toggleButtons(id, 'delete');
             }, 1500);
         }).catch((err) => {
             // TODO show toast
@@ -219,7 +206,6 @@ export class WorkflowsComponent extends Vue {
         if (!wfContext) {
             wfContext = new WorkflowContext();
         }
-        wfContext.disable = !wfContext.disable;
         if (type === 'restart') {
             wfContext.reloadButton = !wfContext.reloadButton;
         }

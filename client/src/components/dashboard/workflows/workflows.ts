@@ -91,7 +91,6 @@ export class WorkflowsComponent extends Vue {
 
     restartAll() {
         this.restartingAll = true;
-        setTimeout(() => {
         this.jmxService.restartAll(this.$store.state.connectionSettings)
             .then((done) => {
                 this.restartingAll = false;
@@ -110,12 +109,11 @@ export class WorkflowsComponent extends Vue {
                 this.showError('Failed to restart all workflows due to:' + err);
                 console.error('Failed to restart workflows due to:', err);
                 this.restartingAll = false;
-            }); }, 3000);
+            });
     }
 
     deleteAll() {
         this.deletingAll = true;
-        setTimeout(() => {
         this.jmxService.deleteAll(this.$store.state.connectionSettings, this.workflows)
         .then((done) => {
             this.deletingAll = false;
@@ -133,12 +131,11 @@ export class WorkflowsComponent extends Vue {
             this.showError('Failed to Delete all workflows due to: ' + err);
             console.error('Failed to Delete all workflows due to:', err);
             this.deletingAll = false;
-        }); }, 3000);
+        });
     }
 
     restart(id: string) {
         this.toggleButtons(id, 'restart');
-        setTimeout(() => {
         this.jmxService.restart(this.$store.state.connectionSettings, id)
         .then((done) => {
             this.toggleButtons(id, 'restart');
@@ -153,12 +150,11 @@ export class WorkflowsComponent extends Vue {
             this.showError(`Failed to restart workflow id: ${id} due to: ${err}`);
             console.error(`Failed to restart workflow id: ${id} due to: ${err}`);
             this.toggleButtons(id, 'restart');
-        }); }, 3000);
+        });
     }
 
     deleteBroken(id: string) {
         this.toggleButtons(id, 'delete');
-        setTimeout(() => {
         this.jmxService.deleteBroken(this.$store.state.connectionSettings, id)
         .then((done) => {
             // this.forceStatusFetch();
@@ -176,7 +172,7 @@ export class WorkflowsComponent extends Vue {
             // TODO show toast
             this.showError(`Failed to delete workflow id: ${id} due to: ${err}`);
             this.toggleButtons(id, 'delete');
-        }); }, 3000);
+        });
     }
 
     highlight(id: String, type: String) {

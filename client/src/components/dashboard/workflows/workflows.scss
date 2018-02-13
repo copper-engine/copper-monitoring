@@ -55,12 +55,26 @@
         align-items: center;
     }
 
+    @keyframes highlightCurve {
+        0% {opacity: 0.35}
+        50% {opacity: 0.8}
+        100% {opacity: 0.45}
+    }
+    
     .highlight-workflow-layout >* {
         background: #27695c !important;
-        // opacity: 0.2;
-        transition: background 1s;
-        // transition: opacity 1.2s;
+        opacity: 0.35;
+        animation-name: highlightCurve;
+        animation-duration: 1s;
+        animation-timing-function: ease-out;
     }
+
+    // .highlight-workflow-layout >* {
+    //     background: #27695c !important;
+    //     // opacity: 0.2;
+    //     transition: background 1s;
+    //     // transition: opacity 1.2s;
+    // }
 
     .highlight-workflow-deleting >* {
         background: #e74615 !important;

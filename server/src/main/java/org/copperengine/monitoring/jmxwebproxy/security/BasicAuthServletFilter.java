@@ -10,6 +10,9 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 
@@ -21,16 +24,26 @@ import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
  */
 public class BasicAuthServletFilter implements Filter {
     private static final Logger log = LoggerFactory.getLogger(BasicAuthServletFilter.class);
+    private static final String ENVIRONMENT = System.getenv("ENVIRONMENT");
 
     private String realm;
-    private String fixedUsername;
-    private String fixedPassword;
+    private Map<String, String> credentialMap = new HashMap<>();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         this.realm = filterConfig.getInitParameter("realm");
-        this.fixedUsername = filterConfig.getInitParameter("fixedUsername");
-        this.fixedPassword = filterConfig.getInitParameter("fixedPassword");
+        String auth = filterConfig.getInitParameter("auth");
+        
+        if (auth != null && auth.length() > 0) {
+            Arrays.stream(auth.split(";")).map(entry -> entry.split(":"))
+                .forEach(credentials -> {
+                    if (credentials.length == 2) {
+                        credentialMap.put(credentials[0], credentials[1]);
+                    } else {
+                        System.out.println("Found no password for " + credentials[0]);
+                    }
+                });
+        }
     }
 
     @Override
@@ -40,12 +53,14 @@ public class BasicAuthServletFilter implements Filter {
 
 
         if ("OPTIONS".equals(httpServletRequest.getMethod())) {
-    //        httpServletResponse.addHeader("Access-Control-Allow-Origin", "http://localhost:9099");
+//            log.warn("Setting Access-Control-Allow headers. Consider to not use it in production.");
+            if ("DEV".equals(ENVIRONMENT)) {
+                httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
+            }
+
             httpServletResponse.addHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-            httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
-            httpServletResponse.addHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS");
+            httpServletResponse.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
             httpServletResponse.addHeader("Access-Control-Allow-Credentials", "true");
-            httpServletResponse.addHeader("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, X-Codingpedia");
             return;
         }
 
@@ -72,7 +87,7 @@ public class BasicAuthServletFilter implements Filter {
         }
 
         // Validate the extracted credentials
-        if (!username.equals(fixedUsername) || !password.equals(fixedPassword)) {
+        if (!password.equals(credentialMap.get(username))) {
             authError(httpServletResponse, "Invalid username or password");
             return;
         }
@@ -81,7 +96,7 @@ public class BasicAuthServletFilter implements Filter {
     }
 
     private void authError(HttpServletResponse httpServletResponse, String msg) throws IOException {
-        httpServletResponse.addHeader("WWW-Authenticate", "Basic realm=\"" + realm + "\"");
+        httpServletResponse.addHeader("WWW-Authenticate", "xBasic realm=\"" + realm + "\"");
         httpServletResponse.sendError(UNAUTHORIZED.getStatusCode(), msg);
     }
 

@@ -22,6 +22,7 @@ export class JmxService {
             });
     }
 
+// TODO logout if wrong credentials...
     getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User , max: number = 50, offset: number = 0) {
         return Axios.post(process.env.API_NAME, [
                 this.createQueryBrokenWFRequest(connectionSettings, max, offset)

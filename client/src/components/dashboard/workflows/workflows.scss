@@ -2,6 +2,17 @@
     font-size: 1.2em;
 }
 
+@keyframes slowFade {
+    from {opacity: 1}
+    to {opacity: 0.2}
+}
+
+.fade {
+    opacity: 0.2;
+    animation-name: slowFade;
+    animation-duration: 1s;
+}
+
 .workflows {
     width: 100%;
     

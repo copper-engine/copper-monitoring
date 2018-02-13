@@ -6,7 +6,9 @@
         </v-flex>
         <v-flex>
             <v-btn dark
-                color="info"
+                color="teal darken-3"
+                :loading="restartingAll"
+                :disabled="restartingAll || deletingAll"
                 @click="sendRestartAll"
                 >
                 <v-icon left>cached</v-icon>
@@ -16,7 +18,9 @@
                 </span>
             </v-btn>
             <v-btn dark
-                color="info"
+                color="teal darken-3"
+                :loading="deletingAll"
+                :disabled="deletingAll || restartingAll"
                 @click="sendDeleteAll"
                 >
                 <v-icon left>delete</v-icon>

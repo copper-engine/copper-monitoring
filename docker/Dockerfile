@@ -8,5 +8,6 @@ RUN unzip copper-monitoring.zip
 
 WORKDIR /app/copper-monitoring
 EXPOSE 8080
+ENV JMX_AUTH "admin:admin;scoop:scoop"
 
 CMD ["./bin/jmxwebproxy"]

@@ -135,11 +135,14 @@ public class JmxWebProxyMain {
         servlet.addMapping("/*");
 
         // add basic auth filter for this Jolokia servlet
-//        FilterRegistration authFilter = webappContext.addFilter("authFilter", new BasicAuthServletFilter());
-//        authFilter.setInitParameter("realm", "Jolokia JMW Web Proxy");
-//        authFilter.setInitParameter("fixedUsername", "admin");
-//        authFilter.setInitParameter("fixedPassword", "admin");
-//        authFilter.addMappingForServletNames(null, jolokiaServletName);
+        FilterRegistration authFilter = webappContext.addFilter("authFilter", new BasicAuthServletFilter());
+        authFilter.setInitParameter("realm", "Jolokia JMW Web Proxy");
+        String auth = System.getenv("JMX_AUTH");
+        if (auth == null || auth.length() == 0) {
+            log.warn("No authentication credentials were set. Check if environment variable JMX_AUTH is set correct.");
+        }
+        authFilter.setInitParameter("auth", auth);
+        authFilter.addMappingForServletNames(null, jolokiaServletName);
 
         return webappContext;
     }

@@ -21,8 +21,6 @@ export class LoginComponent extends Vue {
             Axios.get(process.env.API_NAME, {
                 auth: {username: this.username, password: this.password}
             }).then(result => {
-                console.log('login result: ', result);
-
                 if (result.status === 401) {
                     this.error = 'Username & Password combination is incorect.';
                 } else {

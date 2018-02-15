@@ -17,13 +17,18 @@ export class SidebarComponent extends Vue {
     drawer = null;
     miniVariant = false;
     settingsShowed = false;
-    links: Link[] = [
-        new Link('Home', '/dashboard', 'mdi-home'),
-        new Link('Broken Workflows', '/dashboard/workflows', 'mdi-image-broken'),
+    
+    
+    get links(): Link[] {
+
+     return [
+        new Link('Home', '/dashboard?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-home'),
+        new Link('Broken Workflows', '/dashboard/workflows?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-image-broken'),
       ];
+    }
       
-      updateTarget(connectionSettings) {
-          this.settingsShowed = false;
-          this.$store.commit('updateConnectionSettings', connectionSettings);
-      }
+    updateTarget(connectionSettings) {
+        this.settingsShowed = false;
+        this.$store.commit('updateConnectionSettings', connectionSettings);
+    }
 }

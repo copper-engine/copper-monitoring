@@ -67,7 +67,7 @@
         border-top: 1px solid rgba(255, 255, 255, 0.59);
     }
     
-    .workflow-layout {
+    .workflow-layout >* {
         padding: 8px 16px;
         align-items: center;
     }
@@ -170,24 +170,28 @@
         max-width: 65px;
     }
 
+    .workflow-info-layout {
+        padding: 0px;
+        
+        .details {
+            background: #4e4e4e;
+            padding: 24px 32px;
+            width: 100%;
 
-    .details {
-        background: #4e4e4e;
-        padding: 24px 32px;
+            .workflow-detail {
+                padding: 4px;
+            }
 
-        .workflow-detail {
-            padding: 4px;
-        }
+            .detail-label {
+                font-weight: 700;
+                width: 200px;
+                min-width: 200px;
+                max-width: 200px;
+            }
 
-        .detail-label {
-            font-weight: 700;
-            width: 200px;
-            min-width: 200px;
-            max-width: 200px;
-        }
-
-        .stacktrace .text {
-            overflow-x: auto;
+            .stacktrace .text {
+                overflow-x: auto;
+            }
         }
     }
 

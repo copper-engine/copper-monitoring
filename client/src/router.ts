@@ -45,6 +45,7 @@ export const createRoutes: () => RouteConfig[] = () => [
     name: 'dashboard',
     path: '/dashboard',
     component: dashboardComponent,
+    props: (route) => ({ host: route.query.host, port: route.query.port }),
     meta: {
       requiresAuth: true
     },
@@ -65,19 +66,31 @@ export const createRoutes: () => RouteConfig[] = () => [
 
 let store: Store<StoreState> = Vue.$ioc.resolve('store');
 
+export class CopperRouter extends VueRouter {
+  public nextPath: string;
+}
+
 export const createRouter = () => {
-  let router = new VueRouter({ mode: 'history', routes: createRoutes(), base: process.env.ROUTING_BASE });
+  let router = new CopperRouter({ 
+    mode: 'history', 
+    routes: createRoutes(), 
+    base: process.env.ROUTING_BASE 
+  });
+
 
   router.beforeEach((to: Route, from: Route, next) => {
     let requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     
     if (requiresAuth && !store.state.user) {
+      // todo store route
+      console.log('to', to);
+      router.nextPath = to.fullPath;
       next('/login');
     } else {
       next();
     }
   });
-
+  
   console.log('Router created', new Date());
 
   return router;

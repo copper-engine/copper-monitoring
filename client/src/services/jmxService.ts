@@ -151,6 +151,7 @@ export class JmxService {
         if (!response || !response.data 
             || response.data.length < 1
             || response.data[0].error) {
+            console.log('Invalid responce:', response); 
             throw new Error('invalid response!');
         }
 
@@ -164,6 +165,7 @@ export class JmxService {
             || !this.isSubResponseValid(response.data[1])
             || !this.isSubResponseValid(response.data[2])
         ) {
+            console.log('Invalid responce:', response);          
             throw new Error('invalid response!');
         }
 
@@ -183,6 +185,7 @@ export class JmxService {
             || response.data.length < 1
             || !this.isSubResponseValid(response.data[0])
         ) {
+            console.log('Invalid responce:', response);          
             throw new Error('invalid response!');
         }
 

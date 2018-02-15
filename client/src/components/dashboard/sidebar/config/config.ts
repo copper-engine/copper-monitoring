@@ -11,7 +11,7 @@ export class ConfigComponent extends Vue {
     // @Prop() connectionSettings: ConnectionSettings;
 
     host: string = '';
-    port: number = 1099;
+    port: string = '1099';
     fetchPeriod: number = 5;
     updatePeriod: number = 10;
     valid = true;

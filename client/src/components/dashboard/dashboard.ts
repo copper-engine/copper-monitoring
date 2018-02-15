@@ -1,4 +1,4 @@
-import { Component, Vue, Watch } from 'vue-property-decorator';
+import { Component, Vue, Watch, Prop } from 'vue-property-decorator';
 import { ConnectionSettings } from '../../models/connectionSettings';
 import { JmxService } from '../../services/jmxService';
 
@@ -31,7 +31,10 @@ export class DashboardComponent extends Vue {
         (this.$services.eventHub as Vue).$off('forceStatusFetch', this.forceFetchingStatus);
     }
 
+
     mounted() {
+        this.parseRoute();
+       
         console.log('Dashboard mounted', new Date());
         this.sheduleFetchingStatus();
     }
@@ -41,8 +44,26 @@ export class DashboardComponent extends Vue {
         this.$router.replace('/login'); 
     }
 
+    @Watch('$route')
+    parseRoute() {
+        if (this.$route.fullPath.split('?').length > 1 ) {
+            let params = this.$route.fullPath.split('?');
+            if (params && params[1]) {
+                params = params[1].split('&');
+                let host: string = params[0] ? params[0].split('=')[1] : undefined;
+                let port: string = params[1] ? params[1].split('=')[1] : undefined;
+
+                if (host || port) {
+                    this.$store.commit('updateConnectionSettings', new ConnectionSettings(host, port));
+                }
+            }
+        }
+    }
+
     @Watch('$store.state.connectionSettings')
     sheduleFetchingStatus() {
+        // this.$route.query.host = this.$store.state.connectionSettings.host;
+        // this.$route.query.host = this.$store.state.connectionSettings.port;
         if (this.updateStatusInterval) {
             clearInterval(this.updateStatusInterval);
         }

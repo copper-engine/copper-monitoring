@@ -4,6 +4,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { User } from '../../models/user';
 
 import './login.scss';
+import { CopperRouter } from '../../router';
 
 @Component({
     template: require('./login.html'),
@@ -25,11 +26,10 @@ export class LoginComponent extends Vue {
                     this.error = 'Username & Password combination is incorect.';
                 } else {
                     this.$store.commit('setUser', new User(this.username, this.password));
-                    this.$router.replace('dashboard'); 
+                    this.$router.push((this.$router as CopperRouter).nextPath);
                 }
             }).catch(error => {
                 this.error = 'Username & Password combination is incorect.';
-                // console.error('ERROR catched', error);
             });            
         }
     }

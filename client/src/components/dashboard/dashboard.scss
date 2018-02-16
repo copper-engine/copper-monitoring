@@ -1,3 +1,38 @@
+.router-component-enter-active, .router-component-leave-active {
+    transition: opacity 0.15s;
+}
+.router-component-enter {
+    opacity: 0;
+}
+.router-component-enter-to {
+    opacity: 1;
+}
+.router-component-leave {
+    opacity: 1;
+}
+.router-component-leave-to {
+    opacity: 0;
+}
+
+// .router-component-enter-active, .router-component-leave-active {
+//     transition: all 0.8s;
+// }
+// .router-component-enter {
+//     transform: translateX(-100%);
+//     opacity: 0.5;
+// }
+// .router-component-enter-to {
+//     transform: translateX(0);
+//     opacity: 1;
+// }
+// .router-component-leave {
+//     transform: translateX(0);
+// }
+// .router-component-leave-to {
+//     transform: translateX(-110%);
+//     opacity: 0.5;
+// }
+
 .dashboard {
     padding-bottom: 50px;
     background: #303030;

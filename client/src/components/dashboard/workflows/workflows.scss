@@ -1,20 +1,3 @@
-.component-fade-enter-active, .component-fade-leave-active {
-    transition: transform 1.5s;
-}
-.component-fade-enter {
-    transform: translateY(-110%);
-}
-.component-fade-enter-to {
-    transform: translateY(0);
-}
-.component-fade-leave {
-    transform: translateY(0);
-}
-.component-fade-leave-to {
-    transform: translateY(+150%);
-}
-
-
 .tooltip-text {
     font-size: 1.2em;
 }

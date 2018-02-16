@@ -13,7 +13,8 @@
                 label="Username"
                 v-model="username"
                 :rules="usernameRules"
-                autofocus="true"
+                @keyup.enter="submit"
+                autofocus
                 required
             ></v-text-field>
             <v-text-field
@@ -21,13 +22,13 @@
                 label="Password"
                 v-model="password"
                 :rules="passwordRules"
+                @keyup.enter="submit"
                 required
             ></v-text-field>
             
             <v-btn color=" teal darken-3"
             @click="submit"
-                type="submit"
-                :disabled="!valid"
+            :disabled="!valid"
             >
                 Login
             </v-btn>

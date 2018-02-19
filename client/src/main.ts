@@ -9,8 +9,6 @@ import { createRouter } from './router';
 import 'vuetify/dist/vuetify.css';
 import 'mdi/css/materialdesignicons.min.css';
 
-import './main.scss';
-
 // Vue.use(date)
 Vue.use(require('vue-moment'));
 Vue.use(Vuetify);

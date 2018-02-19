@@ -1,7 +1,10 @@
 const helpers = require('./helpers'),
   NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin'),
+  IgnorePlugin = require('webpack/lib/IgnorePlugin'),
   CopyWebpackPlugin = require('copy-webpack-plugin');
 
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+  
 let config = {
   entry: {
     'main': helpers.root('/src/main.ts')
@@ -40,6 +43,8 @@ let config = {
   },
   plugins: [
     new NamedModulesPlugin(),
+    // new BundleAnalyzerPlugin(),
+    new IgnorePlugin(/^\.\/locale$/, /moment$/),
     new CopyWebpackPlugin([{
       from: 'src/assets',
       to: './assets'

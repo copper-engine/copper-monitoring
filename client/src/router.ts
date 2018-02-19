@@ -4,7 +4,8 @@ import { StoreState } from './store.vuex';
 import VueRouter, { Location, Route, RouteConfig } from 'vue-router';
 import { makeHot, reload } from './util/hot-reload';
 
-const loginComponent = () => import('./components/login').then(({ LoginComponent }) => LoginComponent);
+import { LoginComponent } from './components/login';
+
 const dashboardComponent = () => import('./components/dashboard').then(({ DashboardComponent }) => DashboardComponent);
 const workflowsComponent = () => import('./components/dashboard/workflows').then(({ WorkflowsComponent }) => WorkflowsComponent);
 
@@ -12,7 +13,8 @@ const workflowsComponent = () => import('./components/dashboard/workflows').then
 if (process.env.ENV === 'development' && module.hot) {
   // first arguments for `module.hot.accept` and `require` methods have to be static strings
   // see https://github.com/webpack/webpack/issues/5668
-    
+  
+  const loginComponent = () => import('./components/login').then(({ LoginComponent }) => LoginComponent);
   const loginModuleId = './components/login';
   makeHot(loginModuleId, loginComponent,
     module.hot.accept('./components/login', () => reload(loginModuleId, (<any>require('./components/login')).LoginComponent)));
@@ -39,7 +41,7 @@ export const createRoutes: () => RouteConfig[] = () => [
   {
     name: 'login',
     path: '/login',
-    component: loginComponent,
+    component: LoginComponent,
   },
   {
     name: 'dashboard',

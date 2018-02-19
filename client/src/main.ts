@@ -21,6 +21,7 @@ Vue.use(Vuetify, {
     accent: '#8c9eff',
     error: '#b71c1c',
     themeText: '#000000',
+    textOnColor: '#f5f5f5',
     back: '#E0E0E0'
   }
 });

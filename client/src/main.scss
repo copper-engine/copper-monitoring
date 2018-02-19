@@ -11,3 +11,11 @@ body {
     background: #E0E0E0;
     color: rgba(0,0,0,0.87);
 }
+
+.theme--light .input-group input, .application .theme--light.input-group input, .theme--light .input-group textarea, .application .theme--light.input-group textarea {
+    color: white;
+}
+
+.theme--light .input-group:not(.input-group--error) label, .application .theme--light.input-group:not(.input-group--error) label {
+    color: white
+}

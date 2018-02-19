@@ -34,8 +34,6 @@ export class DashboardComponent extends Vue {
 
     mounted() {
         this.parseRoute();
-       
-        console.log('Dashboard mounted', new Date());
         this.sheduleFetchingStatus();
     }
 

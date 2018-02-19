@@ -17,6 +17,13 @@ const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) =
 })
 export class DashboardComponent extends Vue {
     updateStatusInterval: any;
+    // darkTheme = localStorage.darkTheme;
+    darkTheme = false;
+
+    toggleTheme() {
+        this.$emit('toggle-theme');
+        this.darkTheme = !this.darkTheme;
+    }
     
     get user() {
         return this.$store.state.user;
@@ -33,6 +40,7 @@ export class DashboardComponent extends Vue {
 
 
     mounted() {
+
         this.parseRoute();
        
         console.log('Dashboard mounted', new Date());

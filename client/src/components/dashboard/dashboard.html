@@ -7,6 +7,10 @@
         <div class="user" v-if="!!user">
             User: <span class="username"> {{ user.name }} </span>
         </div>
+        <v-btn @click="toggleTheme" v-if="!!user">
+            <v-icon>mdi-theme-light-dark</v-icon>
+            {{ darkTheme ? 'Light' : 'Dark' }}
+        </v-btn>
         <v-btn @click="logout" v-if="!!user">
             <v-icon>mdi-logout</v-icon>
             Logout

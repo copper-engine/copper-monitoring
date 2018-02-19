@@ -10,7 +10,7 @@
     <title>Copper Monitoring</title>
     <style>
       body {
-        background: #424242;
+        background: #F5F5F5;
       }
       .initialHide {
         display: none;
@@ -22,7 +22,7 @@
         height: 100px;
         width: 100px;
         animation: rotate 1s infinite linear;
-        border: 10px solid rgb(0, 104, 92);
+        border: 10px solid #3f51b5;
         border-right-color: transparent;
         border-radius: 50%;
         right: 0;
@@ -39,9 +39,11 @@
   <body>
     <div class="loadingAnimation" id="loading"></div>
     <div class="initialHide" id="appCover">
-      <v-app dark id="app">
+      <v-app :dark="toggleTheme" id="app">
         <notifications></notifications>
-          <router-view></router-view>
+        <router-view
+        @toggle-theme="toggleTheme=!toggleTheme">
+        </router-view>
       </v-app>
     </div>
   </body>

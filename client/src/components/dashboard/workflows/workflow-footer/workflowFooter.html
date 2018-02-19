@@ -1,9 +1,9 @@
 <div>
     <v-card>
-        <v-card-text>
+        <v-card-text class="secondary">
             <v-layout justify-center class="pagination-cont">
                     <v-flex class="text-xs-center">
-                        <v-pagination :length="totalPages" v-model="localPage" :total-visible="10" color="teal darken-3"></v-pagination>      
+                        <v-pagination :length="totalPages" v-model="localPage" :total-visible="10" color="primary"></v-pagination>      
                     </v-flex>
                 <v-flex class="" xs3>
                     <v-layout justify-center class="pagin-config">
@@ -17,7 +17,7 @@
                             :items="perPageItems"
                             v-model="localPerPage"
                             dark
-                            color="teal darken-3"
+                            color="primary"
                             ></v-select>
                         </v-flex>
                     </v-layout>

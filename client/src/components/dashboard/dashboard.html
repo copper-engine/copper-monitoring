@@ -9,7 +9,7 @@
         </div>
         <v-btn @click="toggleTheme" v-if="!!user">
             <v-icon>mdi-theme-light-dark</v-icon>
-            {{ darkTheme ? 'Light' : 'Dark' }}
+            {{ darkThemeText ? 'Light' : 'Dark' }}
         </v-btn>
         <v-btn @click="logout" v-if="!!user">
             <v-icon>mdi-logout</v-icon>

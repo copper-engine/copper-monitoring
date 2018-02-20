@@ -1,7 +1,7 @@
 import { Component, Vue, Watch, Prop } from 'vue-property-decorator';
 import { ConnectionSettings } from '../../models/connectionSettings';
 import { JmxService } from '../../services/jmxService';
-
+import * as utils from '../../util/utils';
 import './dashboard.scss';
 import { EngineStatus } from '../../models/engine';
 import { User } from '../../models/user';
@@ -17,12 +17,12 @@ const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) =
 })
 export class DashboardComponent extends Vue {
     updateStatusInterval: any;
-    // darkTheme = localStorage.darkTheme;
-    darkTheme = false;
+    darkThemeText = utils.parseBoolean(localStorage.getItem('darkTheme'));
+    // darkThemeText = false;
 
     toggleTheme() {
         this.$emit('toggle-theme');
-        this.darkTheme = !this.darkTheme;
+        this.darkThemeText = !this.darkThemeText;
     }
     
     get user() {

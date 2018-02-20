@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import 'babel-polyfill';
 import { Store } from 'vuex';
-// import date from 'vue-date-filter';
 import { StoreState } from './store.vuex';
 import Vuetify from 'vuetify';
 import { makeHot, reload } from './util/hot-reload';
@@ -9,22 +8,53 @@ import './dependency-injection';
 import { createRouter } from './router';
 import 'vuetify/dist/vuetify.css';
 import 'mdi/css/materialdesignicons.min.css';
+import * as utils from './util/utils';
 
 import './main.scss';
 
+if (utils.parseBoolean(localStorage.getItem('darkTheme')) === null) {
+  localStorage.setItem('darkTheme', 'true');
+}
+
 // Vue.use(date)
 Vue.use(require('vue-moment'));
-Vue.use(Vuetify, {
-  theme: {
-    primary: '#3f51b5',
-    secondary: '#f5f5f5',
-    accent: '#8c9eff',
-    error: '#b71c1c',
-    themeText: '#000000',
-    textOnColor: '#f5f5f5',
-    back: '#E0E0E0'
-  }
-});
+// Vue.use(Vuetify, {
+//   theme: {
+//     primary: '#3f51b5',
+//     secondary: '#f5f5f5',
+//     accent: '#8c9eff',
+//     error: '#b71c1c',
+//     themeText: '#000000',
+//     textOnColor: '#f5f5f5',
+//     back: '#E0E0E0'
+//   }
+// });
+
+if (utils.parseBoolean(localStorage.getItem('darkTheme')) === false) {
+  Vue.use(Vuetify, {
+    theme: {
+      primary: '#3f51b5',
+      secondary: '#f5f5f5',
+      accent: '#8c9eff',
+      error: '#b71c1c',
+      themeText: '#000000',
+      textOnColor: '#f5f5f5',
+      back: '#E0E0E0'
+    }
+  });
+} else {
+  Vue.use(Vuetify, {
+    theme: {
+      primary: '#00695C',
+      secondary: '#424242',
+      accent: '#8c9eff',
+      error: '#b71c1c',
+      themeText: '#f5f5f5',
+      textOnColor: '#f5f5f5',
+      back: '#303030'
+    }
+  });
+}
 
 const dashboardComponent = () => import('./components/dashboard').then(({ DashboardComponent }) => DashboardComponent);
 const notificationsComponent = () => import('./components/core/notifications').then(({ NotificationsComponent }) => NotificationsComponent);
@@ -42,12 +72,13 @@ if (process.env.ENV === 'development' && module.hot) {
     module.hot.accept('./components/dashboard', () => reload(dashboardModuleId, (<any>require('./components/dashboard')).DashboardComponent)));
 }
 
-(<any> window).app = new Vue({
+let app = new Vue({
   el: '#app',
   store: (Vue.$ioc.resolve('store') as Store<StoreState>),
   router: createRouter(),
   data: {
-    toggleTheme: false
+    // darkTheme: false
+    darkTheme: utils.parseBoolean(localStorage.getItem('darkTheme')) && true
   },
   components: {
     // 'navbar': navbarComponent,
@@ -59,20 +90,24 @@ if (process.env.ENV === 'development' && module.hot) {
     document.getElementById('loading').classList.add('initialHide');
   },
   watch: {
-    toggleTheme: function() {
-      if (this.toggleTheme === true) {
-        (<any> window).app.$vuetify.theme.primary = '#00695C';
-        (<any> window).app.$vuetify.theme.secondary = '#424242';
-        (<any> window).app.$vuetify.theme.themeText = '#f5f5f5';
-        (<any> window).app.$vuetify.theme.back = '#303030';
+    darkTheme: function() {
+      // console.log('WATCH is listening to darkTheme and this is the current value: ' + this.darkTheme);
+      let theme = app.$vuetify.theme;
+      if (this.darkTheme === true) {
+        localStorage.setItem('darkTheme', 'true');
+        theme.primary = '#00695C';
+        theme.secondary = '#424242';
+        theme.themeText = '#f5f5f5';
+        theme.back = '#303030';
       }
       else {
-        (<any> window).app.$vuetify.theme.primary = '#3f51b5';
-        (<any> window).app.$vuetify.theme.secondary = '#f5f5f5';
-        (<any> window).app.$vuetify.theme.themeText = '#000000';
-        (<any> window).app.$vuetify.theme.back = '#E0E0E0';
+        localStorage.setItem('darkTheme', 'false');
+        theme.primary = '#3f51b5';
+        theme.secondary = '#f5f5f5';
+        theme.themeText = '#000000';
+        theme.back = '#E0E0E0';
       }
     }
   }
 });
-// (<any> window).app.$vuetify.theme.primary = '#b71c1c';
+// app.$vuetify.theme.primary = '#b71c1c';

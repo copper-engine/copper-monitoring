@@ -15,14 +15,31 @@
         <!-- <v-btn flat  v-bind:class="{'active' : $route.path == link.path}">
         </v-btn> -->
         <v-list-tile value="true" v-for="link in links" :key="link.path">
-            <v-list-tile-action>
+
+            <!-- <v-list-tile-action>
                 <v-icon color="themeText">{{ link.icon }}</v-icon>
             </v-list-tile-action>
             <v-list-tile-content >
-                <router-link :to="link.path">
+                <router-link :to="link.path" active-class="activeLink">
                     <v-list-tile-title v-text="link.name" class="themeText--text"></v-list-tile-title>
                 </router-link>
+            </v-list-tile-content>    -->
+    
+            <v-list-tile-content class="linkTile">
+                <router-link :to="link.path" active-class="back" class="link">
+                    <v-layout row>
+                        <v-flex>
+                            <v-list-tile-action>
+                                <v-icon color="themeText">{{ link.icon }}</v-icon>
+                            </v-list-tile-action>
+                        </v-flex>
+                        <v-flex>
+                            <v-list-tile-title v-text="link.name" class="themeText--text"></v-list-tile-title>
+                        </v-flex>
+                    </v-layout>                  
+                </router-link>
             </v-list-tile-content>
+
         </v-list-tile>
     </v-list>
 

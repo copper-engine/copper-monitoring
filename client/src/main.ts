@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import 'babel-polyfill';
 import { Store } from 'vuex';
 import { StoreState } from './store.vuex';
 import Vuetify from 'vuetify';

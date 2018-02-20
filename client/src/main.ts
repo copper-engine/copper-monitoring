@@ -10,12 +10,9 @@ import 'vuetify/dist/vuetify.css';
 import 'mdi/css/materialdesignicons.min.css';
 import * as utils from './util/utils';
 
-import './main.scss';
-
 if (utils.parseBoolean(localStorage.getItem('darkTheme')) === null) {
   localStorage.setItem('darkTheme', 'true');
 }
-
 // Vue.use(date)
 Vue.use(require('vue-moment'));
 // Vue.use(Vuetify, {

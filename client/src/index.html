@@ -9,8 +9,25 @@
     
     <title>Copper Monitoring</title>
     <style>
+      html { 
+          min-width: 900px;
+          overflow-x: auto 
+      }
       body {
-        background: #303030;
+          min-width: 900px;
+          background: #424242;
+      }
+      .application.theme--light {
+          background: #E0E0E0;
+          color: rgba(0,0,0,0.87);
+      }
+
+      .theme--light .input-group input, .application .theme--light.input-group input, .theme--light .input-group textarea, .application .theme--light.input-group textarea {
+          color: white;
+      }
+
+      .theme--light .input-group:not(.input-group--error) label, .application .theme--light.input-group:not(.input-group--error) label {
+          color: white
       }
       .initialHide {
         display: none;

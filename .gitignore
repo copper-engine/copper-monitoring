@@ -13,5 +13,6 @@ dist/
 npm-debug.log
 yarn-error.log
 client-old/
+client/package-lock.json
 server/static/
 server/.idea

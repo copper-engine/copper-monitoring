@@ -8,6 +8,7 @@ import { LoginComponent } from './components/login';
 
 const dashboardComponent = () => import('./components/dashboard').then(({ DashboardComponent }) => DashboardComponent);
 const workflowsComponent = () => import('./components/dashboard/workflows').then(({ WorkflowsComponent }) => WorkflowsComponent);
+const homeComponent = () => import('./components/dashboard/homepage').then(({ HomePage }) => HomePage);
 
 
 if (process.env.ENV === 'development' && module.hot) {
@@ -58,6 +59,14 @@ export const createRoutes: () => RouteConfig[] = () => [
         name: 'workflows',
         path: 'workflows',
         component: workflowsComponent,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        name: 'homepage',
+        path: 'homepage',
+        component: homeComponent,
         meta: {
           requiresAuth: true
         }

@@ -18,11 +18,10 @@ export class SidebarComponent extends Vue {
     miniVariant = false;
     settingsShowed = false;
     
-    
     get links(): Link[] {
 
      return [
-        new Link('Home', '/dashboard?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-home'),
+        new Link('Home', '/dashboard/homepage?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-home'),
         new Link('Broken Workflows', '/dashboard/workflows?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-image-broken'),
       ];
     }

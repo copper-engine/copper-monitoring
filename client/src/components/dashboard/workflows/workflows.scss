@@ -40,6 +40,8 @@
         align-items: center;
         font-weight: 700;
         font-size: 1.1em;
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px;
     }
 
     .workflows-cont {
@@ -205,6 +207,11 @@
             background-color: #424242;
             border: 1px solid #424242;
         }
+    }
+
+    .footer-card {
+        border-bottom-left-radius: 2px;
+        border-bottom-right-radius: 2px;
     }
 
     .list-item {

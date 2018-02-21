@@ -29,7 +29,7 @@ Vue.use(require('vue-moment'));
 if (utils.parseBoolean(localStorage.getItem('darkTheme')) === false) {
   Vue.use(Vuetify, {
     theme: {
-      primary: '#3f51b5',
+      primary: '#0D5494',
       secondary: '#EEEEEE',
       accent: '#E0E0E0',
       error: '#b71c1c',
@@ -99,7 +99,7 @@ let app = new Vue({
       }
       else {
         localStorage.setItem('darkTheme', 'false');
-        theme.primary = '#3f51b5';
+        theme.primary = '#0D5494';
         theme.secondary = '#EEEEEE';
         theme.themeText = '#000000';
         theme.back = '#E0E0E0';

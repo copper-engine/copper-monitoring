@@ -11,7 +11,7 @@
     <v-layout class="workflows-cont" column>
         <v-card v-show="!workflows || workflows.length === 0">
             <v-card-text>
-                <v-alert color="info" icon="info" value="true" >
+                <v-alert color="primary" icon="info" value="true" >
                     There are no broken workflows
                 </v-alert>
             </v-card-text>
@@ -23,7 +23,7 @@
             'highlight-workflow-layout': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloading, 
             'fade': workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton)
             }">
-                <v-layout class="workflow-layout grey darken-3" column>
+                <v-layout class="workflow-layout secondary" column>
                     <v-layout>
                         <v-flex class="number">
                             {{ (page - 1) * perPage + i + 1 }}
@@ -57,7 +57,7 @@
                         <v-flex class="actions">
                             <v-tooltip top content-class="tooltip-text">
                                 <v-btn dark icon
-                                    color="teal darken-3"
+                                    color="primary"
                                     :loading="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloadButton"
                                     :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"
                                     @click="restart(workflow.id)"
@@ -69,7 +69,7 @@
                             </v-tooltip>
                             <v-tooltip top content-class="tooltip-text">
                                 <v-btn dark icon
-                                    color="teal darken-3"
+                                    color="primary"
                                     :loading="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleteButton"
                                     :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"                                
                                     @click="deleteBroken(workflow.id)"
@@ -80,7 +80,7 @@
                             </v-tooltip>
                             <v-tooltip top content-class="tooltip-text">
                                 <v-btn dark icon
-                                    color="teal darken-3"
+                                    color="primary"
                                     :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"                                                                
                                     @click="showDetails(workflow)"
                                     slot="activator">

@@ -17,6 +17,18 @@
           min-width: 900px;
           background: #424242;
       }
+      .application.theme--light {
+          background: #E0E0E0;
+          color: rgba(0,0,0,0.87);
+      }
+
+      .theme--light .input-group input, .application .theme--light.input-group input, .theme--light .input-group textarea, .application .theme--light.input-group textarea {
+          color: white;
+      }
+
+      .theme--light .input-group:not(.input-group--error) label, .application .theme--light.input-group:not(.input-group--error) label {
+          color: white
+      }
       .initialHide {
         display: none;
       }
@@ -27,7 +39,7 @@
         height: 100px;
         width: 100px;
         animation: rotate 1s infinite linear;
-        border: 10px solid rgb(0, 104, 92);
+        border: 10px solid #00695C;
         border-right-color: transparent;
         border-radius: 50%;
         right: 0;
@@ -44,9 +56,11 @@
   <body>
     <div class="loadingAnimation" id="loading"></div>
     <div class="initialHide" id="appCover">
-      <v-app dark id="app">
+      <v-app :dark="darkTheme" id="app">
         <notifications></notifications>
-          <router-view></router-view>
+        <router-view
+        @toggle-theme="darkTheme=!darkTheme">
+        </router-view>
       </v-app>
     </div>
   </body>

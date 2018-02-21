@@ -18,17 +18,23 @@
           background: #424242;
       }
       .application.theme--light {
-          background: #E0E0E0;
-          color: rgba(0,0,0,0.87);
+          /* background: #E0E0E0; */
+          /* color: rgba(0,0,0,0.87); */
+          background: #FAFAFA;
       }
 
       .theme--light .input-group input, .application .theme--light.input-group input, .theme--light .input-group textarea, .application .theme--light.input-group textarea {
-          color: white;
+          color: white !important;
       }
 
       .theme--light .input-group:not(.input-group--error) label, .application .theme--light.input-group:not(.input-group--error) label {
-          color: white
+          color: white !important;
+      } 
+
+      .theme--light .input-group:not(.input-group--error) .input-group__details:before, .application .theme--light.input-group:not(.input-group--error) .input-group__details:before {
+          background-color: white !important;
       }
+
       .initialHide {
         display: none;
       }

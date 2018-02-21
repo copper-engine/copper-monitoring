@@ -9,7 +9,7 @@
     </workflowHeading>
     
     <v-layout class="workflows-cont" column>
-        <v-card v-show="!workflows || workflows.length === 0">
+        <v-card v-show="!workflows || workflows.length === 0" class="secondary">
             <v-card-text>
                 <v-alert color="primary" icon="info" value="true" >
                     There are no broken workflows
@@ -95,7 +95,7 @@
                         'highlight-workflow-layout': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloading, 
                         'fade': workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton)
                         }">
-                        <div class="details" v-show="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).open">
+                        <div class="details accent" v-show="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).open">
                             <v-layout class="workflow-detail workflow-id">
                                 <v-flex class="detail-label"> Workflow ID:</v-flex>
                                 <v-flex  class="text"> {{workflow.id}} </v-flex>

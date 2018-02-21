@@ -30,8 +30,8 @@ if (utils.parseBoolean(localStorage.getItem('darkTheme')) === false) {
   Vue.use(Vuetify, {
     theme: {
       primary: '#3f51b5',
-      secondary: '#f5f5f5',
-      accent: '#8c9eff',
+      secondary: '#EEEEEE',
+      accent: '#E0E0E0',
       error: '#b71c1c',
       themeText: '#000000',
       textOnColor: '#f5f5f5',
@@ -43,7 +43,7 @@ if (utils.parseBoolean(localStorage.getItem('darkTheme')) === false) {
     theme: {
       primary: '#00695C',
       secondary: '#424242',
-      accent: '#8c9eff',
+      accent: '#616161',
       error: '#b71c1c',
       themeText: '#f5f5f5',
       textOnColor: '#f5f5f5',
@@ -94,14 +94,16 @@ let app = new Vue({
         theme.primary = '#00695C';
         theme.secondary = '#424242';
         theme.themeText = '#f5f5f5';
-        theme.back = '#303030';
+        theme.back = '#303030'; 
+        theme.accent = '#616161';
       }
       else {
         localStorage.setItem('darkTheme', 'false');
         theme.primary = '#3f51b5';
-        theme.secondary = '#f5f5f5';
+        theme.secondary = '#EEEEEE';
         theme.themeText = '#000000';
         theme.back = '#E0E0E0';
+        theme.accent = '#E0E0E0';
       }
     }
   }

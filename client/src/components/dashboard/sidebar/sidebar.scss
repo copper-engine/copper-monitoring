@@ -1,14 +1,21 @@
-.link {
-    padding: 20px;
-    width: 100%;
-}
-
-.linkTile {
-    border-radius: 2px;
-}
 
 .sidebar {
+
     margin-top: 64px;
+
+    .link {
+        padding: 20px;
+        width: 100%;
+    }
+    
+    .linkTile {
+        border-radius: 2px;
+    }
+    
+    .iconFlex {
+        flex-grow: 0;
+    }
+
     .navigation-drawer--mini-variant {
         .settings-btn {
             display: none;

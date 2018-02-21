@@ -32,7 +32,7 @@ export class ConfigComponent extends Vue {
         this.updatePeriod = this.connectionSettings.updatePeriod;
     }
 
-    submit () {
+    submit() {
         this.$emit('updateTarget', new ConnectionSettings(this.host, this.port, this.fetchPeriod, this.updatePeriod));
     }
 

@@ -191,6 +191,11 @@ export class JmxService {
             throw new Error('invalid response!');
         }
 
+        let wfName = 'NoWorkflowRepository';
+        if (response.data[0].value.WorkflowRepository != null) {
+            wfName = response.data[0].value.WorkflowRepository.objectName;
+        }
+
         return new EngineStatus(
             response.data[1].value.startupTS,
             response.data[1].value.lastActivityTS,
@@ -198,7 +203,8 @@ export class JmxService {
             response.data[0].value.EngineType,
             response.data[1].value.countWfiLastNMinutes,
             response.data[0].value.State.toLowerCase(),
-            response.data[2].value
+            response.data[2].value,
+            wfName
         );
     }
 

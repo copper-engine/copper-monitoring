@@ -12,7 +12,7 @@ export class JmxService {
         return Axios.post(process.env.API_NAME, [
                 this.createEngineInfoRequest(connectionSettings), 
                 this.createEngineActivityRequest(connectionSettings),
-                this.createCountBrokenWFRequest(connectionSettings)
+                this.createCountBrokenWFRequest(connectionSettings)                
             ], {
                 auth: { username: user.name, password: user.password }
             })
@@ -30,6 +30,19 @@ export class JmxService {
                 auth: { username: user.name, password: user.password }
             })
             .then(this.parseBrokenWorkflowsResponse)
+            .catch(error => {
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
+            });
+    }
+
+    getWfRepo(connectionSettings: ConnectionSettings, user: User , wfRepoMXBean: String ) {
+        return Axios.post(process.env.API_NAME, [
+            this.createWfRepoRequest(connectionSettings, wfRepoMXBean)
+            ], {
+                auth: { username: user.name, password: user.password }
+            })
+            // TODO
+            // .then(this.parseWfRepoResponse)
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
             });
@@ -90,11 +103,20 @@ export class JmxService {
         })
     ]
 
+    private createWfRepoRequest(connectionSettings: ConnectionSettings, wfRepoMXBean: String) {
+        return {
+            type: 'read',
+            // mbean: 'copper.workflowrepo:name=wfRepository',
+            mbean: wfRepoMXBean,
+            // attribute: ['EngineId', 'EngineType', 'State', 'WorkflowRepository'],
+            target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
+        };
+    }
     private createEngineInfoRequest(connectionSettings: ConnectionSettings) {
         return {
             type: 'read',
             mbean: ENGINE_MBEAN,
-            attribute: ['EngineId', 'EngineType', 'State'],
+            attribute: ['EngineId', 'EngineType', 'State', 'WorkflowRepository'],
             target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
         };
     }

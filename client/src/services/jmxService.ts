@@ -41,8 +41,7 @@ export class JmxService {
             ], {
                 auth: { username: user.name, password: user.password }
             })
-            // TODO
-            // .then(this.parseWfRepoResponse)
+            .then(this.parseWfRepoResponse)
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
             });
@@ -168,6 +167,16 @@ export class JmxService {
         };
     }
 
+    private parseWfRepoResponse = (response) => {
+        console.log('... parsing wfrepo info...');
+        if (!response || !response.data 
+            || response.data.length < 1
+            || response.data[0].error) {
+            console.log('Invalid responce:', response); 
+            throw new Error('invalid response!');
+        }
+        return response.data[0].value.Workflows;
+    }
 
     private parseVoidResponse = (response): boolean => {
         if (!response || !response.data 
@@ -190,7 +199,6 @@ export class JmxService {
             console.log('Invalid responce:', response);          
             throw new Error('invalid response!');
         }
-
         let wfName = 'NoWorkflowRepository';
         if (response.data[0].value.WorkflowRepository != null) {
             wfName = response.data[0].value.WorkflowRepository.objectName;

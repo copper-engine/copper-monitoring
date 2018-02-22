@@ -1,22 +1,171 @@
-.classes { 
+.classes {
     width: 100%;
+
     .summary {
         .text {
             font-size: 1.5em;
             font-weight: 700;
             padding-top: 8px;
             color: #efefef;
-            // max-width: 430px;
         }
     }
+
     .header {
         margin-top: 16px;
-        padding: 5px 16px 5px 16px;
+        padding: 30px 16px 30px 16px;
         align-items: center;
         font-weight: 700;
         font-size: 1.1em;
         border-top-left-radius: 2px;
         border-top-right-radius: 2px;
+    }
+
+    .workflows-cont {
+        border-bottom: 1px solid;
+    }
+
+    .workflow {
+        border-top: 1px solid;
+    }
+    
+    .workflow-layout >* {
+        padding: 8px 16px;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .number,
+    .alias,
+    .classname,
+    .version,
+    .actions {
+        word-wrap: break-word;
+        // width: 120px;
+        // min-width: 120px;
+        // max-width: 120px;
+        padding: 0 10px;
+    }
+    .number {
+        width: 35px;
+        min-width: 35px;
+        max-width: 35px;
+    }
+    .actions {
+        width: 110px;
+        max-width: 110px;
+        min-width: 110px;
+
+        button {
+            // margin-right: 4px;
+            // margin-left: 4px;
+            margin-left: 27px;
+            border-radius: 20%;
+        }
+
+        .close-details-icon {
+            transform: rotate(180deg);
+        }
+
+    }
+    
+    .version {
+        width: 125px;
+        min-width: 125px;
+        max-width: 125px;
+    }
+
+    .classname {
+        // width: 240px;
+        min-width: 240px;
+        max-width: 400px;
+    }
+    .alias {
+        width: 400px;
+        min-width: 400px;
+        max-width: 400px;
+    }
+
+    .workflow-info-layout {
+
+        padding: 0px;
+
+        .code {
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+        
+        .details {
+            // background: #4e4e4e;
+            padding-left: 32px;
+            padding-right: 32px;
+            padding-bottom: 24px;
+            padding-top: 0px;
+            width: 100%;
+
+            .workflow-detail {
+                padding: 4px;
+            }
+
+            .detail-label {
+                font-weight: 700;
+                padding-top: 20px;
+                padding-bottom: 20px;
+                
+            }
+
+            .stacktrace .text {
+                overflow-x: auto;
+            }
+        }
+    }
+
+    .custom-loader {
+        animation: loader 1s infinite;
+        display: flex;
+    }
+
+    .pagination-cont {
+        align-items: center;
+        .pagin-config {
+            align-items: center;
+            .per-page-label {
+                font-size: 1.1em;
+                font-weight: 700;
+                padding-left: 16px;
+                padding-bottom: 8px;
+            }
+            .per-page {
+                width: 60px;
+            }
+        }
+
+
+        .pagination li span {
+            float: none;
+            // color: #ffffff;
+            // background-color: #424242;
+            // border: 1px solid #424242;
+        }
+    }
+
+    .footer-card {
+        border-bottom-left-radius: 2px;
+        border-bottom-right-radius: 2px;
+    }
+
+    .list-item {
+        display: inline-block;
+        margin-right: 10px;
+    }
+    .list-enter-active, .list-leave-active {
+        transition: all 1s;
+    }
+    .list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    .list-move {
+        transition: transform 1s;
     }
 
 }

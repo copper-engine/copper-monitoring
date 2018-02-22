@@ -1,20 +1,106 @@
 <div class="classes">
-    <h2 class="themeText--text">Classes</h2>
-    <v-layout class="summary">
-        <v-flex class="text themeText--text">
-            Workflow Name: {{ wfName }}
+
+    <v-layout class="workflows-cont" column>
+        <h2 class="themeText--text">Workflow Repository</h2>
+        <v-layout class="summary">
+            <v-flex class="text themeText--text">
+                Repository Name: {{ wfName }}
+            </v-flex>
+            <!-- <v-flex>
+                <v-btn @click="sendRequest" color="primary">Send Request</v-btn>
+            </v-flex> -->
+        </v-layout>
+
+        <v-layout class="header primary textOnColor--text">
+            <v-flex class="number">
+                #
+            </v-flex>  
+            <v-flex class="alias">
+                Alias
+            </v-flex>  
+            <v-flex class="classname">
+                Class
+            </v-flex>
+            <v-spacer></v-spacer>
+            <v-flex class="version">
+                Version          
+            </v-flex>
+            <v-flex class="actions center">
+                Source Code
+            </v-flex>
+        </v-layout>
+
+        <v-flex class="workflow" v-for="(workflow, i) in wfArray" :key="workflow.id">
+            <v-layout class="workflow-layout secondary" column>
+                <v-layout>
+                    <v-flex class="number">
+                        {{ i + 1 }}
+                    </v-flex>  
+                    <v-flex class="alias">
+                        {{ workflow.alias }}
+                    </v-flex>  
+                    <v-flex class="classname">
+                        {{ workflow.classname }}
+                    </v-flex>
+                    <v-spacer></v-spacer>
+                    <v-flex class="version">
+                       Version: {{ workflow.majorVersion }}.{{ workflow.minorVersion }}.{{ workflow.patchLevel }}
+                    </v-flex>                  
+                    <v-flex class="actions">
+                        <v-tooltip top content-class="tooltip-text">
+                                <v-btn
+                                icon
+                                color="primary"
+                                @click="toggleOpen(i)"
+                                slot="activator">
+                                    <v-icon :class="{ 'close-details-icon': workflow.open }" >details</v-icon>
+                                </v-btn>
+                                <span>Show Source Code</span>
+                            </v-tooltip>
+                    </v-flex>
+                </v-layout>
+            </v-layout>
+
+            <v-layout class="workflow-info-layout">
+                <div class="details accent" v-show="workflow.open">
+                    <v-layout class="workflow-detail stacktrace" column>
+                        <v-flex class="detail-label">Source Code:</v-flex>
+                        <v-flex class="text">
+                            <code class="code">
+                                {{ workflow.sourceCode }}
+                            </code>
+                            </v-flex>
+                    </v-layout>
+                </div>
+            </v-layout>
+
         </v-flex>
     </v-layout>
 
-    <v-layout class="header primary textOnColor--text">
-        <v-flex>
-            #
-        </v-flex>  
-        <v-flex>
-            Class Name
-        </v-flex>
-        <v-flex>
-            Class Info
-        </v-flex>
-    </v-layout>
+    <v-card flat class="footer-card">
+        <v-card-text class="secondary">
+            <v-layout justify-center class="pagination-cont">
+                    <v-flex class="text-xs-center">
+                        <v-pagination :length="totalPages" v-model="page" :total-visible="10" color="primary"></v-pagination>      
+                    </v-flex>
+                <v-flex class="" xs3>
+                    <v-layout justify-center class="pagin-config">
+                        <v-flex>
+                            <div class="per-page-label">Per page</div>
+                        </v-flex>
+                        
+                        <v-flex>
+                            <v-select
+                            class="per-page"
+                            :items="perPageItems"
+                            v-model="perPage"
+                            color="primary"
+                            ></v-select>
+                        </v-flex>
+                    </v-layout>
+                </v-flex>
+            </v-layout>
+        </v-card-text>
+    </v-card>
+
 </div>

@@ -23,7 +23,7 @@ export class SidebarComponent extends Vue {
      return [
         new Link('Home', '/dashboard/homepage?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-home'),
         new Link('Broken Workflows', '/dashboard/workflows?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-image-broken'),
-        new Link('Classes', '/dashboard/classes?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-file')
+        new Link('Workflow Repository', '/dashboard/classes?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-file')
       ];
     }
       

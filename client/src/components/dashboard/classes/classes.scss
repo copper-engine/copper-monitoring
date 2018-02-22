@@ -1,5 +1,7 @@
 .classes {
     width: 100%;
+    max-width: 1650px;
+    margin: auto;
 
     .summary {
         .text {
@@ -27,13 +29,13 @@
     .workflow {
         border-top: 1px solid;
     }
-    
+
     .workflow-layout >* {
         padding: 8px 16px;
         align-items: center;
         padding: 20px;
     }
-
+    
     .number,
     .alias,
     .classname,
@@ -50,6 +52,22 @@
         min-width: 35px;
         max-width: 35px;
     }
+    .version {
+        width: 350px;
+        min-width: 125px;
+        max-width: 350px;
+    }
+
+    .classname {
+        width: 550px;
+        min-width: 240px;
+        max-width: 550px;
+    }
+    .alias {
+        width: 550px;
+        min-width: 240px;
+        max-width: 550px;
+    }
     .actions {
         width: 110px;
         max-width: 110px;
@@ -58,7 +76,7 @@
         button {
             // margin-right: 4px;
             // margin-left: 4px;
-            margin-left: 27px;
+            margin-left: 32px;
             border-radius: 20%;
         }
 
@@ -66,23 +84,6 @@
             transform: rotate(180deg);
         }
 
-    }
-    
-    .version {
-        width: 125px;
-        min-width: 125px;
-        max-width: 125px;
-    }
-
-    .classname {
-        // width: 240px;
-        min-width: 240px;
-        max-width: 400px;
-    }
-    .alias {
-        width: 400px;
-        min-width: 400px;
-        max-width: 400px;
     }
 
     .workflow-info-layout {
@@ -93,7 +94,7 @@
             padding-left: 30px;
             padding-right: 30px;
         }
-        
+
         .details {
             // background: #4e4e4e;
             padding-left: 32px;
@@ -110,11 +111,15 @@
                 font-weight: 700;
                 padding-top: 20px;
                 padding-bottom: 20px;
-                
+                padding-right: 10px;
+                max-width: 100px;
+                margin-right: 100px;
             }
 
             .stacktrace .text {
                 overflow-x: auto;
+                padding-top: 20px;
+                padding-left: 5px;
             }
         }
     }

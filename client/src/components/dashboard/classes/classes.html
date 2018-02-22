@@ -21,7 +21,7 @@
             <v-flex class="classname">
                 Class
             </v-flex>
-            <v-spacer></v-spacer>
+            <!-- <v-spacer></v-spacer> -->
             <v-flex class="version">
                 Version          
             </v-flex>
@@ -30,7 +30,8 @@
             </v-flex>
         </v-layout>
 
-        <v-flex class="workflow" v-for="(workflow, i) in wfArray" :key="workflow.id">
+        <v-layout class="workflow" v-for="(workflow, i) in wfArray" :key="workflow.id" column>
+
             <v-layout class="workflow-layout secondary" column>
                 <v-layout>
                     <v-flex class="number">
@@ -42,7 +43,7 @@
                     <v-flex class="classname">
                         {{ workflow.classname }}
                     </v-flex>
-                    <v-spacer></v-spacer>
+                    <!-- <v-spacer></v-spacer> -->
                     <v-flex class="version">
                        Version: {{ workflow.majorVersion }}.{{ workflow.minorVersion }}.{{ workflow.patchLevel }}
                     </v-flex>                  
@@ -63,18 +64,19 @@
 
             <v-layout class="workflow-info-layout">
                 <div class="details accent" v-show="workflow.open">
-                    <v-layout class="workflow-detail stacktrace" column>
+                    <v-layout class="workflow-detail stacktrace" row>
                         <v-flex class="detail-label">Source Code:</v-flex>
                         <v-flex class="text">
                             <code class="code">
                                 {{ workflow.sourceCode }}
                             </code>
-                            </v-flex>
+                        </v-flex>
                     </v-layout>
                 </div>
             </v-layout>
 
-        </v-flex>
+        </v-layout>
+        
     </v-layout>
 
     <v-card flat class="footer-card">

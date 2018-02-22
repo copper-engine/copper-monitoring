@@ -33,7 +33,7 @@ if (utils.parseBoolean(localStorage.getItem('darkTheme')) === false) {
       secondary: '#EEEEEE',
       accent: '#E0E0E0',
       error: '#b71c1c',
-      themeText: '#000000',
+      themeText: '#303030',
       textOnColor: '#f5f5f5',
       back: '#E0E0E0'
     }
@@ -101,7 +101,7 @@ let app = new Vue({
         localStorage.setItem('darkTheme', 'false');
         theme.primary = '#0D5494';
         theme.secondary = '#EEEEEE';
-        theme.themeText = '#000000';
+        theme.themeText = '#303030';
         theme.back = '#E0E0E0';
         theme.accent = '#E0E0E0';
       }

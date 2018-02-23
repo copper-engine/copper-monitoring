@@ -5,10 +5,14 @@
 
     .summary {
         .text {
-            font-size: 1.5em;
-            font-weight: 700;
+            font-size: 1.2em;
+            font-weight: 400;
             padding-top: 8px;
+            padding-right: 20px;
             color: #efefef;
+        }
+        .stopGrow {
+            flex-grow: 0;
         }
     }
 
@@ -112,8 +116,8 @@
                 padding-top: 20px;
                 padding-bottom: 20px;
                 padding-right: 10px;
-                max-width: 100px;
-                margin-right: 100px;
+                max-width: 75px;
+                margin-right: 75px;
             }
 
             .stacktrace .text {

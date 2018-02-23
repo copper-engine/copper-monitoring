@@ -1,8 +1,15 @@
-// .theme--dark .engine-connection-config {
-//     background-color: #505050;
-//     border-bottom: 2px solid #807e7e;
-// }
-
+.theme--light .input-group:not(.input-group--error) label, .application .theme--light.input-group:not(.input-group--error) label {
+    color: #f5f5f5 !important;
+}
+.theme--light .input-group input, .application .theme--light.input-group input, .theme--light .input-group textarea, .application .theme--light.input-group textarea {
+    color: #f5f5f5 !important;
+}
+.theme--light .input-group:not(.input-group--error) .input-group__details:before, .application .theme--light.input-group:not(.input-group--error) .input-group__details:before {
+    background-color: #999999 !important;
+}
+.theme--dark .input-group:not(.input-group--error) .input-group__details:before, .application .theme--light.input-group:not(.input-group--error) .input-group__details:before {
+    background-color: #999999 !important;
+}
 .engine-connection-config {
     form {
         padding-top: 8px;
@@ -11,6 +18,9 @@
     
     .primary--text {
         color: #c1c1c1 !important; 
+    }
+    .input-group__details {
+        color: #f5f5f5 !important;
     }
     
 }

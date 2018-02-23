@@ -30,7 +30,7 @@ if (utils.parseBoolean(localStorage.getItem('darkTheme')) === false) {
   Vue.use(Vuetify, {
     theme: {
       primary: '#0D5494',
-      secondary: '#EEEEEE',
+      secondary: '#ededed',
       accent: '#E0E0E0',
       error: '#b71c1c',
       themeText: '#303030',
@@ -73,7 +73,6 @@ let app = new Vue({
   store: (Vue.$ioc.resolve('store') as Store<StoreState>),
   router: createRouter(),
   data: {
-    // darkTheme: false
     darkTheme: utils.parseBoolean(localStorage.getItem('darkTheme')) && true
   },
   components: {
@@ -87,7 +86,6 @@ let app = new Vue({
   },
   watch: {
     darkTheme: function() {
-      // console.log('WATCH is listening to darkTheme and this is the current value: ' + this.darkTheme);
       let theme = app.$vuetify.theme;
       if (this.darkTheme === true) {
         localStorage.setItem('darkTheme', 'true');
@@ -100,7 +98,7 @@ let app = new Vue({
       else {
         localStorage.setItem('darkTheme', 'false');
         theme.primary = '#0D5494';
-        theme.secondary = '#EEEEEE';
+        theme.secondary = '#ededed';
         theme.themeText = '#303030';
         theme.back = '#E0E0E0';
         theme.accent = '#E0E0E0';

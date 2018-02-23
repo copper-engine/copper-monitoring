@@ -23,6 +23,14 @@ export class EngineStatus {
     ) {}
 }
 
+export class WorkflowRepo {
+    constructor(
+        public description: String,
+        public sourceDir: String,
+        public workFlowInfo: Array<WorkflowClassInfo>
+    ) {}
+}
+
 export class WorkflowInfo {
 
     constructor(

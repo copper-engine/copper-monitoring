@@ -4,12 +4,22 @@
         <h2 class="themeText--text">Workflow Repository</h2>
 
         <v-layout class="summary" column>
-            <v-flex class="text themeText--text stopGrow">
-                Repository Type: {{ wfType }}
-            </v-flex>
-            <v-flex class="text themeText--text">
-                Source: {{ wfSource }}
-            </v-flex>
+            <v-layout class="text themeText--text stopGrow">
+                <v-flex class="sub-heading">
+                    Repository Type:
+                </v-flex>
+                <v-flex>
+                    {{ wfType }}
+                </v-flex>
+            </v-layout>
+            <v-layout class="text themeText--text">
+                <v-flex class="sub-heading">
+                    Source:
+                </v-flex>
+                <v-flex>
+                    {{ wfSource }}
+                </v-flex>
+            </v-layout>
         </v-layout>
 
         <v-layout class="header primary textOnColor--text">

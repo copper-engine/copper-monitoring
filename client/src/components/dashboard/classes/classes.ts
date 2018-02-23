@@ -24,7 +24,6 @@ export class Classes extends Vue {
             this.wfArray = response.workFlowInfo;
             this.wfType = response.description;
             this.wfSource = response.sourceDir;
-            this.wfArray[1].sourceCode = null;
         });
     }
 

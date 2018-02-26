@@ -37,6 +37,7 @@ export class WorkflowsComponent extends Vue {
     restartingAll = false;
     deletingAll = false;
     dialog = false;
+    dialogSourceCode = null;
 
     private jmxService: JmxService = this.$services.jmxService;
     private eventHub: Vue = this.$services.eventHub;
@@ -211,6 +212,13 @@ export class WorkflowsComponent extends Vue {
         }
         this.workflowsContext.set(id, wfContext);
         this.$forceUpdate();
+    }
+
+    showSourceCode(workflow: WorkflowInfo) {
+        this.jmxService.getSourceCode(this.$store.state.connectionSettings, this.$store.state.user, workflow.workflowClassInfo.classname)
+        .then((response) => {
+            this.dialogSourceCode = response;
+        });
     }
 
     showDetails(workflow: WorkflowInfo) {

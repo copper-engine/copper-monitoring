@@ -99,27 +99,27 @@
                             <v-layout class="workflow-detail workflow-id">
                                 <v-flex class="detail-label"> Workflow ID:</v-flex>
                                 <v-flex  class="text"> {{workflow.id}} </v-flex>
+                                <v-spacer></v-spacer>
+                                <v-dialog v-model="dialog" scrollable max-width="800px" position="absolute">
+                                        <v-btn icon color="primary"slot="activator"@click="showSourceCode(workflow)">Source Code</v-btn>
+                                        <v-card>
+                                            <v-card-title position="absolute">
+                                                <h2>Source Code</h2>
+                                                <v-spacer></v-spacer>                  
+                                                    <v-btn color="primary" @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>      
+                                            </v-card-title>
+                                            <v-divider></v-divider>
+                                            <v-card-text>                              
+                                                <code class="code">{{ dialogSourceCode }}</code>
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-dialog>
                             </v-layout>
                             <v-layout class="workflow-detail class-info">
                                 <v-flex class="detail-label">Class:</v-flex>
                                 <v-flex class="text">
                                     {{workflow.workflowClassInfo.alias}} ({{workflow.workflowClassInfo.classname}})
-                                    <v-dialog v-model="dialog" scrollable max-width="700px">
-                                        <v-btn icon color="primary"slot="activator"@click="dialog = true"><v-icon>details</v-icon></v-btn>
-                                        <v-card>
-                                            <v-card-title>Source Code</v-card-title>
-                                            <v-divider></v-divider>
-                                            <v-card-text style="height: 800px;">
-                                            
-                                                {{ workflow.workflowClassInfo.sourceCode }}
-                                            
-                                            </v-card-text>
-                                            <v-divider></v-divider>
-                                            <v-card-actions>
-                                                <v-btn color="primary" @click.native="dialog = false">Close</v-btn>
-                                            </v-card-actions>
-                                        </v-card>
-                                    </v-dialog>
+                                    
                                 </v-flex> 
                             </v-layout>
                             <v-layout class="workflow-detail version">

@@ -47,6 +47,39 @@ export class JmxService {
             });
     }
 
+    getSourceCode(connectionSettings: ConnectionSettings, user: User, classname: String) {
+        return Axios.post(process.env.API_NAME, [
+            this.createSourceCodeRequest(connectionSettings, classname)
+            ], {
+                auth: { username: user.name, password: user.password }
+            })
+            .then(this.parseSourceCodeResponse)
+            .catch(error => {
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
+            });
+    }
+
+    private createSourceCodeRequest(connectionSettings: ConnectionSettings, classname: String) {
+        return {
+        type: 'EXEC',
+        mbean: 'copper.workflowrepo:name=wfRepository',
+        // mbean: 'copper.workflowrepo:name=workflowRepositoryMXBean',
+        operation: 'getWorkflowInfo',
+        arguments: [classname],
+        target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
+        };
+    }
+
+    private parseSourceCodeResponse = (response): String => {
+        if (!response || !response.data 
+            || response.data.length < 1
+            || response.data[0].error) {
+            console.log('Invalid responce:', response); 
+            throw new Error('invalid response!');
+        }
+        return response.data[0].value.sourceCode;
+    }
+
     restartAll(connectionSettings: ConnectionSettings, user: User) {
         return Axios.post(process.env.API_NAME, [
                     this.createJmxExecRequest(connectionSettings, { operation: 'restartAll()' })

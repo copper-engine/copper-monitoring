@@ -68,15 +68,26 @@ export class DashboardComponent extends Vue {
 
     @Watch('$store.state.connectionSettings')
     sheduleFetchingStatus() {
-        // this.$route.query.host = this.$store.state.connectionSettings.host;
-        // this.$route.query.host = this.$store.state.connectionSettings.port;
-        if (this.updateStatusInterval) {
-            clearInterval(this.updateStatusInterval);
-        }
-        this.getEngineStatus(this.$store.state.connectionSettings, this.$store.state.user);
-        this.updateStatusInterval = setInterval(() => {
-            this.getEngineStatus(this.$store.state.connectionSettings, this.$store.state.user);
-        }, this.$store.state.connectionSettings.updatePeriod * 1000);
+        (this.$services.jmxService as JmxService)
+        .getMBeans(this.$store.state.connectionSettings, this.$store.state.user)
+        .then((mbeanNames: string[]) => {
+
+            console.log('mbeanNames', mbeanNames);
+
+            if (this.updateStatusInterval) {
+                clearInterval(this.updateStatusInterval);
+            }
+
+            let connectionSettings: ConnectionSettings = this.$store.state.connectionSettings;
+            connectionSettings.setEngineMBean(mbeanNames[0]);
+            connectionSettings.setwfRepoMBean(mbeanNames[1]);
+
+            this.$store.commit('updateConnectionSettings', connectionSettings);
+            this.getEngineStatus(connectionSettings, this.$store.state.user);
+            this.updateStatusInterval = setInterval(() => {
+                this.getEngineStatus(this.$store.state.connectionSettings, this.$store.state.user);
+            }, this.$store.state.connectionSettings.updatePeriod * 1000);
+        });
     }
 
     forceFetchingStatus(delay: number = 0) {

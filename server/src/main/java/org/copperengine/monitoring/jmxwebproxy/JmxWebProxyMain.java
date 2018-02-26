@@ -53,6 +53,9 @@ public class JmxWebProxyMain {
         WebappContext jolokiaWebappContext = createJolokiaWebappContext("/api");
         jolokiaWebappContext.deploy(server);
         log.info("    - jolokia servlet deployed at /api");
+        WebappContext userWebappContext = createUserWebappContext("/user");
+        userWebappContext.deploy(server);
+        log.info("    - user servlet deployed at /auth");
 
         // deploy handler for static resources
         StaticHttpHandler staticResourcesHandler = new StaticHttpHandler(docRoot.getCanonicalPath());
@@ -143,6 +146,29 @@ public class JmxWebProxyMain {
         }
         authFilter.setInitParameter("auth", auth);
         authFilter.addMappingForServletNames(null, jolokiaServletName);
+
+        return webappContext;
+    }
+
+    private WebappContext createUserWebappContext(String contextPath) {
+        WebappContext webappContext = new WebappContext("user Agent", contextPath);
+
+        String servletName = "user-agent";
+        ServletRegistration servlet = webappContext.addServlet(servletName, new UserServlet());
+        servlet.setInitParameter("debug", "false");
+        servlet.setLoadOnStartup(1);
+
+        servlet.addMapping("/*");
+
+        // add basic auth filter for this Jolokia servlet
+        FilterRegistration authFilter = webappContext.addFilter("authFilter", new BasicAuthServletFilter());
+        authFilter.setInitParameter("realm", "Jolokia JMW Web Proxy");
+        String auth = System.getenv("JMX_AUTH");
+        if (auth == null || auth.length() == 0) {
+            log.warn("No authentication credentials were set. Check if environment variable JMX_AUTH is set correct.");
+        }
+        authFilter.setInitParameter("auth", auth);
+        authFilter.addMappingForServletNames(null, servletName);
 
         return webappContext;
     }

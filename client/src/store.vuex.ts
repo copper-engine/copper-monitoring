@@ -21,6 +21,10 @@ export const store = new Vuex.Store<StoreState>({
       },
       setUser(state, user: User) {
         state.user = user;
+        if (user) {
+          state.connectionSettings.host = user.settings.defaultHost;
+          state.connectionSettings.port = user.settings.defaultPort;
+        }
       }
     }
   });

@@ -28,12 +28,14 @@
     }
 
     .engine-id {
-        // font-weight: 700;
-        font-size: 1.1em;
+        font-size: 1.3em;
+        font-weight: 700;
+        word-wrap: break-word;
+        max-width: 195px;
     }
     .type {
         color: #ccc;
-        font-size: 0.9em;
+        font-size: 1.2em;
     }
     
     .engine-status-info {
@@ -54,10 +56,10 @@
 .navigation-drawer--mini-variant {
     .engine-status {
         .engine-status-info,
-        .headline .header {
+        .headline-custom .header {
             display: none;
         }
-        .headline .icon {
+        .headline-custom .icon {
             margin-left: 14px;
         }
     }

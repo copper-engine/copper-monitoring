@@ -69,17 +69,17 @@
                     </v-flex>                  
                     <v-flex class="actions">
                         <v-tooltip top content-class="tooltip-text">
-                                <v-btn
-                                icon
-                                color="primary"
-                                @click="toggleOpen(i)"
-                                :disabled="workflow.sourceCode === null"
-                                slot="activator">
-                                    <v-icon :class="{ 'close-details-icon': workflow.open }" >details</v-icon>
-                                </v-btn>
-                                <span v-show="workflow.sourceCode != null">Show Source Code</span>
-                                <span v-show="workflow.sourceCode === null">No Source Code</span>
-                            </v-tooltip>
+                            <v-btn
+                            icon
+                            color="primary"
+                            @click="toggleOpen(i)"
+                            :disabled="workflow.sourceCode === null"
+                            slot="activator">
+                                <v-icon :class="{ 'close-details-icon': workflow.open }" >details</v-icon>
+                            </v-btn>
+                            <span v-show="workflow.sourceCode != null">Show Source Code</span>
+                            <span v-show="workflow.sourceCode === null">No Source Code</span>
+                        </v-tooltip>
                     </v-flex>
                 </v-layout>
             </v-layout>

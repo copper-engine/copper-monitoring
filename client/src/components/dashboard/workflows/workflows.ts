@@ -36,6 +36,7 @@ export class WorkflowsComponent extends Vue {
     perPageItems: number[] = [10, 15, 25, 50];
     restartingAll = false;
     deletingAll = false;
+    dialog = false;
 
     private jmxService: JmxService = this.$services.jmxService;
     private eventHub: Vue = this.$services.eventHub;

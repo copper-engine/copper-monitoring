@@ -240,7 +240,6 @@ export class JmxService {
             console.log('Invalid responce:', response);          
             throw new Error('invalid response!');
         }
-
         return response.data[0].value as WorkflowInfo[];
     }
 

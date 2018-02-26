@@ -54,9 +54,9 @@ export class JmxService {
             });
     }
 
-    getWfRepo(connectionSettings: ConnectionSettings, user: User , wfRepoMXBean: String ) {
+    getWfRepo(connectionSettings: ConnectionSettings, user: User) {
         return Axios.post(process.env.API_NAME, [
-            this.createWfRepoRequest(connectionSettings, wfRepoMXBean)
+            this.createWfRepoRequest(connectionSettings)
             ], {
                 auth: { username: user.name, password: user.password }
             })
@@ -154,12 +154,10 @@ export class JmxService {
         })
     ]
 
-    private createWfRepoRequest(connectionSettings: ConnectionSettings, wfRepoMXBean: String) {
+    private createWfRepoRequest(connectionSettings: ConnectionSettings) {
         return {
             type: 'read',
-            // mbean: 'copper.workflowrepo:name=wfRepository',
-            mbean: wfRepoMXBean,
-            // attribute: ['EngineId', 'EngineType', 'State', 'WorkflowRepository'],
+            mbean: connectionSettings.wfRepoMBean,
             target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
         };
     }
@@ -167,7 +165,7 @@ export class JmxService {
         return {
             type: 'read',
             mbean: connectionSettings.engineMBean,
-            attribute: ['EngineId', 'EngineType', 'State', 'WorkflowRepository'],
+            attribute: ['EngineId', 'EngineType', 'State'],
             target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
         };
     }
@@ -275,10 +273,6 @@ export class JmxService {
             console.log('Invalid responce:', response);          
             throw new Error('invalid response!');
         }
-        let wfName = 'NoWorkflowRepository';
-        if (response.data[0].value.WorkflowRepository != null) {
-            wfName = response.data[0].value.WorkflowRepository.objectName;
-        }
 
         return new EngineStatus(
             response.data[1].value.startupTS,
@@ -287,8 +281,7 @@ export class JmxService {
             response.data[0].value.EngineType,
             response.data[1].value.countWfiLastNMinutes,
             response.data[0].value.State.toLowerCase(),
-            response.data[2].value,
-            wfName
+            response.data[2].value
         );
     }
 

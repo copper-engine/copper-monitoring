@@ -137,13 +137,13 @@
     <v-dialog v-model="dialog" scrollable max-width="800px" position="absolute">
         <v-card>
             <v-card-title position="absolute">
-                <h2>Source Code</h2>
+                <h2>{{ sourceCodeAvailable ? 'Source Code' : 'Source Code - Not Available' }}</h2>
                 <v-spacer></v-spacer>                  
                     <v-btn depressed class="squareButton" color="primary" @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>      
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>                              
-                <code class="code">{{ dialogSourceCode || 'No Source Code' }}</code>
+                <code class="code">{{ dialogSourceCode || 'No Source Code Available' }}</code>
             </v-card-text>
         </v-card>
     </v-dialog>

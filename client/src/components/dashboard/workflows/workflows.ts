@@ -38,6 +38,7 @@ export class WorkflowsComponent extends Vue {
     deletingAll = false;
     dialog = false;
     dialogSourceCode = null;
+    sourceCodeAvailable = true;
 
     private jmxService: JmxService = this.$services.jmxService;
     private eventHub: Vue = this.$services.eventHub;
@@ -217,7 +218,14 @@ export class WorkflowsComponent extends Vue {
     showSourceCode(workflow: WorkflowInfo) {
         this.jmxService.getSourceCode(this.$store.state.connectionSettings, this.$store.state.user, workflow.workflowClassInfo.classname)
         .then((response) => {
-            this.dialogSourceCode = response;
+            if ((String(response).trim()).toLowerCase() !== 'na') {  
+                this.dialogSourceCode = response;
+                this.sourceCodeAvailable = true;
+            } else {
+                this.dialogSourceCode = 'No Source Code Available';
+                this.sourceCodeAvailable = false;
+            }
+            
             this.dialog = true;
         });
     }

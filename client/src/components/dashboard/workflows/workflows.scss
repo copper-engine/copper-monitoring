@@ -25,6 +25,12 @@ body .dialog {
     box-shadow: 0px 0px;
 }
 
+.exitButton {
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;;
+}
+
 .card {
     .code {
         padding: 30px;
@@ -211,6 +217,10 @@ body .dialog {
 
             .workflow-id {
                 max-height: 24px;
+            }
+
+            .raise {
+                margin-top: -40px;
             }
 
             button {

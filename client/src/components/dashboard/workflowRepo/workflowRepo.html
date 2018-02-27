@@ -70,8 +70,9 @@
                     <v-flex class="actions">
                         <v-tooltip top content-class="tooltip-text">
                             <v-btn
-                            icon
+                            depressed
                             color="primary"
+                            class="squareButton"
                             @click="toggleOpen(i)"
                             :disabled="workflow.sourceCode === null"
                             slot="activator">

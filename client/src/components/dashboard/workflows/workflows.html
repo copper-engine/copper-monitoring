@@ -56,8 +56,9 @@
                         </v-flex>                  
                         <v-flex class="actions">
                             <v-tooltip top content-class="tooltip-text">
-                                <v-btn dark icon
+                                <v-btn dark depressed
                                     color="primary"
+                                    class="squareButton"
                                     :loading="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloadButton"
                                     :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"
                                     @click="restart(workflow.id)"
@@ -68,8 +69,9 @@
                                 <span>Restart Workflow</span>
                             </v-tooltip>
                             <v-tooltip top content-class="tooltip-text">
-                                <v-btn dark icon
+                                <v-btn dark depressed
                                     color="primary"
+                                    class="squareButton"
                                     :loading="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleteButton"
                                     :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"                                
                                     @click="deleteBroken(workflow.id)"
@@ -79,8 +81,9 @@
                                 <span>Delete Workflow</span>
                             </v-tooltip>
                             <v-tooltip top content-class="tooltip-text">
-                                <v-btn dark icon
+                                <v-btn dark depressed
                                     color="primary"
+                                    class="squareButton"
                                     :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"                                                                
                                     @click="showDetails(workflow)"
                                     slot="activator">
@@ -107,7 +110,7 @@
                                 </v-flex> 
                                 <v-spacer></v-spacer>
                                 <v-flex class="stopGrow raise">
-                                    <v-btn icon color="primary" slot="activator" @click="showSourceCode(workflow)">Source Code</v-btn>
+                                    <v-btn depressed color="primary" slot="activator" @click="showSourceCode(workflow)">Source Code</v-btn>
                                 </v-flex>
                             </v-layout>
                             <v-layout class="workflow-detail version">
@@ -136,7 +139,7 @@
             <v-card-title position="absolute">
                 <h2>Source Code</h2>
                 <v-spacer></v-spacer>                  
-                    <v-btn icon class="exitButton" color="primary" @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>      
+                    <v-btn depressed class="squareButton" color="primary" @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>      
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>                              

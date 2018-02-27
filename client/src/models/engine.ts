@@ -17,9 +17,7 @@ export class EngineStatus {
         public type: string,
         public instances: number,
         public state: string,
-        public brokenWFCount: number,
-        public wfRepoMXBeanName: String
-        // public brokenWF: WorkflowInfo[]
+        public brokenWFCount: number
     ) {}
 }
 

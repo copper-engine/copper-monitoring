@@ -51,12 +51,11 @@ public class BasicAuthServletFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-
+        if ("DEV".equals(ENVIRONMENT)) {
+            httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
+        }
         if ("OPTIONS".equals(httpServletRequest.getMethod())) {
 //            log.warn("Setting Access-Control-Allow headers. Consider to not use it in production.");
-            if ("DEV".equals(ENVIRONMENT)) {
-                httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
-            }
 
             httpServletResponse.addHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
             httpServletResponse.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");

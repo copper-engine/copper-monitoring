@@ -28,7 +28,7 @@
     "test:watch": "cross-env NODE_ENV=development karma start karma.unit.js --singleRun=false --auto-watch"
   },
   "dependencies": {
-    "axios": "~0.17.1",
+    "axios": "~0.18.0",
     "mdi": "^2.1.19",
     "uiv": "^0.14.1",
     "vue": "~2.5.8",

@@ -5,8 +5,6 @@ import { ConnectionSettings } from '../models/connectionSettings';
 import moment from 'moment';
 import { User } from '../models/user';
 
-const ENGINE_MBEAN = 'copper.engine:name=persistent.engine';
-
 export class JmxService {
     getEngineStatus(connectionSettings: ConnectionSettings, user: User) {
         return Axios.post(process.env.API_NAME, [
@@ -21,8 +19,29 @@ export class JmxService {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
             });
     }
+    getMBeans(connectionSettings: ConnectionSettings, user: User) {
+        return Axios.post(process.env.API_NAME, [
+                this.createMBeansListRequest(connectionSettings)
+            ], {
+                auth: { username: user.name, password: user.password }
+            })
+            .then((response) => {
+                if (!response || !response.data
+                    || response.data.length < 1
+                    || !this.isSubResponseValid(response.data[0])
+                ) {
+                    console.log('Invalid responce:', response);          
+                    throw new Error('invalid response!');
+                }
+                
+                return [Object.keys(response.data[0].value['copper.engine'])[0], Object.keys(response.data[0].value['copper.workflowrepo'])[0]];
+            })
+            .catch(error => {
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
+            });
+    }
 
-// TODO logout if wrong credentials...
+    // TODO logout if wrong credentials...
     getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User , max: number = 50, offset: number = 0) {
         return Axios.post(process.env.API_NAME, [
                 this.createQueryBrokenWFRequest(connectionSettings, max, offset)
@@ -35,9 +54,9 @@ export class JmxService {
             });
     }
 
-    getWfRepo(connectionSettings: ConnectionSettings, user: User , wfRepoMXBean: String ) {
+    getWfRepo(connectionSettings: ConnectionSettings, user: User) {
         return Axios.post(process.env.API_NAME, [
-            this.createWfRepoRequest(connectionSettings, wfRepoMXBean)
+            this.createWfRepoRequest(connectionSettings)
             ], {
                 auth: { username: user.name, password: user.password }
             })
@@ -135,23 +154,29 @@ export class JmxService {
         })
     ]
 
-    private createWfRepoRequest(connectionSettings: ConnectionSettings, wfRepoMXBean: String) {
+    private createWfRepoRequest(connectionSettings: ConnectionSettings) {
         return {
             type: 'read',
-            // mbean: 'copper.workflowrepo:name=wfRepository',
-            mbean: wfRepoMXBean,
-            // attribute: ['EngineId', 'EngineType', 'State', 'WorkflowRepository'],
+            mbean: connectionSettings.wfRepoMBean,
             target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
         };
     }
     private createEngineInfoRequest(connectionSettings: ConnectionSettings) {
         return {
             type: 'read',
-            mbean: ENGINE_MBEAN,
-            attribute: ['EngineId', 'EngineType', 'State', 'WorkflowRepository'],
+            mbean: connectionSettings.engineMBean,
+            attribute: ['EngineId', 'EngineType', 'State'],
             target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
         };
     }
+
+    private createMBeansListRequest(connectionSettings: ConnectionSettings) {
+        return {
+            type: 'LIST',
+            target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
+        };
+    }
+
     private createQueryBrokenWFRequest(connectionSettings: ConnectionSettings, max: number, offset: number) {
         return this.createJmxExecRequest(connectionSettings, {
             operation: 'queryWorkflowInstances(javax.management.openmbean.CompositeData)',
@@ -187,15 +212,15 @@ export class JmxService {
     }
 
     private createJmxExecRequest(connectionSettings, uniquePart: {}) {
-        return Object.assign(this.createJmxExecRequstBase(connectionSettings.host, connectionSettings.port), uniquePart);
+        return Object.assign(this.createJmxExecRequstBase(connectionSettings), uniquePart);
     }
 
-    private createJmxExecRequstBase(host: string, port: string) {
+    private createJmxExecRequstBase(connectionSettings: ConnectionSettings) {
         return {
             type: 'EXEC',
-            mbean: ENGINE_MBEAN,
+            mbean: connectionSettings.engineMBean,
             target: {
-                url: `service:jmx:rmi:///jndi/rmi://${host}:${port}/jmxrmi`
+                url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi`
             }
         };
     }
@@ -248,10 +273,6 @@ export class JmxService {
             console.log('Invalid responce:', response);          
             throw new Error('invalid response!');
         }
-        let wfName = 'NoWorkflowRepository';
-        if (response.data[0].value.WorkflowRepository != null) {
-            wfName = response.data[0].value.WorkflowRepository.objectName;
-        }
 
         return new EngineStatus(
             response.data[1].value.startupTS,
@@ -260,8 +281,7 @@ export class JmxService {
             response.data[0].value.EngineType,
             response.data[1].value.countWfiLastNMinutes,
             response.data[0].value.State.toLowerCase(),
-            response.data[2].value,
-            wfName
+            response.data[2].value
         );
     }
 

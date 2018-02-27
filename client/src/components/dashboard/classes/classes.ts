@@ -6,7 +6,6 @@ import './classes.scss';
 @Component({
     template: require('./classes.html')
 })
-
 export class Classes extends Vue {
 
     private jmxService: JmxService = this.$services.jmxService;
@@ -20,7 +19,7 @@ export class Classes extends Vue {
     perPageItems: number[] = [10, 15, 25, 50];
 
     created() {
-        this.jmxService.getWfRepo(this.$store.state.connectionSettings, this.$store.state.user, this.$store.state.engineStatus.wfRepoMXBeanName).then((response: WorkflowRepo) => {
+        this.jmxService.getWfRepo(this.$store.state.connectionSettings, this.$store.state.user).then((response: WorkflowRepo) => {
             this.wfArray = response.workFlowInfo;
             this.wfType = response.description;
             this.wfSource = response.sourceDir;

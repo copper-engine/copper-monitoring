@@ -102,8 +102,6 @@ export const createRouter = () => {
     let requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     
     if (requiresAuth && !store.state.user) {
-      // todo store route
-      console.log('to', to);
       router.nextPath = to.fullPath;
       next('/login');
     } else {
@@ -111,7 +109,5 @@ export const createRouter = () => {
     }
   });
   
-  console.log('Router created', new Date());
-
   return router;
 };

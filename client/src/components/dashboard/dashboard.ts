@@ -68,8 +68,6 @@ export class DashboardComponent extends Vue {
 
     @Watch('$store.state.connectionSettings')
     sheduleFetchingStatus() {
-        console.log('connectionSettings changed:', this.$store.state.connectionSettings.host, this.$store.state.connectionSettings.port );
-
         (this.$services.jmxService as JmxService)
         .getMBeans(this.$store.state.connectionSettings, this.$store.state.user)
         .then((mbeanNames: string[]) => {
@@ -86,10 +84,8 @@ export class DashboardComponent extends Vue {
 
             this.$store.commit('updateConnectionSettings', connectionSettings);
 
-            console.log('getEngineStatus: ', this.$store.state.connectionSettings.host, this.$store.state.connectionSettings.port );
             this.getEngineStatus(connectionSettings, this.$store.state.user);
             this.updateStatusInterval = setInterval(() => {
-                console.log('interval getEngineStatus: ', this.$store.state.connectionSettings.host, this.$store.state.connectionSettings.port );
                 this.getEngineStatus(this.$store.state.connectionSettings, this.$store.state.user);
             }, this.$store.state.connectionSettings.updatePeriod * 1000);
         });

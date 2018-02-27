@@ -1,6 +1,6 @@
 import Axios from 'axios';
 // import Vue from 'vue';
-import { State, EngineStatus, WorkflowInfo } from '../models/engine';
+import { State, EngineStatus, WorkflowInfo, WorkflowClassInfo, WorkflowRepo } from '../models/engine';
 import { ConnectionSettings } from '../models/connectionSettings';
 import moment from 'moment';
 import { User } from '../models/user';
@@ -10,7 +10,7 @@ export class JmxService {
         return Axios.post(process.env.API_NAME, [
                 this.createEngineInfoRequest(connectionSettings), 
                 this.createEngineActivityRequest(connectionSettings),
-                this.createCountBrokenWFRequest(connectionSettings)
+                this.createCountBrokenWFRequest(connectionSettings)                
             ], {
                 auth: { username: user.name, password: user.password }
             })
@@ -52,6 +52,51 @@ export class JmxService {
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
             });
+    }
+
+    getWfRepo(connectionSettings: ConnectionSettings, user: User) {
+        return Axios.post(process.env.API_NAME, [
+            this.createWfRepoRequest(connectionSettings)
+            ], {
+                auth: { username: user.name, password: user.password }
+            })
+            .then(this.parseWfRepoResponse)
+            .catch(error => {
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
+            });
+    }
+
+    getSourceCode(connectionSettings: ConnectionSettings, user: User, classname: String) {
+        return Axios.post(process.env.API_NAME, [
+            this.createSourceCodeRequest(connectionSettings, classname)
+            ], {
+                auth: { username: user.name, password: user.password }
+            })
+            .then(this.parseSourceCodeResponse)
+            .catch(error => {
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
+            });
+    }
+
+    private createSourceCodeRequest(connectionSettings: ConnectionSettings, classname: String) {
+        return {
+        type: 'EXEC',
+        mbean: 'copper.workflowrepo:name=wfRepository',
+        // mbean: 'copper.workflowrepo:name=workflowRepositoryMXBean',
+        operation: 'getWorkflowInfo',
+        arguments: [classname],
+        target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
+        };
+    }
+
+    private parseSourceCodeResponse = (response): String => {
+        if (!response || !response.data 
+            || response.data.length < 1
+            || response.data[0].error) {
+            console.log('Invalid responce:', response); 
+            throw new Error('invalid response!');
+        }
+        return response.data[0].value.sourceCode;
     }
 
     restartAll(connectionSettings: ConnectionSettings, user: User) {
@@ -109,6 +154,13 @@ export class JmxService {
         })
     ]
 
+    private createWfRepoRequest(connectionSettings: ConnectionSettings) {
+        return {
+            type: 'read',
+            mbean: connectionSettings.wfRepoMBean,
+            target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
+        };
+    }
     private createEngineInfoRequest(connectionSettings: ConnectionSettings) {
         return {
             type: 'read',
@@ -173,6 +225,32 @@ export class JmxService {
         };
     }
 
+    private parseWfRepoResponse = (response) => {
+        if (!response || !response.data 
+            || response.data.length < 1
+            || response.data[0].error) {
+            console.log('Invalid responce:', response); 
+            throw new Error('invalid response!');
+        }
+        let wfArray: Array<WorkflowClassInfo> = [];
+        response.data[0].value.Workflows.forEach(function (element) {
+            let wf = new WorkflowClassInfo(
+                element.classname,
+                element.alias,
+                element.majorVersion,
+                element.minorVersion,
+                element.patchLevel,
+                element.serialversionuid,
+                element.sourceCode
+            );
+            wfArray.push(wf);
+        });
+        let wfRepo = new WorkflowRepo(
+            response.data[0].value.Description,
+            response.data[0].value.SourceDirs[0],
+            wfArray        );
+        return wfRepo;
+    }
 
     private parseVoidResponse = (response): boolean => {
         if (!response || !response.data 
@@ -215,7 +293,6 @@ export class JmxService {
             console.log('Invalid responce:', response);          
             throw new Error('invalid response!');
         }
-
         return response.data[0].value as WorkflowInfo[];
     }
 

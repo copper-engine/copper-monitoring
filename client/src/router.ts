@@ -9,6 +9,7 @@ import { LoginComponent } from './components/login';
 const dashboardComponent = () => import('./components/dashboard').then(({ DashboardComponent }) => DashboardComponent);
 const workflowsComponent = () => import('./components/dashboard/workflows').then(({ WorkflowsComponent }) => WorkflowsComponent);
 const homeComponent = () => import('./components/dashboard/homepage').then(({ HomePage }) => HomePage);
+const classesComponent = () => import('./components/dashboard/classes').then(({ Classes }) => Classes);
 
 
 if (process.env.ENV === 'development' && module.hot) {
@@ -67,6 +68,14 @@ export const createRoutes: () => RouteConfig[] = () => [
         name: 'homepage',
         path: 'homepage',
         component: homeComponent,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        name: 'classes',
+        path: 'classes',
+        component: classesComponent,
         meta: {
           requiresAuth: true
         }

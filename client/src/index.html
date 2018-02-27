@@ -18,23 +18,26 @@
           background: #424242;
       }
       .application.theme--light {
-          /* background: #E0E0E0; */
-          /* color: rgba(0,0,0,0.87); */
           background: #F5F5F5 !important;
+          color: #303030 !important;
       }
-
-      /* .theme--light .input-group input, .application .theme--light.input-group input, .theme--light .input-group textarea, .application .theme--light.input-group textarea {
-          color: white !important;
+      .theme--light .btn.btn--disabled, .application .theme--light.btn.btn--disabled {
+        color: rgb(245, 245, 245) !important;
+        background-color: #52687b !important;
       }
-
+      body .theme--light .btn.btn--disabled .icon, body .application .theme--light.btn.btn--disabled .icon {
+        color: rgb(171, 171, 171) !important;
+      }
+      .theme--dark .btn.btn--disabled, .application .theme--dark.btn.btn--disabled {
+          color: rgb(75, 75, 75) !important;
+          background-color: #243e3bcf !important;
+      }
       .theme--light .input-group:not(.input-group--error) label, .application .theme--light.input-group:not(.input-group--error) label {
-          color: white !important;
-      } 
-
-      .theme--light .input-group:not(.input-group--error) .input-group__details:before, .application .theme--light.input-group:not(.input-group--error) .input-group__details:before {
-          background-color: white !important;
-      } */
-
+          color: #303030 !important;
+      }
+      .theme--light .input-group input, .application .theme--light.input-group input, .theme--light .input-group textarea, .application .theme--light.input-group textarea {
+          color: #303030 !important;
+      }
       .initialHide {
         display: none;
       }

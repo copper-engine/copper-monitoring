@@ -2,6 +2,7 @@ import Vue from 'vue';
 import { Store } from 'vuex';
 import { StoreState } from './store.vuex';
 import Vuetify from 'vuetify';
+import VuetifyTheme from 'vuetify';
 import { makeHot, reload } from './util/hot-reload';
 import './dependency-injection';
 import { createRouter } from './router';
@@ -14,42 +15,37 @@ if (utils.parseBoolean(localStorage.getItem('darkTheme')) === null) {
 }
 // Vue.use(date)
 Vue.use(require('vue-moment'));
-// Vue.use(Vuetify, {
-//   theme: {
-//     primary: '#3f51b5',
-//     secondary: '#f5f5f5',
-//     accent: '#8c9eff',
-//     error: '#b71c1c',
-//     themeText: '#000000',
-//     textOnColor: '#f5f5f5',
-//     back: '#E0E0E0'
-//   }
-// });
+
+let darkColors: VuetifyTheme = {
+  primary: '#00695C',
+  secondary: '#424242',
+  accent: '#616161',
+  error: '#b71c1c',
+  themeText: '#f5f5f5',
+  textOnColor: '#f5f5f5',
+  back: '#303030',
+  info: '#2196F3',
+  success: '#4CAF50',
+  warning: '#FFC107'
+};
+let lightColors: VuetifyTheme = {
+  primary: '#0D5494',
+  secondary: '#ebebeb',
+  accent: '#d6d6d6',
+  error: '#b71c1c',
+  themeText: '#303030',
+  textOnColor: '#f5f5f5',
+  back: '#d6d6d6',
+  info: '#2196F3',
+  success: '#4CAF50',
+  warning: '#FFC107'
+};
 
 if (utils.parseBoolean(localStorage.getItem('darkTheme')) === false) {
-  Vue.use(Vuetify, {
-    theme: {
-      primary: '#0D5494',
-      secondary: '#EEEEEE',
-      accent: '#E0E0E0',
-      error: '#b71c1c',
-      themeText: '#000000',
-      textOnColor: '#f5f5f5',
-      back: '#E0E0E0'
-    }
-  });
+  Vue.use(Vuetify, { theme: lightColors });
 } else {
-  Vue.use(Vuetify, {
-    theme: {
-      primary: '#00695C',
-      secondary: '#424242',
-      accent: '#616161',
-      error: '#b71c1c',
-      themeText: '#f5f5f5',
-      textOnColor: '#f5f5f5',
-      back: '#303030'
-    }
-  });
+  Vue.use(Vuetify, { theme: darkColors });
+  
 }
 
 const dashboardComponent = () => import('./components/dashboard').then(({ DashboardComponent }) => DashboardComponent);
@@ -73,7 +69,6 @@ let app = new Vue({
   store: (Vue.$ioc.resolve('store') as Store<StoreState>),
   router: createRouter(),
   data: {
-    // darkTheme: false
     darkTheme: utils.parseBoolean(localStorage.getItem('darkTheme')) && true
   },
   components: {
@@ -87,23 +82,13 @@ let app = new Vue({
   },
   watch: {
     darkTheme: function() {
-      // console.log('WATCH is listening to darkTheme and this is the current value: ' + this.darkTheme);
-      let theme = app.$vuetify.theme;
       if (this.darkTheme === true) {
         localStorage.setItem('darkTheme', 'true');
-        theme.primary = '#00695C';
-        theme.secondary = '#424242';
-        theme.themeText = '#f5f5f5';
-        theme.back = '#303030'; 
-        theme.accent = '#616161';
+        (app.$vuetify.theme as any) = darkColors;
       }
       else {
         localStorage.setItem('darkTheme', 'false');
-        theme.primary = '#0D5494';
-        theme.secondary = '#EEEEEE';
-        theme.themeText = '#000000';
-        theme.back = '#E0E0E0';
-        theme.accent = '#E0E0E0';
+        (app.$vuetify.theme as any) = lightColors;
       }
     }
   }

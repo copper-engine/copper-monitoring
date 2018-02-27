@@ -18,7 +18,14 @@ export class EngineStatus {
         public instances: number,
         public state: string,
         public brokenWFCount: number
-        // public brokenWF: WorkflowInfo[]
+    ) {}
+}
+
+export class WorkflowRepo {
+    constructor(
+        public description: String,
+        public sourceDir: String,
+        public workFlowInfo: Array<WorkflowClassInfo>
     ) {}
 }
 

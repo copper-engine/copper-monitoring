@@ -1,4 +1,4 @@
-<div class="classes">
+<div class="wf-repo">
 
     <v-layout class="workflows-cont" column>
         <h2 class="themeText--text">Workflow Repository</h2>
@@ -9,7 +9,7 @@
                     Repository Type:
                 </v-flex>
                 <v-flex>
-                    {{ wfType }}
+                    {{ this.wfRepo.description }}
                 </v-flex>
             </v-layout>
             <v-layout class="text themeText--text">
@@ -17,7 +17,7 @@
                     Source:
                 </v-flex>
                 <v-flex>
-                    {{ wfSource }}
+                    {{ this.wfRepo.sourceDir }}
                 </v-flex>
             </v-layout>
         </v-layout>
@@ -42,7 +42,7 @@
             </v-flex>
         </v-layout>
 
-        <v-card v-show="!wfArray || wfArray.length === 0" class="secondary">
+        <v-card v-show="!this.wfRepo.workFlowInfo || this.wfRepo.workFlowInfo.length === 0" class="secondary">
             <v-card-text>
                 <v-alert color="primary" icon="info" value="true" >
                     Cannot Load Workflow Class Information
@@ -50,7 +50,7 @@
             </v-card-text>
         </v-card>
 
-        <v-layout class="workflow" v-for="(workflow, i) in wfArray" :key="workflow.id" column>
+        <v-layout class="workflow" v-for="(workflow, i) in this.wfRepo.workFlowInfo" :key="workflow.id" column>
 
             <v-layout class="workflow-layout secondary" column>
                 <v-layout>
@@ -70,15 +70,16 @@
                     <v-flex class="actions">
                         <v-tooltip top content-class="tooltip-text">
                             <v-btn
-                            icon
+                            depressed
                             color="primary"
+                            class="squareButton"
                             @click="toggleOpen(i)"
-                            :disabled="workflow.sourceCode === null"
+                            :disabled="workflow.sourceCode === null || (workflow.sourceCode.trim()).toLowerCase() === 'na'"
                             slot="activator">
                                 <v-icon :class="{ 'close-details-icon': workflow.open }" >details</v-icon>
                             </v-btn>
-                            <span v-show="workflow.sourceCode != null">Show Source Code</span>
-                            <span v-show="workflow.sourceCode === null">No Source Code</span>
+                            <span v-show="workflow.sourceCode != null && (workflow.sourceCode.trim()).toLowerCase() !== 'na'">Show Source Code</span>
+                            <span v-show="workflow.sourceCode === null || (workflow.sourceCode.trim()).toLowerCase() === 'na'">No Source Code</span>
                         </v-tooltip>
                     </v-flex>
                 </v-layout>

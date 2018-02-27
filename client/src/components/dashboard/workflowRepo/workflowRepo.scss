@@ -1,7 +1,11 @@
-.classes {
+.wf-repo {
     width: 100%;
     max-width: 1650px;
     margin: auto;
+
+    .alert {
+        margin: 20px;
+    }
 
     .summary {
         .text {
@@ -119,8 +123,9 @@
                 padding-top: 20px;
                 padding-bottom: 20px;
                 padding-right: 10px;
+                min-width: 100px;
                 max-width: 100px;
-                margin-right: 65px;
+                margin-right: 75px;
             }
 
             .stacktrace .text {

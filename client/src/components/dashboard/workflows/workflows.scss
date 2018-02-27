@@ -1,5 +1,5 @@
 body .overlay--active:before {
-    opacity: 0.15 !important;
+    opacity: 0.75 !important;
 }
 body .overlay:before {
     background-color: #212121;
@@ -16,7 +16,7 @@ body .overlay:before {
     width: 100%;
 }
 body .dialog {
-    border-radius: 2px;
+    // border-radius: 2px;
     margin: 24px;
     overflow-y: auto;
     pointer-events: auto;
@@ -24,10 +24,11 @@ body .dialog {
     width: 100%;
     box-shadow: 0px 0px;
 }
-
 .card {
     .code {
         padding: 30px;
+        min-width: 783px;
+        min-height: 500px;
     }
 }
 .card__text {
@@ -211,6 +212,10 @@ body .dialog {
 
             .workflow-id {
                 max-height: 24px;
+            }
+
+            .raise {
+                margin-top: -40px;
             }
 
             button {

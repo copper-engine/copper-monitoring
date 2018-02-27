@@ -56,8 +56,9 @@
                         </v-flex>                  
                         <v-flex class="actions">
                             <v-tooltip top content-class="tooltip-text">
-                                <v-btn dark icon
+                                <v-btn dark depressed
                                     color="primary"
+                                    class="squareButton"
                                     :loading="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloadButton"
                                     :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"
                                     @click="restart(workflow.id)"
@@ -68,8 +69,9 @@
                                 <span>Restart Workflow</span>
                             </v-tooltip>
                             <v-tooltip top content-class="tooltip-text">
-                                <v-btn dark icon
+                                <v-btn dark depressed
                                     color="primary"
+                                    class="squareButton"
                                     :loading="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleteButton"
                                     :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"                                
                                     @click="deleteBroken(workflow.id)"
@@ -79,8 +81,9 @@
                                 <span>Delete Workflow</span>
                             </v-tooltip>
                             <v-tooltip top content-class="tooltip-text">
-                                <v-btn dark icon
+                                <v-btn dark depressed
                                     color="primary"
+                                    class="squareButton"
                                     :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"                                                                
                                     @click="showDetails(workflow)"
                                     slot="activator">
@@ -98,29 +101,17 @@
                         <div class="details accent" v-show="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).open">
                             <v-layout class="workflow-detail workflow-id">
                                 <v-flex class="detail-label"> Workflow ID:</v-flex>
-                                <v-flex  class="text"> {{workflow.id}} </v-flex>
-                                <v-spacer></v-spacer>
-                                <v-dialog v-model="dialog" scrollable max-width="800px" position="absolute">
-                                        <v-btn icon color="primary"slot="activator"@click="showSourceCode(workflow)">Source Code</v-btn>
-                                        <v-card>
-                                            <v-card-title position="absolute">
-                                                <h2>Source Code</h2>
-                                                <v-spacer></v-spacer>                  
-                                                    <v-btn color="primary" @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>      
-                                            </v-card-title>
-                                            <v-divider></v-divider>
-                                            <v-card-text>                              
-                                                <code class="code">{{ dialogSourceCode }}</code>
-                                            </v-card-text>
-                                        </v-card>
-                                    </v-dialog>
+                                <v-flex class="text"> {{workflow.id}} </v-flex>                               
                             </v-layout>
-                            <v-layout class="workflow-detail class-info">
+                            <v-layout class="workflow-detail class-info" row>
                                 <v-flex class="detail-label">Class:</v-flex>
                                 <v-flex class="text">
-                                    {{workflow.workflowClassInfo.alias}} ({{workflow.workflowClassInfo.classname}})
-                                    
+                                    {{workflow.workflowClassInfo.alias}} ({{workflow.workflowClassInfo.classname}})                                   
                                 </v-flex> 
+                                <v-spacer></v-spacer>
+                                <v-flex class="stopGrow raise">
+                                    <v-btn depressed color="primary" slot="activator" @click="showSourceCode(workflow)">Source Code</v-btn>
+                                </v-flex>
                             </v-layout>
                             <v-layout class="workflow-detail version">
                                 <v-flex class="detail-label">Version:</v-flex>
@@ -141,7 +132,21 @@
                 </v-layout>
             </v-flex>
         <!-- </transition-group> -->
-    </v-layout>    
+    </v-layout>
+
+    <v-dialog v-model="dialog" scrollable max-width="800px" position="absolute">
+        <v-card>
+            <v-card-title position="absolute">
+                <h2>{{ sourceCodeAvailable ? 'Source Code' : 'Source Code - Not Available' }}</h2>
+                <v-spacer></v-spacer>                  
+                    <v-btn depressed class="squareButton" color="primary" @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>      
+            </v-card-title>
+            <v-divider></v-divider>
+            <v-card-text>                              
+                <code class="code">{{ dialogSourceCode || 'No Source Code Available' }}</code>
+            </v-card-text>
+        </v-card>
+    </v-dialog>
 
     <workflowFooter
     @updatePage="page = $event"

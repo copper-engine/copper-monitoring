@@ -10,9 +10,6 @@ export class WorkflowRepository extends Vue {
 
     private jmxService: JmxService = this.$services.jmxService;
 
-    // wfType: String = '';
-    // wfSource: String = '';
-    // wfArray: any = [];
     wfRepo: WorkflowRepo = {
         description: '',
         sourceDir: '',
@@ -25,9 +22,6 @@ export class WorkflowRepository extends Vue {
 
     created() {
         this.jmxService.getWfRepo(this.$store.state.connectionSettings, this.$store.state.user).then((response: WorkflowRepo) => {
-            // this.wfArray = response.workFlowInfo;
-            // this.wfType = response.description;
-            // this.wfSource = response.sourceDir;
             this.wfRepo = response;
         });
     }

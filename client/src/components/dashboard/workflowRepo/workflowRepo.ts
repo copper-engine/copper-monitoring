@@ -1,18 +1,23 @@
 import { Vue, Component} from 'vue-property-decorator';
 import { WorkflowRepo } from '../../../models/engine';
 import { JmxService } from '../../../services/jmxService';
-import './classes.scss';
+import './workflowRepo.scss';
 
 @Component({
-    template: require('./classes.html')
+    template: require('./workflowRepo.html')
 })
-export class Classes extends Vue {
+export class WorkflowRepository extends Vue {
 
     private jmxService: JmxService = this.$services.jmxService;
 
-    wfType: String = '';
-    wfSource: String = '';
-    wfArray: any = [];
+    // wfType: String = '';
+    // wfSource: String = '';
+    // wfArray: any = [];
+    wfRepo: WorkflowRepo = {
+        description: '',
+        sourceDir: '',
+        workFlowInfo: []
+    };
 
     page: number = 1;
     perPage: number = 10;
@@ -20,20 +25,21 @@ export class Classes extends Vue {
 
     created() {
         this.jmxService.getWfRepo(this.$store.state.connectionSettings, this.$store.state.user).then((response: WorkflowRepo) => {
-            this.wfArray = response.workFlowInfo;
-            this.wfType = response.description;
-            this.wfSource = response.sourceDir;
+            // this.wfArray = response.workFlowInfo;
+            // this.wfType = response.description;
+            // this.wfSource = response.sourceDir;
+            this.wfRepo = response;
         });
     }
 
     toggleOpen(index) {
-        this.wfArray[index].open = !this.wfArray[index].open;
+        this.wfRepo.workFlowInfo[index].open = !this.wfRepo.workFlowInfo[index].open;
         this.$forceUpdate();
     }
 
     get totalPages() {
-        if (this.wfArray.length > 0) {
-             let total = Math.ceil(this.wfArray.length / this.perPage);
+        if (this.wfRepo.workFlowInfo.length > 0) {
+             let total = Math.ceil(this.wfRepo.workFlowInfo.length / this.perPage);
              if (this.page > total) {
                  this.page = 1;
              }

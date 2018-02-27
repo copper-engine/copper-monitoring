@@ -1,5 +1,5 @@
 body .overlay--active:before {
-    opacity: 0.15 !important;
+    opacity: 0.75 !important;
 }
 body .overlay:before {
     background-color: #212121;
@@ -16,7 +16,7 @@ body .overlay:before {
     width: 100%;
 }
 body .dialog {
-    border-radius: 2px;
+    // border-radius: 2px;
     margin: 24px;
     overflow-y: auto;
     pointer-events: auto;

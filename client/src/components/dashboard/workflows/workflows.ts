@@ -218,8 +218,10 @@ export class WorkflowsComponent extends Vue {
         this.jmxService.getSourceCode(this.$store.state.connectionSettings, this.$store.state.user, workflow.workflowClassInfo.classname)
         .then((response) => {
             this.dialogSourceCode = response;
+            this.dialog = true;
         });
     }
+
 
     showDetails(workflow: WorkflowInfo) {
         let wfContext = this.workflowsContext.get(workflow.id);

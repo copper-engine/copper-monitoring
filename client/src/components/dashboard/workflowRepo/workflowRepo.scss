@@ -1,7 +1,11 @@
-.classes {
+.wf-repo {
     width: 100%;
     max-width: 1650px;
     margin: auto;
+
+    .alert {
+        margin: 20px;
+    }
 
     .summary {
         .text {

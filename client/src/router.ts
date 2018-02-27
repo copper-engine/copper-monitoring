@@ -9,7 +9,7 @@ import { LoginComponent } from './components/login';
 const dashboardComponent = () => import('./components/dashboard').then(({ DashboardComponent }) => DashboardComponent);
 const workflowsComponent = () => import('./components/dashboard/workflows').then(({ WorkflowsComponent }) => WorkflowsComponent);
 const homeComponent = () => import('./components/dashboard/homepage').then(({ HomePage }) => HomePage);
-const classesComponent = () => import('./components/dashboard/classes').then(({ Classes }) => Classes);
+const workflowRepoComponent = () => import('./components/dashboard/workflowRepo').then(({ WorkflowRepository }) => WorkflowRepository);
 
 
 if (process.env.ENV === 'development' && module.hot) {
@@ -73,9 +73,9 @@ export const createRoutes: () => RouteConfig[] = () => [
         }
       },
       {
-        name: 'classes',
-        path: 'classes',
-        component: classesComponent,
+        name: 'workflowRepo',
+        path: 'workflowRepo',
+        component: workflowRepoComponent,
         meta: {
           requiresAuth: true
         }

@@ -232,23 +232,22 @@ export class JmxService {
             console.log('Invalid responce:', response); 
             throw new Error('invalid response!');
         }
-        let wfArray: Array<WorkflowClassInfo> = [];
-        response.data[0].value.Workflows.forEach(function (element) {
-            let wf = new WorkflowClassInfo(
-                element.classname,
-                element.alias,
-                element.majorVersion,
-                element.minorVersion,
-                element.patchLevel,
-                element.serialversionuid,
-                element.sourceCode
+        let wfArray: Array<WorkflowClassInfo> = response.data[0].value.Workflows.map((workflow) => {
+            return new WorkflowClassInfo(
+                workflow.classname,
+                workflow.alias,
+                workflow.majorVersion,
+                workflow.minorVersion,
+                workflow.patchLevel,
+                workflow.serialversionuid,
+                workflow.sourceCode
             );
-            wfArray.push(wf);
         });
         let wfRepo = new WorkflowRepo(
             response.data[0].value.Description,
             response.data[0].value.SourceDirs[0],
-            wfArray        );
+            wfArray
+        );
         return wfRepo;
     }
 

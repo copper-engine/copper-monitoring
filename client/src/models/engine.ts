@@ -54,7 +54,8 @@ export class WorkflowClassInfo {
         public minorVersion: number,
         public patchLevel: number,
         public serialversionuid: number,
-        public sourceCode: String
+        public sourceCode: String,
+        public open: Boolean = false
     ) {}
 }
 export class ErrorData {

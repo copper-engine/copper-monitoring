@@ -74,12 +74,12 @@
                             color="primary"
                             class="squareButton"
                             @click="toggleOpen(i)"
-                            :disabled="workflow.sourceCode === null"
+                            :disabled="workflow.sourceCode === null || (workflow.sourceCode.trim()).toLowerCase() === 'na'"
                             slot="activator">
                                 <v-icon :class="{ 'close-details-icon': workflow.open }" >details</v-icon>
                             </v-btn>
-                            <span v-show="workflow.sourceCode != null">Show Source Code</span>
-                            <span v-show="workflow.sourceCode === null">No Source Code</span>
+                            <span v-show="workflow.sourceCode != null && (workflow.sourceCode.trim()).toLowerCase() !== 'na'">Show Source Code</span>
+                            <span v-show="workflow.sourceCode === null || (workflow.sourceCode.trim()).toLowerCase() === 'na'">No Source Code</span>
                         </v-tooltip>
                     </v-flex>
                 </v-layout>

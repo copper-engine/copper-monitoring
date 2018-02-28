@@ -15,4 +15,8 @@ export class WorkflowHeading extends Vue {
     sendDeleteAll() {
         this.$emit('triggerDeleteAll');
     }
+
+    sendFilterMenu() {
+        this.$emit('triggerFilterMenu');
+    }
 }

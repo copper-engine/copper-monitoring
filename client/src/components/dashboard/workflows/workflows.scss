@@ -39,6 +39,28 @@ body .dialog {
 .tooltip-text {
     font-size: 1.2em;
 }
+
+.filter-button {
+    width: 150px;
+    height: 36px;
+}
+
+.filter-container {
+    padding: 20px;
+    .timeField {
+        width: 190px;
+        max-width: 190px;
+        min-width: 190px;
+    }
+    .filter-flex {
+        padding-top: 16px;
+    }
+    .select-flex {
+        max-width: 380px;
+        width: 380px;
+    }
+}
+
 code:after, kbd:after, code:before, kbd:before {
     content: "";
     letter-spacing: 0px;
@@ -58,6 +80,11 @@ code:after, kbd:after, code:before, kbd:before {
     animation-name: slowFade;
     animation-duration: 1s;
 }
+
+.stopGrow {
+    flex-grow: 0;
+}
+
 
 .workflows {
 
@@ -223,10 +250,6 @@ code:after, kbd:after, code:before, kbd:before {
                 code {
                     border-radius: 3px 3px 0px 0px;
                 }
-            }
-
-            .stopGrow {
-                flex-grow: 0;
             }
 
             .workflow-id {

@@ -1,6 +1,6 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { setTimeout } from 'timers';
-import { WorkflowInfo, EngineStatus } from '../../../models/engine';
+import { WorkflowInfo, EngineStatus, WorkflowRepo } from '../../../models/engine';
 import { Notification } from '../../../models/notification';
 import { JmxService } from '../../../services/jmxService';
 import * as utils from '../../../util/utils';
@@ -37,10 +37,28 @@ export class WorkflowsComponent extends Vue {
     perPageItems: number[] = [10, 15, 25, 50];
     restartingAll = false;
     deletingAll = false;
+
     dialog = false;
     dialogSourceCode = null;
     sourceCodeAvailable = true;
 
+    filterDialog = false;
+    filterState = false;
+    filterModTime = false;
+    filterCreationTime = false;
+    filterClassName = false;
+    states = [];
+    classNames = [];
+    modTimeFrom = '';
+    modTimeTo = '';
+    createTimeFrom = '';
+    createTimeTo = '';
+    possibleClassnames = [];    
+    possibleStates = [
+        'Error',
+        'Invalid'
+    ];
+    
     private jmxService: JmxService = this.$services.jmxService;
     private eventHub: Vue = this.$services.eventHub;
 
@@ -70,9 +88,6 @@ export class WorkflowsComponent extends Vue {
         return 1;
     }
 
-    created() {
-    }
-
     beforeDestroy() {
         clearInterval(this.fetchBrokenWFInterval);
     }
@@ -92,6 +107,32 @@ export class WorkflowsComponent extends Vue {
         this.jmxService.getBrokenWorkflows(connectionSettings, user, this.perPage, (this.page - 1) * this.perPage).then((response: WorkflowInfo[]) => {
             this.workflows = response;
         });
+    }
+    @Watch('filterState')
+    clearStates() {
+        if (this.filterState === false) {
+            this.states = [];
+        }
+    }
+    @Watch('filterClassName')
+    clearClasses() {
+        if (this.filterClassName === false) {
+            this.classNames = [];
+        }
+    }
+    @Watch('filterModTime')
+    clearModTime() {
+        if (this.filterModTime === false) {
+            this.modTimeFrom = '';
+            this.modTimeTo = '';
+        }
+    }
+    @Watch('filterCreationTime')
+    clearCreateTime() {
+        if (this.filterCreationTime === false) {
+            this.createTimeFrom = '';
+            this.createTimeTo = '';
+        }
     }
 
     restartAll() {
@@ -231,6 +272,41 @@ export class WorkflowsComponent extends Vue {
         });
     }
 
+    triggerFilterMenu() {
+        if (this.possibleClassnames.length < 1) {
+            this.getPossibleClassNames();
+        }
+        this.filterDialog = !this.filterDialog;
+    }
+    clearFilter() { 
+        this.filterState = false;
+        this.filterClassName = false;
+        this.filterModTime = false;
+        this.filterCreationTime = false;
+        this.states = [];
+        this.classNames = [];
+        this.modTimeFrom = '';
+        this.modTimeTo = '';
+        this.createTimeFrom = '';
+        this.createTimeTo = '';
+    }
+    applyFilter() {
+        console.log('S T A T E S');
+        console.log(this.states);
+        console.log('C L A S S  N A M E S');
+        console.log(this.classNames);
+        console.log('M O D  T I M E');
+        console.log(this.modTimeFrom + ' to ' + this.modTimeTo);
+        console.log('C R E A T E  T I M E');
+        console.log(this.createTimeFrom + ' to ' + this.createTimeTo);        
+    }
+    getPossibleClassNames() {
+        this.jmxService.getWfRepo(this.$store.state.connectionSettings, this.$store.state.user).then((response: WorkflowRepo) => {
+            this.possibleClassnames = response.workFlowInfo.map((workflow, index) => {
+                return response.workFlowInfo[index].classname;
+            });
+        });
+    }
 
     showDetails(workflow: WorkflowInfo) {
         let wfContext = this.workflowsContext.get(workflow.id);

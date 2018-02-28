@@ -3,6 +3,7 @@
     <workflowHeading 
     @triggerRestartAll="restartAll"
     @triggerDeleteAll="deleteAll"
+    @triggerFilterMenu="triggerFilterMenu"
     :engineStatus="status"
     :restartingAll="restartingAll"
     :deletingAll="deletingAll">
@@ -143,6 +144,102 @@
             <v-card-text>                              
                 <code class="codeDialog">{{ dialogSourceCode || 'No Source Code Available' }}</code>
             </v-card-text>
+        </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="filterDialog" persistent max-width="800px" position="absolute">
+        <v-card>
+            <v-card-title position="absolute">
+                <h2>Filter By:</h2>   
+            </v-card-title>
+            <v-divider></v-divider>
+            <v-card-text class="filter-container">                              
+                <v-layout column>
+                    <v-layout row>
+                        <v-flex class="filter-flex">
+                            <v-switch label="State" v-model="filterState" color="primary"></v-switch>
+                        </v-flex>
+                        <v-spacer></v-spacer>
+                        <v-flex class="select-flex">
+                            <v-select
+                            single-line
+                            label="Include States:"
+                            :items="possibleStates"
+                            :disabled="filterState === false"
+                            v-model="states"
+                            multiple>
+                            </v-select>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row>
+                        <v-flex class="filter-flex">
+                            <v-switch label="Class Name" v-model="filterClassName" color="primary"></v-switch>
+                        </v-flex>
+                        <v-spacer></v-spacer>
+                        <v-flex class="select-flex">
+                            <v-select
+                            single-line
+                            label="Include Classnames:"
+                            :items="possibleClassnames"
+                            :disabled="filterClassName === false"
+                            v-model="classNames"
+                            multiple>
+                            </v-select>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row>
+                        <v-flex class="filter-flex">
+                            <v-switch label="Last Modification" v-model="filterModTime" color="primary"></v-switch>
+                        </v-flex>
+                        <v-spacer></v-spacer>
+                        <v-flex class="stopGrow timeField">
+                            <v-text-field
+                            :disabled="filterModTime === false"
+                            v-model="modTimeFrom"
+                            label="From"
+                            type="time">
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex class="stopGrow timeField">
+                            <v-text-field
+                            :disabled="filterModTime === false"
+                            v-model="modTimeTo"
+                            label="To"
+                            type="time">
+                            </v-text-field>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row>
+                        <v-flex class="filter-flex">
+                            <v-switch label="Creation Time" v-model="filterCreationTime" color="primary"></v-switch>
+                        </v-flex>
+                        <v-spacer></v-spacer>
+                        <v-flex class="stopGrow timeField">
+                            <v-text-field
+                            :disabled="filterCreationTime === false"
+                            v-model="createTimeFrom"
+                            label="From"
+                            type="time">
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex class="stopGrow timeField">
+                            <v-text-field
+                            :disabled="filterCreationTime === false"
+                            v-model="createTimeTo"
+                            label="To"
+                            type="time">
+                            </v-text-field>
+                        </v-flex>
+                    </v-layout>
+                </v-layout>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+                <v-btn depressed color="primary" @click="clearFilter">Clear All</v-btn>
+                <v-spacer></v-spacer>
+                <v-btn depressed color="primary" @click="applyFilter">Apply</v-btn>
+                <v-btn depressed color="primary" @click="filterDialog = false">Cancel</v-btn>
+            </v-card-actions>
         </v-card>
     </v-dialog>
 

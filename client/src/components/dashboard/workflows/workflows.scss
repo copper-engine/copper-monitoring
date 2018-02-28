@@ -39,6 +39,10 @@ body .dialog {
 .tooltip-text {
     font-size: 1.2em;
 }
+code:after, kbd:after, code:before, kbd:before {
+    content: "";
+    letter-spacing: 0px;
+}
 
 @keyframes slowFade {
     from {opacity: 1}
@@ -190,6 +194,12 @@ body .dialog {
         .details {
             padding: 24px 32px;
             width: 100%;
+
+            .code {
+                padding-left: 30px;
+                padding-right: 30px;
+            }
+    
 
             .workflow-detail {
                 padding: 4px;

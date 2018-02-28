@@ -2,11 +2,14 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { ConnectionSettings } from './models/connectionSettings';
 import { EngineStatus } from './models/engine';
+import { MBeans } from './models/mbeans';
 import { User } from './models/user';
 
 Vue.use(Vuex);
 
 export class StoreState {
+  public mbeans: MBeans = new MBeans('', '');
+
   constructor(public connectionSettings: ConnectionSettings, public engineStatus: EngineStatus = null, public user: User = null) {}
 }
 
@@ -15,6 +18,9 @@ export const store = new Vuex.Store<StoreState>({
     mutations: {
       updateConnectionSettings(state, connectionSettings) {
         state.connectionSettings = connectionSettings;
+      },
+      updateMBeans(state, mbeans) {
+        state.mbeans = mbeans;
       },
       updateEngineStatus(state, engineStatus) {
         state.engineStatus = engineStatus;

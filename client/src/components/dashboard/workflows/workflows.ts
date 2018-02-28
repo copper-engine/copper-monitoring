@@ -7,6 +7,7 @@ import { JmxService } from '../../../services/jmxService';
 import './workflows.scss';
 import { ConnectionSettings } from '../../../models/connectionSettings';
 import { User } from '../../../models/user';
+import { MBeans } from '../../../models/mbeans';
 
 export class WorkflowContext {
     public open: boolean = false;
@@ -81,20 +82,20 @@ export class WorkflowsComponent extends Vue {
         if (this.fetchBrokenWFInterval) {
             clearInterval(this.fetchBrokenWFInterval);
         }
-        this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
+        this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user);
         this.fetchBrokenWFInterval = setInterval(() => {
-            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
+            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user);
         }, this.$store.state.connectionSettings.updatePeriod * 1000);
     }
 
-    private getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User) {
-        this.jmxService.getBrokenWorkflows(connectionSettings, user, this.perPage, (this.page - 1) * this.perPage).then((response: WorkflowInfo[]) => {
+    private getBrokenWorkflows(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User) {
+        this.jmxService.getBrokenWorkflows(connectionSettings, mbeans, user, this.perPage, (this.page - 1) * this.perPage).then((response: WorkflowInfo[]) => {
             this.workflows = response;
         });
     }
 
     restartAll() {
-        this.jmxService.restartAll(this.$store.state.connectionSettings, this.$store.state.user)
+        this.jmxService.restartAll(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user)
             .then((done) => {
                 this.restartingAll = false;
                 this.forceStatusFetch(500);
@@ -117,7 +118,7 @@ export class WorkflowsComponent extends Vue {
 
     deleteAll() {
         this.deletingAll = true;
-        this.jmxService.deleteAll(this.$store.state.connectionSettings, this.workflows, this.$store.state.user)
+        this.jmxService.deleteAll(this.$store.state.connectionSettings, this.$store.state.mbeans, this.workflows, this.$store.state.user)
         .then((done) => {
             this.deletingAll = false;
             if (done) {
@@ -139,7 +140,7 @@ export class WorkflowsComponent extends Vue {
 
     restart(id: string) {
         this.toggleButtons(id, 'restart');
-        this.jmxService.restart(this.$store.state.connectionSettings, id, this.$store.state.user)
+        this.jmxService.restart(this.$store.state.connectionSettings, this.$store.state.mbeans, id, this.$store.state.user)
         .then((done) => {
             this.toggleButtons(id, 'restart');
             if (done) {
@@ -158,7 +159,7 @@ export class WorkflowsComponent extends Vue {
 
     deleteBroken(id: string) {
         this.toggleButtons(id, 'delete');
-        this.jmxService.deleteBroken(this.$store.state.connectionSettings, id, this.$store.state.user)
+        this.jmxService.deleteBroken(this.$store.state.connectionSettings, this.$store.state.mbeans, id, this.$store.state.user)
         .then((done) => {
             // this.forceStatusFetch();
             this.toggleButtons(id, 'delete');
@@ -253,7 +254,7 @@ export class WorkflowsComponent extends Vue {
     @Watch('perPage')
     private forceStatusFetch(delay: number = 0) {
         setTimeout(() => {
-            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
+            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user);
         }, delay);
     }
 }

@@ -21,11 +21,11 @@ export class WorkflowRepository extends Vue {
     perPageItems: number[] = [10, 15, 25, 50];
 
     created() {
-        this.jmxService.getWfRepo(this.$store.state.connectionSettings, this.$store.state.user).then((response: WorkflowRepo) => {
+        this.jmxService.getWfRepo(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user).then((response: WorkflowRepo) => {
             this.wfRepo = response;
         });
     }
-
+    
     toggleOpen(index) {
         this.wfRepo.workFlowInfo[index].open = !this.wfRepo.workFlowInfo[index].open;
         this.$forceUpdate();

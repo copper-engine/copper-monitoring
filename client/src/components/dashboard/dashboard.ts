@@ -5,6 +5,7 @@ import * as utils from '../../util/utils';
 import './dashboard.scss';
 import { EngineStatus } from '../../models/engine';
 import { User } from '../../models/user';
+import { MBeans } from '../../models/mbeans';
 
 const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) => SidebarComponent);
 
@@ -78,27 +79,26 @@ export class DashboardComponent extends Vue {
 
             let connectionSettings: ConnectionSettings = this.$store.state.connectionSettings;
             if (mbeanNames && mbeanNames.length === 2) {
-                connectionSettings.setEngineMBean(mbeanNames[0]);
-                connectionSettings.setwfRepoMBean(mbeanNames[1]);
+                this.$store.commit('updateMBeans', new MBeans(mbeanNames[0], mbeanNames[1]));
             }
 
-            this.$store.commit('updateConnectionSettings', connectionSettings);
 
-            this.getEngineStatus(connectionSettings, this.$store.state.user);
+
+            this.getEngineStatus(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user);
             this.updateStatusInterval = setInterval(() => {
-                this.getEngineStatus(this.$store.state.connectionSettings, this.$store.state.user);
+                this.getEngineStatus(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user);
             }, this.$store.state.connectionSettings.updatePeriod * 1000);
         });
     }
 
     forceFetchingStatus(delay: number = 0) {
         setTimeout(() => {
-            this.getEngineStatus(this.$store.state.connectionSettings, this.$store.state.user);
+            this.getEngineStatus(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user);
         }, delay);
     }
 
-    private getEngineStatus(connectionSettings: ConnectionSettings, user: User) {
-        (this.$services.jmxService as JmxService).getEngineStatus(connectionSettings, user).then((response: EngineStatus) => {
+    private getEngineStatus(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User) {
+        (this.$services.jmxService as JmxService).getEngineStatus(connectionSettings, mbeans, user).then((response: EngineStatus) => {
             this.$store.commit('updateEngineStatus', response);
         });
     }

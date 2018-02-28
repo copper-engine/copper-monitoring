@@ -4,13 +4,14 @@ import { State, EngineStatus, WorkflowInfo, WorkflowClassInfo, WorkflowRepo } fr
 import { ConnectionSettings } from '../models/connectionSettings';
 import moment from 'moment';
 import { User } from '../models/user';
+import { MBeans } from '../models/mbeans';
 
 export class JmxService {
-    getEngineStatus(connectionSettings: ConnectionSettings, user: User) {
+    getEngineStatus(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User) {
         return Axios.post(process.env.API_NAME, [
-                this.createEngineInfoRequest(connectionSettings), 
-                this.createEngineActivityRequest(connectionSettings),
-                this.createCountBrokenWFRequest(connectionSettings)                
+                this.createEngineInfoRequest(connectionSettings, mbeans), 
+                this.createEngineActivityRequest(connectionSettings, mbeans),
+                this.createCountBrokenWFRequest(connectionSettings, mbeans)                
             ], {
                 auth: { username: user.name, password: user.password }
             })
@@ -42,9 +43,9 @@ export class JmxService {
     }
 
     // TODO logout if wrong credentials...
-    getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User , max: number = 50, offset: number = 0) {
+    getBrokenWorkflows(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User , max: number = 50, offset: number = 0) {
         return Axios.post(process.env.API_NAME, [
-                this.createQueryBrokenWFRequest(connectionSettings, max, offset)
+                this.createQueryBrokenWFRequest(connectionSettings, mbeans, max, offset)
             ], {
                 auth: { username: user.name, password: user.password }
             })
@@ -54,9 +55,9 @@ export class JmxService {
             });
     }
 
-    getWfRepo(connectionSettings: ConnectionSettings, user: User) {
+    getWfRepo(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User) {
         return Axios.post(process.env.API_NAME, [
-            this.createWfRepoRequest(connectionSettings)
+            this.createWfRepoRequest(connectionSettings, mbeans)
             ], {
                 auth: { username: user.name, password: user.password }
             })
@@ -99,9 +100,9 @@ export class JmxService {
         return response.data[0].value.sourceCode;
     }
 
-    restartAll(connectionSettings: ConnectionSettings, user: User) {
+    restartAll(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User) {
         return Axios.post(process.env.API_NAME, [
-                    this.createJmxExecRequest(connectionSettings, { operation: 'restartAll()' })
+                    this.createJmxExecRequest(connectionSettings, mbeans, { operation: 'restartAll()' })
                 ], {
                     auth: { username: user.name, password: user.password }
                 })
@@ -111,9 +112,9 @@ export class JmxService {
             });
     }
 
-    deleteAll(connectionSettings: ConnectionSettings, workflows: WorkflowInfo[], user: User) {
+    deleteAll(connectionSettings: ConnectionSettings, mbeans: MBeans, workflows: WorkflowInfo[], user: User) {
         let requestList = workflows.map((workflow) => {
-            return this.createJmxExecRequest(connectionSettings, { operation: 'deleteBroken', arguments: [ workflow.id ] });
+            return this.createJmxExecRequest(connectionSettings, mbeans, { operation: 'deleteBroken', arguments: [ workflow.id ] });
         });
         
         return Axios.post(process.env.API_NAME, requestList, {
@@ -125,9 +126,9 @@ export class JmxService {
             });
     }
 
-    restart(connectionSettings: ConnectionSettings, workflowId: string, user: User) {
+    restart(connectionSettings: ConnectionSettings, mbeans: MBeans, workflowId: string, user: User) {
         return Axios.post(process.env.API_NAME, 
-                [ this.createJmxExecRequest(connectionSettings, { operation: 'restart', arguments: [ workflowId ] }) ], {
+                [ this.createJmxExecRequest(connectionSettings, mbeans, { operation: 'restart', arguments: [ workflowId ] }) ], {
                     auth: { username: user.name, password: user.password }
                 })
             .then(this.parseVoidResponse)
@@ -136,9 +137,9 @@ export class JmxService {
             });
     }
 
-    deleteBroken(connectionSettings: ConnectionSettings, workflowId: string, user: User) {
+    deleteBroken(connectionSettings: ConnectionSettings, mbeans: MBeans, workflowId: string, user: User) {
         return Axios.post(process.env.API_NAME, 
-                [ this.createJmxExecRequest(connectionSettings, { operation: 'deleteBroken', arguments: [ workflowId ] }) ], {
+                [ this.createJmxExecRequest(connectionSettings, mbeans, { operation: 'deleteBroken', arguments: [ workflowId ] }) ], {
                     auth: { username: user.name, password: user.password }
                 })
             .then(this.parseVoidResponse)
@@ -147,24 +148,24 @@ export class JmxService {
             });
     }
 
-    private buildRestartAllRequest = (connectionSettings: ConnectionSettings) => [
-        this.createJmxExecRequest(connectionSettings, {
+    private buildRestartAllRequest = (connectionSettings: ConnectionSettings, mbeans: MBeans) => [
+        this.createJmxExecRequest(connectionSettings, mbeans, {
             operation: 'restartAll()',
             arguments: [], 
         })
     ]
 
-    private createWfRepoRequest(connectionSettings: ConnectionSettings) {
+    private createWfRepoRequest(connectionSettings: ConnectionSettings, mbeans: MBeans) {
         return {
             type: 'read',
-            mbean: connectionSettings.wfRepoMBean,
+            mbean: mbeans.wfRepoMBean,
             target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
         };
     }
-    private createEngineInfoRequest(connectionSettings: ConnectionSettings) {
+    private createEngineInfoRequest(connectionSettings: ConnectionSettings, mbeans: MBeans) {
         return {
             type: 'read',
-            mbean: connectionSettings.engineMBean,
+            mbean: mbeans.engineMBean,
             attribute: ['EngineId', 'EngineType', 'State'],
             target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
         };
@@ -177,21 +178,21 @@ export class JmxService {
         };
     }
 
-    private createQueryBrokenWFRequest(connectionSettings: ConnectionSettings, max: number, offset: number) {
-        return this.createJmxExecRequest(connectionSettings, {
+    private createQueryBrokenWFRequest(connectionSettings: ConnectionSettings, mbeans: MBeans, max: number, offset: number) {
+        return this.createJmxExecRequest(connectionSettings, mbeans, {
             operation: 'queryWorkflowInstances(javax.management.openmbean.CompositeData)',
             arguments: [this.createWorkflowFilter(connectionSettings, [State.ERROR, State.INVALID], max, offset)], // get workflows with status Invalid
         });
     }
-    private createCountBrokenWFRequest(connectionSettings: ConnectionSettings) {
-        return this.createJmxExecRequest(connectionSettings, {
+    private createCountBrokenWFRequest(connectionSettings: ConnectionSettings, mbeans: MBeans) {
+        return this.createJmxExecRequest(connectionSettings, mbeans, {
             operation: 'countWorkflowInstances(javax.management.openmbean.CompositeData)',
             arguments: [this.createWorkflowFilter(connectionSettings, [State.ERROR, State.INVALID])], // get workflows with status Invalid
         });
     }
 
-    private createEngineActivityRequest(connectionSettings: ConnectionSettings) {
-        return this.createJmxExecRequest(connectionSettings, {
+    private createEngineActivityRequest(connectionSettings: ConnectionSettings, mbeans: MBeans) {
+        return this.createJmxExecRequest(connectionSettings, mbeans, {
             operation: 'queryEngineActivity',
             arguments: [connectionSettings.fetchPeriod], // fetch info for last N minutes
         });
@@ -211,14 +212,14 @@ export class JmxService {
         };
     }
 
-    private createJmxExecRequest(connectionSettings, uniquePart: {}) {
-        return Object.assign(this.createJmxExecRequstBase(connectionSettings), uniquePart);
+    private createJmxExecRequest(connectionSettings, mbeans: MBeans, uniquePart: {}) {
+        return Object.assign(this.createJmxExecRequstBase(connectionSettings, mbeans), uniquePart);
     }
 
-    private createJmxExecRequstBase(connectionSettings: ConnectionSettings) {
+    private createJmxExecRequstBase(connectionSettings: ConnectionSettings, mbeans: MBeans) {
         return {
             type: 'EXEC',
-            mbean: connectionSettings.engineMBean,
+            mbean: mbeans.engineMBean,
             target: {
                 url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi`
             }

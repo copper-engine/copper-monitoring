@@ -43,6 +43,10 @@ code:after, kbd:after, code:before, kbd:before {
     content: "";
     letter-spacing: 0px;
 }
+.codeDialog {
+    padding: 30px;
+    border-radius: 0px;
+}
 
 @keyframes slowFade {
     from {opacity: 1}
@@ -56,6 +60,7 @@ code:after, kbd:after, code:before, kbd:before {
 }
 
 .workflows {
+
     width: 100%;
     max-width: 1650px;
     margin: auto;
@@ -214,6 +219,10 @@ code:after, kbd:after, code:before, kbd:before {
 
             .stacktrace .text {
                 overflow-x: auto;
+                border-radius: 3px;
+                code {
+                    border-radius: 3px 3px 0px 0px;
+                }
             }
 
             .stopGrow {

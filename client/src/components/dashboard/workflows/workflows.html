@@ -29,7 +29,7 @@
                             {{ (page - 1) * perPage + i + 1 }}
                         </v-flex>  
                         <v-flex class="data">
-                            {{ workflow.dataAsString }}
+                            {{ workflow.workflowClassInfo.alias }}
                         </v-flex>  
                         <v-flex class="priority">
                             {{ workflow.priority }}
@@ -103,10 +103,14 @@
                                 <v-flex class="detail-label"> Workflow ID:</v-flex>
                                 <v-flex class="text"> {{workflow.id}} </v-flex>                               
                             </v-layout>
+                            <v-layout class="workflow-detail workflow-id">
+                                <v-flex class="detail-label"> Workflow Data:</v-flex>
+                                <v-flex class="text"> {{ workflow.dataAsString }} </v-flex>                               
+                            </v-layout>
                             <v-layout class="workflow-detail class-info" row>
                                 <v-flex class="detail-label">Class:</v-flex>
                                 <v-flex class="text">
-                                    {{workflow.workflowClassInfo.alias}} ({{workflow.workflowClassInfo.classname}})                                   
+                                    {{workflow.workflowClassInfo.classname}}                                  
                                 </v-flex> 
                                 <v-spacer></v-spacer>
                                 <v-flex class="stopGrow raise">

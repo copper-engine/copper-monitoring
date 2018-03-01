@@ -222,6 +222,8 @@ code:after, kbd:after, code:before, kbd:before {
                 border-radius: 3px;
                 code {
                     border-radius: 3px 3px 0px 0px;
+                    padding: 10px 30px;
+                    min-width: 100%;
                 }
             }
 

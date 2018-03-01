@@ -3,6 +3,7 @@ import { setTimeout } from 'timers';
 import { WorkflowInfo, EngineStatus } from '../../../models/engine';
 import { Notification } from '../../../models/notification';
 import { JmxService } from '../../../services/jmxService';
+import * as utils from '../../../util/utils';
 
 import './workflows.scss';
 import { ConnectionSettings } from '../../../models/connectionSettings';
@@ -220,7 +221,7 @@ export class WorkflowsComponent extends Vue {
         this.jmxService.getSourceCode(this.$store.state.connectionSettings, this.$store.state.user, workflow.workflowClassInfo.classname)
         .then((response) => {
             if ((String(response).trim()).toLowerCase() !== 'na') {  
-                this.dialogSourceCode = response;
+                this.dialogSourceCode = utils.parseSourceCode(String(response));
                 this.sourceCodeAvailable = true;
             } else {
                 this.dialogSourceCode = 'No Source Code Available';

@@ -1,6 +1,7 @@
 import { Vue, Component} from 'vue-property-decorator';
 import { WorkflowRepo } from '../../../models/engine';
 import { JmxService } from '../../../services/jmxService';
+import * as utils from '../../../util/utils';
 import './workflowRepo.scss';
 
 @Component({
@@ -23,6 +24,9 @@ export class WorkflowRepository extends Vue {
     created() {
         this.jmxService.getWfRepo(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user).then((response: WorkflowRepo) => {
             this.wfRepo = response;
+            this.wfRepo.workFlowInfo.map((workflow, index) => {
+                this.wfRepo.workFlowInfo[index].sourceCode = utils.parseSourceCode(workflow.sourceCode);
+            });
         });
     }
     

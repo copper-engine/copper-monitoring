@@ -296,7 +296,7 @@ export class WorkflowsComponent extends Vue {
         console.log('C L A S S  N A M E S');
         console.log(this.classNames);
         console.log('M O D  T I M E');
-        console.log(this.modTimeFrom + ' to ' + this.modTimeTo);
+        console.log(this.getEpochTime(this.modTimeFrom) + ' to ' + this.getEpochTime(this.modTimeTo));
         console.log('C R E A T E  T I M E');
         console.log(this.createTimeFrom + ' to ' + this.createTimeTo);        
     }
@@ -306,6 +306,21 @@ export class WorkflowsComponent extends Vue {
                 return response.workFlowInfo[index].classname;
             });
         });
+    }
+    getEpochTime(time: String) {
+        // console.log(time);
+        let year = Number(time.substr(8, 4));
+        // console.log('Year: ' + year);
+        let month = Number(time.substr(6, 2));
+        // console.log('Month: ' + month);
+        let day = Number(time.substr(4, 2));
+        // console.log('Day: ' + day);
+        let hour = Number(time.substr(0, 2));
+        // console.log('Hour: ' + hour);
+        let min = Number(time.substr(2, 2));
+        // console.log('Min: ' + min);
+        let date = new Date(year, month, day, hour, min, 0, 0);
+        return date.getTime();
     }
 
     showDetails(workflow: WorkflowInfo) {

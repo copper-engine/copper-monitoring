@@ -13,7 +13,7 @@
         <v-card v-show="!workflows || workflows.length === 0" class="secondary">
             <v-card-text>
                 <v-alert color="primary" icon="info" value="true" >
-                    There are no broken workflows
+                    There are no available broken workflows
                 </v-alert>
             </v-card-text>
         </v-card>
@@ -197,7 +197,8 @@
                             :disabled="filterModTime === false"
                             v-model="modTimeFrom"
                             label="From"
-                            type="time">
+                            mask="##:## ##/##/####"
+                            hint="HH:MM DD/MM/YYYY">
                             </v-text-field>
                         </v-flex>
                         <v-flex class="stopGrow timeField">
@@ -205,7 +206,8 @@
                             :disabled="filterModTime === false"
                             v-model="modTimeTo"
                             label="To"
-                            type="time">
+                            mask="##:## ##/##/####"
+                            hint="HH:MM DD/MM/YYYY">
                             </v-text-field>
                         </v-flex>
                     </v-layout>
@@ -219,7 +221,8 @@
                             :disabled="filterCreationTime === false"
                             v-model="createTimeFrom"
                             label="From"
-                            type="time">
+                            mask="##:## ##/##/####"
+                            hint="HH:MM DD/MM/YYYY">
                             </v-text-field>
                         </v-flex>
                         <v-flex class="stopGrow timeField">
@@ -227,7 +230,8 @@
                             :disabled="filterCreationTime === false"
                             v-model="createTimeTo"
                             label="To"
-                            type="time">
+                            mask="##:## ##/##/####"
+                            hint="HH:MM DD/MM/YYYY">
                             </v-text-field>
                         </v-flex>
                     </v-layout>

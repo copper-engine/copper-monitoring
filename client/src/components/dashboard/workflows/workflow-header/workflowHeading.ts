@@ -7,6 +7,7 @@ export class WorkflowHeading extends Vue {
     @Prop() engineStatus;
     @Prop() restartingAll: boolean;
     @Prop() deletingAll: boolean;
+    openFilterMenu: boolean = false;
 
     sendRestartAll() {
         this.$emit('triggerRestartAll');
@@ -18,5 +19,6 @@ export class WorkflowHeading extends Vue {
 
     sendFilterMenu() {
         this.$emit('triggerFilterMenu');
+        this.openFilterMenu = !this.openFilterMenu;
     }
 }

@@ -5,7 +5,7 @@
             Total number of broken workflows: {{ engineStatus ? engineStatus.brokenWFCount : 0}}
         </v-flex>
         <v-spacer></v-spacer>
-        <v-flex>
+        <v-flex class="stopGrow">
             <v-btn dark
                 color="primary"
                 :loading="restartingAll"
@@ -22,30 +22,101 @@
                 color="primary"
                 :loading="deletingAll"
                 :disabled="deletingAll || restartingAll"
-                @click="sendDeleteAll"
-                >
+                @click="sendDeleteAll">
                 <v-icon left>delete</v-icon>
                 Delete All
                 <span slot="loader" class="custom-loader">
                     <v-icon light>cached</v-icon>
                 </span>
             </v-btn>
-        </v-flex>
-        <v-spacer></v-spacer>
-        <v-flex class="stopGrow">
-                <v-btn dark
-                class="filter-button"
-                color="primary"
-                :loading="deletingAll"
-                :disabled="deletingAll || restartingAll"
-                @click="sendFilterMenu">
-                <v-icon left>mdi-filter</v-icon>
-                Filter
-                <span slot="loader" class="custom-loader">
-                    <v-icon light>cached</v-icon>
-                </span>
+            <v-btn dark
+            class="filter-button"
+            color="primary"
+            :loading="deletingAll"
+            :disabled="deletingAll || restartingAll"
+            @click="sendFilterMenu">
+            <v-icon left>mdi-filter</v-icon>
+            Filter
+            <span slot="loader" class="custom-loader">
+                <v-icon light>cached</v-icon>
+            </span>
             </v-btn>
         </v-flex>
+    </v-layout>
+
+    <v-layout v-show="openFilterMenu" class="filter-menu accent" column>
+        <v-layout row class="filter-header">
+        <h3 class="themeText--text">Filter By:</h3>
+        <v-spacer></v-spacer>
+        <v-btn depressed color="primary" @click="clearFilter">Clear All</v-btn>
+        <v-btn depressed color="primary" @click="applyFilter">Apply</v-btn>
+        </v-layout>
+        <v-layout row class="filter-layout">
+            <v-flex class="select-flex">
+                <v-select class="select"
+                single-line
+                label="Include States:"
+                :items="possibleStates"
+                :disabled="filterState === false"
+                v-model="states"
+                multiple>
+                </v-select>
+            </v-flex>
+            <v-flex class="select-flex">
+                <v-select class="select"
+                single-line
+                label="Include Classnames:"
+                :items="possibleClassnames"
+                :disabled="filterClassName === false"
+                v-model="classNames"
+                multiple>
+                </v-select>
+            </v-flex>
+            <v-layout class="time-field-container">
+                <v-flex class="stopGrow time-field">
+                    <v-text-field
+                    :disabled="filterCreationTime === false"
+                    v-model="createTimeFrom"
+                    label="Created From"
+                    mask="##:## ##/##/####"
+                    hint="HH:MM DD/MM/YYYY"
+                    single-line>
+                    </v-text-field>
+                </v-flex>
+                <v-flex class="stopGrow time-field">
+                    <v-text-field
+                    :disabled="filterCreationTime === false"
+                    v-model="createTimeTo"
+                    label="To"
+                    mask="##:## ##/##/####"
+                    hint="HH:MM DD/MM/YYYY"
+                    single-line>
+                    </v-text-field>
+                </v-flex>
+            </v-layout>
+            <v-layout class="time-field-container">
+                <v-flex class="stopGrow time-field">
+                    <v-text-field
+                    :disabled="filterModTime === false"
+                    v-model="modTimeFrom"
+                    label="Modified From"
+                    mask="##:## ##/##/####"
+                    hint="HH:MM DD/MM/YYYY"
+                    single-line>
+                    </v-text-field>
+                </v-flex>
+                <v-flex class="stopGrow time-field">
+                    <v-text-field
+                    :disabled="filterModTime === false"
+                    v-model="modTimeTo"
+                    label="To"
+                    mask="##:## ##/##/####"
+                    hint="HH:MM DD/MM/YYYY"
+                    single-line>
+                    </v-text-field>
+                </v-flex>
+            </v-layout>
+        </v-layout>      
     </v-layout>
 
     <v-layout class="header primary textOnColor--text">

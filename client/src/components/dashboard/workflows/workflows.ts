@@ -276,7 +276,7 @@ export class WorkflowsComponent extends Vue {
         if (this.possibleClassnames.length < 1) {
             this.getPossibleClassNames();
         }
-        this.filterDialog = !this.filterDialog;
+        // this.filterDialog = !this.filterDialog;
     }
     clearFilter() { 
         this.filterState = false;

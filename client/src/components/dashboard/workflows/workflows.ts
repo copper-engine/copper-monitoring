@@ -29,6 +29,10 @@ const WorkflowFooter = () => import('./workflow-footer').then(({ WorkflowFooter 
     }
 })
 export class WorkflowsComponent extends Vue {
+
+    private jmxService: JmxService = this.$services.jmxService;
+    private eventHub: Vue = this.$services.eventHub;
+
     workflowsContext: Map<String, WorkflowContext> = new Map<String, WorkflowContext>(); 
     workflows: WorkflowInfo[] = [];
     fetchBrokenWFInterval: any;
@@ -42,25 +46,25 @@ export class WorkflowsComponent extends Vue {
     dialogSourceCode = null;
     sourceCodeAvailable = true;
 
-    filterDialog = false;
-    filterState = false;
-    filterModTime = false;
-    filterCreationTime = false;
-    filterClassName = false;
-    states = [];
-    classNames = [];
-    modTimeFrom = '';
-    modTimeTo = '';
-    createTimeFrom = '';
-    createTimeTo = '';
-    possibleClassnames = [];    
-    possibleStates = [
-        'Error',
-        'Invalid'
-    ];
-    
-    private jmxService: JmxService = this.$services.jmxService;
-    private eventHub: Vue = this.$services.eventHub;
+    mounted() {
+        this.sheduleFetchingBrrokenWF();
+    }
+    beforeDestroy() {
+        clearInterval(this.fetchBrokenWFInterval);
+    }
+
+    private getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User) {
+        this.jmxService.getBrokenWorkflows(connectionSettings, user, this.perPage, (this.page - 1) * this.perPage).then((response: WorkflowInfo[]) => {
+            this.workflows = response;
+        });
+    }
+    private showSuccess(message: String) {
+        this.eventHub.$emit('showNotification', new Notification(message));
+    }
+
+    private showError(message: String) {
+        this.eventHub.$emit('showNotification', new Notification(message, 'error'));
+    }
 
     get status() {
         return this.$store.state.engineStatus;
@@ -68,10 +72,6 @@ export class WorkflowsComponent extends Vue {
 
     get disabled() {
         return this.restartingAll || this.deletingAll;
-    }
-    
-    mounted() {
-        this.sheduleFetchingBrrokenWF();
     }
 
     get totalPages() {
@@ -86,53 +86,6 @@ export class WorkflowsComponent extends Vue {
         }
         this.page = 1;
         return 1;
-    }
-
-    beforeDestroy() {
-        clearInterval(this.fetchBrokenWFInterval);
-    }
-
-    @Watch('$store.state.connectionSettings')
-    sheduleFetchingBrrokenWF() {
-        if (this.fetchBrokenWFInterval) {
-            clearInterval(this.fetchBrokenWFInterval);
-        }
-        this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
-        this.fetchBrokenWFInterval = setInterval(() => {
-            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
-        }, this.$store.state.connectionSettings.updatePeriod * 1000);
-    }
-
-    private getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User) {
-        this.jmxService.getBrokenWorkflows(connectionSettings, user, this.perPage, (this.page - 1) * this.perPage).then((response: WorkflowInfo[]) => {
-            this.workflows = response;
-        });
-    }
-    @Watch('filterState')
-    clearStates() {
-        if (this.filterState === false) {
-            this.states = [];
-        }
-    }
-    @Watch('filterClassName')
-    clearClasses() {
-        if (this.filterClassName === false) {
-            this.classNames = [];
-        }
-    }
-    @Watch('filterModTime')
-    clearModTime() {
-        if (this.filterModTime === false) {
-            this.modTimeFrom = '';
-            this.modTimeTo = '';
-        }
-    }
-    @Watch('filterCreationTime')
-    clearCreateTime() {
-        if (this.filterCreationTime === false) {
-            this.createTimeFrom = '';
-            this.createTimeTo = '';
-        }
     }
 
     restartAll() {
@@ -272,57 +225,6 @@ export class WorkflowsComponent extends Vue {
         });
     }
 
-    triggerFilterMenu() {
-        if (this.possibleClassnames.length < 1) {
-            this.getPossibleClassNames();
-        }
-        // this.filterDialog = !this.filterDialog;
-    }
-    clearFilter() { 
-        this.filterState = false;
-        this.filterClassName = false;
-        this.filterModTime = false;
-        this.filterCreationTime = false;
-        this.states = [];
-        this.classNames = [];
-        this.modTimeFrom = '';
-        this.modTimeTo = '';
-        this.createTimeFrom = '';
-        this.createTimeTo = '';
-    }
-    applyFilter() {
-        console.log('S T A T E S');
-        console.log(this.states);
-        console.log('C L A S S  N A M E S');
-        console.log(this.classNames);
-        console.log('M O D  T I M E');
-        console.log(this.getEpochTime(this.modTimeFrom) + ' to ' + this.getEpochTime(this.modTimeTo));
-        console.log('C R E A T E  T I M E');
-        console.log(this.createTimeFrom + ' to ' + this.createTimeTo);        
-    }
-    getPossibleClassNames() {
-        this.jmxService.getWfRepo(this.$store.state.connectionSettings, this.$store.state.user).then((response: WorkflowRepo) => {
-            this.possibleClassnames = response.workFlowInfo.map((workflow, index) => {
-                return response.workFlowInfo[index].classname;
-            });
-        });
-    }
-    getEpochTime(time: String) {
-        // console.log(time);
-        let year = Number(time.substr(8, 4));
-        // console.log('Year: ' + year);
-        let month = Number(time.substr(6, 2));
-        // console.log('Month: ' + month);
-        let day = Number(time.substr(4, 2));
-        // console.log('Day: ' + day);
-        let hour = Number(time.substr(0, 2));
-        // console.log('Hour: ' + hour);
-        let min = Number(time.substr(2, 2));
-        // console.log('Min: ' + min);
-        let date = new Date(year, month, day, hour, min, 0, 0);
-        return date.getTime();
-    }
-
     showDetails(workflow: WorkflowInfo) {
         let wfContext = this.workflowsContext.get(workflow.id);
         if (!wfContext) {
@@ -333,14 +235,16 @@ export class WorkflowsComponent extends Vue {
         this.$forceUpdate();
     }
 
-    private showSuccess(message: String) {
-        this.eventHub.$emit('showNotification', new Notification(message));
+    @Watch('$store.state.connectionSettings')
+    sheduleFetchingBrrokenWF() {
+        if (this.fetchBrokenWFInterval) {
+            clearInterval(this.fetchBrokenWFInterval);
+        }
+        this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
+        this.fetchBrokenWFInterval = setInterval(() => {
+            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
+        }, this.$store.state.connectionSettings.updatePeriod * 1000);
     }
-
-    private showError(message: String) {
-        this.eventHub.$emit('showNotification', new Notification(message, 'error'));
-    }
-
     @Watch('page')
     @Watch('perPage')
     private forceStatusFetch(delay: number = 0) {

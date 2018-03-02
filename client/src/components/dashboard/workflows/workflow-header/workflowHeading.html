@@ -34,7 +34,7 @@
             color="primary"
             :loading="deletingAll"
             :disabled="deletingAll || restartingAll"
-            @click="sendFilterMenu">
+            @click="triggerFilterMenu">
             <v-icon left>mdi-filter</v-icon>
             Filter
             <span slot="loader" class="custom-loader">
@@ -44,80 +44,78 @@
         </v-flex>
     </v-layout>
 
-    <v-layout v-show="openFilterMenu" class="filter-menu accent" column>
+    <transition name="filter-component">
+    <v-layout v-show="openFilterMenu" class="filter-menu secondary" column>
         <v-layout row class="filter-header">
-        <h3 class="themeText--text">Filter By:</h3>
-        <v-spacer></v-spacer>
-        <v-btn depressed color="primary" @click="clearFilter">Clear All</v-btn>
-        <v-btn depressed color="primary" @click="applyFilter">Apply</v-btn>
+        <h3 class="themeText--text">Filter By:</h3>        
         </v-layout>
-        <v-layout row class="filter-layout">
-            <v-flex class="select-flex">
-                <v-select class="select"
-                single-line
-                label="Include States:"
-                :items="possibleStates"
-                :disabled="filterState === false"
-                v-model="states"
-                multiple>
-                </v-select>
-            </v-flex>
-            <v-flex class="select-flex">
-                <v-select class="select"
-                single-line
-                label="Include Classnames:"
-                :items="possibleClassnames"
-                :disabled="filterClassName === false"
-                v-model="classNames"
-                multiple>
-                </v-select>
-            </v-flex>
-            <v-layout class="time-field-container">
-                <v-flex class="stopGrow time-field">
-                    <v-text-field
-                    :disabled="filterCreationTime === false"
-                    v-model="createTimeFrom"
-                    label="Created From"
-                    mask="##:## ##/##/####"
-                    hint="HH:MM DD/MM/YYYY"
-                    single-line>
-                    </v-text-field>
+        <v-layout class="filter-layout" column>
+            <v-layout row class="filter-header">
+                <v-flex class="select-container stopGrow">
+                    <v-select class="select"
+                    single-line
+                    label="Include States:"
+                    :items="possibleStates"
+                    v-model="states"
+                    multiple>
+                    </v-select>
                 </v-flex>
-                <v-flex class="stopGrow time-field">
-                    <v-text-field
-                    :disabled="filterCreationTime === false"
-                    v-model="createTimeTo"
-                    label="To"
-                    mask="##:## ##/##/####"
-                    hint="HH:MM DD/MM/YYYY"
-                    single-line>
-                    </v-text-field>
-                </v-flex>
+                <v-layout class="time-field-container">
+                    <v-flex class="stopGrow time-field">
+                        <v-text-field class="date-time-text"
+                        v-model="createTimeFrom"
+                        label="Created - From"
+                        mask="####-##-## ##:##"
+                        readonly>
+                        </v-text-field>
+                        <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="createTimeFromInput"></datetime>
+                    </v-flex>
+                    <v-flex class="stopGrow time-field">
+                        <v-text-field
+                        v-model="createTimeTo"
+                        label="To"
+                        mask="####-##-## ##:##"
+                        readonly>
+                        </v-text-field>
+                        <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="createTimeToInput"></datetime>
+                    </v-flex>
+                </v-layout>
+                <v-btn class="filter-action" depressed color="primary" @click="clearFilter"><v-icon left>mdi-cancel</v-icon>Clear</v-btn>         
             </v-layout>
-            <v-layout class="time-field-container">
-                <v-flex class="stopGrow time-field">
-                    <v-text-field
-                    :disabled="filterModTime === false"
-                    v-model="modTimeFrom"
-                    label="Modified From"
-                    mask="##:## ##/##/####"
-                    hint="HH:MM DD/MM/YYYY"
-                    single-line>
-                    </v-text-field>
-                </v-flex>
-                <v-flex class="stopGrow time-field">
-                    <v-text-field
-                    :disabled="filterModTime === false"
-                    v-model="modTimeTo"
-                    label="To"
-                    mask="##:## ##/##/####"
-                    hint="HH:MM DD/MM/YYYY"
-                    single-line>
-                    </v-text-field>
-                </v-flex>
+            <v-layout row class="filter-header">
+                <v-flex class="select-container stopGrow">
+                    <v-select class="select"
+                    single-line
+                    label="Include Classname:"
+                    :items="possibleClassnames"
+                    v-model="classNames">
+                    </v-select>
+                </v-flex>       
+                <v-layout class="time-field-container">
+                    <v-flex class="stopGrow time-field">
+                        <v-text-field
+                        v-model="modTimeFrom"
+                        label="Modified - From"
+                        mask="####-##-## ##:##"
+                        readonly>
+                        </v-text-field>
+                        <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="modTimeFromInput"></datetime>
+                    </v-flex>
+                    <v-flex class="stopGrow time-field">
+                        <v-text-field
+                        v-model="modTimeTo"
+                        label="To"
+                        mask="####-##-## ##:##"
+                        readonly>
+                        </v-text-field>
+                        <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="modTimeToInput"></datetime>
+                    </v-flex>
+                </v-layout>
+                <v-btn class="filter-action" depressed color="primary" @click="applyFilter"><v-icon left>mdi-check</v-icon>Apply</v-btn>
             </v-layout>
         </v-layout>      
     </v-layout>
+    </transition>
 
     <v-layout class="header primary textOnColor--text">
         <v-flex class="number">

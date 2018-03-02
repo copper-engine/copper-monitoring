@@ -29,17 +29,20 @@
   },
   "dependencies": {
     "axios": "~0.18.0",
+    "element-ui": "^2.2.1",
+    "luxon": "^0.5.3",
     "mdi": "^2.1.19",
     "uiv": "^0.14.1",
     "vue": "~2.5.8",
     "vue-class-component": "~6.1.0",
     "vue-container": "^1.1.1",
+    "vue-datetime": "^1.0.0-beta.3",
     "vue-moment": "^3.1.0",
     "vue-property-decorator": "~6.0.0",
     "vue-router": "^3.0.1",
     "vuetify": "1.0.0-beta.3",
     "vuex": "^3.0.1",
-    "webpack-war-plugin": "^1.0.0-beta.3"
+    "weekstart": "^1.0.0"
   },
   "devDependencies": {
     "@types/mocha": "~2.2.44",

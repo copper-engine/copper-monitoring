@@ -9,12 +9,16 @@ import { createRouter } from './router';
 import 'vuetify/dist/vuetify.css';
 import 'mdi/css/materialdesignicons.min.css';
 import * as utils from './util/utils';
+import Datetime from 'vue-datetime';
+import 'vue-datetime/dist/vue-datetime.css';
+
 
 if (utils.parseBoolean(localStorage.getItem('darkTheme')) === null) {
   localStorage.setItem('darkTheme', 'true');
 }
 // Vue.use(date)
 Vue.use(require('vue-moment'));
+Vue.use(Datetime);
 
 let darkColors: VuetifyTheme = {
   primary: '#00695C',

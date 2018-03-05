@@ -63,7 +63,7 @@
                 <v-layout class="time-field-container">
                     <v-flex class="stopGrow time-field">
                         <v-text-field class="date-time-text"
-                        v-model="createTimeFrom"
+                        :value="createTimeFrom"
                         label="Created - From"
                         mask="####-##-## ##:##"
                         readonly>
@@ -72,7 +72,7 @@
                     </v-flex>
                     <v-flex class="stopGrow time-field">
                         <v-text-field
-                        v-model="createTimeTo"
+                        :value="createTimeTo"
                         label="To"
                         mask="####-##-## ##:##"
                         readonly>
@@ -94,7 +94,7 @@
                 <v-layout class="time-field-container">
                     <v-flex class="stopGrow time-field">
                         <v-text-field
-                        v-model="modTimeFrom"
+                        :value="modTimeFrom"
                         label="Modified - From"
                         mask="####-##-## ##:##"
                         readonly>
@@ -103,7 +103,7 @@
                     </v-flex>
                     <v-flex class="stopGrow time-field">
                         <v-text-field
-                        v-model="modTimeTo"
+                        :value="modTimeTo"
                         label="To"
                         mask="####-##-## ##:##"
                         readonly>

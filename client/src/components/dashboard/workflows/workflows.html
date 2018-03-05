@@ -3,6 +3,7 @@
     <workflowHeading 
     @triggerRestartAll="restartAll"
     @triggerDeleteAll="deleteAll"
+    @triggerApplyFilter="applyFilter($event)"
     :engineStatus="status"
     :restartingAll="restartingAll"
     :deletingAll="deletingAll">

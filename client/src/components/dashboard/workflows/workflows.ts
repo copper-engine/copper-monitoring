@@ -1,6 +1,6 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { setTimeout } from 'timers';
-import { WorkflowInfo, EngineStatus, WorkflowRepo } from '../../../models/engine';
+import { WorkflowInfo, EngineStatus, WorkflowRepo, WorkflowFilter } from '../../../models/engine';
 import { Notification } from '../../../models/notification';
 import { JmxService } from '../../../services/jmxService';
 import * as utils from '../../../util/utils';
@@ -46,6 +46,8 @@ export class WorkflowsComponent extends Vue {
     dialogSourceCode = null;
     sourceCodeAvailable = true;
 
+    filter: WorkflowFilter = new WorkflowFilter;
+
     mounted() {
         this.sheduleFetchingBrrokenWF();
     }
@@ -53,8 +55,8 @@ export class WorkflowsComponent extends Vue {
         clearInterval(this.fetchBrokenWFInterval);
     }
 
-    private getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User) {
-        this.jmxService.getBrokenWorkflows(connectionSettings, user, this.perPage, (this.page - 1) * this.perPage).then((response: WorkflowInfo[]) => {
+    private getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User, filter: WorkflowFilter) {
+        this.jmxService.getBrokenWorkflows(connectionSettings, user, this.perPage, (this.page - 1) * this.perPage, filter).then((response: WorkflowInfo[]) => {
             this.workflows = response;
         });
     }
@@ -86,6 +88,12 @@ export class WorkflowsComponent extends Vue {
         }
         this.page = 1;
         return 1;
+    }
+
+    applyFilter(newFilter: WorkflowFilter) {
+        // console.log(newFilter);
+        this.filter = newFilter;
+        this.sheduleFetchingBrrokenWF();
     }
 
     restartAll() {
@@ -240,16 +248,16 @@ export class WorkflowsComponent extends Vue {
         if (this.fetchBrokenWFInterval) {
             clearInterval(this.fetchBrokenWFInterval);
         }
-        this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
+        this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
         this.fetchBrokenWFInterval = setInterval(() => {
-            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
+            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
         }, this.$store.state.connectionSettings.updatePeriod * 1000);
     }
     @Watch('page')
     @Watch('perPage')
     private forceStatusFetch(delay: number = 0) {
         setTimeout(() => {
-            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
+            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
         }, delay);
     }
 }

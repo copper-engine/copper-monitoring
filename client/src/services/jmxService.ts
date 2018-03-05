@@ -1,6 +1,6 @@
 import Axios from 'axios';
 // import Vue from 'vue';
-import { State, EngineStatus, WorkflowInfo, WorkflowClassInfo, WorkflowRepo } from '../models/engine';
+import { State, EngineStatus, WorkflowInfo, WorkflowClassInfo, WorkflowRepo, WorkflowFilter } from '../models/engine';
 import { ConnectionSettings } from '../models/connectionSettings';
 import moment from 'moment';
 import { User } from '../models/user';
@@ -42,9 +42,9 @@ export class JmxService {
     }
 
     // TODO logout if wrong credentials...
-    getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User , max: number = 50, offset: number = 0) {
+    getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User , max: number = 50, offset: number = 0, filter: WorkflowFilter) {
         return Axios.post(process.env.API_NAME, [
-                this.createQueryBrokenWFRequest(connectionSettings, max, offset)
+                this.createQueryBrokenWFRequest(connectionSettings, max, offset, filter)
             ], {
                 auth: { username: user.name, password: user.password }
             })
@@ -177,10 +177,10 @@ export class JmxService {
         };
     }
 
-    private createQueryBrokenWFRequest(connectionSettings: ConnectionSettings, max: number, offset: number) {
+    private createQueryBrokenWFRequest(connectionSettings: ConnectionSettings, max: number, offset: number, filter: WorkflowFilter) {
         return this.createJmxExecRequest(connectionSettings, {
             operation: 'queryWorkflowInstances(javax.management.openmbean.CompositeData)',
-            arguments: [this.createWorkflowFilter(connectionSettings, [State.ERROR, State.INVALID], max, offset)], // get workflows with status Invalid
+            arguments: [this.createWorkflowFilter(connectionSettings, filter.states, max, offset, filter)], // get workflows with status Invalid
         });
     }
     private createCountBrokenWFRequest(connectionSettings: ConnectionSettings) {
@@ -197,15 +197,21 @@ export class JmxService {
         });
     }
 
-    private createWorkflowFilter(connectionSettings: ConnectionSettings, states: State[], max: number = 50, offset: number = 0) {
-        let now = new Date().getTime();
-        // let fromTime = new Date(now - connectionSettings.fetchPeriod * 60 * 1000).getTime();
+    private createWorkflowFilter(connectionSettings: ConnectionSettings, states: State[], max: number = 50, offset: number = 0, filter: WorkflowFilter = new WorkflowFilter) {
+        let createTo = new Date().getTime();
+        let modTo = new Date().getTime();
+        if (filter.createTo != null) {
+            createTo = filter.createTo;
+        }
+        if (filter.modTo != null) {
+            modTo = filter.modTo;
+        }
         return { 
             'states': states.map((state) => State[state]),
-            'lastModTS': { 'from': null, 'to': now}, 
-            'creationTS': { 'from': null, 'to': now}, 
+            'lastModTS': { 'from': filter.modFrom, 'to': filter.modTo}, 
+            'creationTS': { 'from': filter.createFrom, 'to': filter.createTo}, 
             'processorPoolId': null, 
-            'workflowClassname': null, 
+            'workflowClassname': filter.classname, 
             'max': max,
             'offset': offset
         };

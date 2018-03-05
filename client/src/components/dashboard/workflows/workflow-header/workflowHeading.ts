@@ -1,6 +1,6 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { JmxService } from '../../../../services/jmxService';
-import { WorkflowRepo } from '../../../../models/engine';
+import { WorkflowRepo, WorkflowFilter, State } from '../../../../models/engine';
 import { Datetime } from 'vue-datetime';
 
 @Component({
@@ -16,11 +16,11 @@ export class WorkflowHeading extends Vue {
     private jmxService: JmxService = this.$services.jmxService;
     openFilterMenu: boolean = false;
     states = [];
-    classNames = [];
-    modTimeFromInput = '';
-    modTimeToInput = '';
-    createTimeFromInput = '';
-    createTimeToInput = '';
+    classNames = null;
+    modTimeFromInput = null;
+    modTimeToInput = null;
+    createTimeFromInput = null;
+    createTimeToInput = null;
     possibleClassnames = [];    
     possibleStates = [
         'Error',
@@ -28,26 +28,25 @@ export class WorkflowHeading extends Vue {
     ];
 
     get createTimeFrom() {
-        let time = this.createTimeFromInput;
-        let formattedTime = time.substr(0, 4) + time.substr(5, 2) + time.substr(8, 2) + time.substr(11, 2) + time.substr(14, 2);
-        return formattedTime;
+        return this.formatTime(this.createTimeFromInput);
     }
     get createTimeTo() {
-        let time = this.createTimeToInput;
-        let formattedTime = time.substr(0, 4) + time.substr(5, 2) + time.substr(8, 2) + time.substr(11, 2) + time.substr(14, 2);
-        return formattedTime;
+        return this.formatTime(this.createTimeToInput);
     }
     get modTimeFrom() {
-        let time = this.modTimeFromInput;
-        let formattedTime = time.substr(0, 4) + time.substr(5, 2) + time.substr(8, 2) + time.substr(11, 2) + time.substr(14, 2);
-        return formattedTime;
+        return this.formatTime(this.modTimeFromInput);
     }
     get modTimeTo() {
-        let time = this.modTimeToInput;
-        let formattedTime = time.substr(0, 4) + time.substr(5, 2) + time.substr(8, 2) + time.substr(11, 2) + time.substr(14, 2);
-        return formattedTime;
+        return this.formatTime(this.modTimeToInput);
     }
 
+    formatTime(time) {
+        if (time != null) {
+            return  time.substr(0, 4) + time.substr(5, 2) + time.substr(8, 2) + time.substr(11, 2) + time.substr(14, 2);
+        } else {
+            return null;
+        }
+    }
 
     triggerFilterMenu() {
         if (this.possibleClassnames.length < 1) {
@@ -57,21 +56,34 @@ export class WorkflowHeading extends Vue {
     }
     clearFilter() { 
         this.states = [];
-        this.classNames = [];
-        this.modTimeFromInput = '';
-        this.modTimeToInput = '';
-        this.createTimeFromInput = '';
-        this.createTimeToInput = '';
+        this.classNames = null;
+        this.modTimeFromInput = null;
+        this.modTimeToInput = null;
+        this.createTimeFromInput = null;
+        this.createTimeToInput = null;
     }
     applyFilter() {
-        console.log('S T A T E S');
-        console.log(this.states);
-        console.log('C L A S S  N A M E S');
-        console.log(this.classNames);
-        console.log('M O D  T I M E');
-        console.log(this.getEpochTime(this.modTimeFromInput) + ' to ' + this.getEpochTime(this.modTimeToInput));
-        console.log('C R E A T E  T I M E');
-        console.log(this.createTimeFrom + ' to ' + this.createTimeTo);        
+        let stateArray: State[] = [];
+        this.states.forEach((state) => {
+            if (state === 'Error') {
+                stateArray.push(State.ERROR);
+            }
+            else if (state === 'Invalid') {
+                stateArray.push(State.INVALID);
+            }
+        });
+        if (stateArray.length < 1) {
+            stateArray = [State.ERROR, State.INVALID];
+        }
+        let newFilter = new WorkflowFilter (
+            stateArray,
+            this.classNames,
+            this.getEpochTime(this.createTimeFromInput),
+            this.getEpochTime(this.createTimeToInput),
+            this.getEpochTime(this.modTimeFromInput),
+            this.getEpochTime(this.modTimeToInput)
+        );
+        this.$emit('triggerApplyFilter', newFilter);
     }
     getPossibleClassNames() {
         this.jmxService.getWfRepo(this.$store.state.connectionSettings, this.$store.state.user).then((response: WorkflowRepo) => {
@@ -81,8 +93,12 @@ export class WorkflowHeading extends Vue {
         });
     }
     getEpochTime(time) {
-        let date = new Date(time);
-        return date.getTime();
+        if (time != null) {
+            let date = new Date(time);
+            return date.getTime();
+        } else {
+            return null;
+        }
     }
 
     sendRestartAll() {

@@ -24,7 +24,7 @@ export class EngineStatus {
 export class WorkflowFilter {
     constructor(
         public states: State[] = [State.ERROR, State.INVALID],
-        public classname: String = null,
+        public classname: string = null,
         public createFrom: number = null,
         public createTo: number = null,
         public modFrom: number = null,

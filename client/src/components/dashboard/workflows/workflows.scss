@@ -1,18 +1,21 @@
-.filter-component-enter-active, .filter-component-leave-active {
-    transition: opacity 0.25s;
-}
-.filter-component-enter {
-    opacity: 0;
-}
-.filter-component-enter-to {
-    opacity: 1;
-}
-.filter-component-leave {
-    opacity: 1;
-}
-.filter-component-leave-to {
-    opacity: 0;
-}
+// .filter-component-enter-active {
+//     transition: opacity 0.5s;
+// }
+// .filter-component-leave-active {
+//     transition: opacity 0.15s;
+// }
+// .filter-component-enter {
+//     opacity: 0;
+// }
+// .filter-component-enter-to {
+//     opacity: 1;
+// }
+// .filter-component-leave {
+//     opacity: 1;
+// }
+// .filter-component-leave-to {
+//     opacity: 0.25;
+// }
 
 body .workflows {
     .overlay--active:before {
@@ -109,6 +112,8 @@ code:after, kbd:after, code:before, kbd:before {
         }
     }
     .filter-menu {
+        flex-wrap: wrap; 
+        border-radius: 2px;
         margin-top: 5px;
         margin-bottom: 5px;
         padding-top: 20px;
@@ -159,6 +164,16 @@ code:after, kbd:after, code:before, kbd:before {
             width: 150px;
             min-width: 150px;
         }
+    }
+
+    .filter-chip-flex {
+        padding: 5px;
+    }
+    .inner-chip { 
+        margin-left: -7px !important;
+    }
+    .chip__content {
+        padding: 5px;
     }
 
     .code {

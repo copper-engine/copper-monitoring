@@ -44,7 +44,6 @@
         </v-flex>
     </v-layout>
 
-    <transition name="filter-component">
     <v-layout v-show="openFilterMenu" class="filter-menu secondary" column>
         <v-layout row class="filter-header">
         <h3 class="themeText--text">Filter By:</h3>        
@@ -115,7 +114,12 @@
             </v-layout>
         </v-layout>      
     </v-layout>
-    </transition>
+
+    <v-layout v-show="filterApplied && !openFilterMenu" class="filter-menu secondary" row>
+        <v-flex v-for="filter in currentFilters" :key="filter.id" class="stopGrow filter-chip-flex">
+            <v-chip color="primary textOnColor--text" class="filter-chip"><v-chip color="accent textOnColor--text" class="inner-chip">{{ filter[0] }}</v-chip>{{ filter[1] }}</v-chip>
+        </v-flex>
+    </v-layout>
 
     <v-layout class="header primary textOnColor--text">
         <v-flex class="number">

@@ -32,7 +32,6 @@ export class WorkflowsComponent extends Vue {
 
     private jmxService: JmxService = this.$services.jmxService;
     private eventHub: Vue = this.$services.eventHub;
-
     workflowsContext: Map<String, WorkflowContext> = new Map<String, WorkflowContext>(); 
     workflows: WorkflowInfo[] = [];
     fetchBrokenWFInterval: any;
@@ -41,11 +40,9 @@ export class WorkflowsComponent extends Vue {
     perPageItems: number[] = [10, 15, 25, 50];
     restartingAll = false;
     deletingAll = false;
-
     dialog = false;
     dialogSourceCode = null;
     sourceCodeAvailable = true;
-
     filter: WorkflowFilter = new WorkflowFilter;
 
     mounted() {
@@ -53,19 +50,6 @@ export class WorkflowsComponent extends Vue {
     }
     beforeDestroy() {
         clearInterval(this.fetchBrokenWFInterval);
-    }
-
-    private getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User, filter: WorkflowFilter) {
-        this.jmxService.getBrokenWorkflows(connectionSettings, user, this.perPage, (this.page - 1) * this.perPage, filter).then((response: WorkflowInfo[]) => {
-            this.workflows = response;
-        });
-    }
-    private showSuccess(message: String) {
-        this.eventHub.$emit('showNotification', new Notification(message));
-    }
-
-    private showError(message: String) {
-        this.eventHub.$emit('showNotification', new Notification(message, 'error'));
     }
 
     get status() {
@@ -88,6 +72,19 @@ export class WorkflowsComponent extends Vue {
         }
         this.page = 1;
         return 1;
+    }
+
+    private getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User, filter: WorkflowFilter) {
+        this.jmxService.getBrokenWorkflows(connectionSettings, user, this.perPage, (this.page - 1) * this.perPage, filter).then((response: WorkflowInfo[]) => {
+            this.workflows = response;
+        });
+    }
+    private showSuccess(message: String) {
+        this.eventHub.$emit('showNotification', new Notification(message));
+    }
+
+    private showError(message: String) {
+        this.eventHub.$emit('showNotification', new Notification(message, 'error'));
     }
 
     applyFilter(newFilter: WorkflowFilter) {

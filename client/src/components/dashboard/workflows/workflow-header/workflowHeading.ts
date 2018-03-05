@@ -15,13 +15,15 @@ export class WorkflowHeading extends Vue {
     @Prop() deletingAll: boolean;
     private jmxService: JmxService = this.$services.jmxService;
     openFilterMenu: boolean = false;
+    filterApplied: boolean = false;
+    currentFilters: string[][] = [];
     states = [];
     classNames = null;
     modTimeFromInput = null;
     modTimeToInput = null;
     createTimeFromInput = null;
     createTimeToInput = null;
-    possibleClassnames = [];    
+    possibleClassnames = [];
     possibleStates = [
         'Error',
         'Invalid'
@@ -41,8 +43,8 @@ export class WorkflowHeading extends Vue {
     }
 
     formatTime(time) {
-        if (time != null) {
-            return  time.substr(0, 4) + time.substr(5, 2) + time.substr(8, 2) + time.substr(11, 2) + time.substr(14, 2);
+        if (time != null && time.length > 0) {
+            return  time.substr(0, 4) + '/' + time.substr(5, 2) + '/' + time.substr(8, 2) + ' ' + time.substr(11, 2) + ':' + time.substr(14, 2);
         } else {
             return null;
         }
@@ -54,7 +56,7 @@ export class WorkflowHeading extends Vue {
         }
         this.openFilterMenu = !this.openFilterMenu;
     }
-    clearFilter() { 
+    clearFilter() {
         this.states = [];
         this.classNames = null;
         this.modTimeFromInput = null;
@@ -62,7 +64,44 @@ export class WorkflowHeading extends Vue {
         this.createTimeFromInput = null;
         this.createTimeToInput = null;
     }
-    applyFilter() {
+    applyFilter() {   
+        let newFilter = new WorkflowFilter (
+            this.parseStates(),
+            this.classNames,
+            this.getEpochTime(this.createTimeFromInput),
+            this.getEpochTime(this.createTimeToInput),
+            this.getEpochTime(this.modTimeFromInput),
+            this.getEpochTime(this.modTimeToInput)
+        );
+        this.openFilterMenu = false;
+        this.filterApplied = this.isFiltered(newFilter);
+        this.$emit('triggerApplyFilter', newFilter);
+    }
+
+    isFiltered(newFilter: WorkflowFilter) {
+        this.currentFilters = [];
+        if (newFilter.classname !== null) {
+            this.currentFilters.push(['Classname', newFilter.classname]);
+        }
+        if (newFilter.states.length < 2) {
+            this.currentFilters.push(['States', String(this.states)]);
+        }
+        if (newFilter.createFrom > 0) {
+            this.currentFilters.push(['Created from:', this.createTimeFrom]);
+        }
+        if (newFilter.createTo > 0) {
+            this.currentFilters.push(['Created  up to:', this.createTimeTo]);
+        }
+        if (newFilter.modFrom > 0) {
+            this.currentFilters.push(['Modified from: ', this.modTimeFrom]);
+        }
+        if (newFilter.modTo > 0) {
+            this.currentFilters.push(['Modified up to: ', this.modTimeTo]);
+        }
+        return this.currentFilters.length > 0;
+    }
+
+    parseStates() {
         let stateArray: State[] = [];
         this.states.forEach((state) => {
             if (state === 'Error') {
@@ -75,16 +114,9 @@ export class WorkflowHeading extends Vue {
         if (stateArray.length < 1) {
             stateArray = [State.ERROR, State.INVALID];
         }
-        let newFilter = new WorkflowFilter (
-            stateArray,
-            this.classNames,
-            this.getEpochTime(this.createTimeFromInput),
-            this.getEpochTime(this.createTimeToInput),
-            this.getEpochTime(this.modTimeFromInput),
-            this.getEpochTime(this.modTimeToInput)
-        );
-        this.$emit('triggerApplyFilter', newFilter);
+        return stateArray;
     }
+
     getPossibleClassNames() {
         this.jmxService.getWfRepo(this.$store.state.connectionSettings, this.$store.state.user).then((response: WorkflowRepo) => {
             this.possibleClassnames = response.workFlowInfo.map((workflow, index) => {
@@ -92,8 +124,9 @@ export class WorkflowHeading extends Vue {
             });
         });
     }
+
     getEpochTime(time) {
-        if (time != null) {
+        if (time != null && time !== NaN) {
             let date = new Date(time);
             return date.getTime();
         } else {

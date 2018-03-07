@@ -58,12 +58,14 @@
             .date-time-picker {
                 // border: 1px solid red;
                 padding: 5px;
-                width: 100%;
-                height: 120%;
+                width: 25%;
+                height: 110%;
                 margin-top: -35px;
                 position: relative;
-                bottom: 10px;
+                bottom: 5px;
+                left: 135px;
                 button, input, select, textarea {
+                    cursor: pointer;
                     background-color: transparent;
                     border-style: none;
                     opacity: 0;

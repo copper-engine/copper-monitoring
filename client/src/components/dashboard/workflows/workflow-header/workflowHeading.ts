@@ -20,35 +20,126 @@ export class WorkflowHeading extends Vue {
     currentFilters: string[][] = [];
     states = [];
     classNames = null;
-    modTimeFromInput = null;
-    modTimeToInput = null;
-    createTimeFromInput = null;
-    createTimeToInput = null;
+    modTimeFromSelect = null;
+    modTimeFromType = null;
+    modTimeFrom = null;
+    modTimeToSelect = null;
+    modTimeToType = null;
+    modTimeTo = null;
+    createTimeFromSelect = null;
+    createTimeFromType = null;
+    createTimeFrom = null;
+    createTimeToSelect = null;
+    createTimeToType = null;
+    createTimeTo = null;
     possibleClassnames = [];
     possibleStates = [
         'Error',
         'Invalid'
     ];
 
-    get createTimeFrom() {
-        return this.formatTime(this.createTimeFromInput);
+    @Watch('createTimeFromSelect')
+    formatCreateFromSelect() {
+        if (this.createTimeFromSelect != null) {
+            let time = this.createTimeFromSelect;
+            this.createTimeFrom = this.formatTime(time, 'forMain');
+            this.createTimeFromType = this.formatTime(time, 'forType');
+        }
     }
-    get createTimeTo() {
-        return this.formatTime(this.createTimeToInput);
-    }
-    get modTimeFrom() {
-        return this.formatTime(this.modTimeFromInput);
-    }
-    get modTimeTo() {
-        return this.formatTime(this.modTimeToInput);
+    @Watch('createTimeFromType')
+    formatCreateTimeFromType() {
+        if (this.createTimeFromType != null && this.createTimeFromType.length > 11) {
+            let time = this.createTimeFromType;
+            this.createTimeFrom = this.formatTime(time, 'forMain');
+            this.createTimeFromSelect = this.formatTime(time, 'forSelect');
+        }
     }
 
-    formatTime(time) {
-        if (time != null && time.length > 0) {
-            return  time.substr(0, 4) + '/' + time.substr(5, 2) + '/' + time.substr(8, 2) + ' ' + time.substr(11, 2) + ':' + time.substr(14, 2);
-        } else {
-            return null;
+    @Watch('createTimeToSelect')
+    formatCreateToSelect() {
+        if (this.createTimeToSelect != null) {
+            let time = this.createTimeToSelect;
+            this.createTimeTo = this.formatTime(time, 'forMain');
+            this.createTimeToType = this.formatTime(time, 'forType');
         }
+    }
+    @Watch('createTimeToType')
+    formatCreateTimeToType() {
+        if (this.createTimeToType != null && this.createTimeToType.length > 11) {
+            let time = this.createTimeToType;
+            this.createTimeTo = this.formatTime(time, 'forMain');
+            this.createTimeToSelect = this.formatTime(time, 'forSelect');
+        }
+    }
+
+    @Watch('modTimeFromSelect')
+    formatModFromSelect() {
+        if (this.modTimeFromSelect != null) {
+            let time = this.modTimeFromSelect;
+            this.modTimeFrom = this.formatTime(time, 'forMain');
+            this.modTimeFromType = this.formatTime(time, 'forType');
+        }
+    }
+    @Watch('modTimeFromType')
+    formatModTimeFromType() {
+        if (this.modTimeFromType != null && this.modTimeFromType.length > 11) {
+            let time = this.modTimeFromType;
+            this.modTimeFrom = this.formatTime(time, 'forMain');
+            this.modTimeFromSelect = this.formatTime(time, 'forSelect');
+        }
+    }
+
+    @Watch('modTimeToSelect')
+    formatModToSelect() {
+        if (this.modTimeToSelect != null) {
+            let time = this.modTimeToSelect;
+            this.modTimeTo = this.formatTime(time, 'forMain');
+            this.modTimeToType = this.formatTime(time, 'forType');
+        }
+    }
+    @Watch('modTimeToType')
+    formatModTimeToType() {
+        if (this.modTimeToType != null && this.modTimeToType.length > 11) {
+            let time = this.modTimeToType;
+            this.modTimeTo = this.formatTime(time, 'forMain');
+            this.modTimeToSelect = this.formatTime(time, 'forSelect');
+        }
+    }
+
+    formatTime(time, type: string) {
+        if (type === 'forMain') {
+            return time.substr(0, 4) + '/' + time.substr(5, 2) + '/' + time.substr(8, 2) + ' ' + time.substr(11, 2) + ':' + time.substr(14, 2);
+        }
+        else if (type === 'forType') {
+            return time.substr(0, 4) + time.substr(5, 2) + time.substr(8, 2) + time.substr(11, 2) + time.substr(14, 2);
+        }
+        else if (type === 'forSelect') {
+            return time.substr(0, 4) + '-' + time.substr(4, 2) + '-' + time.substr(6, 2) + 'T' + time.substr(8, 2) + ':' + time.substr(10, 2);
+        }
+    }
+
+    dateCheck(date) {
+        if (date !== null && date !== '' && date.length > 5) {
+            if (Number(date.substr(4, 2)) > 12) {
+                return 'Invalid Month';
+            }
+            if (Number(date.substr(6, 2)) > 31) {
+                return 'Invalid Day';
+            }
+            if (date.length < 8) {
+                return 'Invalid Date';
+            }
+            if (Number(date.substr(8, 2)) > 24) {
+                return 'Invalid Hour';
+            }
+            if (Number(date.substr(10, 2)) > 59) {
+                return 'Invalid Minute';
+            }
+            if (date.length < 12) {
+                return 'Invalid Time';
+            }  
+        }
+        return true;
     }
 
     triggerFilterMenu() {
@@ -60,19 +151,27 @@ export class WorkflowHeading extends Vue {
     clearFilter() {
         this.states = [];
         this.classNames = null;
-        this.modTimeFromInput = null;
-        this.modTimeToInput = null;
-        this.createTimeFromInput = null;
-        this.createTimeToInput = null;
+        this.modTimeFromType = null;
+        this.modTimeFromSelect = null;
+        this.modTimeFrom = null;
+        this.modTimeToType = null;
+        this.modTimeToSelect = null;
+        this.modTimeTo = null;
+        this.createTimeFromType = null;
+        this.createTimeFromSelect = null;
+        this.createTimeFrom = null;
+        this.createTimeToType = null;
+        this.createTimeToSelect = null;
+        this.createTimeTo = null;
     }
     applyFilter() {   
         let newFilter = new WorkflowFilter (
             this.parseStates(),
             this.classNames,
-            this.getEpochTime(this.createTimeFromInput),
-            this.getEpochTime(this.createTimeToInput),
-            this.getEpochTime(this.modTimeFromInput),
-            this.getEpochTime(this.modTimeToInput)
+            this.getEpochTime(this.createTimeFrom),
+            this.getEpochTime(this.createTimeTo),
+            this.getEpochTime(this.modTimeFrom),
+            this.getEpochTime(this.modTimeTo)
         );
         this.openFilterMenu = false;
         this.filterApplied = this.isFiltered(newFilter);

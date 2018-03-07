@@ -41,7 +41,9 @@
                             {{ workflow.state }}
                         </v-flex>
                         <v-flex class="timeout">
-                            {{ workflow.timeout | moment("HH:mm DD/MM/YYYY")}}
+                            <span v-if="workflow.timeout">
+                                {{ workflow.timeout | moment("HH:mm DD/MM/YYYY") }}
+                            </span>
                         </v-flex>
                         <v-flex class="timestamps">
                             <div class="errorTS">
@@ -126,9 +128,10 @@
                             <v-layout class="workflow-detail stacktrace">
                                 <v-flex class="detail-label">Last waiting Stack Trace:</v-flex>
                                 <v-flex class="text">
-                                    <code>
+                                    <code v-show="workflow.lastWaitStackTrace">
                                         {{ workflow.lastWaitStackTrace }}
                                     </code>
+                                    <span v-show="!workflow.lastWaitStackTrace">There is no waiting stack trace</span>
                                 </v-flex>
                             </v-layout>
                             <v-layout class="workflow-detail stacktrace">
@@ -154,8 +157,10 @@
                     <v-btn depressed class="squareButton" color="primary" @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>      
             </v-card-title>
             <v-divider></v-divider>
-            <v-card-text>                              
-                <code class="codeDialog">{{ dialogSourceCode || 'No Source Code Available' }}</code>
+            <v-card-text>
+                <div>
+                    <source-code :sourceCode="dialogSourceCode" :highliteLines="dialogHighlitedlines"></source-code>
+                </div>
             </v-card-text>
         </v-card>
     </v-dialog>

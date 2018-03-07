@@ -28,6 +28,7 @@ let darkColors: VuetifyTheme = {
   success: '#4CAF50',
   warning: '#FFC107'
 };
+
 let lightColors: VuetifyTheme = {
   primary: '#0D5494',
   secondary: '#ebebeb',

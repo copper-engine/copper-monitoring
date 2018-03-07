@@ -23,44 +23,81 @@ export class EngineStatus {
 
 export class WorkflowRepo {
     constructor(
-        public description: String,
-        public sourceDir: String,
+        public description: string,
+        public sourceDir: string,
         public workFlowInfo: Array<WorkflowClassInfo>
     ) {}
 }
 
 export class WorkflowInfo {
+    public id: string;
+    public state: string;
+    public priority: number;
+    public processorPoolId: string;
+    public timeout: Date;
+    public workflowClassInfo: WorkflowClassInfo;
+    public dataAsstring: string;
+    public lastWaitStackTrace: string;
+    public errorData: ErrorData;
+    public lastModTS: Date;
+    public creationTS: Date;
 
     constructor(
-        public id: String,
-        public state: String,
-        public priority: number,
-        public processorPoolId: String,
-        public timeout: Date,
-        public workflowClassInfo: WorkflowClassInfo,
-        public dataAsString: String,
-        public lastWaitStackTrace: String,
-        public errorData: ErrorData,
-        public lastModTS: Date,
-        public creationTS: Date
     ) {}
+
+
+    public getLastWaitingLineNum(): number {
+        if (this.lastWaitStackTrace) {
+            let className = '(' + this.getShortClassName() + '.java';
+            let firstLine = this.lastWaitStackTrace.split('\n').find(line => line.indexOf(className) !== -1);
+            if (firstLine) {
+                let lineNum = parseInt(firstLine.substring(firstLine.lastIndexOf(':') + 1, firstLine.lastIndexOf(')')));
+                return lineNum ? lineNum : -1;
+            }
+        }
+
+        return -1;
+    }
+    public getErrorLineNum(): number {
+        if (this.errorData && this.errorData.exceptionStackTrace) {
+            let className = '(' + this.getShortClassName() + '.java';
+            let firstLine = this.errorData && this.errorData.exceptionStackTrace.split('\n').find(line => line.indexOf(className) !== -1);
+            if (firstLine) {
+                let lineNum = parseInt(firstLine.substring(firstLine.lastIndexOf(':') + 1, firstLine.lastIndexOf(')')));
+                return lineNum ? lineNum : -1;
+            }
+        }
+
+        return -1;
+    }
+
+    public getShortClassName(): string {
+        if (this.workflowClassInfo.classname) {
+            let names = this.workflowClassInfo.classname.split('.');
+            return names[names.length - 1];
+        } else {
+            return this.workflowClassInfo.classname;
+        }
+    }
 }
 
 export class WorkflowClassInfo {
+    public sourceCodeLines: string[];
+
     constructor(
-        public classname: String,
-        public alias: String,
+        public classname: string,
+        public alias: string,
         public majorVersion: number,
         public minorVersion: number,
         public patchLevel: number,
         public serialversionuid: number,
-        public sourceCode: String,
+        public sourceCode: string,
         public open: Boolean = false
     ) {}
 }
 export class ErrorData {
     constructor(
         public errorTS: Date,
-        public exceptionStackTrace: String
+        public exceptionStackTrace: string
     ) {}
 }

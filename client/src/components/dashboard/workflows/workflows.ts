@@ -5,10 +5,12 @@ import { Notification } from '../../../models/notification';
 import { JmxService } from '../../../services/jmxService';
 import * as utils from '../../../util/utils';
 
-import './workflows.scss';
 import { ConnectionSettings } from '../../../models/connectionSettings';
 import { User } from '../../../models/user';
 import { MBeans } from '../../../models/mbeans';
+import { HighlitedLine } from '../../../models/highlited-line';
+
+import './workflows.scss';
 
 export class WorkflowContext {
     public open: boolean = false;
@@ -18,6 +20,7 @@ export class WorkflowContext {
     public deleteButton: boolean = false;
 }
 
+const sourceCodeomponent = () => import('./../../core').then(({ SourceCodeComponent }) => SourceCodeComponent);
 const WorkflowHeading = () => import('./workflow-header').then(({ WorkflowHeading }) => WorkflowHeading);
 const WorkflowFooter = () => import('./workflow-footer').then(({ WorkflowFooter }) => WorkflowFooter);
 
@@ -25,6 +28,7 @@ const WorkflowFooter = () => import('./workflow-footer').then(({ WorkflowFooter 
     template: require('./workflows.html'),
     services: ['jmxService', 'eventHub'],
     components: {
+        'source-code': sourceCodeomponent,
         'workflowHeading': WorkflowHeading,
         'workflowFooter': WorkflowFooter
     }
@@ -40,6 +44,7 @@ export class WorkflowsComponent extends Vue {
     deletingAll = false;
     dialog = false;
     dialogSourceCode = null;
+    dialogHighlitedlines: HighlitedLine[] = null;
     sourceCodeAvailable = true;
 
     private jmxService: JmxService = this.$services.jmxService;
@@ -182,24 +187,24 @@ export class WorkflowsComponent extends Vue {
 
     highlight(id: String, type: String) {
         let wfContext = this.workflowsContext.get(id);
-                if (!wfContext) {
-                    wfContext = new WorkflowContext();
-                }
-                if (type === 'reload') {
-                    wfContext.reloading = true;
-                    this.workflowsContext.set(id, wfContext);
-                    this.$forceUpdate();
-                    setTimeout(() => { 
-                        wfContext.reloading = false; 
-                        this.workflowsContext.set(id, wfContext);
-                        this.$forceUpdate();
-                    }, 800);
-                }
-                if (type === 'delete') {
-                    wfContext.deleting = true;
-                    this.workflowsContext.set(id, wfContext);
-                    this.$forceUpdate();
-                }
+        if (!wfContext) {
+            wfContext = new WorkflowContext();
+        }
+        if (type === 'reload') {
+            wfContext.reloading = true;
+            this.workflowsContext.set(id, wfContext);
+            this.$forceUpdate();
+            setTimeout(() => { 
+                wfContext.reloading = false; 
+                this.workflowsContext.set(id, wfContext);
+                this.$forceUpdate();
+            }, 800);
+        }
+        if (type === 'delete') {
+            wfContext.deleting = true;
+            this.workflowsContext.set(id, wfContext);
+            this.$forceUpdate();
+        }
     }
 
     toggleButtons(id: String, type: String) {
@@ -219,15 +224,25 @@ export class WorkflowsComponent extends Vue {
 
     showSourceCode(workflow: WorkflowInfo) {
         this.jmxService.getSourceCode(this.$store.state.connectionSettings, this.$store.state.user, workflow.workflowClassInfo.classname)
-        .then((response) => {
-            if ((String(response).trim()).toLowerCase() !== 'na') {  
-                this.dialogSourceCode = utils.parseSourceCode(String(response));
+        .then((sourceCode) => {
+            if (sourceCode && (sourceCode as string).trim().toLowerCase() !== 'na') {  
+                this.dialogSourceCode = sourceCode;
                 this.sourceCodeAvailable = true;
+                this.dialogHighlitedlines = [];
+
+                let waitPos = workflow.getLastWaitingLineNum();
+                if (waitPos !== -1) {
+                    this.dialogHighlitedlines.push(new HighlitedLine(waitPos, 'Last wait position'));
+                }
+
+                let errorPos = workflow.getErrorLineNum();
+                if (errorPos) {
+                    this.dialogHighlitedlines.push(new HighlitedLine(errorPos, 'Error position', 'error'));
+                } 
             } else {
                 this.dialogSourceCode = 'No Source Code Available';
                 this.sourceCodeAvailable = false;
             }
-            
             this.dialog = true;
         });
     }
@@ -255,7 +270,7 @@ export class WorkflowsComponent extends Vue {
     @Watch('perPage')
     private forceStatusFetch(delay: number = 0) {
         setTimeout(() => {
-            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user);
+            this.getBrokenWorkflows(this.$store.state.connectionSettings,   this.$store.state.mbeans, this.$store.state.user);
         }, delay);
     }
 }

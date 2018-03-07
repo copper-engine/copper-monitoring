@@ -30,6 +30,7 @@
   "dependencies": {
     "axios": "~0.18.0",
     "mdi": "^2.1.19",
+    "prismjs": "^1.11.0",
     "uiv": "^0.14.1",
     "vue": "~2.5.8",
     "vue-class-component": "~6.1.0",

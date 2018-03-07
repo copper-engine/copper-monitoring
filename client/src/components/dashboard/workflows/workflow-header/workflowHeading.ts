@@ -2,6 +2,7 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { JmxService } from '../../../../services/jmxService';
 import { WorkflowRepo, WorkflowFilter, State } from '../../../../models/engine';
 import { Datetime } from 'vue-datetime';
+import './workflowHeading.scss';
 
 @Component({
     template: require('./workflowHeading.html'),
@@ -77,7 +78,6 @@ export class WorkflowHeading extends Vue {
         this.filterApplied = this.isFiltered(newFilter);
         this.$emit('triggerApplyFilter', newFilter);
     }
-
     isFiltered(newFilter: WorkflowFilter) {
         this.currentFilters = [];
         if (newFilter.classname !== null) {

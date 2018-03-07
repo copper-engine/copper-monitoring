@@ -17,6 +17,9 @@
           min-width: 900px;
           background: #424242;
       }
+      .tooltip-text {
+        font-size: 1.2em !important;
+      }
       .application.theme--light {
           background: #F5F5F5 !important;
           color: #303030 !important;
@@ -25,15 +28,33 @@
         color: rgb(245, 245, 245) !important;
         background-color: #52687b !important;
       }
-      body .theme--light .btn.btn--disabled .icon, body .application .theme--light.btn.btn--disabled .icon {
-        color: rgb(171, 171, 171) !important;
-      }
+      
       .theme--dark .btn.btn--disabled, .application .theme--dark.btn.btn--disabled {
           color: rgb(75, 75, 75) !important;
           background-color: #243e3bcf !important;
       }
       .theme--light .input-group:not(.input-group--error) label, .application .theme--light.input-group:not(.input-group--error) label {
           color: #303030 !important;
+      }
+      body .theme--light .vdatetime-year-picker__item--selected,
+      body .theme--light .vdatetime-time-picker__item--selected,
+      body .theme--light .vdatetime-popup__actions__button {
+          color: #0D5494;
+      }
+      body .theme--light .vdatetime-popup__header,
+      body .theme--light .vdatetime-calendar__month__day--selected > span > span,
+      body .theme--light .vdatetime-calendar__month__day--selected:hover > span > span {
+        background: #0D5494;
+      }
+      body .theme--dark .vdatetime-year-picker__item--selected,
+      body .theme--dark .vdatetime-time-picker__item--selected,
+      body .theme--dark .vdatetime-popup__actions__button {
+          color: #00695C;
+      }
+      body .theme--dark .vdatetime-popup__header,
+      body .theme--dark .vdatetime-calendar__month__day--selected > span > span,
+      body .theme--dark .vdatetime-calendar__month__day--selected:hover > span > span {
+        background: #00695C;
       }
       body .squareButton {
           width: 36px;

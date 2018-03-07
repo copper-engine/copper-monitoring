@@ -30,7 +30,8 @@ let darkColors: VuetifyTheme = {
   back: '#303030',
   info: '#2196F3',
   success: '#4CAF50',
-  warning: '#FFC107'
+  warning: '#FFC107',
+  highlight: '#616161'
 };
 let lightColors: VuetifyTheme = {
   primary: '#0D5494',
@@ -42,7 +43,8 @@ let lightColors: VuetifyTheme = {
   back: '#d6d6d6',
   info: '#2196F3',
   success: '#4CAF50',
-  warning: '#FFC107'
+  warning: '#FFC107',
+  highlight: '#BDBDBD'
 };
 
 if (utils.parseBoolean(localStorage.getItem('darkTheme')) === false) {

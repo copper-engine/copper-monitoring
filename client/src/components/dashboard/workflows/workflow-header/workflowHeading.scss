@@ -1,0 +1,110 @@
+.workflow-header {
+    .summary {
+        align-items: center;
+        .text {
+            font-size: 1.2em;
+            font-weight: 400;
+            color: #efefef;
+            max-width: 430px;
+        }
+        .heading-buttons {
+            padding-right: 10px;
+        }
+    }
+    .filter-menu,
+    .chip-menu {
+        flex-wrap: wrap; 
+        border-radius: 2px;
+        margin-top: 10px;
+        // margin-bottom: 5px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        min-width: 986px;
+    }
+    .filter-menu {    
+        .filter-header {
+            align-items: center;
+            padding-left: 15px;
+            padding-right: 0px;
+            h3 {
+                padding-left: 20px;
+            }
+        }
+        .filter-layout {
+            padding-left: 10px;
+            padding-right: 10px;
+
+            .time-field-container {
+                padding-left: 5px;
+                padding-right: 5px;
+                .time-field {
+                    width: 190px;
+                    max-width: 190px;
+                    min-width: 190px;
+                    padding: 5px;
+                }
+            }
+            .select-container {
+                padding-top: 3px;
+                max-width: 380px;
+                min-width:380px;
+                // width: 380px;
+                padding-left: 10px;
+                padding-right: 10px;
+                .select {
+                    max-width: 380px;
+                }
+            }
+            .date-time-picker {
+                // border: 1px solid red;
+                padding: 5px;
+                width: 100%;
+                height: 120%;
+                margin-top: -35px;
+                position: relative;
+                bottom: 10px;
+                button, input, select, textarea {
+                    background-color: transparent;
+                    border-style: none;
+                    opacity: 0;
+                }
+            }
+            .input-group__details {
+                min-height: 0px !important;
+            }
+            button {
+                height: 36px;
+                width: 150px;
+                min-width: 150px;
+                margin-bottom: -15px;
+                // margin-top: -70px;
+            }
+        }
+        
+    }
+    .chip-menu {
+        align-items: center;
+        padding: 15px;
+        .filter-chip-flex {
+            padding: 5px;
+        }
+        .inner-chip { 
+            margin-left: -7px !important;
+        }
+        .chip__content {
+            padding: 5px;
+        }
+        button {
+            margin-right: 5px;
+        }
+    }
+    .row-info {
+        margin-top: 16px;
+        padding: 5px 16px 5px 16px;
+        align-items: center;
+        font-weight: 700;
+        font-size: 1.1em;
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px;
+    }
+}

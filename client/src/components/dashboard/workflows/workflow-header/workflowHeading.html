@@ -1,12 +1,13 @@
-<div>
+<div class="workflow-header">
     <h2 class="themeText--text">Broken Workflows</h2>
     <v-layout class="summary">
         <v-flex class="text themeText--text stopGrow">
             Total number of broken workflows: {{ engineStatus ? engineStatus.brokenWFCount : 0}}
         </v-flex>
         <v-spacer></v-spacer>
-        <v-flex class="stopGrow">
+        <v-flex class="stopGrow heading-buttons">
             <v-btn dark
+                class="longButton"
                 color="primary"
                 :loading="restartingAll"
                 :disabled="restartingAll || deletingAll"
@@ -19,18 +20,19 @@
                 </span>
             </v-btn>
             <v-btn dark
-                color="primary"
-                :loading="deletingAll"
-                :disabled="deletingAll || restartingAll"
-                @click="sendDeleteAll">
-                <v-icon left>delete</v-icon>
-                Delete All
-                <span slot="loader" class="custom-loader">
-                    <v-icon light>cached</v-icon>
-                </span>
+            class="longButton"
+            color="primary"
+            :loading="deletingAll"
+            :disabled="deletingAll || restartingAll"
+            @click="sendDeleteAll">
+            <v-icon left>delete</v-icon>
+            Delete All
+            <span slot="loader" class="custom-loader">
+                <v-icon light>cached</v-icon>
+            </span>
             </v-btn>
             <v-btn dark
-            class="filter-button"
+            class="longButton"
             color="primary"
             :loading="deletingAll"
             :disabled="deletingAll || restartingAll"
@@ -52,7 +54,6 @@
             <v-layout row class="filter-header">
                 <v-flex class="select-container stopGrow">
                     <v-select class="select"
-                    single-line
                     label="Include States:"
                     :items="possibleStates"
                     v-model="states"
@@ -79,12 +80,11 @@
                         <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="createTimeToInput"></datetime>
                     </v-flex>
                 </v-layout>
-                <v-btn class="filter-action" depressed color="primary" @click="clearFilter"><v-icon left>mdi-cancel</v-icon>Clear</v-btn>         
+                <v-btn depressed color="primary" @click="clearFilter" class="longButton"><v-icon left>mdi-cancel</v-icon>Clear</v-btn>         
             </v-layout>
             <v-layout row class="filter-header">
                 <v-flex class="select-container stopGrow">
                     <v-select class="select"
-                    single-line
                     label="Include Classname:"
                     :items="possibleClassnames"
                     v-model="classNames">
@@ -110,18 +110,37 @@
                         <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="modTimeToInput"></datetime>
                     </v-flex>
                 </v-layout>
-                <v-btn class="filter-action" depressed color="primary" @click="applyFilter"><v-icon left>mdi-check</v-icon>Apply</v-btn>
+                <v-btn depressed color="primary" @click="applyFilter" class="longButton"><v-icon left>mdi-check</v-icon>Apply</v-btn>
             </v-layout>
         </v-layout>      
     </v-layout>
 
-    <v-layout v-show="filterApplied && !openFilterMenu" class="filter-menu secondary" row>
+    <v-layout v-show="filterApplied && !openFilterMenu" class="chip-menu secondary" row>
+        <v-flex class="stopGrow">
+            <h3>Filtered By:</h3>
+        </v-flex>
         <v-flex v-for="filter in currentFilters" :key="filter.id" class="stopGrow filter-chip-flex">
-            <v-chip color="primary textOnColor--text" class="filter-chip"><v-chip color="accent textOnColor--text" class="inner-chip">{{ filter[0] }}</v-chip>{{ filter[1] }}</v-chip>
+            <v-chip color="highlight textOnColor--text" class="filter-chip">
+                <v-chip color="primary textOnColor--text" class="inner-chip">
+                    {{ filter[0] }}
+                </v-chip>
+                {{ filter[1] }}
+            </v-chip>
+        </v-flex>
+        <v-spacer></v-spacer>
+        <v-flex class="stopGrow">
+            <v-btn dark
+            depressed
+            color="primary"
+            class="longButton"
+            @click="clearFilter(); applyFilter()">
+            <v-icon left>mdi-close</v-icon>
+            Clear
+            </v-btn>
         </v-flex>
     </v-layout>
 
-    <v-layout class="header primary textOnColor--text">
+    <v-layout class="row-info primary textOnColor--text">
         <v-flex class="number">
             #
         </v-flex>  

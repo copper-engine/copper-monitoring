@@ -35,12 +35,11 @@
             padding-right: 10px;
 
             .time-field-container {
-                border: 1px solid blue;
                 height: 65px;
-                position: relative;
                 padding-left: 5px;
                 padding-right: 5px;
                 .time-field {
+                    position: relative;
                     width: 190px;
                     max-width: 190px;
                     min-width: 190px;
@@ -59,23 +58,20 @@
                 }
             }
             .date-time-picker {
-                border: 1px solid red;
                 position: absolute;
-                padding: 5px;
-                width: 25%;
+                padding-top: 7px;
+                padding-left: 5px;
+                padding-right: 5px;
+                width: 50px;
                 height: 100%;
-                margin-top: -35px;
-                position: relative;
-                bottom: 10px;
-                left: 140px;
+                bottom: -7px;
+                left: 142px;
                 button, input, select, textarea {
                     cursor: pointer;
                     background-color: transparent;
-                    // border-style: none;
-                    border: 1px solid green;
                     height: 75%;
                     width: 100%;
-                    opacity: 0.5;
+                    opacity: 0;
                 }
             }
             .input-group__details {

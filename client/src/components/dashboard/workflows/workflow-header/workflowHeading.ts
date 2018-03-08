@@ -129,10 +129,10 @@ export class WorkflowHeading extends Vue {
             if (date.length < 8) {
                 return 'Invalid Date';
             }
-            if (Number(date.substr(8, 2)) > 24) {
+            if (Number(date.substr(8, 2)) > 24 || Number(date.substr(8, 2)) < 1) {
                 return 'Invalid Hour';
             }
-            if (Number(date.substr(10, 2)) > 59) {
+            if (Number(date.substr(10, 2)) > 59 || Number(date.substr(8, 2)) < 1) {
                 return 'Invalid Minute';
             }
             if (date.length < 12) {

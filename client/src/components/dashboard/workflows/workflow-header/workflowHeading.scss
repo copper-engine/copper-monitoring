@@ -88,16 +88,23 @@
         
     }
     .chip-menu {
-        align-items: center;
         padding: 15px;
-        .filter-chip-flex {
-            padding: 5px;
-        }
-        .inner-chip { 
-            margin-left: -7px !important;
-        }
-        .chip__content {
-            padding: 5px;
+        flex-wrap: nowrap;
+        .filter-chip-container {
+            align-items: center;
+            flex-wrap: wrap;
+            .filter-chip-flex {
+                padding: 5px;
+            }
+            .inner-chip { 
+                margin-left: -7px !important;
+            }
+            .chip__content {
+                padding: 5px;
+            }
+            h3 {
+                min-width: 85px;
+            }
         }
         button {
             margin-right: 5px;

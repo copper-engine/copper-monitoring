@@ -124,18 +124,19 @@
     </v-layout>
 
     <v-layout v-show="filterApplied && !openFilterMenu" class="chip-menu secondary" row>
-        <v-flex class="stopGrow">
-            <h3>Filtered By:</h3>
-        </v-flex>
-        <v-flex v-for="filter in currentFilters" :key="filter.id" class="stopGrow filter-chip-flex">
-            <v-chip color="highlight textOnColor--text" class="filter-chip">
-                <v-chip color="primary textOnColor--text" class="inner-chip">
-                    {{ filter[0] }}
+        <v-layout row class="filter-chip-container">
+            <v-flex class="stopGrow">
+                <h3>Filtered By:</h3>
+            </v-flex>
+            <v-flex v-for="filter in currentFilters" :key="filter.id" class="stopGrow filter-chip-flex">
+                <v-chip color="highlight textOnColor--text" class="filter-chip">
+                    <v-chip color="primary textOnColor--text" class="inner-chip">
+                        {{ filter[0] }}
+                    </v-chip>
+                    {{ filter[1] }}
                 </v-chip>
-                {{ filter[1] }}
-            </v-chip>
-        </v-flex>
-        <v-spacer></v-spacer>
+            </v-flex>
+        </v-layout>
         <v-flex class="stopGrow">
             <v-btn dark
             depressed

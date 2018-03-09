@@ -10,7 +10,7 @@ const dashboardComponent = () => import('./components/dashboard').then(({ Dashbo
 const workflowsComponent = () => import('./components/dashboard/workflows').then(({ WorkflowsComponent }) => WorkflowsComponent);
 const homeComponent = () => import('./components/dashboard/homepage').then(({ HomePage }) => HomePage);
 const workflowRepoComponent = () => import('./components/dashboard/workflowRepo').then(({ WorkflowRepository }) => WorkflowRepository);
-
+const processorPoolsComponent = () => import('./components/dashboard/processor-pools').then(({ ProcessorPools }) => ProcessorPools);
 
 if (process.env.ENV === 'development' && module.hot) {
   // first arguments for `module.hot.accept` and `require` methods have to be static strings
@@ -76,6 +76,14 @@ export const createRoutes: () => RouteConfig[] = () => [
         name: 'workflowRepo',
         path: 'workflowRepo',
         component: workflowRepoComponent,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        name: 'processor-pools',
+        path: 'processor-pools',
+        component: processorPoolsComponent,
         meta: {
           requiresAuth: true
         }

@@ -21,6 +21,18 @@ export class EngineStatus {
     ) {}
 }
 
+export class ProcessorPool {
+    constructor(
+        public id: string = '',
+        public state: string = '',
+        public priority: number = 0,
+        public upperThreshold: number = 0,
+        public lowerThreshold: number = 0,
+        public numThreads: number = 0,
+        public numActiveThreads: number = 0
+    ) {}
+}
+
 export class WorkflowFilter {
     constructor(
         public states: State[] = [State.ERROR, State.INVALID],

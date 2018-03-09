@@ -1,6 +1,7 @@
 import Axios from 'axios';
 // import Vue from 'vue';
-import { State, EngineStatus, WorkflowInfo, WorkflowClassInfo, WorkflowRepo, WorkflowFilter } from '../models/engine';
+import { State, EngineStatus, WorkflowInfo, WorkflowClassInfo,
+    WorkflowRepo, WorkflowFilter, ProcessorPool } from '../models/engine';
 import { ConnectionSettings } from '../models/connectionSettings';
 import moment from 'moment';
 import { User } from '../models/user';
@@ -99,6 +100,17 @@ export class JmxService {
         return response.data[0].value.sourceCode;
     }
 
+    getProcessorPools(connectionSettings: ConnectionSettings, user: User) {
+        return Axios.post(process.env.API_NAME, 
+                [ this.createGetProcessorPoolsRequest(connectionSettings) ], {
+                    auth: { username: user.name, password: user.password }
+                })
+            .then(this.parseProcessorPoolsResponse)
+            .catch(error => {
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflow:', error);
+            });
+    }
+
     restartAll(connectionSettings: ConnectionSettings, user: User) {
         return Axios.post(process.env.API_NAME, [
                     this.createJmxExecRequest(connectionSettings, { operation: 'restartAll()' })
@@ -177,6 +189,15 @@ export class JmxService {
         };
     }
 
+    private createGetProcessorPoolsRequest(connectionSettings: ConnectionSettings) {
+        return {
+            type: 'READ',
+            mbean: 'copper.processorpool:name=persistent.ProcessorPool.default',
+            attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'UpperThreshold', 'LowerThreshold', 'NumberOfThreads', 'NumberOfActiveThreads'],
+            target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
+        };
+    }
+
     private createQueryBrokenWFRequest(connectionSettings: ConnectionSettings, max: number, offset: number, filter: WorkflowFilter) {
         return this.createJmxExecRequest(connectionSettings, {
             operation: 'queryWorkflowInstances(javax.management.openmbean.CompositeData)',
@@ -229,6 +250,25 @@ export class JmxService {
                 url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi`
             }
         };
+    }
+
+    private parseProcessorPoolsResponse = (response) => {
+        if (!response || !response.data 
+            || response.data.length < 1
+            || response.data[0].error) {
+            console.log('Invalid responce:', response); 
+            throw new Error('invalid response!');
+        }
+        let pool = new ProcessorPool (
+            response.data[0].value.Id,
+            response.data[0].value.ProcessorPoolState,
+            response.data[0].value.ThreadPriority,
+            response.data[0].value.UpperThreshold,
+            response.data[0].value.LowerThreshold,
+            response.data[0].value.NumberOfThreads,
+            response.data[0].value.NumberOfActiveThreads
+        );
+        return pool;
     }
 
     private parseWfRepoResponse = (response) => {

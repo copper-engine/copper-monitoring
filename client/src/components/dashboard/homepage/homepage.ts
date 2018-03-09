@@ -6,5 +6,5 @@ import './homepage.scss';
 })
 
 export class HomePage extends Vue {
-    
+
 }

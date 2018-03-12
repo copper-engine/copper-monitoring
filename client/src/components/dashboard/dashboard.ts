@@ -18,12 +18,9 @@ const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) =
 })
 export class DashboardComponent extends Vue {
     updateStatusInterval: any;
-    darkThemeText = utils.parseBoolean(localStorage.getItem('darkTheme'));
-    // darkThemeText = false;
 
     toggleTheme() {
-        this.$emit('toggle-theme');
-        this.darkThemeText = !this.darkThemeText;
+        this.$store.commit('updateTheme', !this.$store.state.darkTheme);
     }
     
     get user() {

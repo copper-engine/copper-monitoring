@@ -6,21 +6,27 @@ import { makeHot, reload } from './util/hot-reload';
 
 import { LoginComponent } from './components/login';
 
-const dashboardComponent = () => import('./components/dashboard').then(({ DashboardComponent }) => DashboardComponent);
+export const dashboardComponent = () => import('./components/dashboard').then(({ DashboardComponent }) => DashboardComponent);
+export const notificationsComponent = () => import('./components/core/notifications').then(({ NotificationsComponent }) => NotificationsComponent);
 const workflowsComponent = () => import('./components/dashboard/workflows').then(({ WorkflowsComponent }) => WorkflowsComponent);
-const homeComponent = () => import('./components/dashboard/homepage').then(({ HomePage }) => HomePage);
+const statisticsComponent = () => import('./components/dashboard/statistics').then(({ StatisticsComponent }) => StatisticsComponent);
 const workflowRepoComponent = () => import('./components/dashboard/workflowRepo').then(({ WorkflowRepository }) => WorkflowRepository);
 
 
 if (process.env.ENV === 'development' && module.hot) {
   // first arguments for `module.hot.accept` and `require` methods have to be static strings
   // see https://github.com/webpack/webpack/issues/5668
+
   
   const loginComponent = () => import('./components/login').then(({ LoginComponent }) => LoginComponent);
   const loginModuleId = './components/login';
   makeHot(loginModuleId, loginComponent,
     module.hot.accept('./components/login', () => reload(loginModuleId, (<any>require('./components/login')).LoginComponent)));
 
+  const notificationsModuleId = './components/notifications';
+  makeHot(notificationsModuleId, notificationsComponent,
+      module.hot.accept('./components/core/notifications', () => reload(notificationsModuleId, (<any>require('./components/core/notifications')).NotificaionsComponent)));
+    
   const dashboardModuleId = './components/dashboard';
   makeHot(dashboardModuleId, dashboardComponent,
     module.hot.accept('./components/dashboard', () => reload(dashboardModuleId, (<any>require('./components/dashboard')).DashboardComponent)));
@@ -28,6 +34,10 @@ if (process.env.ENV === 'development' && module.hot) {
   const workflowsModuleId = './components/dashboard/workflows';
   makeHot(workflowsModuleId, workflowsComponent,
     module.hot.accept('./components/dashboard/workflows', () => reload(workflowsModuleId, (<any>require('./components/dashboard/workflows')).WorkflowsComponent)));
+
+  const statisticsComponentId = './components/dashboard/statistics';
+  makeHot(statisticsComponentId, statisticsComponent,
+    module.hot.accept('./components/dashboard/statistics', () => reload(statisticsComponentId, (<any>require('./components/dashboard/statistics')).statisticsComponent)));
 }
 
 Vue.use(VueRouter);
@@ -67,7 +77,7 @@ export const createRoutes: () => RouteConfig[] = () => [
       {
         name: 'homepage',
         path: 'homepage',
-        component: homeComponent,
+        component: statisticsComponent,
         meta: {
           requiresAuth: true
         }

@@ -7,7 +7,7 @@
             <v-layout class="summary" column>
                 <v-layout class="text themeText--text stopGrow">
                     <v-flex class="sub-heading">
-                        # of Processor Pools:
+                        Number of Processor Pools:
                     </v-flex>
                     <v-flex>
                         {{ this.processorPools.length }}
@@ -15,9 +15,9 @@
                 </v-layout>
             </v-layout>
     
-            <v-layout class="header primary textOnColor--text">
+            <!-- <v-layout class="header primary textOnColor--text"> -->
                 
-                <v-flex class="id">
+                <!-- <v-flex class="id">
                     ID
                 </v-flex>
                 <v-flex class="state">
@@ -28,30 +28,82 @@
                 </v-flex>
                 <v-flex class="num-threads">
                     Number of Threads
+                </v-flex> -->
+
+                <!-- <v-layout column class="id-state-container">
+                    <v-flex>
+                        ID
+                    </v-flex>
+                    <v-flex>
+                        State
+                    </v-flex>
+                </v-layout>
+                <v-layout column class="priority-queue-container">
+                    <v-flex>
+                        Thread Priority
+                    </v-flex>
+                    <v-flex>
+                        Queue Size
+                    </v-flex>
+                </v-layout>
+                <v-layout column class="upper-lower-container">
+                    <v-flex>
+                        Upper Threshold
+                    </v-flex>
+                    <v-flex>
+                        Lower Threshold
+                    </v-flex>
+                </v-layout>
+                <v-layout column class="number-active-container">
+                    <v-flex>
+                        Number of Threads/
+                    </v-flex>
+                    <v-flex>
+                        Active Threads
+                    </v-flex>
+                </v-layout>
+                <v-flex>
+                    Actions
                 </v-flex>
-            </v-layout>
+
+            </v-layout> -->
     
-            <v-card v-show="!this.processorPools || this.processorPools.length === 0" class="secondary">
+            <!-- <v-card v-show="!this.processorPools || this.processorPools.length === 0" class="secondary">
                 <v-card-text>
                     <v-alert color="primary" icon="info" value="true" >
                         Cannot Load Processor Pool Information
                     </v-alert>
                 </v-card-text>
-            </v-card>
+            </v-card> -->
     
-            <v-layout class="workflow workflow-layout" v-for="pool in this.processorPools" :key="pool.id" column>
+            <!-- <v-layout class="workflow workflow-layout" v-for="pool in this.processorPools" :key="pool.id" column>
 
                 <v-layout class="secondary" row>
-                    <v-flex class="id">
-                        {{ pool.id }}
-                    </v-flex>
-                    <v-flex class="state">
-                        {{ pool.state }}
-                    </v-flex>
-                    <v-flex class="priority">
-                        {{ pool.priority }}
-                    </v-flex>
-                    <v-flex>
+                    <v-layout column class="id-state-container">
+                        <v-flex>
+                            {{ pool.id }}
+                        </v-flex>
+                        <v-flex>
+                            {{ pool.state }}
+                        </v-flex>
+                    </v-layout> 
+                    <v-layout column class="priority-queue-container">
+                        <v-flex>
+                            Priority: {{ pool.priority }}
+                        </v-flex>
+                        <v-flex>
+                            Queue: {{ pool.queueSize }}
+                        </v-flex>
+                    </v-layout>
+                    <v-layout column class="upper-lower-container">
+                        <v-flex>
+                            {{ pool.upperThreshold }}
+                        </v-flex>
+                        <v-flex>
+                            {{ pool.lowerThreshold }}
+                        </v-flex>
+                    </v-layout>                  
+                    <v-flex class="number-active-container">
                         <donut 
                         :data="{
                             labels: ['Active Threads', 'Inactive Threads'],
@@ -64,12 +116,163 @@
                             ]
                           }"
                         :options="{responsive: false, maintainAspectRatio: false}"
-                        :width="200"
-                        :height="200">
+                        :width="175"
+                        :height="175">
                         </donut>
                     </v-flex>        
                 </v-layout>
     
+            </v-layout> -->
+            <v-layout row class="pool-card-container">
+                <v-layout class="pool-card" v-for="pool in this.processorPools" :key="pool.id" row>
+                    <v-layout column class="primary textOnColor--text card-label">
+                        <v-flex>
+                            ID: 
+                        </v-flex>
+                        <v-flex>
+                            State:
+                        </v-flex>
+                        <v-flex>
+                            Priority:
+                        </v-flex>
+                        <v-flex>
+                            Queue Size:
+                        </v-flex>
+                        <v-flex>
+                            Memory Queue:
+                        </v-flex>
+                        <v-flex>
+                            Deque Bulk:
+                        </v-flex>
+                        <v-flex>
+                            Empty Queue Wait:
+                        </v-flex>
+                        <v-flex>
+                            Threads:
+                        </v-flex>
+                        <v-flex>
+                            Active Threads:
+                        </v-flex>
+                        <v-flex>
+                            Upper Threshold Wait:
+                        </v-flex>
+                        <v-flex>
+                            Upper Threshold:
+                        </v-flex>
+                        <v-flex>
+                            Lower Threshold:
+                        </v-flex>
+                    </v-layout>
+                    <v-layout column class="secondary card-info">
+                        <v-flex>
+                            {{ pool.id }}
+                        </v-flex>
+                        <v-flex>
+                            {{ pool.state }}
+                        </v-flex>
+                        <v-flex>
+                            {{ pool.priority }}
+                        </v-flex>
+                        <v-flex>
+                            {{ pool.queueSize }}
+                        </v-flex>
+                        <v-flex>
+                            {{ pool.memoryQueueSize }}
+                        </v-flex>
+                        <v-flex>
+                            {{ pool.dequeBulkSize }}
+                        </v-flex>
+                        <v-flex>
+                            {{ pool.emptyQueueWait }}
+                        </v-flex>
+                        <v-flex>
+                            {{ pool.numThreads }}
+                        </v-flex>
+                        <v-flex>
+                            {{ pool.numActiveThreads }}
+                        </v-flex>
+                        <v-flex>
+                            {{ pool.upperThresholdWait }}
+                        </v-flex>
+                        <v-flex>
+                            {{ pool.upperThreshold }}
+                        </v-flex>
+                        <v-flex>
+                            {{ pool.lowerThreshold }}
+                        </v-flex>
+                    </v-layout>
+                    <v-flex class="secondary card-graph">
+                        <donut 
+                        :data="{
+                            labels: ['Active Threads', 'Inactive Threads'],
+                            datasets: [
+                                {
+                                label: 'Total Threads',
+                                backgroundColor: ['#f87979', '#0D5494'],
+                                data: [pool.numActiveThreads, (pool.numThreads - pool.numActiveThreads)]
+                                }
+                            ]
+                            }"
+                        :options="{responsive: false, maintainAspectRatio: false}"
+                        :width="275"
+                        :height="275">
+                        </donut>
+                    </v-flex>
+                    <v-flex class="secondary card-graph">
+                        <bar 
+                        :data="{
+                            labels: ['Active', 'Queue'],
+                            datasets: [
+                                {
+                                backgroundColor: ['#f87979', '#0D5494'],
+                                data: [5, 5]
+                                }
+                            ]
+                            }"
+                        :options="{responsive: false, maintainAspectRatio: false}"
+                        :width="300"
+                        :height="300">
+                        </bar>
+                    </v-flex>
+                    <v-layout column class="secondary card-button-container">
+                        <v-tooltip top content-class="tooltip-text">
+                        <v-btn depressed 
+                            class="primary squareButton" 
+                            slot="activator"
+                            @click="resume">
+                            <v-icon>mdi-arrow-right-bold</v-icon>
+                        </v-btn>
+                        <span>Resume</span>
+                        </v-tooltip>
+                        <v-tooltip top content-class="tooltip-text">
+                        <v-btn depressed 
+                            class="primary squareButton" 
+                            slot="activator"
+                            @click="suspend">
+                                <v-icon>mdi-stop</v-icon>
+                        </v-btn>
+                        <span>Suspend</span>
+                        </v-tooltip>
+                        <v-tooltip top content-class="tooltip-text">
+                        <v-btn depressed 
+                            class="primary squareButton" 
+                            slot="activator"
+                            @click="resumeDeque">
+                                <v-icon>mdi-arrow-right-bold-box-outline</v-icon>
+                        </v-btn>
+                        <span>Resume Deque</span>
+                        </v-tooltip>
+                        <v-tooltip top content-class="tooltip-text">
+                        <v-btn depressed 
+                            class="primary squareButton" 
+                            slot="activator"
+                            @click="suspendDeque">
+                                <v-icon>mdi-stop-circle-outline</v-icon>
+                        </v-btn>
+                        <span>Suspend Deque</span>
+                        </v-tooltip>
+                    </v-layout>
+                </v-layout>
             </v-layout>
                 
         </v-layout>

@@ -111,6 +111,54 @@ export class JmxService {
             });
     }
 
+    resume(connectionSettings: ConnectionSettings, user: User) {
+        return Axios.post(process.env.API_NAME, [
+            this.createPoolExecRequest(connectionSettings, { operation: 'resume()' })
+        ], {
+            auth: { username: user.name, password: user.password }
+        })
+        .then(this.parseVoidResponse)
+        .catch(error => {
+            console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflows:', error);
+        });
+    }
+
+    suspend(connectionSettings: ConnectionSettings, user: User) {
+        return Axios.post(process.env.API_NAME, [
+            this.createPoolExecRequest(connectionSettings, { operation: 'suspend()' })
+        ], {
+            auth: { username: user.name, password: user.password }
+        })
+        .then(this.parseVoidResponse)
+        .catch(error => {
+            console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflows:', error);
+        });
+    }
+
+    resumeDeque(connectionSettings: ConnectionSettings, user: User) {
+        return Axios.post(process.env.API_NAME, [
+            this.createPoolExecRequest(connectionSettings, { operation: 'resumeDeque()' })
+        ], {
+            auth: { username: user.name, password: user.password }
+        })
+        .then(this.parseVoidResponse)
+        .catch(error => {
+            console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflows:', error);
+        });
+    }
+
+    suspendDeque(connectionSettings: ConnectionSettings, user: User) {
+        return Axios.post(process.env.API_NAME, [
+            this.createPoolExecRequest(connectionSettings, { operation: 'suspendDeque()' })
+        ], {
+            auth: { username: user.name, password: user.password }
+        })
+        .then(this.parseVoidResponse)
+        .catch(error => {
+            console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflows:', error);
+        });
+    }
+
     restartAll(connectionSettings: ConnectionSettings, user: User) {
         return Axios.post(process.env.API_NAME, [
                     this.createJmxExecRequest(connectionSettings, { operation: 'restartAll()' })
@@ -242,10 +290,24 @@ export class JmxService {
         return Object.assign(this.createJmxExecRequstBase(connectionSettings), uniquePart);
     }
 
+    private createPoolExecRequest(connectionSettings, uniquePart: {}) {
+        return Object.assign(this.createPoolExecRequstBase(connectionSettings), uniquePart);
+    }
+
     private createJmxExecRequstBase(connectionSettings: ConnectionSettings) {
         return {
             type: 'EXEC',
             mbean: connectionSettings.engineMBean,
+            target: {
+                url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi`
+            }
+        };
+    }
+
+    private createPoolExecRequstBase(connectionSettings: ConnectionSettings) {
+        return {
+            type: 'EXEC',
+            mbean: 'copper.processorpool:name=persistent.ProcessorPool.default',
             target: {
                 url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi`
             }
@@ -263,6 +325,11 @@ export class JmxService {
             response.data[0].value.Id,
             response.data[0].value.ProcessorPoolState,
             response.data[0].value.ThreadPriority,
+            response.data[0].value.QueueSize,
+            response.data[0].value.MemoryQueueSize,
+            response.data[0].value.DequeBulkSize,
+            response.data[0].value.EmptyQueueWaitMSec,
+            response.data[0].value.UpperThresholdReachedWaitMSec,            
             response.data[0].value.UpperThreshold,
             response.data[0].value.LowerThreshold,
             response.data[0].value.NumberOfThreads,

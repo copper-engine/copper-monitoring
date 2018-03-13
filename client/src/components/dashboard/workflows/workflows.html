@@ -2,8 +2,9 @@
 
     <workflowHeading 
     @triggerRestartAll="restartAll"
-    @triggerDeleteAll="deleteAll"
     @triggerApplyFilter="applyFilter($event)"
+    @triggerRestartFiltered="restartFiltered($event)"
+    @triggerDeleteFiltered="deleteFiltered($event)"
     :engineStatus="status"
     :restartingAll="restartingAll"
     :deletingAll="deletingAll">

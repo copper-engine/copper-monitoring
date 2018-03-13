@@ -79,27 +79,6 @@ export class JmxService {
             });
     }
 
-    private createSourceCodeRequest(connectionSettings: ConnectionSettings, classname: String) {
-        return {
-        type: 'EXEC',
-        mbean: 'copper.workflowrepo:name=wfRepository',
-        // mbean: 'copper.workflowrepo:name=workflowRepositoryMXBean',
-        operation: 'getWorkflowInfo',
-        arguments: [classname],
-        target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
-        };
-    }
-
-    private parseSourceCodeResponse = (response): String => {
-        if (!response || !response.data 
-            || response.data.length < 1
-            || response.data[0].error) {
-            console.log('Invalid responce:', response); 
-            throw new Error('invalid response!');
-        }
-        return response.data[0].value.sourceCode;
-    }
-
     getProcessorPools(connectionSettings: ConnectionSettings, user: User) {
         return Axios.post(process.env.API_NAME, 
                 [ this.createGetProcessorPoolsRequest(connectionSettings) ], {
@@ -171,20 +150,6 @@ export class JmxService {
             });
     }
 
-    deleteAll(connectionSettings: ConnectionSettings, workflows: WorkflowInfo[], user: User) {
-        let requestList = workflows.map((workflow) => {
-            return this.createJmxExecRequest(connectionSettings, { operation: 'deleteBroken', arguments: [ workflow.id ] });
-        });
-        
-        return Axios.post(process.env.API_NAME, requestList, {
-            auth: { username: user.name, password: user.password }
-        })
-            .then(this.parseVoidResponse)
-            .catch(error => {
-                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflows:', error);
-            });
-    }
-
     restart(connectionSettings: ConnectionSettings, workflowId: string, user: User) {
         return Axios.post(process.env.API_NAME, 
                 [ this.createJmxExecRequest(connectionSettings, { operation: 'restart', arguments: [ workflowId ] }) ], {
@@ -207,12 +172,46 @@ export class JmxService {
             });
     }
 
+    deleteFiltered(connectionSettings: ConnectionSettings, user: User , max: number = 50, offset: number = 0, filter: WorkflowFilter) {
+        return Axios.post(process.env.API_NAME, 
+            [ this.createJmxExecRequest(connectionSettings, { operation: 'deleteFiltered(javax.management.openmbean.CompositeData)', arguments: [this.createWorkflowFilter(connectionSettings, filter.states, max, offset, filter)] }) ], {
+                auth: { username: user.name, password: user.password }
+            })
+        .then(this.parseVoidResponse)
+        .catch(error => {
+            console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflow:', error);
+        });
+    }
+
+    restartFiltered(connectionSettings: ConnectionSettings, user: User , max: number = 50, offset: number = 0, filter: WorkflowFilter) {
+        return Axios.post(process.env.API_NAME, [
+            this.createJmxExecRequest(connectionSettings, { operation: 'restartFiltered(javax.management.openmbean.CompositeData)', arguments: [this.createWorkflowFilter(connectionSettings, filter.states, max, offset, filter)]  })
+            ], {
+                auth: { username: user.name, password: user.password }
+            })
+        .then(this.parseVoidResponse)
+        .catch(error => {
+            console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting filtered workflows:', error);
+        });
+    }
+
     private buildRestartAllRequest = (connectionSettings: ConnectionSettings) => [
         this.createJmxExecRequest(connectionSettings, {
             operation: 'restartAll()',
             arguments: [], 
         })
     ]
+
+    private createSourceCodeRequest(connectionSettings: ConnectionSettings, classname: String) {
+        return {
+        type: 'EXEC',
+        mbean: 'copper.workflowrepo:name=wfRepository',
+        // mbean: 'copper.workflowrepo:name=workflowRepositoryMXBean',
+        operation: 'getWorkflowInfo',
+        arguments: [classname],
+        target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
+        };
+    }
 
     private createWfRepoRequest(connectionSettings: ConnectionSettings) {
         return {
@@ -368,7 +367,7 @@ export class JmxService {
         if (!response || !response.data 
             || response.data.length < 1
             || response.data[0].error) {
-            console.log('Invalid responce:', response); 
+            console.log('Invalid response:', response); 
             throw new Error('invalid response!');
         }
 
@@ -395,6 +394,16 @@ export class JmxService {
             response.data[0].value.State.toLowerCase(),
             response.data[2].value
         );
+    }
+
+    private parseSourceCodeResponse = (response): String => {
+        if (!response || !response.data 
+            || response.data.length < 1
+            || response.data[0].error) {
+            console.log('Invalid responce:', response); 
+            throw new Error('invalid response!');
+        }
+        return response.data[0].value.sourceCode;
     }
 
     private parseBrokenWorkflowsResponse = (response): WorkflowInfo[] => {

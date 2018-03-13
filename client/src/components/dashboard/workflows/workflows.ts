@@ -115,26 +115,47 @@ export class WorkflowsComponent extends Vue {
             });
     }
 
-    deleteAll() {
-        this.deletingAll = true;
-        this.jmxService.deleteAll(this.$store.state.connectionSettings, this.workflows, this.$store.state.user)
-        .then((done) => {
-            this.deletingAll = false;
-            if (done) {
-                this.workflows.forEach((wf) => {
-                    let currentID = wf.id;
-                    this.highlight(currentID, 'delete');
-                });
-                this.showSuccess('All workflows deleted successfully');
-            } else {
-                this.showError('Failed to Delete all workflows');
-            }
-            this.forceStatusFetch(1500);
-        }).catch((err) => {
-            this.showError('Failed to Delete all workflows due to: ' + err);
-            console.error('Failed to Delete all workflows due to:', err);
-            this.deletingAll = false;
-        });
+    restartFiltered(newFilter: WorkflowFilter) {
+        this.jmxService.restartFiltered(this.$store.state.connectionSettings, this.$store.state.user, 50, 0, newFilter)
+            .then((done) => {
+                this.restartingAll = false;
+                this.forceStatusFetch(500);
+                if (done) {
+                    this.workflows.forEach((wf) => {
+                        let currentID = wf.id;
+                        this.highlight(currentID, 'reload');
+                    });
+                    this.showSuccess('Filtered workflows restarted successfully');
+                } else {
+                    this.showError('Failed to restart filtered workflows');
+                }
+            }).catch((err) => {
+                this.showError('Failed to restart filtered workflows due to:' + err);
+                console.error('Failed to restart filtered workflows due to:', err);
+                this.restartingAll = false;
+            });
+    }
+
+    deleteFiltered(newFilter: WorkflowFilter) {
+        this.jmxService.deleteFiltered(this.$store.state.connectionSettings, this.$store.state.user, 50, 0, newFilter)
+            .then((done) => {
+                this.deletingAll = false;
+                this.forceStatusFetch(500);
+                if (done) {
+                    this.workflows.forEach((wf) => {
+                        let currentID = wf.id;
+                        this.highlight(currentID, 'delete');
+                    });
+                    this.showSuccess('Filtered workflows deleted successfully');
+                } else {
+                    this.showError('Failed to delete filtered workflows');
+                }
+                this.forceStatusFetch(1500);                
+            }).catch((err) => {
+                this.showError('Failed to delete filtered workflows due to:' + err);
+                console.error('Failed to delete filtered workflows due to:', err);
+                this.deletingAll = false;
+            });
     }
 
     restart(id: string) {
@@ -197,6 +218,11 @@ export class WorkflowsComponent extends Vue {
                     wfContext.deleting = true;
                     this.workflowsContext.set(id, wfContext);
                     this.$forceUpdate();
+                    setTimeout(() => { 
+                        wfContext.deleting = false; 
+                        this.workflowsContext.set(id, wfContext);
+                        this.$forceUpdate();
+                    }, 1500);
                 }
     }
 

@@ -18,6 +18,7 @@ export class WorkflowHeading extends Vue {
     openFilterMenu: boolean = false;
     filterApplied: boolean = false;
     currentFilters: string[][] = [];
+    currentFilterObject: WorkflowFilter;
     states = [];
     classNames = null;
     modTimeFromSelect = null;
@@ -165,7 +166,7 @@ export class WorkflowHeading extends Vue {
         this.createTimeTo = null;
     }
     applyFilter() {   
-        let newFilter = new WorkflowFilter (
+        this.currentFilterObject = new WorkflowFilter (
             this.parseStates(),
             this.classNames,
             this.getEpochTime(this.createTimeFrom),
@@ -174,8 +175,8 @@ export class WorkflowHeading extends Vue {
             this.getEpochTime(this.modTimeTo)
         );
         this.openFilterMenu = false;
-        this.filterApplied = this.isFiltered(newFilter);
-        this.$emit('triggerApplyFilter', newFilter);
+        this.filterApplied = this.isFiltered(this.currentFilterObject);
+        this.$emit('triggerApplyFilter', this.currentFilterObject);
     }
     isFiltered(newFilter: WorkflowFilter) {
         this.currentFilters = [];
@@ -234,10 +235,14 @@ export class WorkflowHeading extends Vue {
     }
 
     sendRestartAll() {
-        this.$emit('triggerRestartAll');
+        if (this.filterApplied === false) {
+            this.$emit('triggerRestartAll');
+        } else {
+            this.$emit('triggerRestartFiltered', this.currentFilterObject);
+        }
     }
 
     sendDeleteAll() {
-        this.$emit('triggerDeleteAll');
+        this.$emit('triggerDeleteFiltered', this.filterApplied ? this.currentFilterObject : new WorkflowFilter());
     }
 }

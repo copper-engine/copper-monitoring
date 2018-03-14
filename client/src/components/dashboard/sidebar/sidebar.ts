@@ -21,7 +21,7 @@ export class SidebarComponent extends Vue {
     get links(): Link[] {
 
      return [
-        new Link('Home', '/dashboard/homepage?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-home'),
+        new Link('Statistics', '/dashboard/homepage?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-home'),
         new Link('Broken Workflows', '/dashboard/workflows?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-image-broken'),
         new Link('Workflow Repository', '/dashboard/workflowRepo?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-file')
       ];

@@ -124,46 +124,82 @@
     
             </v-layout> -->
             <v-layout row class="pool-card-container">
-                <v-layout class="pool-card" v-for="pool in this.processorPools" :key="pool.id" row>
+                <v-layout class="secondary pool-card" v-for="pool in this.processorPools" :key="pool.id" row>
                     <v-layout column class="primary textOnColor--text card-label">
-                        <v-flex>
-                            ID: 
-                        </v-flex>
-                        <v-flex>
-                            State:
-                        </v-flex>
-                        <v-flex>
-                            Priority:
-                        </v-flex>
-                        <v-flex>
-                            Queue Size:
-                        </v-flex>
-                        <v-flex>
-                            Memory Queue:
-                        </v-flex>
-                        <v-flex>
-                            Deque Bulk:
-                        </v-flex>
-                        <v-flex>
-                            Empty Queue Wait:
-                        </v-flex>
-                        <v-flex>
-                            Threads:
-                        </v-flex>
-                        <v-flex>
-                            Active Threads:
-                        </v-flex>
-                        <v-flex>
-                            Upper Threshold Wait:
-                        </v-flex>
-                        <v-flex>
-                            Upper Threshold:
-                        </v-flex>
-                        <v-flex>
-                            Lower Threshold:
-                        </v-flex>
+                        <v-layout>
+                            <v-spacer></v-spacer>
+                            <v-flex>
+                                ID: 
+                            </v-flex>
+                        </v-layout>
+                        <v-layout>
+                            <v-spacer></v-spacer>
+                            <v-flex>
+                                State: 
+                            </v-flex>
+                        </v-layout>
+                        <v-layout>
+                            <v-spacer></v-spacer>
+                            <v-flex>
+                                Priority: 
+                            </v-flex>
+                        </v-layout>
+                        <v-layout>
+                            <v-spacer></v-spacer>
+                            <v-flex>
+                                Queue Size: 
+                            </v-flex>
+                        </v-layout>
+                        <v-layout>
+                            <v-spacer></v-spacer>
+                            <v-flex>
+                                Memory Queue: 
+                            </v-flex>
+                        </v-layout>
+                        <v-layout>
+                            <v-spacer></v-spacer>
+                            <v-flex>
+                                Deque Bulk: 
+                            </v-flex>
+                        </v-layout>
+                        <v-layout>
+                            <v-spacer></v-spacer>
+                            <v-flex>
+                                Empty Queue Wait: 
+                            </v-flex>
+                        </v-layout>
+                        <v-layout>
+                            <v-spacer></v-spacer>
+                            <v-flex>
+                                Threads: 
+                            </v-flex>
+                        </v-layout>
+                        <v-layout>
+                            <v-spacer></v-spacer>
+                            <v-flex>
+                                Active Threads: 
+                            </v-flex>
+                        </v-layout>
+                        <v-layout>
+                            <v-spacer></v-spacer>
+                            <v-flex>
+                                Upper Threshold Wait: 
+                            </v-flex>
+                        </v-layout>
+                        <v-layout>
+                            <v-spacer></v-spacer>
+                            <v-flex>
+                                Upper Threshold: 
+                            </v-flex>
+                        </v-layout>
+                        <v-layout>
+                            <v-spacer></v-spacer>
+                            <v-flex>
+                                Lower Threshold: 
+                            </v-flex>
+                        </v-layout>
                     </v-layout>
-                    <v-layout column class="secondary card-info">
+                    <v-layout column class="card-info">
                         <v-flex>
                             {{ pool.id }}
                         </v-flex>
@@ -201,10 +237,10 @@
                             {{ pool.lowerThreshold }}
                         </v-flex>
                     </v-layout>
-                    <v-flex class="secondary card-graph">
+                    <v-flex class="card-graph">
                         <donut 
                         :data="{
-                            labels: ['Active Threads', 'Inactive Threads'],
+                            labels: ['   Active Threads', 'Inactive Threads'],
                             datasets: [
                                 {
                                 label: 'Total Threads',
@@ -218,7 +254,7 @@
                         :height="275">
                         </donut>
                     </v-flex>
-                    <v-flex class="secondary card-graph">
+                    <!-- <v-flex class="secondary card-graph">
                         <bar 
                         :data="{
                             labels: ['Active', 'Queue'],
@@ -233,44 +269,32 @@
                         :width="300"
                         :height="300">
                         </bar>
-                    </v-flex>
-                    <v-layout column class="secondary card-button-container">
-                        <v-tooltip top content-class="tooltip-text">
+                    </v-flex> -->
+                    <v-layout column class="card-button-container">
                         <v-btn depressed 
-                            class="primary squareButton" 
+                            class="primary" 
                             slot="activator"
                             @click="resume">
-                            <v-icon>mdi-arrow-right-bold</v-icon>
+                            Resume
                         </v-btn>
-                        <span>Resume</span>
-                        </v-tooltip>
-                        <v-tooltip top content-class="tooltip-text">
                         <v-btn depressed 
-                            class="primary squareButton" 
+                            class="primary" 
                             slot="activator"
                             @click="suspend">
-                                <v-icon>mdi-stop</v-icon>
+                            Suspend
                         </v-btn>
-                        <span>Suspend</span>
-                        </v-tooltip>
-                        <v-tooltip top content-class="tooltip-text">
                         <v-btn depressed 
-                            class="primary squareButton" 
+                            class="primary" 
                             slot="activator"
                             @click="resumeDeque">
-                                <v-icon>mdi-arrow-right-bold-box-outline</v-icon>
+                            Resume Deque
                         </v-btn>
-                        <span>Resume Deque</span>
-                        </v-tooltip>
-                        <v-tooltip top content-class="tooltip-text">
                         <v-btn depressed 
-                            class="primary squareButton" 
+                            class="primary" 
                             slot="activator"
                             @click="suspendDeque">
-                                <v-icon>mdi-stop-circle-outline</v-icon>
+                            Suspend Deque
                         </v-btn>
-                        <span>Suspend Deque</span>
-                        </v-tooltip>
                     </v-layout>
                 </v-layout>
             </v-layout>

@@ -4,11 +4,11 @@ import { JmxService } from '../../../services/jmxService';
 import { parseSourceCode } from '../../../util/utils';
 import './workflowRepo.scss';
 
-const sourceCodeomponent = () => import('./../../core').then(({ SourceCodeComponent }) => SourceCodeComponent);
+const sourceCodeComponent = () => import('./../../core').then(({ SourceCodeComponent }) => SourceCodeComponent);
 @Component({
     template: require('./workflowRepo.html'),
     components: {
-        'source-code': sourceCodeomponent,
+        'source-code': sourceCodeComponent,
     }
 })
 export class WorkflowRepository extends Vue {

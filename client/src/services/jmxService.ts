@@ -1,6 +1,6 @@
 import Axios from 'axios';
 // import Vue from 'vue';
-import { State, EngineStatus, WorkflowInfo, WorkflowClassInfo, WorkflowRepo } from '../models/engine';
+import { State, EngineStatus, WorkflowInfo, WorkflowClassInfo, WorkflowRepo, StatesPrint } from '../models/engine';
 import { ConnectionSettings } from '../models/connectionSettings';
 import moment from 'moment';
 import { User } from '../models/user';
@@ -11,11 +11,27 @@ export class JmxService {
         return Axios.post(process.env.API_NAME, [
                 this.createEngineInfoRequest(connectionSettings, mbeans), 
                 this.createEngineActivityRequest(connectionSettings, mbeans),
-                this.createCountBrokenWFRequest(connectionSettings, mbeans)                
+                this.createCountWFRequest(connectionSettings, mbeans, [ State.ERROR, State.INVALID ])                
             ], {
                 auth: { username: user.name, password: user.password }
             })
             .then(this.parseEngineStatusResponse)
+            .catch(error => {
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
+            });
+    }
+    getChartCounts(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User) {
+        return Axios.post(process.env.API_NAME, [
+                this.createCountWFRequest(connectionSettings, mbeans, [ State.RUNNING ]),                
+                this.createCountWFRequest(connectionSettings, mbeans, [ State.WAITING ]),                
+                this.createCountWFRequest(connectionSettings, mbeans, [ State.FINISHED ]),                
+                this.createCountWFRequest(connectionSettings, mbeans, [ State.DEQUEUED ]),                
+                this.createCountWFRequest(connectionSettings, mbeans, [ State.ERROR ]),               
+                this.createCountWFRequest(connectionSettings, mbeans, [ State.INVALID ])                
+            ], {
+                auth: { username: user.name, password: user.password }
+            })
+            .then(this.parseChartCountResponse)
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
             });
@@ -184,10 +200,11 @@ export class JmxService {
             arguments: [this.createWorkflowFilter(connectionSettings, [State.ERROR, State.INVALID], max, offset)], // get workflows with status Invalid
         });
     }
-    private createCountBrokenWFRequest(connectionSettings: ConnectionSettings, mbeans: MBeans) {
+
+    private createCountWFRequest(connectionSettings: ConnectionSettings, mbeans: MBeans, states: State[]) {
         return this.createJmxExecRequest(connectionSettings, mbeans, {
             operation: 'countWorkflowInstances(javax.management.openmbean.CompositeData)',
-            arguments: [this.createWorkflowFilter(connectionSettings, [State.ERROR, State.INVALID])], // get workflows with status Invalid
+            arguments: [this.createWorkflowFilter(connectionSettings, states)], // get workflows with status Invalid
         });
     }
 
@@ -283,6 +300,25 @@ export class JmxService {
             response.data[0].value.State.toLowerCase(),
             response.data[2].value
         );
+    }
+
+    private parseChartCountResponse = (response): StatesPrint => {
+        console.log('chart responce', response.data);
+        if (!response || !response.data
+            || response.data.length < 5
+            || !this.isSubResponseValid(response.data[0])
+            || !this.isSubResponseValid(response.data[1])
+            || !this.isSubResponseValid(response.data[2])
+            || !this.isSubResponseValid(response.data[3])
+            || !this.isSubResponseValid(response.data[4])
+            || !this.isSubResponseValid(response.data[5])
+        ) {
+            console.log('Invalid responce:', response);          
+            throw new Error('invalid response!');
+        }
+
+        return new StatesPrint(new Date(response.data[0].timestamp * 1000),
+        response.data[0].value, response.data[1].value, response.data[2].value, response.data[3].value, response.data[4].value, response.data[5].value);
     }
 
     private parseBrokenWorkflowsResponse = (response): WorkflowInfo[] => {

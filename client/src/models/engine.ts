@@ -9,6 +9,17 @@ export enum State {
     INVALID     // Something illegal happened to the workflow. Cannot work with it anymore. In persistent mode, this might be caused by a deserialization error or something similar.
 }
 
+export class StatesPrint {
+    constructor(
+        public time: Date,
+        public raw: number,
+        public waiting: number,
+        public finished: number,
+        public dequeued: number,
+        public error: number,
+        public invalid: number) {}
+}
+
 export class EngineStatus {
     constructor(
         public runningSince: Date,

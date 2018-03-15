@@ -116,7 +116,7 @@ export class WorkflowsComponent extends Vue {
     }
 
     restartFiltered(newFilter: WorkflowFilter) {
-        this.jmxService.restartFiltered(this.$store.state.connectionSettings, this.$store.state.user, 50, 0, newFilter)
+        this.jmxService.restartFiltered(this.$store.state.connectionSettings, this.$store.state.user, 0, 0, newFilter)
             .then((done) => {
                 this.restartingAll = false;
                 this.forceStatusFetch(500);
@@ -138,7 +138,7 @@ export class WorkflowsComponent extends Vue {
 
     deleteFiltered(newFilter: WorkflowFilter) {
         this.page = 1;
-        this.jmxService.deleteFiltered(this.$store.state.connectionSettings, this.$store.state.user, 50, 0, newFilter)
+        this.jmxService.deleteFiltered(this.$store.state.connectionSettings, this.$store.state.user, 0, 0, newFilter)
             .then((done) => {
                 this.deletingAll = false;
                 this.forceStatusFetch(500);

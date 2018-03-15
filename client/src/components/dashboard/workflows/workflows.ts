@@ -119,7 +119,7 @@ export class WorkflowsComponent extends Vue {
         this.jmxService.restartFiltered(this.$store.state.connectionSettings, this.$store.state.user, 0, 0, newFilter)
             .then((done) => {
                 this.restartingAll = false;
-                this.forceStatusFetch(500);
+                this.forceStatusFetch(1000);
                 if (done) {
                     this.workflows.forEach((wf) => {
                         let currentID = wf.id;

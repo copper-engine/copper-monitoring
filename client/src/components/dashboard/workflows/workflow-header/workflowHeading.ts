@@ -27,7 +27,7 @@ export class WorkflowHeading extends Vue {
     modTimeToSelect = null;
     modTimeToType = null;
     modTimeTo = null;
-    createTimeFromSelect = null;
+    createTimeFromSelect: string = null;
     createTimeFromType = null;
     createTimeFrom = null;
     createTimeToSelect = null;
@@ -38,6 +38,25 @@ export class WorkflowHeading extends Vue {
         'Error',
         'Invalid'
     ];
+
+
+    clickedFromDate(dateTimeName) {
+        // TODO today 00:00
+        this[dateTimeName] = this.formatTime('201803140000', 'forSelect');
+        this.emitClick(dateTimeName);
+    }
+    clickedToDate(dateTimeName) {
+        // TODO today 23:59
+        this[dateTimeName] = this.formatTime('201803142359', 'forSelect');
+        this.emitClick(dateTimeName);
+    }
+
+    emitClick(dateTimeName) {
+        let elem = (this as any).$refs[dateTimeName];
+        let event = new Event('click');
+        elem.$el.dispatchEvent(event);
+        elem.open(event);
+    }
 
     @Watch('createTimeFromSelect')
     formatCreateFromSelect() {

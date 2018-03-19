@@ -22,21 +22,24 @@ export class StatesPrint {
 
 export class EngineStatus {
     constructor(
+        public id: number,
         public runningSince: Date,
         public lastProcessing: Date,
         public engineId: string,
         public type: string,
         public instances: number,
         public state: string,
-        public brokenWFCount: number
+        public brokenWFCount: number,
+        public wfRepoMXBean: string,
+        public ppoolsMXBeans: string[]
     ) {}
 }
 
 export class WorkflowRepo {
     constructor(
-        public description: string,
-        public sourceDir: string,
-        public workFlowInfo: Array<WorkflowClassInfo>
+        public description: string = '',
+        public sourceDir: string = '',
+        public workFlowInfo: Array<WorkflowClassInfo> = []
     ) {}
 }
 

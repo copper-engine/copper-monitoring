@@ -95,7 +95,8 @@ export class WorkflowsComponent extends Vue {
     }
 
     private getBrokenWorkflows(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User) {
-        this.jmxService.getBrokenWorkflows(connectionSettings, mbeans, user, this.perPage, (this.page - 1) * this.perPage).then((response: WorkflowInfo[]) => {
+        // TODO fix selecting correct bean
+        this.jmxService.getBrokenWorkflows(connectionSettings, mbeans.engineMBeans[0], user, this.perPage, (this.page - 1) * this.perPage).then((response: WorkflowInfo[]) => {
             this.workflows = response;
         });
     }

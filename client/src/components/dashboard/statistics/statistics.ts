@@ -4,7 +4,7 @@ import LineChart from './chart';
 import './statistics.scss';
 import { VueCharts, Bar, Line, mixins } from 'vue-chartjs';
 import { JmxService } from '../../../services/jmxService';
-import { StatesPrint } from '../../../models/engine';
+import { StatesPrint, EngineStatus } from '../../../models/engine';
 import { ConnectionSettings } from '../../../models/connectionSettings';
 
 const INT_15_MIN = 15 * 60 * 1000;
@@ -72,6 +72,7 @@ export class StatisticsComponent extends Vue {
     }
 
     @Watch('states', { deep: true })
+    @Watch('$route.params')
     initCharts() {
         this.initSecondsChart();
         this.initMinutesChart();
@@ -124,7 +125,7 @@ export class StatisticsComponent extends Vue {
     }
 
     fetchingData(states: StatesPrint[], updateFn) {
-        this.jmxService.getChartCounts(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user).then((newStates: StatesPrint) => {
+        this.jmxService.getChartCounts(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id], this.$store.state.user).then((newStates: StatesPrint) => {
             if (states.length > 10) {
                 states.shift();
             }

@@ -68,7 +68,8 @@ export class DashboardComponent extends Vue {
     sheduleFetchingStatus() {
         (this.$services.jmxService as JmxService)
         .getMBeans(this.$store.state.connectionSettings, this.$store.state.user)
-        .then((mbeanNames: string[]) => {
+        .then((mbeanNames: string[][]) => {
+            console.log('mbeanNames', mbeanNames);
 
             if (this.updateStatusInterval) {
                 clearInterval(this.updateStatusInterval);
@@ -95,8 +96,9 @@ export class DashboardComponent extends Vue {
     }
 
     private getEngineStatus(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User) {
-        (this.$services.jmxService as JmxService).getEngineStatus(connectionSettings, mbeans, user).then((response: EngineStatus) => {
-            this.$store.commit('updateEngineStatus', response);
+        (this.$services.jmxService as JmxService).getEngineStatus(connectionSettings, mbeans, user).then((enginStatusList: EngineStatus[]) => {
+            console.log('got engines', enginStatusList);
+            this.$store.commit('updateEngineStatus', enginStatusList);
         });
     }
 }

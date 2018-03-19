@@ -10,9 +10,9 @@ Vue.use(Vuex);
 
 export class StoreState {
   public darkTheme = parseBoolean(localStorage.getItem('darkTheme')) && true;
-  public mbeans: MBeans = new MBeans('', '');
+  public mbeans: MBeans = new MBeans([''], ['']);
 
-  constructor(public connectionSettings: ConnectionSettings, public engineStatus: EngineStatus = null, public user: User = null) {}
+  constructor(public connectionSettings: ConnectionSettings, public engineStatusList: EngineStatus[] = null, public user: User = null) {}
 }
 
 export const store = new Vuex.Store<StoreState>({
@@ -27,8 +27,8 @@ export const store = new Vuex.Store<StoreState>({
       updateMBeans(state, mbeans) {
         state.mbeans = mbeans;
       },
-      updateEngineStatus(state, engineStatus) {
-        state.engineStatus = engineStatus;
+      updateEngineStatus(state, engineStatusList) {
+        state.engineStatusList = engineStatusList;
       },
       setUser(state, user: User) {
         state.user = user;

@@ -1,5 +1,4 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Link } from '../../../models/link';
 import { ConnectionSettings } from '../../../models/connectionSettings';
 import './sidebar.scss';
 
@@ -17,15 +16,6 @@ export class SidebarComponent extends Vue {
     drawer = null;
     miniVariant = false;
     settingsShowed = false;
-    
-    get links(): Link[] {
-
-     return [
-        new Link('Statistics', '/dashboard/homepage?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-home'),
-        new Link('Broken Workflows', '/dashboard/workflows?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-image-broken'),
-        new Link('Workflow Repository', '/dashboard/workflowRepo?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-file')
-      ];
-    }
       
     updateTarget(connectionSettings) {
         this.settingsShowed = false;

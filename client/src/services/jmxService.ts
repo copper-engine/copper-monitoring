@@ -1,21 +1,37 @@
 import Axios from 'axios';
 // import Vue from 'vue';
-import { State, EngineStatus, WorkflowInfo, WorkflowClassInfo,
-    WorkflowRepo, WorkflowFilter, ProcessorPool } from '../models/engine';
+import { State, EngineStatus, WorkflowInfo, WorkflowClassInfo, WorkflowRepo, StatesPrint, WorkflowFilter, ProcessorPool } from '../models/engine';
 import { ConnectionSettings } from '../models/connectionSettings';
 import moment from 'moment';
 import { User } from '../models/user';
+import { MBeans } from '../models/mbeans';
 
 export class JmxService {
-    getEngineStatus(connectionSettings: ConnectionSettings, user: User) {
+    getEngineStatus(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User) {
         return Axios.post(process.env.API_NAME, [
-                this.createEngineInfoRequest(connectionSettings), 
-                this.createEngineActivityRequest(connectionSettings),
-                this.createCountBrokenWFRequest(connectionSettings)                
+                this.createEngineInfoRequest(connectionSettings, mbeans), 
+                this.createEngineActivityRequest(connectionSettings, mbeans),
+                this.createCountWFRequest(connectionSettings, mbeans, [ State.ERROR, State.INVALID ])                
             ], {
                 auth: { username: user.name, password: user.password }
             })
             .then(this.parseEngineStatusResponse)
+            .catch(error => {
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
+            });
+    }
+    getChartCounts(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User) {
+        return Axios.post(process.env.API_NAME, [
+                this.createCountWFRequest(connectionSettings, mbeans, [ State.RUNNING ]),                
+                this.createCountWFRequest(connectionSettings, mbeans, [ State.WAITING ]),                
+                this.createCountWFRequest(connectionSettings, mbeans, [ State.FINISHED ]),                
+                this.createCountWFRequest(connectionSettings, mbeans, [ State.DEQUEUED ]),                
+                this.createCountWFRequest(connectionSettings, mbeans, [ State.ERROR ]),               
+                this.createCountWFRequest(connectionSettings, mbeans, [ State.INVALID ])                
+            ], {
+                auth: { username: user.name, password: user.password }
+            })
+            .then(this.parseChartCountResponse)
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
             });
@@ -43,9 +59,9 @@ export class JmxService {
     }
 
     // TODO logout if wrong credentials...
-    getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User , max: number = 50, offset: number = 0, filter: WorkflowFilter) {
+    getBrokenWorkflows(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User , max: number = 50, offset: number = 0, filter: WorkflowFilter) {
         return Axios.post(process.env.API_NAME, [
-                this.createQueryBrokenWFRequest(connectionSettings, max, offset, filter)
+                this.createQueryBrokenWFRequest(connectionSettings, mbeans, max, offset, filter)
             ], {
                 auth: { username: user.name, password: user.password }
             })
@@ -55,9 +71,9 @@ export class JmxService {
             });
     }
 
-    getWfRepo(connectionSettings: ConnectionSettings, user: User) {
+    getWfRepo(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User) {
         return Axios.post(process.env.API_NAME, [
-            this.createWfRepoRequest(connectionSettings)
+            this.createWfRepoRequest(connectionSettings, mbeans)
             ], {
                 auth: { username: user.name, password: user.password }
             })
@@ -138,9 +154,9 @@ export class JmxService {
         });
     }
 
-    restartAll(connectionSettings: ConnectionSettings, user: User) {
+    restartAll(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User) {
         return Axios.post(process.env.API_NAME, [
-                    this.createJmxExecRequest(connectionSettings, { operation: 'restartAll()' })
+                    this.createJmxExecRequest(connectionSettings, mbeans, { operation: 'restartAll()' })
                 ], {
                     auth: { username: user.name, password: user.password }
                 })
@@ -150,9 +166,9 @@ export class JmxService {
             });
     }
 
-    restart(connectionSettings: ConnectionSettings, workflowId: string, user: User) {
+    restart(connectionSettings: ConnectionSettings, mbeans: MBeans, workflowId: string, user: User) {
         return Axios.post(process.env.API_NAME, 
-                [ this.createJmxExecRequest(connectionSettings, { operation: 'restart', arguments: [ workflowId ] }) ], {
+                [ this.createJmxExecRequest(connectionSettings, mbeans, { operation: 'restart', arguments: [ workflowId ] }) ], {
                     auth: { username: user.name, password: user.password }
                 })
             .then(this.parseVoidResponse)
@@ -161,9 +177,9 @@ export class JmxService {
             });
     }
 
-    deleteBroken(connectionSettings: ConnectionSettings, workflowId: string, user: User) {
+    deleteBroken(connectionSettings: ConnectionSettings, mbeans: MBeans, workflowId: string, user: User) {
         return Axios.post(process.env.API_NAME, 
-                [ this.createJmxExecRequest(connectionSettings, { operation: 'deleteBroken', arguments: [ workflowId ] }) ], {
+                [ this.createJmxExecRequest(connectionSettings, mbeans, { operation: 'deleteBroken', arguments: [ workflowId ] }) ], {
                     auth: { username: user.name, password: user.password }
                 })
             .then(this.parseVoidResponse)
@@ -172,9 +188,9 @@ export class JmxService {
             });
     }
 
-    deleteFiltered(connectionSettings: ConnectionSettings, user: User , max: number = 50, offset: number = 0, filter: WorkflowFilter) {
+    deleteFiltered(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User , max: number = 50, offset: number = 0, filter: WorkflowFilter) {
         return Axios.post(process.env.API_NAME, 
-            [ this.createJmxExecRequest(connectionSettings, { operation: 'deleteFiltered(javax.management.openmbean.CompositeData)', arguments: [this.createWorkflowFilter(connectionSettings, filter.states, max, offset, filter)] }) ], {
+            [ this.createJmxExecRequest(connectionSettings, mbeans, { operation: 'deleteFiltered(javax.management.openmbean.CompositeData)', arguments: [this.createWorkflowFilter(connectionSettings, filter.states, max, offset, filter)] }) ], {
                 auth: { username: user.name, password: user.password }
             })
         .then(this.parseVoidResponse)
@@ -183,9 +199,9 @@ export class JmxService {
         });
     }
 
-    restartFiltered(connectionSettings: ConnectionSettings, user: User , max: number = 50, offset: number = 0, filter: WorkflowFilter) {
+    restartFiltered(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User , max: number = 50, offset: number = 0, filter: WorkflowFilter) {
         return Axios.post(process.env.API_NAME, [
-            this.createJmxExecRequest(connectionSettings, { operation: 'restartFiltered(javax.management.openmbean.CompositeData)', arguments: [this.createWorkflowFilter(connectionSettings, filter.states, max, offset, filter)]  })
+            this.createJmxExecRequest(connectionSettings, mbeans, { operation: 'restartFiltered(javax.management.openmbean.CompositeData)', arguments: [this.createWorkflowFilter(connectionSettings, filter.states, max, offset, filter)]  })
             ], {
                 auth: { username: user.name, password: user.password }
             })
@@ -195,8 +211,8 @@ export class JmxService {
         });
     }
 
-    private buildRestartAllRequest = (connectionSettings: ConnectionSettings) => [
-        this.createJmxExecRequest(connectionSettings, {
+    private buildRestartAllRequest = (connectionSettings: ConnectionSettings, mbeans: MBeans) => [
+        this.createJmxExecRequest(connectionSettings, mbeans, {
             operation: 'restartAll()',
             arguments: [], 
         })
@@ -213,17 +229,17 @@ export class JmxService {
         };
     }
 
-    private createWfRepoRequest(connectionSettings: ConnectionSettings) {
+    private createWfRepoRequest(connectionSettings: ConnectionSettings, mbeans: MBeans) {
         return {
             type: 'read',
-            mbean: connectionSettings.wfRepoMBean,
+            mbean: mbeans.wfRepoMBean,
             target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
         };
     }
-    private createEngineInfoRequest(connectionSettings: ConnectionSettings) {
+    private createEngineInfoRequest(connectionSettings: ConnectionSettings, mbeans: MBeans) {
         return {
             type: 'read',
-            mbean: connectionSettings.engineMBean,
+            mbean: mbeans.engineMBean,
             attribute: ['EngineId', 'EngineType', 'State'],
             target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
         };
@@ -245,21 +261,22 @@ export class JmxService {
         };
     }
 
-    private createQueryBrokenWFRequest(connectionSettings: ConnectionSettings, max: number, offset: number, filter: WorkflowFilter) {
-        return this.createJmxExecRequest(connectionSettings, {
+    private createQueryBrokenWFRequest(connectionSettings: ConnectionSettings, mbeans: MBeans, max: number, offset: number, filter: WorkflowFilter) {
+        return this.createJmxExecRequest(connectionSettings, mbeans, {
             operation: 'queryWorkflowInstances(javax.management.openmbean.CompositeData)',
             arguments: [this.createWorkflowFilter(connectionSettings, filter.states, max, offset, filter)], // get workflows with status Invalid
         });
     }
-    private createCountBrokenWFRequest(connectionSettings: ConnectionSettings) {
-        return this.createJmxExecRequest(connectionSettings, {
+
+    private createCountWFRequest(connectionSettings: ConnectionSettings, mbeans: MBeans, states: State[]) {
+        return this.createJmxExecRequest(connectionSettings, mbeans, {
             operation: 'countWorkflowInstances(javax.management.openmbean.CompositeData)',
-            arguments: [this.createWorkflowFilter(connectionSettings, [State.ERROR, State.INVALID])], // get workflows with status Invalid
+            arguments: [this.createWorkflowFilter(connectionSettings, states)], // get workflows with status Invalid
         });
     }
 
-    private createEngineActivityRequest(connectionSettings: ConnectionSettings) {
-        return this.createJmxExecRequest(connectionSettings, {
+    private createEngineActivityRequest(connectionSettings: ConnectionSettings, mbeans: MBeans) {
+        return this.createJmxExecRequest(connectionSettings, mbeans, {
             operation: 'queryEngineActivity',
             arguments: [connectionSettings.fetchPeriod], // fetch info for last N minutes
         });
@@ -285,18 +302,18 @@ export class JmxService {
         };
     }
 
-    private createJmxExecRequest(connectionSettings, uniquePart: {}) {
-        return Object.assign(this.createJmxExecRequstBase(connectionSettings), uniquePart);
+    private createJmxExecRequest(connectionSettings, mbeans: MBeans, uniquePart: {}) {
+        return Object.assign(this.createJmxExecRequstBase(connectionSettings, mbeans), uniquePart);
     }
 
     private createPoolExecRequest(connectionSettings, uniquePart: {}) {
         return Object.assign(this.createPoolExecRequstBase(connectionSettings), uniquePart);
     }
 
-    private createJmxExecRequstBase(connectionSettings: ConnectionSettings) {
+    private createJmxExecRequstBase(connectionSettings: ConnectionSettings, mbeans: MBeans) {
         return {
             type: 'EXEC',
-            mbean: connectionSettings.engineMBean,
+            mbean: mbeans.engineMBean,
             target: {
                 url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi`
             }
@@ -406,6 +423,25 @@ export class JmxService {
         return response.data[0].value.sourceCode;
     }
 
+    private parseChartCountResponse = (response): StatesPrint => {
+        console.log('chart responce', response.data);
+        if (!response || !response.data
+            || response.data.length < 5
+            || !this.isSubResponseValid(response.data[0])
+            || !this.isSubResponseValid(response.data[1])
+            || !this.isSubResponseValid(response.data[2])
+            || !this.isSubResponseValid(response.data[3])
+            || !this.isSubResponseValid(response.data[4])
+            || !this.isSubResponseValid(response.data[5])
+        ) {
+            console.log('Invalid responce:', response);          
+            throw new Error('invalid response!');
+        }
+
+        return new StatesPrint(new Date(response.data[0].timestamp * 1000),
+        response.data[0].value, response.data[1].value, response.data[2].value, response.data[3].value, response.data[4].value, response.data[5].value);
+    }
+
     private parseBrokenWorkflowsResponse = (response): WorkflowInfo[] => {
         if (!response || !response.data
             || response.data.length < 1
@@ -414,7 +450,8 @@ export class JmxService {
             console.log('Invalid responce:', response);          
             throw new Error('invalid response!');
         }
-        return response.data[0].value as WorkflowInfo[];
+
+        return response.data[0].value.map(info => Object.assign(new WorkflowInfo(), info));
     }
 
     private isSubResponseValid(subResponse) {

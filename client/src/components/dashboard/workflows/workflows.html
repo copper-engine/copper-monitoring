@@ -30,7 +30,7 @@
                             {{ (page - 1) * perPage + i + 1 }}
                         </v-flex>  
                         <v-flex class="data">
-                            {{ workflow.dataAsString }}
+                            {{ workflow.workflowClassInfo.alias }}
                         </v-flex>  
                         <v-flex class="priority">
                             {{ workflow.priority }}
@@ -42,11 +42,13 @@
                             {{ workflow.state }}
                         </v-flex>
                         <v-flex class="timeout">
-                            {{ workflow.timeout }}
+                            <span v-if="workflow.timeout">
+                                {{ workflow.timeout | moment("HH:mm DD/MM/YYYY") }}
+                            </span>
                         </v-flex>
                         <v-flex class="timestamps">
                             <div class="errorTS">
-                                {{ workflow.errorData.errorTS | moment("HH:mm DD/MM/YYYY") }}
+                                {{ !workflow.errorData ? '' : workflow.errorData.errorTS | moment("HH:mm DD/MM/YYYY") }}
                             </div>
                             <div class="lastModTS">
                                 {{ workflow.lastModTS | moment("HH:mm DD/MM/YYYY") }}
@@ -104,10 +106,14 @@
                                 <v-flex class="detail-label"> Workflow ID:</v-flex>
                                 <v-flex class="text"> {{workflow.id}} </v-flex>                               
                             </v-layout>
+                            <v-layout class="workflow-detail workflow-id">
+                                <v-flex class="detail-label"> Workflow Data:</v-flex>
+                                <v-flex class="text"> {{ workflow.dataAsString }} </v-flex>                               
+                            </v-layout>
                             <v-layout class="workflow-detail class-info" row>
                                 <v-flex class="detail-label">Class:</v-flex>
                                 <v-flex class="text">
-                                    {{workflow.workflowClassInfo.alias}} ({{workflow.workflowClassInfo.classname}})                                   
+                                    {{workflow.workflowClassInfo.classname}}                                  
                                 </v-flex> 
                                 <v-spacer></v-spacer>
                                 <v-flex class="stopGrow raise">
@@ -121,9 +127,20 @@
                                 </v-flex>
                             </v-layout>
                             <v-layout class="workflow-detail stacktrace">
+                                <v-flex class="detail-label">Last waiting Stack Trace:</v-flex>
+                                <v-flex class="text">
+                                    <code v-show="workflow.lastWaitStackTrace">
+                                        {{ workflow.lastWaitStackTrace }}
+                                    </code>
+                                    <span v-show="!workflow.lastWaitStackTrace">There is no waiting stack trace</span>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout class="workflow-detail stacktrace">
                                 <v-flex class="detail-label">Error Stack Trace:</v-flex>
                                 <v-flex class="text">
-                                    <code>{{ workflow.errorData.exceptionStackTrace }}</code>
+                                    <code>
+                                        {{ workflow.errorData ? workflow.errorData.exceptionStackTrace : '' }}
+                                    </code>
                                 </v-flex>
                             </v-layout>
                         </div>
@@ -140,8 +157,10 @@
                     <v-btn depressed class="squareButton" color="primary" @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>      
             </v-card-title>
             <v-divider></v-divider>
-            <v-card-text>                              
-                <code class="codeDialog">{{ dialogSourceCode || 'No Source Code Available' }}</code>
+            <v-card-text>
+                <div>
+                    <source-code :sourceCode="dialogSourceCode" :highliteLines="dialogHighlitedlines"></source-code>
+                </div>
             </v-card-text>
         </v-card>
     </v-dialog>

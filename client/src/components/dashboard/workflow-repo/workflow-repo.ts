@@ -1,11 +1,15 @@
 import { Vue, Component} from 'vue-property-decorator';
 import { WorkflowRepo } from '../../../models/engine';
 import { JmxService } from '../../../services/jmxService';
-import * as utils from '../../../util/utils';
+import { parseSourceCode } from '../../../util/utils';
 import './workflow-repo.scss';
 
+const sourceCodeComponent = () => import('./../../core/source-code').then(({ SourceCodeComponent }) => SourceCodeComponent);
 @Component({
-    template: require('./workflow-repo.html')
+    template: require('./workflow-repo.html'),
+    components: {
+        'source-code': sourceCodeComponent,
+    }
 })
 export class WorkflowRepository extends Vue {
 
@@ -22,14 +26,15 @@ export class WorkflowRepository extends Vue {
     perPageItems: number[] = [10, 15, 25, 50];
 
     created() {
-        this.jmxService.getWfRepo(this.$store.state.connectionSettings, this.$store.state.user).then((response: WorkflowRepo) => {
+        this.jmxService.getWfRepo(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user).then((response: WorkflowRepo) => {
             this.wfRepo = response;
-            this.wfRepo.workFlowInfo.map((workflow, index) => {
-                this.wfRepo.workFlowInfo[index].sourceCode = utils.parseSourceCode(workflow.sourceCode);
-            });
+            // this.wfRepo.workFlowInfo.map((workflow, index) => {
+            //     this.wfRepo.workFlowInfo[index].sourceCode = parseSourceCode(workflow.sourceCode);
+            //     this.wfRepo.workFlowInfo[index].sourceCodeLines = workflow.sourceCode.split('\n');
+            // });
         });
     }
-
+    
     toggleOpen(index) {
         this.wfRepo.workFlowInfo[index].open = !this.wfRepo.workFlowInfo[index].open;
         this.$forceUpdate();

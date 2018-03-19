@@ -1,0 +1,59 @@
+.source-code {
+    background: #f5f5f5;
+    padding: 20px 0;
+    border-radius: 0.3em;
+
+    code {
+        color: #4e5454;
+        
+        .token.function {
+            color: #0e5a4e;
+        }
+        .token.punctuation {
+            color: #696663;
+        }
+        .token.operator, .token.entity, .token.url, .language-css .token.string, .style .token.string {
+            color: #c76c12;
+            background: none;
+        }
+    }
+
+    .code-line {
+        padding: 0 30px 0 15px;
+        width: 100%;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+    .line-number {
+        background: #ecece8ab;   
+        color: rgb(105, 105, 105);
+        // padding: 0 15px 0 15px;
+        text-align: center;
+        width: 50px;
+        min-width: 50px;
+        max-width: 50px;
+        border-right: 1px solid #ababab;
+
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer */
+        -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
+        -webkit-user-select: none; /* Chrome, Safari, and Opera */
+        -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
+    }
+
+    .highlited-line, .highlited-line-info {
+        background: rgb(238, 225, 152);
+        .code-line {
+            background: rgb(238, 225, 152);
+        }
+    }
+
+    .highlited-line-error {
+        background: #ffb6b6;
+        .code-line {
+            background: #ffb6b6;
+        }
+    }
+
+
+}

@@ -1,0 +1,23 @@
+.statistics {
+    width: 100%;
+
+    h2 {
+        // color: #f5f5f5;
+        padding-bottom: 15px;
+    }
+
+    .state-filter {
+        padding: 30px 0 0 40px;
+    }
+
+    .chart {
+        // background: #303030;
+        margin: 0  auto 30px auto;
+        padding: 15px;
+
+        .title {
+            padding-bottom: 15px;
+            text-align: center; 
+        }
+    }
+}

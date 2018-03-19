@@ -1,0 +1,16 @@
+<div class="source-code">
+    <template v-for="(line, i) in lines">
+
+        <v-layout v-if="!highlites.get(i + 1)">
+            <v-flex class="line-number">{{ i + 1 }}</v-flex>
+            <v-flex><code class="code-line" v-html="line"></code></v-flex>
+        </v-layout>
+        <v-tooltip top v-if="highlites.get(i + 1)" open-delay="0">
+            <v-layout slot="activator" class="highlited-line" :class="[ 'highlited-line-' + highlites.get(i + 1).style ]" >
+                <v-flex class="line-number">{{ i + 1 }}</v-flex>
+                <v-flex ><code class="code-line" v-html="line"></code></v-flex>
+            </v-layout>
+            <span>{{highlites.get(i + 1).message}}</span>
+            </v-tooltip>
+    </template>
+</div>

@@ -6,7 +6,7 @@ code:after, kbd:after, code:before, kbd:before {
     .code {
         padding: 30px;
         min-width: 783px;
-        min-height: 500px;
+        min-height: 200px;
     }
 }
 .card__text {
@@ -68,7 +68,8 @@ code:after, kbd:after, code:before, kbd:before {
                         border-radius: 3px;
                         code {
                             border-radius: 3px 3px 0px 0px;
-                            padding: 30px;
+                            padding: 10px 30px; 
+                            min-width: 100%;
                         }
                     }
                     .workflow-id {
@@ -133,9 +134,9 @@ code:after, kbd:after, code:before, kbd:before {
         }
     }
     .timeout {
-        width: 80px;
-        min-width: 80px;
-        max-width: 80px;
+        width: 140px;
+        min-width: 140px;
+        max-width: 140px;
     }
     .priority,
     .state {

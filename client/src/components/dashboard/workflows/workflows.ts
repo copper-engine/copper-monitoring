@@ -5,9 +5,12 @@ import { Notification } from '../../../models/notification';
 import { JmxService } from '../../../services/jmxService';
 import * as utils from '../../../util/utils';
 
-import './workflows.scss';
 import { ConnectionSettings } from '../../../models/connectionSettings';
 import { User } from '../../../models/user';
+import { MBeans } from '../../../models/mbeans';
+import { HighlitedLine } from '../../../models/highlited-line';
+
+import './workflows.scss';
 
 export class WorkflowContext {
     public open: boolean = false;
@@ -17,6 +20,7 @@ export class WorkflowContext {
     public deleteButton: boolean = false;
 }
 
+const sourceCodeomponent = () => import('./../../core/source-code').then(({ SourceCodeComponent }) => SourceCodeComponent);
 const WorkflowHeading = () => import('./workflow-header').then(({ WorkflowHeading }) => WorkflowHeading);
 const WorkflowFooter = () => import('./workflow-footer').then(({ WorkflowFooter }) => WorkflowFooter);
 
@@ -25,7 +29,8 @@ const WorkflowFooter = () => import('./workflow-footer').then(({ WorkflowFooter 
     services: ['jmxService', 'eventHub'],
     components: {
         'workflow-heading': WorkflowHeading,
-        'workflow-footer': WorkflowFooter
+        'workflow-footer': WorkflowFooter,
+        'source-code': sourceCodeomponent,
     }
 })
 export class WorkflowsComponent extends Vue {
@@ -42,6 +47,7 @@ export class WorkflowsComponent extends Vue {
     deletingAll = false;
     dialog = false;
     dialogSourceCode = null;
+    dialogHighlitedlines: HighlitedLine[] = null;
     sourceCodeAvailable = true;
     filter: WorkflowFilter = new WorkflowFilter;
 
@@ -75,7 +81,7 @@ export class WorkflowsComponent extends Vue {
     }
 
     private getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User, filter: WorkflowFilter) {
-        this.jmxService.getBrokenWorkflows(connectionSettings, user, this.perPage, (this.page - 1) * this.perPage, filter).then((response: WorkflowInfo[]) => {
+        this.jmxService.getBrokenWorkflows(connectionSettings, this.$store.state.mbeans, user, this.perPage, (this.page - 1) * this.perPage, filter).then((response: WorkflowInfo[]) => {
             this.workflows = response;
         });
     }
@@ -94,7 +100,7 @@ export class WorkflowsComponent extends Vue {
     }
 
     restartAll() {
-        this.jmxService.restartAll(this.$store.state.connectionSettings, this.$store.state.user)
+        this.jmxService.restartAll(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user)
             .then((done) => {
                 this.restartingAll = false;
                 this.forceStatusFetch(1500);
@@ -116,7 +122,7 @@ export class WorkflowsComponent extends Vue {
     }
 
     restartFiltered(newFilter: WorkflowFilter) {
-        this.jmxService.restartFiltered(this.$store.state.connectionSettings, this.$store.state.user, 0, 0, newFilter)
+        this.jmxService.restartFiltered(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user, 0, 0, newFilter)
             .then((done) => {
                 this.restartingAll = false;
                 this.forceStatusFetch(1500);
@@ -138,7 +144,7 @@ export class WorkflowsComponent extends Vue {
 
     deleteFiltered(newFilter: WorkflowFilter) {
         this.page = 1;
-        this.jmxService.deleteFiltered(this.$store.state.connectionSettings, this.$store.state.user, 0, 0, newFilter)
+        this.jmxService.deleteFiltered(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user, 0, 0, newFilter)
             .then((done) => {
                 this.deletingAll = false;
                 this.forceStatusFetch(500);
@@ -161,7 +167,7 @@ export class WorkflowsComponent extends Vue {
 
     restart(id: string) {
         this.toggleButtons(id, 'restart');
-        this.jmxService.restart(this.$store.state.connectionSettings, id, this.$store.state.user)
+        this.jmxService.restart(this.$store.state.connectionSettings, this.$store.state.mbeans, id, this.$store.state.user)
         .then((done) => {
             this.toggleButtons(id, 'restart');
             if (done) {
@@ -180,7 +186,7 @@ export class WorkflowsComponent extends Vue {
 
     deleteBroken(id: string) {
         this.toggleButtons(id, 'delete');
-        this.jmxService.deleteBroken(this.$store.state.connectionSettings, id, this.$store.state.user)
+        this.jmxService.deleteBroken(this.$store.state.connectionSettings, this.$store.state.mbeans, id, this.$store.state.user)
         .then((done) => {
             // this.forceStatusFetch();
             this.toggleButtons(id, 'delete');
@@ -244,15 +250,25 @@ export class WorkflowsComponent extends Vue {
 
     showSourceCode(workflow: WorkflowInfo) {
         this.jmxService.getSourceCode(this.$store.state.connectionSettings, this.$store.state.user, workflow.workflowClassInfo.classname)
-        .then((response) => {
-            if ((String(response).trim()).toLowerCase() !== 'na') {  
-                this.dialogSourceCode = utils.parseSourceCode(String(response));
+        .then((sourceCode) => {
+            if (sourceCode && (sourceCode as string).trim().toLowerCase() !== 'na') {  
+                this.dialogSourceCode = sourceCode;
                 this.sourceCodeAvailable = true;
+                this.dialogHighlitedlines = [];
+
+                let waitPos = workflow.getLastWaitingLineNum();
+                if (waitPos !== -1) {
+                    this.dialogHighlitedlines.push(new HighlitedLine(waitPos, 'Last wait position'));
+                }
+
+                let errorPos = workflow.getErrorLineNum();
+                if (errorPos) {
+                    this.dialogHighlitedlines.push(new HighlitedLine(errorPos, 'Error position', 'error'));
+                } 
             } else {
                 this.dialogSourceCode = 'No Source Code Available';
                 this.sourceCodeAvailable = false;
             }
-            
             this.dialog = true;
         });
     }
@@ -277,6 +293,7 @@ export class WorkflowsComponent extends Vue {
             this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
         }, this.$store.state.connectionSettings.updatePeriod * 1000);
     }
+
     @Watch('page')
     @Watch('perPage')
     private forceStatusFetch(delay: number = 0) {

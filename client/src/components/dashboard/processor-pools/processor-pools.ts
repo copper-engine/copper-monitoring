@@ -1,4 +1,4 @@
-import { Vue, Component} from 'vue-property-decorator';
+import { Vue, Component, Watch} from 'vue-property-decorator';
 import { JmxService } from '../../../services/jmxService';
 import { ProcessorPool } from '../../../models/engine';
 import { Notification } from '../../../models/notification';
@@ -17,11 +17,18 @@ import './processor-pools.scss';
 export class ProcessorPools extends Vue {
     private jmxService: JmxService = this.$services.jmxService;
     private eventHub: Vue = this.$services.eventHub;
+    fetchPoolInterval: any;
     processorPools: ProcessorPool[] = [];
     
 
     created() {
         this.getProcessorPools();
+    }
+    mounted() {
+        this.scheduleFetchPools();
+    }
+    beforeDestroy() {
+        clearInterval(this.fetchPoolInterval);
     }
 
     getProcessorPools() {
@@ -77,6 +84,17 @@ export class ProcessorPools extends Vue {
                 this.showError('Unable to suspend deque');
             }
         });
+    }
+
+    @Watch('$store.state.connectionSettings')
+    scheduleFetchPools() {
+        if (this.fetchPoolInterval) {
+            clearInterval(this.fetchPoolInterval);
+        }
+        this.getProcessorPools();
+        this.fetchPoolInterval = setInterval(() => {
+            this.getProcessorPools();
+        }, this.$store.state.connectionSettings.updatePeriod * 1000);
     }
     
     private showSuccess(message: string) {

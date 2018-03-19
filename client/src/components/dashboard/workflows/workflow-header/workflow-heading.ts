@@ -2,25 +2,9 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { JmxService } from '../../../../services/jmxService';
 import { WorkflowRepo, WorkflowFilter, State } from '../../../../models/engine';
 import { Datetime } from 'vue-datetime';
+import { FilterTime } from '../../../../models/filter-time';
 import './workflow-heading.scss';
 
-export class FilterTime {
-    public fromSelect = null;
-    public fromType = null;
-    public from = null;
-    public toSelect = null;
-    public toType = null;
-    public to = null;
-
-    public clear() {
-        this.fromSelect = null;
-        this.fromType = null;
-        this.from = null;
-        this.toSelect = null;
-        this.toType = null;
-        this.to = null;
-    }
-}
 @Component({
     template: require('./workflow-heading.html'),
     components: {

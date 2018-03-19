@@ -1,6 +1,6 @@
 <div class="workflows" :class="{'fade': disabled}">
 
-    <workflowHeading 
+    <workflow-heading 
     @triggerRestartAll="restartAll"
     @triggerApplyFilter="applyFilter($event)"
     @triggerRestartFiltered="restartFiltered($event)"
@@ -8,7 +8,7 @@
     :engineStatus="status"
     :restartingAll="restartingAll"
     :deletingAll="deletingAll">
-    </workflowHeading>
+    </workflow-heading>
     
     <v-layout class="workflows-cont" column>
         <v-card v-show="!workflows || workflows.length === 0" class="secondary">
@@ -146,13 +146,13 @@
         </v-card>
     </v-dialog>
 
-    <workflowFooter
+    <workflow-footer
     @updatePage="page = $event"
     @updatePerPage="perPage = $event"
     :page="page"
     :perPage="perPage"
     :totalPages="totalPages"
     :perPageItems="perPageItems">
-    </workflowFooter>
+    </workflow-footer>
 
 </div>

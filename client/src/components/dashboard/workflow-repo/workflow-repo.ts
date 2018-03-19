@@ -2,10 +2,10 @@ import { Vue, Component} from 'vue-property-decorator';
 import { WorkflowRepo } from '../../../models/engine';
 import { JmxService } from '../../../services/jmxService';
 import * as utils from '../../../util/utils';
-import './workflowRepo.scss';
+import './workflow-repo.scss';
 
 @Component({
-    template: require('./workflowRepo.html')
+    template: require('./workflow-repo.html')
 })
 export class WorkflowRepository extends Vue {
 

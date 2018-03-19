@@ -2,7 +2,7 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { JmxService } from '../../../../services/jmxService';
 import { WorkflowRepo, WorkflowFilter, State } from '../../../../models/engine';
 import { Datetime } from 'vue-datetime';
-import './workflowHeading.scss';
+import './workflow-heading.scss';
 
 export class FilterTime {
     public fromSelect = null;
@@ -22,7 +22,7 @@ export class FilterTime {
     }
 }
 @Component({
-    template: require('./workflowHeading.html'),
+    template: require('./workflow-heading.html'),
     components: {
         datetime: Datetime
     }

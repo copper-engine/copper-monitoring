@@ -1,7 +1,7 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 
 @Component({
-    template: require('./workflowFooter.html'),
+    template: require('./workflow-footer.html'),
 })
 export class WorkflowFooter extends Vue {
     @Prop() page: Number;

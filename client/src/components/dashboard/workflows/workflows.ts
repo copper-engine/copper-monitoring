@@ -24,8 +24,8 @@ const WorkflowFooter = () => import('./workflow-footer').then(({ WorkflowFooter 
     template: require('./workflows.html'),
     services: ['jmxService', 'eventHub'],
     components: {
-        'workflowHeading': WorkflowHeading,
-        'workflowFooter': WorkflowFooter
+        'workflow-heading': WorkflowHeading,
+        'workflow-footer': WorkflowFooter
     }
 })
 export class WorkflowsComponent extends Vue {

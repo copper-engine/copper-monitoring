@@ -73,6 +73,11 @@
                     width: 100%;
                     opacity: 0;
                 }
+                z-index: 1;
+            }
+
+            .date-click-decorator{
+                z-index: 2;
             }
             .input-group__details {
                 min-height: 0px !important;

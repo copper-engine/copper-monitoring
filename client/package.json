@@ -29,11 +29,13 @@
   },
   "dependencies": {
     "axios": "~0.18.0",
+    "chart.js": "^2.7.2",
     "element-ui": "^2.2.1",
     "luxon": "^0.5.3",
     "mdi": "^2.1.19",
     "uiv": "^0.14.1",
     "vue": "~2.5.8",
+    "vue-chartjs": "^3.2.1",
     "vue-class-component": "~6.1.0",
     "vue-container": "^1.1.1",
     "vue-datetime": "^1.0.0-beta.3",

@@ -46,6 +46,26 @@ export class WorkflowHeading extends Vue {
         'Invalid'
     ];
 
+    clickedFromDate(dateTimeName, dateTimeRef) {
+        if (this[dateTimeName]['fromSelect'] === null || this[dateTimeName]['fromSelect'] === '') {
+            this[dateTimeName]['fromSelect'] = this.formatTimeForSelect(this.getNow('0000'));
+        }
+        this.emitClick(dateTimeRef);
+    }
+    clickedToDate(dateTimeName, dateTimeRef) {
+        if (this[dateTimeName]['toSelect'] === null || this[dateTimeName]['toSelect'] === '') {
+            this[dateTimeName]['toSelect'] = this.formatTimeForSelect(this.getNow('2359'));
+        }
+        this.emitClick(dateTimeRef);
+    }
+
+    emitClick(dateTimeRef) {
+        let elem = (this as any).$refs[dateTimeRef];
+        let event = new Event('click');
+        elem.$el.dispatchEvent(event);
+        elem.open(event);
+    }
+
     @Watch('createTime.fromSelect')
     formatCreateFromSelect() {
         if (this.createTime.fromSelect != null) {
@@ -122,6 +142,22 @@ export class WorkflowHeading extends Vue {
     }
     formatTimeForSelect(time) {
         return time.substr(0, 4) + '-' + time.substr(4, 2) + '-' + time.substr(6, 2) + 'T' + time.substr(8, 2) + ':' + time.substr(10, 2);
+    }
+
+    getNow(addition: string) {
+        let date = new Date();
+        let now = String(date.getFullYear());
+        if (date.getMonth() > 8) {
+            now = now + (date.getMonth() + 1);
+        } else {
+            now = now + '0' + (date.getMonth() + 1);
+        }
+        if (date.getDate() > 9) {
+            now = now + date.getDate() + addition;
+        } else {
+            now = now + '0' + date.getDate() + addition;
+        }
+        return now;
     }
 
     dateCheck(date) {

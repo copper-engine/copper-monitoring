@@ -63,25 +63,25 @@
                 <v-layout class="time-field-container">
                     <v-flex class="stopGrow time-field">
                         <v-text-field class="date-time-text"
-                        v-model="createTimeFromType"
+                        v-model="createTime.fromType"
                         label="Created - From"
                         mask="####-##-## ##:##"
                         hint="YYYY-MM-DD HH:MM"
                         :rules="[dateCheck]"
                         append-icon="event">
                         </v-text-field>
-                        <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="createTimeFromSelect"></datetime>
+                        <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="createTime.fromSelect"></datetime>
                     </v-flex>
                     <v-flex class="stopGrow time-field">
                         <v-text-field
-                        v-model="createTimeToType"
+                        v-model="createTime.toType"
                         label="To"
                         mask="####-##-## ##:##"
                         hint="YYYY-MM-DD HH:MM"
                         :rules="[dateCheck]"
                         append-icon="event">
                         </v-text-field>
-                        <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="createTimeToSelect"></datetime>
+                        <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="createTime.toSelect"></datetime>
                     </v-flex>
                 </v-layout>
                 <v-btn depressed color="primary" @click="clearFilter" class="longButton"><v-icon left>mdi-cancel</v-icon>Clear</v-btn>         
@@ -97,25 +97,25 @@
                 <v-layout class="time-field-container">
                     <v-flex class="stopGrow time-field">
                         <v-text-field
-                        v-model="modTimeFromType"
+                        v-model="modTime.fromType"
                         label="Modified - From"
                         mask="####-##-## ##:##"
                         hint="YYYY-MM-DD HH:MM"
                         :rules="[dateCheck]"
                         append-icon="event">
                         </v-text-field>
-                        <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="modTimeFromSelect"></datetime>
+                        <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="modTime.fromSelect"></datetime>
                     </v-flex>
                     <v-flex class="stopGrow time-field">
                         <v-text-field
-                        v-model="modTimeToType"
+                        v-model="modTime.toType"
                         label="To"
                         mask="####-##-## ##:##"
                         hint="YYYY-MM-DD HH:MM"
                         :rules="[dateCheck]"
                         append-icon="event">
                         </v-text-field>
-                        <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="modTimeToSelect"></datetime>
+                        <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="modTime.toSelect"></datetime>
                     </v-flex>
                 </v-layout>
                 <v-btn depressed color="primary" @click="applyFilter" class="longButton"><v-icon left>mdi-check</v-icon>Apply</v-btn>

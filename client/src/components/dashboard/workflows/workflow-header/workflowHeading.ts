@@ -4,6 +4,23 @@ import { WorkflowRepo, WorkflowFilter, State } from '../../../../models/engine';
 import { Datetime } from 'vue-datetime';
 import './workflowHeading.scss';
 
+export class FilterTime {
+    public fromSelect = null;
+    public fromType = null;
+    public from = null;
+    public toSelect = null;
+    public toType = null;
+    public to = null;
+
+    public clear() {
+        this.fromSelect = null;
+        this.fromType = null;
+        this.from = null;
+        this.toSelect = null;
+        this.toType = null;
+        this.to = null;
+    }
+}
 @Component({
     template: require('./workflowHeading.html'),
     components: {
@@ -19,104 +36,92 @@ export class WorkflowHeading extends Vue {
     filterApplied: boolean = false;
     currentFilters: string[][] = [];
     currentFilterObject: WorkflowFilter;
-    states = [];
-    classNames = null;
-    modTimeFromSelect = null;
-    modTimeFromType = null;
-    modTimeFrom = null;
-    modTimeToSelect = null;
-    modTimeToType = null;
-    modTimeTo = null;
-    createTimeFromSelect = null;
-    createTimeFromType = null;
-    createTimeFrom = null;
-    createTimeToSelect = null;
-    createTimeToType = null;
-    createTimeTo = null;
+    states: string[] = [];
+    classNames: string = null;
+    modTime: FilterTime = new FilterTime;
+    createTime: FilterTime = new FilterTime;
     possibleClassnames = [];
     possibleStates = [
         'Error',
         'Invalid'
     ];
 
-    @Watch('createTimeFromSelect')
+    @Watch('createTime.fromSelect')
     formatCreateFromSelect() {
-        if (this.createTimeFromSelect != null) {
-            let time = this.createTimeFromSelect;
-            this.createTimeFrom = this.formatTime(time, 'forMain');
-            this.createTimeFromType = this.formatTime(time, 'forType');
+        if (this.createTime.fromSelect != null) {
+            let time = this.createTime.fromSelect;
+            this.createTime.from = this.formatTimeForMain(time);
+            this.createTime.fromType = this.formatTimeForType(time);
         }
     }
-    @Watch('createTimeFromType')
+    @Watch('createTime.fromType')
     formatCreateTimeFromType() {
-        if (this.createTimeFromType != null && this.createTimeFromType.length > 11) {
-            let time = this.createTimeFromType;
-            this.createTimeFrom = this.formatTime(time, 'forMain');
-            this.createTimeFromSelect = this.formatTime(time, 'forSelect');
+        if (this.createTime.fromType != null && this.createTime.fromType.length > 11) {
+            let time = this.createTime.fromType;
+            this.createTime.from = this.formatTimeForMain(time);
+            this.createTime.fromSelect = this.formatTimeForSelect(time);
         }
     }
 
-    @Watch('createTimeToSelect')
+    @Watch('createTime.toSelect')
     formatCreateToSelect() {
-        if (this.createTimeToSelect != null) {
-            let time = this.createTimeToSelect;
-            this.createTimeTo = this.formatTime(time, 'forMain');
-            this.createTimeToType = this.formatTime(time, 'forType');
+        if (this.createTime.toSelect != null) {
+            let time = this.createTime.toSelect;
+            this.createTime.to = this.formatTimeForMain(time);
+            this.createTime.toType = this.formatTimeForType(time);
         }
     }
-    @Watch('createTimeToType')
+    @Watch('createTime.toType')
     formatCreateTimeToType() {
-        if (this.createTimeToType != null && this.createTimeToType.length > 11) {
-            let time = this.createTimeToType;
-            this.createTimeTo = this.formatTime(time, 'forMain');
-            this.createTimeToSelect = this.formatTime(time, 'forSelect');
+        if (this.createTime.toType != null && this.createTime.toType.length > 11) {
+            let time = this.createTime.toType;
+            this.createTime.to = this.formatTimeForMain(time);
+            this.createTime.toSelect = this.formatTimeForSelect(time);
         }
     }
 
-    @Watch('modTimeFromSelect')
+    @Watch('modTime.fromSelect')
     formatModFromSelect() {
-        if (this.modTimeFromSelect != null) {
-            let time = this.modTimeFromSelect;
-            this.modTimeFrom = this.formatTime(time, 'forMain');
-            this.modTimeFromType = this.formatTime(time, 'forType');
+        if (this.modTime.fromSelect != null) {
+            let time = this.modTime.fromSelect;
+            this.modTime.from = this.formatTimeForMain(time);
+            this.modTime.fromType = this.formatTimeForType(time);
         }
     }
-    @Watch('modTimeFromType')
+    @Watch('modTime.fromType')
     formatModTimeFromType() {
-        if (this.modTimeFromType != null && this.modTimeFromType.length > 11) {
-            let time = this.modTimeFromType;
-            this.modTimeFrom = this.formatTime(time, 'forMain');
-            this.modTimeFromSelect = this.formatTime(time, 'forSelect');
+        if (this.modTime.fromType != null && this.modTime.fromType.length > 11) {
+            let time = this.modTime.fromType;
+            this.modTime.from = this.formatTimeForMain(time);
+            this.modTime.fromSelect = this.formatTimeForSelect(time);
         }
     }
 
-    @Watch('modTimeToSelect')
+    @Watch('modTime.toSelect')
     formatModToSelect() {
-        if (this.modTimeToSelect != null) {
-            let time = this.modTimeToSelect;
-            this.modTimeTo = this.formatTime(time, 'forMain');
-            this.modTimeToType = this.formatTime(time, 'forType');
+        if (this.modTime.toSelect != null) {
+            let time = this.modTime.toSelect;
+            this.modTime.to = this.formatTimeForMain(time);
+            this.modTime.toType = this.formatTimeForType(time);
         }
     }
-    @Watch('modTimeToType')
+    @Watch('modTime.toType')
     formatModTimeToType() {
-        if (this.modTimeToType != null && this.modTimeToType.length > 11) {
-            let time = this.modTimeToType;
-            this.modTimeTo = this.formatTime(time, 'forMain');
-            this.modTimeToSelect = this.formatTime(time, 'forSelect');
+        if (this.modTime.toType != null && this.modTime.toType.length > 11) {
+            let time = this.modTime.toType;
+            this.modTime.to = this.formatTimeForMain(time);
+            this.modTime.toSelect = this.formatTimeForSelect(time);
         }
     }
 
-    formatTime(time, type: string) {
-        if (type === 'forMain') {
-            return time.substr(0, 4) + '/' + time.substr(5, 2) + '/' + time.substr(8, 2) + ' ' + time.substr(11, 2) + ':' + time.substr(14, 2);
-        }
-        else if (type === 'forType') {
-            return time.substr(0, 4) + time.substr(5, 2) + time.substr(8, 2) + time.substr(11, 2) + time.substr(14, 2);
-        }
-        else if (type === 'forSelect') {
-            return time.substr(0, 4) + '-' + time.substr(4, 2) + '-' + time.substr(6, 2) + 'T' + time.substr(8, 2) + ':' + time.substr(10, 2);
-        }
+    formatTimeForMain(time) {
+        return time.substr(0, 4) + '/' + time.substr(5, 2) + '/' + time.substr(8, 2) + ' ' + time.substr(11, 2) + ':' + time.substr(14, 2);
+    }
+    formatTimeForType(time) {
+        return time.substr(0, 4) + time.substr(5, 2) + time.substr(8, 2) + time.substr(11, 2) + time.substr(14, 2);
+    }
+    formatTimeForSelect(time) {
+        return time.substr(0, 4) + '-' + time.substr(4, 2) + '-' + time.substr(6, 2) + 'T' + time.substr(8, 2) + ':' + time.substr(10, 2);
     }
 
     dateCheck(date) {
@@ -152,27 +157,17 @@ export class WorkflowHeading extends Vue {
     clearFilter() {
         this.states = [];
         this.classNames = null;
-        this.modTimeFromType = null;
-        this.modTimeFromSelect = null;
-        this.modTimeFrom = null;
-        this.modTimeToType = null;
-        this.modTimeToSelect = null;
-        this.modTimeTo = null;
-        this.createTimeFromType = null;
-        this.createTimeFromSelect = null;
-        this.createTimeFrom = null;
-        this.createTimeToType = null;
-        this.createTimeToSelect = null;
-        this.createTimeTo = null;
+        this.createTime.clear();
+        this.modTime.clear();
     }
     applyFilter() {   
         this.currentFilterObject = new WorkflowFilter (
             this.parseStates(),
             this.classNames,
-            this.getEpochTime(this.createTimeFrom),
-            this.getEpochTime(this.createTimeTo),
-            this.getEpochTime(this.modTimeFrom),
-            this.getEpochTime(this.modTimeTo)
+            this.getEpochTime(this.createTime.from),
+            this.getEpochTime(this.createTime.to),
+            this.getEpochTime(this.modTime.from),
+            this.getEpochTime(this.modTime.to)
         );
         this.openFilterMenu = false;
         this.filterApplied = this.isFiltered(this.currentFilterObject);
@@ -187,16 +182,16 @@ export class WorkflowHeading extends Vue {
             this.currentFilters.push(['States', String(this.states)]);
         }
         if (newFilter.createFrom > 0) {
-            this.currentFilters.push(['Created from:', this.createTimeFrom]);
+            this.currentFilters.push(['Created from:', this.createTime.from]);
         }
         if (newFilter.createTo > 0) {
-            this.currentFilters.push(['Created  up to:', this.createTimeTo]);
+            this.currentFilters.push(['Created  up to:', this.createTime.to]);
         }
         if (newFilter.modFrom > 0) {
-            this.currentFilters.push(['Modified from: ', this.modTimeFrom]);
+            this.currentFilters.push(['Modified from: ', this.modTime.from]);
         }
         if (newFilter.modTo > 0) {
-            this.currentFilters.push(['Modified up to: ', this.modTimeTo]);
+            this.currentFilters.push(['Modified up to: ', this.modTime.to]);
         }
         return this.currentFilters.length > 0;
     }

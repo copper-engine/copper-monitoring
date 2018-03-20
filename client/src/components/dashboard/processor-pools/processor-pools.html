@@ -146,25 +146,25 @@
                 <v-btn depressed 
                     class="primary" 
                     slot="activator"
-                    @click="resume">
+                    @click="resume(pool.mbean)">
                     Resume
                 </v-btn>
                 <v-btn depressed 
                     class="primary" 
                     slot="activator"
-                    @click="suspend">
+                    @click="suspend(pool.mbean)">
                     Suspend
                 </v-btn>
                 <v-btn depressed 
                     class="primary" 
                     slot="activator"
-                    @click="resumeDeque">
+                    @click="resumeDeque(pool.mbean)">
                     Resume Deque
                 </v-btn>
                 <v-btn depressed 
                     class="primary" 
                     slot="activator"
-                    @click="suspendDeque">
+                    @click="suspendDeque(pool.mbean)">
                     Suspend Deque
                 </v-btn>
             </v-layout>

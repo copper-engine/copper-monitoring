@@ -48,7 +48,8 @@ export class ProcessorPool {
         public upperThreshold: number = 0,
         public lowerThreshold: number = 0,
         public numThreads: number = 0,
-        public numActiveThreads: number = 0
+        public numActiveThreads: number = 0,
+        public mbean: string = ''
     ) {}
 }
 

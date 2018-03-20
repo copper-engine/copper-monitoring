@@ -35,54 +35,50 @@ export class ProcessorPools extends Vue {
     }
 
     getProcessorPools() {
-        this.jmxService.getProcessorPools(this.$store.state.connectionSettings, this.engine.ppoolsMXBeans, this.$store.state.user).then((response: ProcessorPool) => {
-            response.numActiveThreads = 3;
-            response.queueSize = 8;
-            this.processorPools = [];
-            this.processorPools.push(response);
-            this.processorPools.push(response);
-            this.processorPools.push(response);
+        console.log(this.engine.ppoolsMXBeans);
+        this.jmxService.getProcessorPools(this.$store.state.connectionSettings, this.engine.ppoolsMXBeans, this.$store.state.user).then((response: any) => {
+            this.processorPools = response;
         });
     }
 
-    resume() {
-        this.jmxService.resume(this.$store.state.connectionSettings, this.$store.state.user).then((done) => {
+    resume(mbean: string) {
+        this.jmxService.resume(this.$store.state.connectionSettings, this.$store.state.user, mbean).then((done) => {
             if (done) {
                 this.showSuccess('Workflows Resumed');
-                this.getProcessorPools();
+                setTimeout(this.getProcessorPools(), 1500);
             } else {
                 this.showError('Unable to resume');
             }
         });
     }
 
-    suspend() {
-        this.jmxService.suspend(this.$store.state.connectionSettings, this.$store.state.user).then((done) => {
+    suspend(mbean: string) {
+        this.jmxService.suspend(this.$store.state.connectionSettings, this.$store.state.user, mbean).then((done) => {
             if (done) {
                 this.showSuccess('Workflows Suspended');
-                this.getProcessorPools();                
+                setTimeout(this.getProcessorPools(), 1500);                
             } else {
                 this.showError('Unable to suspend');
             }
         });
     }
 
-    resumeDeque() {
-        this.jmxService.resumeDeque(this.$store.state.connectionSettings, this.$store.state.user).then((done) => {
+    resumeDeque(mbean: string) {
+        this.jmxService.resumeDeque(this.$store.state.connectionSettings, this.$store.state.user, mbean).then((done) => {
             if (done) {
                 this.showSuccess('Deque Resumed');
-                this.getProcessorPools();
+                setTimeout(this.getProcessorPools(), 1500);
             } else {
                 this.showError('Unable to resume deque');
             }
         });
     }
 
-    suspendDeque() {
-        this.jmxService.suspendDeque(this.$store.state.connectionSettings, this.$store.state.user).then((done) => {
+    suspendDeque(mbean: string) {
+        this.jmxService.suspendDeque(this.$store.state.connectionSettings, this.$store.state.user, mbean).then((done) => {
             if (done) {
                 this.showSuccess('Deque Suspended');
-                this.getProcessorPools();                
+                setTimeout(this.getProcessorPools(), 1500);               
             } else {
                 this.showError('Unable to suspend deque');
             }

@@ -102,20 +102,20 @@ export class JmxService {
             });
     }
 
-    getProcessorPools(connectionSettings: ConnectionSettings, mbean: string[], user: User) {
-        return Axios.post(process.env.API_NAME, 
-                [ this.createGetProcessorPoolsRequest(connectionSettings, mbean[0]) ], {
+    getProcessorPools(connectionSettings: ConnectionSettings, mbeans: string[], user: User) {
+        let requests = mbeans.map((mbean) => { return this.createGetProcessorPoolsRequest(connectionSettings, mbean); });
+        return Axios.post(process.env.API_NAME, requests, {
                     auth: { username: user.name, password: user.password }
                 })
-            .then(this.parseProcessorPoolsResponse)
+            .then((response) => this.parseProcessorPoolsResponse(response, mbeans))
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflow:', error);
             });
     }
 
-    resume(connectionSettings: ConnectionSettings, user: User) {
+    resume(connectionSettings: ConnectionSettings, user: User, mbean: string) {
         return Axios.post(process.env.API_NAME, [
-            this.createPoolExecRequest(connectionSettings, { operation: 'resume()' })
+            this.createPoolExecRequest(connectionSettings, mbean, { operation: 'resume()' })
         ], {
             auth: { username: user.name, password: user.password }
         })
@@ -137,9 +137,9 @@ export class JmxService {
             });
     }
 
-    suspend(connectionSettings: ConnectionSettings, user: User) {
+    suspend(connectionSettings: ConnectionSettings, user: User, mbean: string) {
         return Axios.post(process.env.API_NAME, [
-            this.createPoolExecRequest(connectionSettings, { operation: 'suspend()' })
+            this.createPoolExecRequest(connectionSettings, mbean, { operation: 'suspend()' })
         ], {
             auth: { username: user.name, password: user.password }
         })
@@ -149,9 +149,9 @@ export class JmxService {
         });
     }
 
-    resumeDeque(connectionSettings: ConnectionSettings, user: User) {
+    resumeDeque(connectionSettings: ConnectionSettings, user: User, mbean: string) {
         return Axios.post(process.env.API_NAME, [
-            this.createPoolExecRequest(connectionSettings, { operation: 'resumeDeque()' })
+            this.createPoolExecRequest(connectionSettings, mbean, { operation: 'resumeDeque()' })
         ], {
             auth: { username: user.name, password: user.password }
         })
@@ -161,9 +161,9 @@ export class JmxService {
         });
     }
 
-    suspendDeque(connectionSettings: ConnectionSettings, user: User) {
+    suspendDeque(connectionSettings: ConnectionSettings, user: User, mbean: string) {
         return Axios.post(process.env.API_NAME, [
-            this.createPoolExecRequest(connectionSettings, { operation: 'suspendDeque()' })
+            this.createPoolExecRequest(connectionSettings, mbean, { operation: 'suspendDeque()' })
         ], {
             auth: { username: user.name, password: user.password }
         })
@@ -264,9 +264,9 @@ export class JmxService {
             type: 'READ',
             mbean: mbean,
             // that is attributes for persistent engine's procesor pool 
-            // attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'UpperThreshold', 'LowerThreshold', 'NumberOfThreads', 'NumberOfActiveThreads'],
+            attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'UpperThreshold', 'LowerThreshold', 'NumberOfThreads', 'NumberOfActiveThreads'],
             // that is attributes for tranzient engine's procesor pool 
-            attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'MemoryQueueSize', 'QueueSize', 'NumberOfThreads', 'NumberOfActiveThreads'],
+            // attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'MemoryQueueSize', 'QueueSize', 'NumberOfThreads', 'NumberOfActiveThreads'],
             target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
         };
     }
@@ -316,8 +316,8 @@ export class JmxService {
         return Object.assign(this.createJmxExecRequstBase(connectionSettings, mbean), uniquePart);
     }
 
-    private createPoolExecRequest(connectionSettings, uniquePart: {}) {
-        return Object.assign(this.createPoolExecRequstBase(connectionSettings), uniquePart);
+    private createPoolExecRequest(connectionSettings, mbean, uniquePart: {}) {
+        return Object.assign(this.createPoolExecRequstBase(connectionSettings, mbean), uniquePart);
     }
 
     private createJmxExecRequstBase(connectionSettings: ConnectionSettings, mbean: string) {
@@ -330,38 +330,45 @@ export class JmxService {
         };
     }
 
-    private createPoolExecRequstBase(connectionSettings: ConnectionSettings) {
+    private createPoolExecRequstBase(connectionSettings: ConnectionSettings, mbean) {
         return {
             type: 'EXEC',
-            mbean: 'copper.processorpool:name=persistent.ProcessorPool.default',
+            mbean: mbean,
             target: {
                 url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi`
             }
         };
     }
 
-    private parseProcessorPoolsResponse = (response) => {
+    private parseProcessorPoolsResponse = (response, mbeans) => {
+        console.log(response);
         if (!response || !response.data 
             || response.data.length < 1
-            || response.data[0].error) {
+            || response.data.error) {
             console.log('Invalid responce:', response); 
             throw new Error('invalid response!');
         }
-        let pool = new ProcessorPool (
-            response.data[0].value.Id,
-            response.data[0].value.ProcessorPoolState,
-            response.data[0].value.ThreadPriority,
-            response.data[0].value.QueueSize,
-            response.data[0].value.MemoryQueueSize,
-            response.data[0].value.DequeBulkSize,
-            response.data[0].value.EmptyQueueWaitMSec,
-            response.data[0].value.UpperThresholdReachedWaitMSec,            
-            response.data[0].value.UpperThreshold,
-            response.data[0].value.LowerThreshold,
-            response.data[0].value.NumberOfThreads,
-            response.data[0].value.NumberOfActiveThreads
-        );
-        return pool;
+        let mbeanIndex = 0;
+        let pools = response.data.map((pool) => {
+            let newPool = new ProcessorPool (
+            pool.value.Id,
+            pool.value.ProcessorPoolState,
+            pool.value.ThreadPriority,
+            pool.value.QueueSize,
+            pool.value.MemoryQueueSize,
+            pool.value.DequeBulkSize,
+            pool.value.EmptyQueueWaitMSec,
+            pool.value.UpperThresholdReachedWaitMSec,            
+            pool.value.UpperThreshold,
+            pool.value.LowerThreshold,
+            pool.value.NumberOfThreads,
+            pool.value.NumberOfActiveThreads, 
+            mbeans[mbeanIndex]
+            );
+            mbeanIndex++;
+            return newPool;
+        });
+        return pools;
     }
 
     private parseWfRepoResponse = (response) => {

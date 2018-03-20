@@ -6,7 +6,9 @@
     mobile-break-point="1200" app>
     
     <!-- <transition name="fade" mode="out-in"> -->
+        <scroll class="scroll-area" :settings="{suppressScrollX: true}">
         <config v-if="settingsShowed" @updateTarget="updateTarget" @hideSettings="settingsShowed = false"></config>
         <status v-for="engineStatus in $store.state.engineStatusList" key="engineStatus.id" :status="engineStatus" :connectionSettings="$store.state.connectionSettings" @showSettings="settingsShowed = true"></status>
+        </scroll>
     <!-- </transition> -->
 </v-navigation-drawer>

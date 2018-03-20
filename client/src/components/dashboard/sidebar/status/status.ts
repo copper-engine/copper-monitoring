@@ -14,6 +14,7 @@ export class StatusComponent extends Vue {
     @Prop() status: EngineStatus;
     @Prop() connectionSettings: ConnectionSettings;
     @Prop() mbean: string;
+    open: boolean = false;
 
     get links(): Link[] {
         

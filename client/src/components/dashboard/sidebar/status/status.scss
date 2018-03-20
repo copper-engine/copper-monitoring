@@ -2,65 +2,74 @@
 //     background-color: #505050;
 //     border-bottom: 2px solid #807e7e;
 // }
+.status {
 
-.engine-status {
+    border-top: 1px solid rgb(56, 56, 56);
 
-    .status-icon-cont{
-        width: 35px;
-        max-width: 35px;
-        
-        .status-icon {
-            margin-top: 6px;
-            font-size: 22px;
+    .engine-status {
+
+        border-radius: 0px;
+
+        .status-icon-cont{
+            width: 35px;
+            max-width: 35px;
+            
+            .status-icon {
+                margin-top: 6px;
+                font-size: 22px;
+            }
         }
-    }
-    .settings-btn-cont {
-        width: 35px;
-        max-width: 35px;
-        
-        .settings-btn {
-            margin-top: 0px;
+        .settings-btn-cont {
+            width: 35px;
+            max-width: 35px;
+            
+            .settings-btn {
+                margin-top: 0px;
+            }
+            .close-details-icon {
+                transform: rotate(180deg);
+            }
         }
-    }
 
-    .card__title--primary {
-        padding-bottom: 24px;
-    }
+        .card__title--primary {
+            padding-bottom: 24px;
+        }
 
-    .engine-id {
-        font-size: 1.3em;
-        font-weight: 700;
-        word-wrap: break-word;
-        max-width: 195px;
-    }
-    .type {
-        color: #ccc;
-        font-size: 1.2em;
-    }
-    
-    .engine-status-info {
-        padding: 16px 16px 0 16px;
+        .engine-id {
+            font-size: 1.3em;
+            font-weight: 700;
+            word-wrap: break-word;
+            max-width: 195px;
+        }
+        .type {
+            color: #ccc;
+            font-size: 1.2em;
+        }
         
-        .line {
-            padding: 4px 0;
+        .engine-status-info {
+            padding: 16px 16px 0 16px;
+            
+            .line {
+                padding: 4px 0;
 
-            .value {
-                padding-left: 8px;
-                // font-size: 1.1em;
-                font-weight: 700;
+                .value {
+                    padding-left: 8px;
+                    // font-size: 1.1em;
+                    font-weight: 700;
+                }
             }
         }
     }
-}
 
-.navigation-drawer--mini-variant {
-    .engine-status {
-        .engine-status-info,
-        .headline-custom .header {
-            display: none;
-        }
-        .headline-custom .icon {
-            margin-left: 14px;
+    .navigation-drawer--mini-variant {
+        .engine-status {
+            .engine-status-info,
+            .headline-custom .header {
+                display: none;
+            }
+            .headline-custom .icon {
+                margin-left: 14px;
+            }
         }
     }
 }

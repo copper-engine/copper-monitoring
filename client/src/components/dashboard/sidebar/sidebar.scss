@@ -1,7 +1,15 @@
 
 .sidebar {
 
+    padding: 0px;
     margin-top: 64px;
+
+    .scroll-area {
+        position: relative;
+        margin: auto;
+        width: 100%;
+        height: 100%; 
+      }
 
     .link {
         padding: 20px 20px 20px 0;

@@ -6,9 +6,11 @@
             font-weight: 400;
             color: #efefef;
             max-width: 430px;
+            min-width: 292px;
         }
         .heading-buttons {
             padding-right: 10px;
+            min-width: 620px;
         }
     }
     .filter-menu,

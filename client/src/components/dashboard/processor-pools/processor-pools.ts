@@ -3,14 +3,12 @@ import { JmxService } from '../../../services/jmxService';
 import { ProcessorPool } from '../../../models/engine';
 import { Notification } from '../../../models/notification';
 import Donut from './donut-graph';
-import Bar from './bar-graph';
 import './processor-pools.scss';
 
 @Component({
     template: require('./processor-pools.html'),
     components: {
-        donut: Donut,
-        bar: Bar
+        donut: Donut
     }
 })
 

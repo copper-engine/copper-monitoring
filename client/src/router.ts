@@ -92,7 +92,7 @@ export const createRoutes: () => RouteConfig[] = () => [
       },
       {
         name: 'processor-pools',
-        path: 'processor-pools',
+        path: 'processor-pools/:id',
         component: processorPoolsComponent,
         meta: {
           requiresAuth: true

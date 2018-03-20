@@ -102,9 +102,9 @@ export class JmxService {
             });
     }
 
-    getProcessorPools(connectionSettings: ConnectionSettings, user: User) {
+    getProcessorPools(connectionSettings: ConnectionSettings, mbean: string[], user: User) {
         return Axios.post(process.env.API_NAME, 
-                [ this.createGetProcessorPoolsRequest(connectionSettings) ], {
+                [ this.createGetProcessorPoolsRequest(connectionSettings, mbean[0]) ], {
                     auth: { username: user.name, password: user.password }
                 })
             .then(this.parseProcessorPoolsResponse)
@@ -259,11 +259,14 @@ export class JmxService {
         };
     }
 
-    private createGetProcessorPoolsRequest(connectionSettings: ConnectionSettings) {
+    private createGetProcessorPoolsRequest(connectionSettings: ConnectionSettings, mbean: string) {
         return {
             type: 'READ',
-            mbean: 'copper.processorpool:name=persistent.ProcessorPool.default',
-            attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'UpperThreshold', 'LowerThreshold', 'NumberOfThreads', 'NumberOfActiveThreads'],
+            mbean: mbean,
+            // that is attributes for persistent engine's procesor pool 
+            // attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'UpperThreshold', 'LowerThreshold', 'NumberOfThreads', 'NumberOfActiveThreads'],
+            // that is attributes for tranzient engine's procesor pool 
+            attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'MemoryQueueSize', 'QueueSize', 'NumberOfThreads', 'NumberOfActiveThreads'],
             target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
         };
     }

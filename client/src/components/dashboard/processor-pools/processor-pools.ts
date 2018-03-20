@@ -1,9 +1,10 @@
 import { Vue, Component, Watch} from 'vue-property-decorator';
 import { JmxService } from '../../../services/jmxService';
-import { ProcessorPool } from '../../../models/engine';
+import { ProcessorPool, EngineStatus } from '../../../models/engine';
 import { Notification } from '../../../models/notification';
 import Donut from './donut-graph';
 import './processor-pools.scss';
+import { StoreState } from '../../../store.vuex';
 
 @Component({
     template: require('./processor-pools.html'),
@@ -17,20 +18,24 @@ export class ProcessorPools extends Vue {
     private eventHub: Vue = this.$services.eventHub;
     fetchPoolInterval: any;
     processorPools: ProcessorPool[] = [];
+    private engine: EngineStatus = null;
     
-
-    created() {
-        this.getProcessorPools();
-    }
     mounted() {
-        this.scheduleFetchPools();
+        this.init();
     }
+
     beforeDestroy() {
         clearInterval(this.fetchPoolInterval);
     }
 
+    @Watch('$route.params')
+    init() {
+        this.engine = (this.$store.state as  StoreState).engineStatusList[this.$route.params.id];
+        this.scheduleFetchPools();
+    }
+
     getProcessorPools() {
-        this.jmxService.getProcessorPools(this.$store.state.connectionSettings, this.$store.state.user).then((response: ProcessorPool) => {
+        this.jmxService.getProcessorPools(this.$store.state.connectionSettings, this.engine.ppoolsMXBeans, this.$store.state.user).then((response: ProcessorPool) => {
             response.numActiveThreads = 3;
             response.queueSize = 8;
             this.processorPools = [];

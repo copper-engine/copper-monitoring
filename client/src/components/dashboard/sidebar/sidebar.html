@@ -6,9 +6,34 @@
     mobile-break-point="1200" app>
     
     <!-- <transition name="fade" mode="out-in"> -->
-        <scroll class="scroll-area" :settings="{suppressScrollX: true}">
-        <config v-if="settingsShowed" @updateTarget="updateTarget" @hideSettings="settingsShowed = false"></config>
-        <status v-for="engineStatus in $store.state.engineStatusList" key="engineStatus.id" :status="engineStatus" :connectionSettings="$store.state.connectionSettings" @showSettings="settingsShowed = true"></status>
+        <scroll class="scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 600}">
+            <div class="primary textOnColor--text scroll-header">
+                <h3>Connection</h3>
+                <v-layout row>
+                    <v-layout class="scroll-label" column>
+                        <v-flex>
+                            Host:
+                        </v-flex>
+                        <v-flex>
+                            Port:
+                        </v-flex>
+                    </v-layout>
+                    <v-layout class="scroll-info" column>
+                        <v-flex>
+                            {{ host }}
+                        </v-flex>
+                        <v-flex>
+                            {{ port }}
+                        </v-flex>
+                    </v-layout>
+                    <v-btn dark icon @click.stop="settingsShowed = true">
+                        <v-icon v-html="'settings'" :class="{'active': true}"></v-icon>
+                    </v-btn>
+                </v-layout>
+            </div>
+            <config v-if="settingsShowed" @updateTarget="updateTarget" @hideSettings="settingsShowed = false"></config>
+            <status v-for="engineStatus in $store.state.engineStatusList" key="engineStatus.id" :status="engineStatus" :connectionSettings="$store.state.connectionSettings" @showSettings="settingsShowed = true"></status>
+            <div class="scroll-footer"></div>
         </scroll>
     <!-- </transition> -->
 </v-navigation-drawer>

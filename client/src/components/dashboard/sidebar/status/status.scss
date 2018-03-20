@@ -4,6 +4,8 @@
 // }
 
 .engine-status {
+    
+    border-radius: 0px;
 
     .status-icon-cont{
         width: 35px;
@@ -20,6 +22,9 @@
         
         .settings-btn {
             margin-top: 0px;
+        }
+        .close-details-icon {
+            transform: rotate(180deg);
         }
     }
 

@@ -29,12 +29,17 @@
                     </span>
                 </v-flex>
                 <v-flex class="settings-btn-cont">
+                        <v-btn dark icon @click="open = !open" class="settings-btn">
+                            <v-icon :class="{ 'close-details-icon': open }">details</v-icon>
+                        </v-btn>
+                </v-flex>
+                <v-flex class="settings-btn-cont">
                     <v-btn dark icon @click.stop="$emit('showSettings')" class="settings-btn">
                         <v-icon v-html="'settings'" :class="{'active': true}"></v-icon>
                     </v-btn>
                 </v-flex>
             </v-layout>
-            <div v-if="status" class="engine-status-info">
+            <div v-show="open" v-if="status" class="engine-status-info">
                 <div class="line wf-number">
                     <span class="status-title">
                         WF instances:
@@ -71,7 +76,7 @@
             </div>
         </v-card-title>
     </v-card>
-    <v-list>
+    <v-list v-show="open">
         <!-- <v-btn flat  v-bind:class="{'active' : $route.path == link.path}">
         </v-btn> -->
         <v-list-tile value="true" v-for="link in links" :key="link.path">

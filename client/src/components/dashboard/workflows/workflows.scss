@@ -1,28 +1,6 @@
-body .overlay--active:before {
-    opacity: 0.75 !important;
-}
-body .overlay:before {
-    background-color: #212121;
-    bottom: 0;
-    content: '';
-    height: 100%;
-    left: 0;
-    opacity: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    transition: inherit;
-    transition-delay: 150ms;
-    width: 100%;
-}
-body .dialog {
-    // border-radius: 2px;
-    margin: 24px;
-    overflow-y: auto;
-    pointer-events: auto;
-    transition: 0.3s ease-in-out;
-    width: 100%;
-    box-shadow: 0px 0px;
+code:after, kbd:after, code:before, kbd:before {
+    content: "";
+    letter-spacing: 0px;
 }
 .card {
     .code {
@@ -35,101 +13,80 @@ body .dialog {
     padding: 0px;
     width: 100%;
 }
-
-.tooltip-text {
-    font-size: 1.2em;
-}
-code:after, kbd:after, code:before, kbd:before {
-    content: "";
-    letter-spacing: 0px;
-}
 .codeDialog {
     padding: 30px;
     border-radius: 0px;
 }
 
-@keyframes slowFade {
-    from {opacity: 1}
-    to {opacity: 0.4}
-}
-
-.fade {
-    opacity: 0.4;
-    animation-name: slowFade;
-    animation-duration: 1s;
-}
-
 .workflows {
-
     width: 100%;
     max-width: 1650px;
     margin: auto;
 
-    .code {
-        padding: 30px;
+    .stopGrow {
+        flex-grow: 0;
     }
-    
-    h2 {
-        color: #efefef;
+    .longButton {
+        height: 36px !important;
+        width: 185px !important;
     }
-
-    .alert {
-        margin: 20px;
-    }
-
-    .summary {
-        .text {
-            font-size: 1.2em;
-            font-weight: 400;
-            padding-top: 8px;
-            color: #efefef;
-            max-width: 430px;
-        }
-    }
-
-    .header {
-        margin-top: 16px;
-        padding: 5px 16px 5px 16px;
-        align-items: center;
-        font-weight: 700;
-        font-size: 1.1em;
-        border-top-left-radius: 2px;
-        border-top-right-radius: 2px;
-    }
-
-    .workflows-cont {
-        border-bottom: 1px solid;
-    }
-
-    .workflow {
-        border-top: 1px solid;
-    }
-    
     .workflow-layout >* {
         padding: 8px 16px;
         align-items: center;
     }
 
-    @keyframes highlightCurve {
-        0% {opacity: 0.35}
-        50% {opacity: 0.8}
-        100% {opacity: 0.45}
-    }
-    
-    .highlight-workflow-layout >* {
-        background: #27695c !important;
-        opacity: 0.35;
-        animation-name: highlightCurve;
-        animation-duration: 1s;
-        animation-timing-function: ease-out;
-    }
+    .workflows-cont {
+        border-bottom: 1px solid;
 
-    .highlight-workflow-deleting >* {
-        background: #e74615 !important;
-        opacity: 0;
-        transition: background 1.3s;
-        transition: opacity 2s;
-    }
+        .alert {
+            margin: 20px;
+        }
+        .workflow {
+            border-top: 1px solid;
+
+            .workflow-info-layout {
+                padding: 0px;    
+
+                .details {
+                    padding-top: 24px;
+                    padding-bottom: 24px;
+                    padding-left: 32px;
+                    padding-right: 10px;
+                    width: 100%;
+
+                    .workflow-detail {
+                        padding: 4px;
+                    }
+                    .detail-label {
+                        font-weight: 700;
+                        width: 200px;
+                        min-width: 200px;
+                        max-width: 200px;
+                    }
+                    .stacktrace .text {
+                        overflow-x: auto;
+                        border-radius: 3px;
+                        code {
+                            border-radius: 3px 3px 0px 0px;
+                            padding: 10px 30px; 
+                            min-width: 100%;
+                        }
+                    }
+                    .workflow-id {
+                        max-height: 24px;
+                    }
+                    .raise {
+                        margin-top: -40px;
+                    }
+                    button {
+                        border-radius: 5%;
+                        width: 185px;
+                        height: 36px;
+                    }
+                }
+            }
+        }
+    } 
 
     .number,
     .data,
@@ -147,6 +104,9 @@ code:after, kbd:after, code:before, kbd:before {
         min-width: 35px;
         max-width: 35px;
     }
+    .data {
+        min-width: 380px; 
+    }
     .processorPoolId {
         width: 120px;
         min-width: 120px;
@@ -156,19 +116,15 @@ code:after, kbd:after, code:before, kbd:before {
         width: 150px;
         min-width: 150px;
         max-width: 150px;
-
         button {
             margin-right: 4px;
             margin-left: 4px;
             border-radius: 20%;
         }
-
         .close-details-icon {
             transform: rotate(180deg);
         }
-
     }
-
     .timestamps {
         width: 150px;
         min-width: 150px;
@@ -180,7 +136,6 @@ code:after, kbd:after, code:before, kbd:before {
             padding: 3px 0;
         }
     }
-    
     .timeout {
         width: 140px;
         min-width: 140px;
@@ -193,67 +148,11 @@ code:after, kbd:after, code:before, kbd:before {
         max-width: 65px;
     }
 
-    .workflow-info-layout {
-        padding: 0px;
-        
-        .details {
-            padding: 24px 32px;
-            width: 100%;
-
-            .code {
-                padding-left: 30px;
-                padding-right: 30px;
-            }
-    
-
-            .workflow-detail {
-                padding: 4px;
-            }
-
-            .detail-label {
-                font-weight: 700;
-                width: 200px;
-                min-width: 200px;
-                max-width: 200px;
-            }
-
-            .stacktrace .text {
-                overflow-x: auto;
-                border-radius: 3px;
-                code {
-                    border-radius: 3px 3px 0px 0px;
-                    padding: 10px 30px;
-                    min-width: 100%;
-                }
-            }
-
-            .stopGrow {
-                flex-grow: 0;
-            }
-
-            .workflow-id {
-                max-height: 24px;
-            }
-
-            .raise {
-                margin-top: -40px;
-            }
-
-            button {
-                border-radius: 5%;
-                width: 100%;
-            }
-
-        }
-    }
-
-    .custom-loader {
-        animation: loader 1s infinite;
-        display: flex;
-    }
-
     .pagination-cont {
         align-items: center;
+        .pagination li span {
+            float: none;
+        }
         .pagin-config {
             align-items: center;
             .per-page-label {
@@ -265,11 +164,6 @@ code:after, kbd:after, code:before, kbd:before {
             .per-page {
                 width: 60px;
             }
-        }
-
-
-        .pagination li span {
-            float: none;
         }
     }
 
@@ -293,6 +187,38 @@ code:after, kbd:after, code:before, kbd:before {
         transition: transform 1s;
     }
 
+
+    .highlight-workflow-layout >* {
+        background: #27695c !important;
+        opacity: 0.35;
+        animation-name: highlightCurve;
+        animation-duration: 1s;
+        animation-timing-function: ease-out;
+    }
+    .highlight-workflow-deleting >* {
+        background: #e74615 !important;
+        opacity: 0;
+        transition: background 1.3s;
+        transition: opacity 2s;
+    }
+    .fade {
+        opacity: 0.4;
+        animation-name: slowFade;
+        animation-duration: 1s;
+    }
+    .custom-loader {
+        animation: loader 1s infinite;
+        display: flex;
+    }
+    @keyframes slowFade {
+        from {opacity: 1}
+        to {opacity: 0.4}
+    }
+    @keyframes highlightCurve {
+        0% {opacity: 0.35}
+        50% {opacity: 0.8}
+        100% {opacity: 0.45}
+    }
     @-moz-keyframes loader {
         from {
             transform: rotate(0);
@@ -309,7 +235,7 @@ code:after, kbd:after, code:before, kbd:before {
             transform: rotate(360deg);
         }
     }
-    @-o-keyframes loader {
+    @keyframes loader {
         from {
             transform: rotate(0);
         }
@@ -317,7 +243,7 @@ code:after, kbd:after, code:before, kbd:before {
             transform: rotate(360deg);
         }
     }
-    @keyframes loader {
+    @-o-keyframes loader {
         from {
             transform: rotate(0);
         }

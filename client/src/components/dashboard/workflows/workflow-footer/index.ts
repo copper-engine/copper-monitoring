@@ -1,1 +1,1 @@
-export * from './workflowFooter';
+export * from './workflow-footer';

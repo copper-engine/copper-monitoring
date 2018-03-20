@@ -2,11 +2,11 @@ import { Vue, Component, Watch} from 'vue-property-decorator';
 import { WorkflowRepo, EngineStatus } from '../../../models/engine';
 import { JmxService } from '../../../services/jmxService';
 import { parseSourceCode } from '../../../util/utils';
-import './workflowRepo.scss';
+import './workflow-repo.scss';
 
-const sourceCodeComponent = () => import('./../../core').then(({ SourceCodeComponent }) => SourceCodeComponent);
+const sourceCodeComponent = () => import('./../../core/source-code').then(({ SourceCodeComponent }) => SourceCodeComponent);
 @Component({
-    template: require('./workflowRepo.html'),
+    template: require('./workflow-repo.html'),
     components: {
         'source-code': sourceCodeComponent,
     }

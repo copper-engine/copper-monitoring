@@ -1,1 +1,1 @@
-export * from './workflowHeading';
+export * from './workflow-heading';

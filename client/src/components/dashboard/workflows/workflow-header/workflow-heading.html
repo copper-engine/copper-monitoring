@@ -1,0 +1,190 @@
+<div class="workflow-header">
+    <h2 class="themeText--text">Broken Workflows</h2>
+    <v-layout class="summary">
+        <v-flex class="text themeText--text stopGrow">
+            Total number of broken workflows: {{ engineStatus ? engineStatus.brokenWFCount : 0}}
+        </v-flex>
+        <v-spacer></v-spacer>
+        <v-flex class="stopGrow heading-buttons">
+            <v-btn dark
+                class="longButton"
+                color="primary"
+                :loading="restartingAll"
+                :disabled="restartingAll || deletingAll"
+                @click="sendRestartAll"
+                >
+                <v-icon left>cached</v-icon>
+                Restart {{ filterApplied ? 'Filtered' : 'All' }}
+                <span slot="loader" class="custom-loader">
+                    <v-icon light>cached</v-icon>
+                </span>
+            </v-btn>
+            <v-btn dark
+            class="longButton"
+            color="primary"
+            :loading="deletingAll"
+            :disabled="deletingAll || restartingAll"
+            @click="sendDeleteAll">
+            <v-icon left>delete</v-icon>
+            Delete {{ filterApplied ? 'Filtered' : 'All' }}
+            <span slot="loader" class="custom-loader">
+                <v-icon light>cached</v-icon>
+            </span>
+            </v-btn>
+            <v-btn dark
+            class="longButton"
+            color="primary"
+            :loading="deletingAll"
+            :disabled="deletingAll || restartingAll"
+            @click="triggerFilterMenu">
+            <v-icon left>mdi-filter</v-icon>
+            Filter
+            <span slot="loader" class="custom-loader">
+                <v-icon light>cached</v-icon>
+            </span>
+            </v-btn>
+        </v-flex>
+    </v-layout>
+
+    <v-layout v-show="openFilterMenu" class="filter-menu secondary" column>
+        <v-layout row class="filter-header">
+        <h3 class="themeText--text">Filter By:</h3>        
+        </v-layout>
+        <v-layout class="filter-layout" column>
+            <v-layout row class="filter-header">
+                <v-flex class="select-container stopGrow">
+                    <v-select class="select"
+                    label="Include States:"
+                    :items="possibleStates"
+                    v-model="states"
+                    multiple>
+                    </v-select>
+                </v-flex>
+                <v-layout class="time-field-container">
+                    <v-flex class="stopGrow time-field" >
+                        <v-text-field class="date-time-text"
+                        v-model="createTime.fromType"
+                        label="Created - From"
+                        mask="####-##-## ##:##"
+                        hint="YYYY-MM-DD HH:MM"
+                        :rules="[dateCheck]"
+                        append-icon="event">
+                        </v-text-field>
+                        <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="createTime.fromSelect" ref="createFrom"></datetime>
+                        <div class="date-click-decorator date-time-picker" @click="clickedFromDate('createTime', 'createFrom')"></div>
+                    </v-flex>
+                    <v-flex class="stopGrow time-field">
+                        <v-text-field
+                        v-model="createTime.toType"
+                        label="To"
+                        mask="####-##-## ##:##"
+                        hint="YYYY-MM-DD HH:MM"
+                        :rules="[dateCheck]"
+                        append-icon="event">
+                    </v-text-field>
+                    <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="createTime.toSelect" ref="createTo"></datetime>
+                    <div class="date-click-decorator date-time-picker" @click="clickedToDate('createTime', 'createTo')"></div>
+                    </v-flex>
+                </v-layout>
+                <v-btn depressed color="primary" @click="clearFilter" class="longButton"><v-icon left>mdi-cancel</v-icon>Clear</v-btn>         
+            </v-layout>
+            <v-layout row class="filter-header">
+                <v-flex class="select-container stopGrow">
+                    <v-select class="select"
+                    label="Include Classname:"
+                    :items="possibleClassnames"
+                    v-model="classNames">
+                    </v-select>
+                </v-flex>       
+                <v-layout class="time-field-container">
+                    <v-flex class="stopGrow time-field">
+                        <v-text-field
+                        v-model="modTime.fromType"
+                        label="Modified - From"
+                        mask="####-##-## ##:##"
+                        hint="YYYY-MM-DD HH:MM"
+                        :rules="[dateCheck]"
+                        append-icon="event">
+                        </v-text-field>
+                        <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="modTime.fromSelect" ref="modFrom"></datetime>
+                        <div class="date-click-decorator date-time-picker" @click="clickedFromDate('modTime', 'modFrom')"></div>
+                    </v-flex>
+                    <v-flex class="stopGrow time-field">
+                        <v-text-field
+                        v-model="modTime.toType"
+                        label="To"
+                        mask="####-##-## ##:##"
+                        hint="YYYY-MM-DD HH:MM"
+                        :rules="[dateCheck]"
+                        append-icon="event">
+                        </v-text-field>
+                        <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="modTime.toSelect" ref="modTo"></datetime>
+                        <div class="date-click-decorator date-time-picker" @click="clickedToDate('modTime', 'modTo')"></div>
+                    </v-flex>
+                </v-layout>
+                <v-btn depressed color="primary" @click="applyFilter" class="longButton"><v-icon left>mdi-check</v-icon>Apply</v-btn>
+            </v-layout>
+        </v-layout>      
+    </v-layout>
+
+    <v-layout v-show="filterApplied && !openFilterMenu" class="chip-menu secondary" row>
+        <v-layout row class="filter-chip-container">
+            <v-flex class="stopGrow">
+                <h3>Filtered By:</h3>
+            </v-flex>
+            <v-flex v-for="filter in currentFilters" :key="filter.id" class="stopGrow filter-chip-flex">
+                <v-chip color="highlight textOnColor--text" class="filter-chip">
+                    <v-chip color="primary textOnColor--text" class="inner-chip">
+                        {{ filter[0] }}
+                    </v-chip>
+                    {{ filter[1] }}
+                </v-chip>
+            </v-flex>
+        </v-layout>
+        <v-flex class="stopGrow">
+            <v-btn dark
+            depressed
+            color="primary"
+            class="longButton"
+            @click="clearFilter(); applyFilter()">
+            <v-icon left>mdi-close</v-icon>
+            Clear
+            </v-btn>
+        </v-flex>
+    </v-layout>
+
+    <v-layout class="row-info primary textOnColor--text">
+        <v-flex class="number">
+            #
+        </v-flex>  
+        <v-flex class="data">
+            Data
+        </v-flex>  
+        <v-flex class="priority">
+            Priority
+        </v-flex>
+        <v-flex class="processorPoolId">
+            Processor Pool
+        </v-flex>
+        <v-flex class="state">
+            State
+        </v-flex>
+        <v-flex class="timeout">
+            Timeout
+        </v-flex>
+        <v-flex class="timestamps">
+            <div class="errorTS">
+                Error Time
+            </div>
+            <div class="lastModTS">
+                Last Modification
+            </div>
+            <div class="creationTS">
+                Creation
+            </div>            
+        </v-flex>
+        <v-flex class="actions">
+            Actions
+        </v-flex>
+    </v-layout>
+</div>

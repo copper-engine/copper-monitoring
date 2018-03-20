@@ -1,0 +1,72 @@
+.processor-pools {
+    width: 100%;
+    max-width: 1650px;
+    margin: auto;
+
+    .alert {
+        margin: 20px;
+    }
+
+    .summary {
+        .text {
+            font-size: 1.2em;
+            font-weight: 400;
+            padding-top: 8px;
+            padding-right: 20px;
+            color: #efefef;
+        }
+        .stopGrow {
+            flex-grow: 0;
+        }
+        .sub-heading {
+            width: 225px;
+            min-width: 225px;
+            max-width: 225px;
+        }
+    }
+
+    .pool-card-container {
+        width: 100%;
+        flex-wrap: wrap;
+        .pool-card {
+            border-radius: 2px;
+            max-width: 740px;
+            min-width: 740px;
+            margin: 20px;
+            border: 1px solid black;
+            .card-label {               
+                font-size: 1.1em;
+                padding: 10px;
+                flex-grow: 0;
+                height: 340px;
+                width:175px;
+                div {
+                    flex-grow: 0;
+                }
+            }
+            .card-info {
+                font-size: 1.1em;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-left: 10px;
+                margin-right: -5px;
+                flex-grow: 0;
+                height: 340px;
+                width: 100px;
+            }
+            .card-graph {
+                flex-grow: 0;
+                margin-top: 35px;
+            }
+            .card-button-container {
+                height: 340px;
+                padding-top: 15px;
+                padding-right: 15px;
+                button {
+                    margin-top: 30px;
+                    width: 150px;
+                }
+            }
+        }
+    }
+}

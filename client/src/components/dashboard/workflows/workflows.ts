@@ -1,6 +1,6 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { setTimeout } from 'timers';
-import { WorkflowInfo, EngineStatus } from '../../../models/engine';
+import { WorkflowInfo, EngineStatus, WorkflowRepo, WorkflowFilter } from '../../../models/engine';
 import { Notification } from '../../../models/notification';
 import { JmxService } from '../../../services/jmxService';
 import * as utils from '../../../util/utils';
@@ -20,7 +20,7 @@ export class WorkflowContext {
     public deleteButton: boolean = false;
 }
 
-const sourceCodeomponent = () => import('./../../core').then(({ SourceCodeComponent }) => SourceCodeComponent);
+const sourceCodeomponent = () => import('./../../core/source-code').then(({ SourceCodeComponent }) => SourceCodeComponent);
 const WorkflowHeading = () => import('./workflow-header').then(({ WorkflowHeading }) => WorkflowHeading);
 const WorkflowFooter = () => import('./workflow-footer').then(({ WorkflowFooter }) => WorkflowFooter);
 
@@ -28,12 +28,15 @@ const WorkflowFooter = () => import('./workflow-footer').then(({ WorkflowFooter 
     template: require('./workflows.html'),
     services: ['jmxService', 'eventHub'],
     components: {
+        'workflow-heading': WorkflowHeading,
+        'workflow-footer': WorkflowFooter,
         'source-code': sourceCodeomponent,
-        'workflowHeading': WorkflowHeading,
-        'workflowFooter': WorkflowFooter
     }
 })
 export class WorkflowsComponent extends Vue {
+
+    private jmxService: JmxService = this.$services.jmxService;
+    private eventHub: Vue = this.$services.eventHub;
     workflowsContext: Map<String, WorkflowContext> = new Map<String, WorkflowContext>(); 
     workflows: WorkflowInfo[] = [];
     fetchBrokenWFInterval: any;
@@ -46,9 +49,14 @@ export class WorkflowsComponent extends Vue {
     dialogSourceCode = null;
     dialogHighlitedlines: HighlitedLine[] = null;
     sourceCodeAvailable = true;
+    filter: WorkflowFilter = new WorkflowFilter;
 
-    private jmxService: JmxService = this.$services.jmxService;
-    private eventHub: Vue = this.$services.eventHub;
+    mounted() {
+        this.sheduleFetchingBrrokenWF();
+    }
+    beforeDestroy() {
+        clearInterval(this.fetchBrokenWFInterval);
+    }
 
     get status() {
         return this.$store.state.engineStatus;
@@ -56,10 +64,6 @@ export class WorkflowsComponent extends Vue {
 
     get disabled() {
         return this.restartingAll || this.deletingAll;
-    }
-    
-    mounted() {
-        this.sheduleFetchingBrrokenWF();
     }
 
     get totalPages() {
@@ -76,36 +80,44 @@ export class WorkflowsComponent extends Vue {
         return 1;
     }
 
-    created() {
+    
+    private showSuccess(message: String) {
+        this.eventHub.$emit('showNotification', new Notification(message));
     }
 
-    beforeDestroy() {
-        clearInterval(this.fetchBrokenWFInterval);
-    }
+    // @Watch('$store.state.connectionSettings')
+    // sheduleFetchingBrrokenWF() {
+    //     if (this.fetchBrokenWFInterval) {
+    //         clearInterval(this.fetchBrokenWFInterval);
+    //     }
+    //     this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
+    //     this.fetchBrokenWFInterval = setInterval(() => {
+    //         this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
+    //     }, this.$store.state.connectionSettings.updatePeriod * 1000);
+    // }
 
-    @Watch('$store.state.connectionSettings')
-    sheduleFetchingBrrokenWF() {
-        if (this.fetchBrokenWFInterval) {
-            clearInterval(this.fetchBrokenWFInterval);
-        }
-        this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
-        this.fetchBrokenWFInterval = setInterval(() => {
-            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
-        }, this.$store.state.connectionSettings.updatePeriod * 1000);
-    }
-
-    private getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User) {
+    private getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User, filter) {
         // TODO fix selecting correct bean
-        this.jmxService.getBrokenWorkflows(connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id], user, this.perPage, (this.page - 1) * this.perPage).then((response: WorkflowInfo[]) => {
+        this.jmxService.getBrokenWorkflows(connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id], user, this.perPage, (this.page - 1) * this.perPage, filter).then((response: WorkflowInfo[]) => {
             this.workflows = response;
         });
+    }
+
+    private showError(message: String) {
+        this.eventHub.$emit('showNotification', new Notification(message, 'error'));
+    }
+
+    applyFilter(newFilter: WorkflowFilter) {
+        // console.log(newFilter);
+        this.filter = newFilter;
+        this.sheduleFetchingBrrokenWF();
     }
 
     restartAll() {
         this.jmxService.restartAll(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user)
             .then((done) => {
                 this.restartingAll = false;
-                this.forceStatusFetch(500);
+                this.forceStatusFetch(1500);
                 if (done) {
                     this.workflows.forEach((wf) => {
                         let currentID = wf.id;
@@ -123,26 +135,48 @@ export class WorkflowsComponent extends Vue {
             });
     }
 
-    deleteAll() {
-        this.deletingAll = true;
-        this.jmxService.deleteAll(this.$store.state.connectionSettings, this.$store.state.mbeans, this.workflows, this.$store.state.user)
-        .then((done) => {
-            this.deletingAll = false;
-            if (done) {
-                this.workflows.forEach((wf) => {
-                    let currentID = wf.id;
-                    this.highlight(currentID, 'delete');
-                });
-                this.showSuccess('All workflows deleted successfully');
-            } else {
-                this.showError('Failed to Delete all workflows');
-            }
-            this.forceStatusFetch(1500);
-        }).catch((err) => {
-            this.showError('Failed to Delete all workflows due to: ' + err);
-            console.error('Failed to Delete all workflows due to:', err);
-            this.deletingAll = false;
-        });
+    restartFiltered(newFilter: WorkflowFilter) {
+        this.jmxService.restartFiltered(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user, 0, 0, newFilter)
+            .then((done) => {
+                this.restartingAll = false;
+                this.forceStatusFetch(1500);
+                if (done) {
+                    this.workflows.forEach((wf) => {
+                        let currentID = wf.id;
+                        this.highlight(currentID, 'reload');
+                    });
+                    this.showSuccess('Filtered workflows restarted successfully');
+                } else {
+                    this.showError('Failed to restart filtered workflows');
+                }
+            }).catch((err) => {
+                this.showError('Failed to restart filtered workflows due to:' + err);
+                console.error('Failed to restart filtered workflows due to:', err);
+                this.restartingAll = false;
+            });
+    }
+
+    deleteFiltered(newFilter: WorkflowFilter) {
+        this.page = 1;
+        this.jmxService.deleteFiltered(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user, 0, 0, newFilter)
+            .then((done) => {
+                this.deletingAll = false;
+                this.forceStatusFetch(500);
+                if (done) {
+                    this.workflows.forEach((wf) => {
+                        let currentID = wf.id;
+                        this.highlight(currentID, 'delete');
+                    });
+                    this.showSuccess('Filtered workflows deleted successfully');
+                } else {
+                    this.showError('Failed to delete filtered workflows');
+                }
+                this.forceStatusFetch(1500);                
+            }).catch((err) => {
+                this.showError('Failed to delete filtered workflows due to:' + err);
+                console.error('Failed to delete filtered workflows due to:', err);
+                this.deletingAll = false;
+            });
     }
 
     restart(id: string) {
@@ -188,24 +222,29 @@ export class WorkflowsComponent extends Vue {
 
     highlight(id: String, type: String) {
         let wfContext = this.workflowsContext.get(id);
-        if (!wfContext) {
-            wfContext = new WorkflowContext();
-        }
-        if (type === 'reload') {
-            wfContext.reloading = true;
-            this.workflowsContext.set(id, wfContext);
-            this.$forceUpdate();
-            setTimeout(() => { 
-                wfContext.reloading = false; 
-                this.workflowsContext.set(id, wfContext);
-                this.$forceUpdate();
-            }, 800);
-        }
-        if (type === 'delete') {
-            wfContext.deleting = true;
-            this.workflowsContext.set(id, wfContext);
-            this.$forceUpdate();
-        }
+                if (!wfContext) {
+                    wfContext = new WorkflowContext();
+                }
+                if (type === 'reload') {
+                    wfContext.reloading = true;
+                    this.workflowsContext.set(id, wfContext);
+                    this.$forceUpdate();
+                    setTimeout(() => { 
+                        wfContext.reloading = false; 
+                        this.workflowsContext.set(id, wfContext);
+                        this.$forceUpdate();
+                    }, 800);
+                }
+                if (type === 'delete') {
+                    wfContext.deleting = true;
+                    this.workflowsContext.set(id, wfContext);
+                    this.$forceUpdate();
+                    setTimeout(() => { 
+                        wfContext.deleting = false; 
+                        this.workflowsContext.set(id, wfContext);
+                        this.$forceUpdate();
+                    }, 1500);
+                }
     }
 
     toggleButtons(id: String, type: String) {
@@ -248,7 +287,6 @@ export class WorkflowsComponent extends Vue {
         });
     }
 
-
     showDetails(workflow: WorkflowInfo) {
         let wfContext = this.workflowsContext.get(workflow.id);
         if (!wfContext) {
@@ -259,19 +297,22 @@ export class WorkflowsComponent extends Vue {
         this.$forceUpdate();
     }
 
-    private showSuccess(message: String) {
-        this.eventHub.$emit('showNotification', new Notification(message));
-    }
-
-    private showError(message: String) {
-        this.eventHub.$emit('showNotification', new Notification(message, 'error'));
+    @Watch('$store.state.connectionSettings')
+    sheduleFetchingBrrokenWF() {
+        if (this.fetchBrokenWFInterval) {
+            clearInterval(this.fetchBrokenWFInterval);
+        }
+        this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
+        this.fetchBrokenWFInterval = setInterval(() => {
+            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
+        }, this.$store.state.connectionSettings.updatePeriod * 1000);
     }
 
     @Watch('page')
     @Watch('perPage')
     private forceStatusFetch(delay: number = 0) {
         setTimeout(() => {
-            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
+            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
         }, delay);
     }
 }

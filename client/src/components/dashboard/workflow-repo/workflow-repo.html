@@ -74,7 +74,7 @@
                             color="primary"
                             class="squareButton"
                             @click="toggleOpen(i)"
-                            :disabled="workflow.sourceCode === null || (workflow.sourceCode.trim()).toLowerCase() === 'na'"
+                            :disabled="workflow.sourceCode === null || (workflow.sourceCode.trim()).toLowerCase() === '1.na'"
                             slot="activator">
                                 <v-icon :class="{ 'close-details-icon': workflow.open }" >details</v-icon>
                             </v-btn>

@@ -13,7 +13,7 @@ export function parseSourceCode(srcCode: String) {
     let lines = srcCode.split('\n');
     let finalSrcCode: String = '';
     lines.forEach((line, index) => {
-        finalSrcCode = finalSrcCode.concat(String(index + 1).concat(':  '.concat(line.concat('\n'))));
+        finalSrcCode = finalSrcCode + String(index + 1) + ':  ' + line + '\n';
     });
     return finalSrcCode;
 }

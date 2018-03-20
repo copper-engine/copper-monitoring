@@ -1,22 +1,23 @@
 <div class="workflows" :class="{'fade': disabled}">
 
-    <workflowHeading 
+    <workflow-heading 
     @triggerRestartAll="restartAll"
-    @triggerDeleteAll="deleteAll"
+    @triggerApplyFilter="applyFilter($event)"
+    @triggerRestartFiltered="restartFiltered($event)"
+    @triggerDeleteFiltered="deleteFiltered($event)"
     :engineStatus="status"
     :restartingAll="restartingAll"
     :deletingAll="deletingAll">
-    </workflowHeading>
+    </workflow-heading>
     
     <v-layout class="workflows-cont" column>
         <v-card v-show="!workflows || workflows.length === 0" class="secondary">
             <v-card-text>
                 <v-alert color="primary" icon="info" value="true" >
-                    There are no broken workflows
+                    There are no available broken workflows
                 </v-alert>
             </v-card-text>
         </v-card>
-        <!-- <transition-group name="list" tag="div" mode="out-in"> -->
             <v-flex class="workflow" v-for="(workflow, i) in workflows" :key="workflow.id"
             :class="{
             'highlight-workflow-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting, 
@@ -146,7 +147,6 @@
                     </v-layout>
                 </v-layout>
             </v-flex>
-        <!-- </transition-group> -->
     </v-layout>
 
     <v-dialog v-model="dialog" scrollable max-width="800px" position="absolute">
@@ -165,13 +165,13 @@
         </v-card>
     </v-dialog>
 
-    <workflowFooter
+    <workflow-footer
     @updatePage="page = $event"
     @updatePerPage="perPage = $event"
     :page="page"
     :perPage="perPage"
     :totalPages="totalPages"
     :perPageItems="perPageItems">
-    </workflowFooter>
+    </workflow-footer>
 
 </div>

@@ -7,6 +7,8 @@ Vue.use(require('vue-moment'));
 
 import 'vuetify/dist/vuetify.css';
 import 'mdi/css/materialdesignicons.min.css';
+import Datetime from 'vue-datetime';
+import 'vue-datetime/dist/vue-datetime.css';
 
 if (utils.parseBoolean(localStorage.getItem('darkTheme')) === null) {
     localStorage.setItem('darkTheme', 'true');
@@ -22,7 +24,8 @@ let darkColors: VuetifyTheme = {
     back: '#303030',
     info: '#2196F3',
     success: '#4CAF50',
-    warning: '#FFC107'
+    warning: '#FFC107',
+    highlight: '#616161'
   };
   
   let lightColors: VuetifyTheme = {
@@ -35,7 +38,8 @@ let darkColors: VuetifyTheme = {
     back: '#d6d6d6',
     info: '#2196F3',
     success: '#4CAF50',
-    warning: '#FFC107'
+    warning: '#FFC107',
+    highlight: '#BDBDBD'
   };
 
   if (utils.parseBoolean(localStorage.getItem('darkTheme')) === false) {

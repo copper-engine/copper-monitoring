@@ -1,0 +1,129 @@
+.workflow-header {
+    .summary {
+        align-items: center;
+        .text {
+            font-size: 1.2em;
+            font-weight: 400;
+            color: #efefef;
+            max-width: 430px;
+            min-width: 292px;
+        }
+        .heading-buttons {
+            padding-right: 10px;
+            min-width: 620px;
+        }
+    }
+    .filter-menu,
+    .chip-menu {
+        flex-wrap: wrap; 
+        border-radius: 2px;
+        margin-top: 10px;
+        // margin-bottom: 5px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        min-width: 986px;
+    }
+    .filter-menu {    
+        .filter-header {
+            align-items: center;
+            padding-left: 15px;
+            padding-right: 0px;
+            h3 {
+                padding-left: 20px;
+            }
+        }
+        .filter-layout {
+            padding-left: 10px;
+            padding-right: 10px;
+
+            .time-field-container {
+                height: 65px;
+                padding-left: 5px;
+                padding-right: 5px;
+                .time-field {
+                    position: relative;
+                    width: 190px;
+                    max-width: 190px;
+                    min-width: 190px;
+                    padding: 5px;
+                }
+            }
+            .select-container {
+                max-width: 380px;
+                min-width:380px;
+                // width: 380px;
+                padding-top: 0px;
+                padding-left: 10px;
+                padding-right: 10px;
+                .select {
+                    max-width: 380px;
+                }
+            }
+            .date-time-picker {
+                position: absolute;
+                padding-top: 7px;
+                padding-left: 5px;
+                padding-right: 5px;
+                width: 50px;
+                height: 100%;
+                bottom: -7px;
+                left: 142px;
+                button, input, select, textarea {
+                    cursor: pointer;
+                    background-color: transparent;
+                    height: 75%;
+                    width: 100%;
+                    opacity: 0;
+                }
+                z-index: 1;
+            }
+
+            .date-click-decorator{
+                z-index: 2;
+            }
+            .input-group__details {
+                min-height: 0px !important;
+            }
+            button {
+                height: 36px;
+                width: 150px;
+                min-width: 150px;
+                margin-bottom: -15px;
+                // margin-top: -70px;
+            }
+        }
+        
+    }
+    .chip-menu {
+        padding: 15px;
+        flex-wrap: nowrap;
+        .filter-chip-container {
+            align-items: center;
+            flex-wrap: wrap;
+            .filter-chip-flex {
+                padding: 5px;
+            }
+            .inner-chip { 
+                margin-left: -7px !important;
+            }
+            .chip__content {
+                padding: 5px;
+            }
+            h3 {
+                min-width: 85px;
+            }
+        }
+        button {
+            margin-right: 5px;
+        }
+    }
+    .row-info {
+        margin-top: 16px;
+        padding: 5px 16px 5px 16px;
+        align-items: center;
+        font-weight: 700;
+        font-size: 1.1em;
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px;
+    }
+}

@@ -10,8 +10,8 @@ export const dashboardComponent = () => import('./components/dashboard').then(({
 export const notificationsComponent = () => import('./components/core/notifications').then(({ NotificationsComponent }) => NotificationsComponent);
 const workflowsComponent = () => import('./components/dashboard/workflows').then(({ WorkflowsComponent }) => WorkflowsComponent);
 const statisticsComponent = () => import('./components/dashboard/statistics').then(({ StatisticsComponent }) => StatisticsComponent);
-const workflowRepoComponent = () => import('./components/dashboard/workflowRepo').then(({ WorkflowRepository }) => WorkflowRepository);
-
+const workflowRepoComponent = () => import('./components/dashboard/workflow-repo').then(({ WorkflowRepository }) => WorkflowRepository);
+const processorPoolsComponent = () => import('./components/dashboard/processor-pools').then(({ ProcessorPools }) => ProcessorPools);
 
 if (process.env.ENV === 'development' && module.hot) {
   // first arguments for `module.hot.accept` and `require` methods have to be static strings
@@ -83,9 +83,17 @@ export const createRoutes: () => RouteConfig[] = () => [
         }
       },
       {
-        name: 'workflowRepo',
-        path: 'workflowRepo/:id',
+        name: 'workflow-repo',
+        path: 'workflow-repo/:id',
         component: workflowRepoComponent,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        name: 'processor-pools',
+        path: 'processor-pools',
+        component: processorPoolsComponent,
         meta: {
           requiresAuth: true
         }

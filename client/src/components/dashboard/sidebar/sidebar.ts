@@ -18,7 +18,7 @@ export class SidebarComponent extends Vue {
     drawer = null;
     miniVariant = false;
     settingsShowed = false;
-      
+
     updateTarget(connectionSettings) {
         this.settingsShowed = false;
         this.$store.commit('updateConnectionSettings', connectionSettings);

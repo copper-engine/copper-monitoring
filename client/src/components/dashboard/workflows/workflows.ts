@@ -88,15 +88,15 @@ export class WorkflowsComponent extends Vue {
         if (this.fetchBrokenWFInterval) {
             clearInterval(this.fetchBrokenWFInterval);
         }
-        this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user);
+        this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
         this.fetchBrokenWFInterval = setInterval(() => {
-            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user);
+            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
         }, this.$store.state.connectionSettings.updatePeriod * 1000);
     }
 
-    private getBrokenWorkflows(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User) {
+    private getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User) {
         // TODO fix selecting correct bean
-        this.jmxService.getBrokenWorkflows(connectionSettings, mbeans.engineMBeans[0], user, this.perPage, (this.page - 1) * this.perPage).then((response: WorkflowInfo[]) => {
+        this.jmxService.getBrokenWorkflows(connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id], user, this.perPage, (this.page - 1) * this.perPage).then((response: WorkflowInfo[]) => {
             this.workflows = response;
         });
     }
@@ -271,7 +271,7 @@ export class WorkflowsComponent extends Vue {
     @Watch('perPage')
     private forceStatusFetch(delay: number = 0) {
         setTimeout(() => {
-            this.getBrokenWorkflows(this.$store.state.connectionSettings,   this.$store.state.mbeans, this.$store.state.user);
+            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
         }, delay);
     }
 }

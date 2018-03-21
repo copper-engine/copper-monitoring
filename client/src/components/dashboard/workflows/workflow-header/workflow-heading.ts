@@ -1,6 +1,6 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { JmxService } from '../../../../services/jmxService';
-import { WorkflowRepo, WorkflowFilter, State } from '../../../../models/engine';
+import { WorkflowRepo, WorkflowFilter, State, EngineStatus } from '../../../../models/engine';
 import { Datetime } from 'vue-datetime';
 import { FilterTime } from '../../../../models/filter-time';
 import './workflow-heading.scss';
@@ -233,7 +233,8 @@ export class WorkflowHeading extends Vue {
     }
 
     getPossibleClassNames() {
-        this.jmxService.getWfRepo(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user).then((response: WorkflowRepo) => {
+        let engine: EngineStatus = this.$store.state.engineStatusList[this.$route.params.id];
+        this.jmxService.getWfRepo(this.$store.state.connectionSettings, engine.wfRepoMXBean, this.$store.state.user).then((response: WorkflowRepo) => {
             this.possibleClassnames = response.workFlowInfo.map((workflow, index) => {
                 return response.workFlowInfo[index].classname;
             });

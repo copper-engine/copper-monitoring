@@ -28,14 +28,7 @@ export class ProcessorPools extends Vue {
         clearInterval(this.fetchPoolInterval);
     }
 
-    @Watch('$route.params')
-    init() {
-        this.engine = (this.$store.state as  StoreState).engineStatusList[this.$route.params.id];
-        this.scheduleFetchPools();
-    }
-
     getProcessorPools() {
-        console.log(this.engine.ppoolsMXBeans);
         this.jmxService.getProcessorPools(this.$store.state.connectionSettings, this.engine.ppoolsMXBeans, this.$store.state.user).then((response: any) => {
             this.processorPools = response;
         });
@@ -83,6 +76,12 @@ export class ProcessorPools extends Vue {
                 this.showError('Unable to suspend deque');
             }
         });
+    }
+
+    @Watch('$route.params')
+    init() {
+        this.engine = (this.$store.state as  StoreState).engineStatusList[this.$route.params.id];
+        this.scheduleFetchPools();
     }
 
     @Watch('$store.state.connectionSettings')

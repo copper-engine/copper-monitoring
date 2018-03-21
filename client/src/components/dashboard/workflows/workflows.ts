@@ -59,8 +59,6 @@ export class WorkflowsComponent extends Vue {
     }
 
     get status() {
-        console.log('status');
-        console.log(this.$store.state.engineStatusList[this.$route.params.id]);
         return this.$store.state.engineStatusList[this.$route.params.id];
     }
 

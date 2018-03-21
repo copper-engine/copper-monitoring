@@ -29,7 +29,7 @@ export class ProcessorPools extends Vue {
     }
 
     getProcessorPools() {
-        this.jmxService.getProcessorPools(this.$store.state.connectionSettings, this.engine.ppoolsMXBeans, this.$store.state.user).then((response: any) => {
+        this.jmxService.getProcessorPools(this.$store.state.connectionSettings, this.engine.ppoolsMXBeans, this.engine.type, this.$store.state.user).then((response: any) => {
             this.processorPools = response;
         });
     }

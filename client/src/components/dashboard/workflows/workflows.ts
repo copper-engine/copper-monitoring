@@ -85,17 +85,6 @@ export class WorkflowsComponent extends Vue {
         this.eventHub.$emit('showNotification', new Notification(message));
     }
 
-    // @Watch('$store.state.connectionSettings')
-    // sheduleFetchingBrrokenWF() {
-    //     if (this.fetchBrokenWFInterval) {
-    //         clearInterval(this.fetchBrokenWFInterval);
-    //     }
-    //     this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
-    //     this.fetchBrokenWFInterval = setInterval(() => {
-    //         this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user);
-    //     }, this.$store.state.connectionSettings.updatePeriod * 1000);
-    // }
-
     private getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User, filter) {
         // TODO fix selecting correct bean
         this.jmxService.getBrokenWorkflows(connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id], user, this.perPage, (this.page - 1) * this.perPage, filter).then((response: WorkflowInfo[]) => {
@@ -108,7 +97,6 @@ export class WorkflowsComponent extends Vue {
     }
 
     applyFilter(newFilter: WorkflowFilter) {
-        // console.log(newFilter);
         this.filter = newFilter;
         this.sheduleFetchingBrrokenWF();
     }
@@ -117,7 +105,7 @@ export class WorkflowsComponent extends Vue {
         this.jmxService.restartAll(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id], this.$store.state.user)
             .then((done) => {
                 this.restartingAll = false;
-                this.forceStatusFetch(1500);
+                this.forceStatusFetch(2000);
                 if (done) {
                     this.workflows.forEach((wf) => {
                         let currentID = wf.id;
@@ -139,7 +127,7 @@ export class WorkflowsComponent extends Vue {
         this.jmxService.restartFiltered(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id], this.$store.state.user, 0, 0, newFilter)
             .then((done) => {
                 this.restartingAll = false;
-                this.forceStatusFetch(1500);
+                this.forceStatusFetch(2000);
                 if (done) {
                     this.workflows.forEach((wf) => {
                         let currentID = wf.id;

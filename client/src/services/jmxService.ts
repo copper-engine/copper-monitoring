@@ -102,8 +102,8 @@ export class JmxService {
             });
     }
 
-    getProcessorPools(connectionSettings: ConnectionSettings, mbeans: string[], user: User) {
-        let requests = mbeans.map((mbean) => { return this.createGetProcessorPoolsRequest(connectionSettings, mbean); });
+    getProcessorPools(connectionSettings: ConnectionSettings, mbeans: string[], engineType: string, user: User) {
+        let requests = mbeans.map((mbean) => { return this.createGetProcessorPoolsRequest(connectionSettings, mbean, engineType); });
         return Axios.post(process.env.API_NAME, requests, {
                     auth: { username: user.name, password: user.password }
                 })
@@ -259,16 +259,31 @@ export class JmxService {
         };
     }
 
-    private createGetProcessorPoolsRequest(connectionSettings: ConnectionSettings, mbean: string) {
-        return {
-            type: 'READ',
-            mbean: mbean,
-            // that is attributes for persistent engine's procesor pool 
-            attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'UpperThreshold', 'LowerThreshold', 'NumberOfThreads', 'NumberOfActiveThreads'],
-            // that is attributes for tranzient engine's procesor pool 
-            // attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'MemoryQueueSize', 'QueueSize', 'NumberOfThreads', 'NumberOfActiveThreads'],
-            target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
-        };
+    private createGetProcessorPoolsRequest(connectionSettings: ConnectionSettings, mbean: string, engineType: string) {
+        if (engineType === 'persistent') {
+            return {
+                type: 'READ',
+                mbean: mbean,
+                // that is attributes for persistent engine's procesor pool 
+                attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'UpperThreshold', 'LowerThreshold', 'NumberOfThreads', 'NumberOfActiveThreads'],
+                // that is attributes for tranzient engine's procesor pool 
+                // attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'MemoryQueueSize', 'QueueSize', 'NumberOfThreads', 'NumberOfActiveThreads'],
+                target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
+            };
+        }
+        else if (engineType === 'transient') {
+            return {
+                type: 'READ',
+                mbean: mbean,
+                // that is attributes for persistent engine's procesor pool 
+                // attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'UpperThreshold', 'LowerThreshold', 'NumberOfThreads', 'NumberOfActiveThreads'],
+                // that is attributes for tranzient engine's procesor pool 
+                attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'MemoryQueueSize', 'QueueSize', 'NumberOfThreads', 'NumberOfActiveThreads'],
+                target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
+            };
+        } else {
+            return 'Engine Type not supported';
+        }
     }
 
     private createQueryBrokenWFRequest(connectionSettings: ConnectionSettings, mbean: string, max: number, offset: number, filter: WorkflowFilter) {

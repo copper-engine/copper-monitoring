@@ -55,9 +55,6 @@
     .version,
     .actions {
         word-wrap: break-word;
-        // width: 120px;
-        // min-width: 120px;
-        // max-width: 120px;
         padding: 0 10px;
     }
     .number {
@@ -102,7 +99,6 @@
         padding: 0px;
 
         .details {
-            // background: #4e4e4e;
             padding-left: 32px;
             padding-right: 32px;
             padding-bottom: 24px;
@@ -154,9 +150,6 @@
 
         .pagination li span {
             float: none;
-            // color: #ffffff;
-            // background-color: #424242;
-            // border: 1px solid #424242;
         }
     }
 

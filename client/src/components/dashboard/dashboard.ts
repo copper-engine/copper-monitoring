@@ -54,11 +54,12 @@ export class DashboardComponent extends Vue {
             let params = this.$route.fullPath.split('?');
             if (params && params[1]) {
                 params = params[1].split('&');
-                let host: string = params[0] ? params[0].split('=')[1] : undefined;
-                let port: string = params[1] ? params[1].split('=')[1] : undefined;
+                let settings: ConnectionSettings = this.$store.state.connectionSettings;
+                let host: string = params[0] ? params[0].split('=')[1] : settings.host;
+                let port: string = params[1] ? params[1].split('=')[1] : settings.port;
 
-                if (host || port) {
-                    this.$store.commit('updateConnectionSettings', new ConnectionSettings(host, port));
+                if (host !== settings.host || port !== settings.port) {
+                    this.$store.commit('updateConnectionSettings', new ConnectionSettings(host, port, settings.fetchPeriod, settings.updatePeriod));
                 }
             }
         }
@@ -97,7 +98,6 @@ export class DashboardComponent extends Vue {
 
     private getEngineStatus(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User) {
         (this.$services.jmxService as JmxService).getEngineStatus(connectionSettings, mbeans, user).then((enginStatusList: EngineStatus[]) => {
-            console.log('got engines', enginStatusList);
             this.$store.commit('updateEngineStatus', enginStatusList);
         });
     }

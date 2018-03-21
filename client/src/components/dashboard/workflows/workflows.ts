@@ -59,7 +59,9 @@ export class WorkflowsComponent extends Vue {
     }
 
     get status() {
-        return this.$store.state.engineStatus;
+        console.log('status');
+        console.log(this.$store.state.engineStatusList[this.$route.params.id]);
+        return this.$store.state.engineStatusList[this.$route.params.id];
     }
 
     get disabled() {
@@ -67,8 +69,8 @@ export class WorkflowsComponent extends Vue {
     }
 
     get totalPages() {
-        if (this.$store.state.engineStatus) {
-             let total = Math.ceil((this.$store.state.engineStatus as EngineStatus).brokenWFCount / this.perPage);
+        if (this.$store.state.engineStatusList[this.$route.params.id]) {
+             let total = Math.ceil((this.$store.state.engineStatusList[this.$route.params.id] as EngineStatus).brokenWFCount / this.perPage);
 
              if (this.page > total) {
                  this.page = 1; 

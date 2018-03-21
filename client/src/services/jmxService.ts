@@ -266,8 +266,6 @@ export class JmxService {
                 mbean: mbean,
                 // that is attributes for persistent engine's procesor pool 
                 attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'UpperThreshold', 'LowerThreshold', 'NumberOfThreads', 'NumberOfActiveThreads'],
-                // that is attributes for tranzient engine's procesor pool 
-                // attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'MemoryQueueSize', 'QueueSize', 'NumberOfThreads', 'NumberOfActiveThreads'],
                 target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
             };
         }
@@ -275,9 +273,7 @@ export class JmxService {
             return {
                 type: 'READ',
                 mbean: mbean,
-                // that is attributes for persistent engine's procesor pool 
-                // attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'UpperThreshold', 'LowerThreshold', 'NumberOfThreads', 'NumberOfActiveThreads'],
-                // that is attributes for tranzient engine's procesor pool 
+                // that is attributes for transient engine's procesor pool 
                 attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'MemoryQueueSize', 'QueueSize', 'NumberOfThreads', 'NumberOfActiveThreads'],
                 target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
             };

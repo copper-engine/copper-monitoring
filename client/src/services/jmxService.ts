@@ -66,7 +66,7 @@ export class JmxService {
     }
 
     // TODO logout if wrong credentials...
-    getBrokenWorkflows(connectionSettings: ConnectionSettings, mbean: string, user: User , max: number = 50, offset: number = 0, filter: WorkflowFilter) {
+    getBrokenWorkflows(connectionSettings: ConnectionSettings, mbean: string, user: User , max: number = 0, offset: number = 0, filter: WorkflowFilter) {
         return Axios.post(process.env.API_NAME, [
                 this.createQueryBrokenWFRequest(connectionSettings, mbean, max, offset, filter)
             ], {
@@ -195,7 +195,7 @@ export class JmxService {
             });
     }
 
-    deleteFiltered(connectionSettings: ConnectionSettings, mbean: string, user: User , max: number = 50, offset: number = 0, filter: WorkflowFilter) {
+    deleteFiltered(connectionSettings: ConnectionSettings, mbean: string, user: User , max: number = 0, offset: number = 0, filter: WorkflowFilter) {
         return Axios.post(process.env.API_NAME, 
             [ this.createJmxExecRequest(connectionSettings, mbean, { operation: 'deleteFiltered(javax.management.openmbean.CompositeData)', arguments: [this.createWorkflowFilter(connectionSettings, filter.states, max, offset, filter)] }) ], {
                 auth: { username: user.name, password: user.password }
@@ -206,7 +206,7 @@ export class JmxService {
         });
     }
 
-    restartFiltered(connectionSettings: ConnectionSettings, mbean: string, user: User , max: number = 50, offset: number = 0, filter: WorkflowFilter) {
+    restartFiltered(connectionSettings: ConnectionSettings, mbean: string, user: User , max: number = 0, offset: number = 0, filter: WorkflowFilter) {
         return Axios.post(process.env.API_NAME, [
             this.createJmxExecRequest(connectionSettings, mbean, { operation: 'restartFiltered(javax.management.openmbean.CompositeData)', arguments: [this.createWorkflowFilter(connectionSettings, filter.states, max, offset, filter)]  })
             ], {
@@ -290,7 +290,7 @@ export class JmxService {
         });
     }
 
-    private createWorkflowFilter(connectionSettings: ConnectionSettings, states: State[], max: number = 50, offset: number = 0, filter: WorkflowFilter = new WorkflowFilter) {
+    private createWorkflowFilter(connectionSettings: ConnectionSettings, states: State[], max: number = 0, offset: number = 0, filter: WorkflowFilter = new WorkflowFilter) {
         let createTo = new Date().getTime();
         let modTo = new Date().getTime();
         if (filter.createTo != null) {

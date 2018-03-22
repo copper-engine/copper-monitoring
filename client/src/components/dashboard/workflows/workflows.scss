@@ -95,6 +95,7 @@ code:after, kbd:after, code:before, kbd:before {
     .state,
     .timeout,
     .timestamps,
+    .engineId,
     .actions {
         word-wrap: break-word;
         padding: 0 5px;
@@ -107,10 +108,15 @@ code:after, kbd:after, code:before, kbd:before {
     .data {
         min-width: 380px; 
     }
+    .engineId {
+        width: 85px;
+        min-width: 85px;
+        max-width: 85px; 
+    }
     .processorPoolId {
-        width: 120px;
-        min-width: 120px;
-        max-width: 120px;
+        width: 130px;
+        min-width: 130px;
+        max-width: 130px;
     }
     .actions {
         width: 150px;
@@ -137,15 +143,15 @@ code:after, kbd:after, code:before, kbd:before {
         }
     }
     .timeout {
-        width: 140px;
-        min-width: 140px;
-        max-width: 140px;
+        width: 110px;
+        min-width: 110px;
+        max-width: 110px;
     }
     .priority,
     .state {
-        width: 65px;
-        min-width: 65px;
-        max-width: 65px;
+        width: 75px;
+        min-width: 75px;
+        max-width: 75px;
     }
 
     .pagination-cont {

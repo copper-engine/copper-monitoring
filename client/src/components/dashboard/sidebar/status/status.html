@@ -2,38 +2,23 @@
     <v-card color="primary" class="white--text engine-status">
         <v-card-title primary-title>
             <v-layout>
-                <v-flex class="status-icon-cont">
-                    <v-icon 
-                    v-show="status" 
-                    class="status-icon" 
-                    color="light-green accent-4">
-                    mdi-brightness-1
-                        </v-icon> 
-                        <v-icon 
-                        v-show="!status" 
-                        class="status-icon" 
-                        color="red darken-4"> 
-                        mdi-brightness-1
-                    </v-icon> 
-                </v-flex>
-                
-                <v-flex class="headline-custom">
+                <v-flex>
                     <span v-if="status" class="line header">
                         <div class="engine-id">{{status.engineId}}</div>
                         <div class="type">{{status.type}}</div>
                     </span>
-                    
                     <span v-show="!status" class="line header not-connected">
                         <div class="engine-id">{{ connectionSettings.host + ':' + connectionSettings.port }}</div>
                         <div class="type">Unable to connect</div>
                     </span>
                 </v-flex>
                 <v-flex class="settings-btn-cont">
-                        <v-btn dark icon @click="open = !open" class="settings-btn">
-                            <v-icon :class="{ 'close-details-icon': open }">details</v-icon>
-                        </v-btn>
+                    <v-btn dark icon @click="open = !open" class="settings-btn">
+                        <v-icon :class="{ 'close-details-icon': open }">details</v-icon>
+                    </v-btn>
                 </v-flex>
             </v-layout>
+            <transition name='fade'>
             <div v-show="open" v-if="status" class="engine-status-info">
                 <div class="line wf-number">
                     <span class="status-title">
@@ -69,11 +54,11 @@
                 </div>
                 
             </div>
+            </transition>
         </v-card-title>
     </v-card>
-    <v-list v-show="open">
-        <!-- <v-btn flat  v-bind:class="{'active' : $route.path == link.path}">
-        </v-btn> -->
+    <transition name='slide'>
+    <v-list v-show="open" class="link-list">
         <v-list-tile value="true" v-for="link in links" :key="link.path">
             <v-list-tile-content class="linkTile">
                 <router-link :to="link.path" active-class="back" class="link">
@@ -91,4 +76,5 @@
             </v-list-tile-content>
         </v-list-tile>
     </v-list>
+    </transition>
 </div>

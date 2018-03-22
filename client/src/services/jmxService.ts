@@ -27,6 +27,16 @@ export class JmxService {
         ];
     }
 
+    countWFRequest(connectionSettings, mbean, user: User, filter: WorkflowFilter) {
+        return Axios.post(process.env.API_NAME, this.createCountWFRequest(connectionSettings, mbean, filter.states, filter), {
+            auth: { username: user.name, password: user.password }
+        })
+        .then(this.parseCountWFRequest)
+        .catch(error => {
+            console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
+        });
+    }
+
     getChartCounts(connectionSettings: ConnectionSettings, mbean: string, user: User) {
         return Axios.post(process.env.API_NAME, [
                 this.createCountWFRequest(connectionSettings, mbean, [ State.RUNNING ]),                
@@ -68,7 +78,7 @@ export class JmxService {
     }
 
     // TODO logout if wrong credentials...
-    getBrokenWorkflows(connectionSettings: ConnectionSettings, mbean: string, user: User , max: number = 50, offset: number = 0, filter: WorkflowFilter) {
+    getBrokenWorkflows(connectionSettings: ConnectionSettings, mbean: string, user: User , max: number = 0, offset: number = 0, filter: WorkflowFilter) {
         return Axios.post(process.env.API_NAME, [
                 this.createQueryBrokenWFRequest(connectionSettings, mbean, max, offset, filter)
             ], {
@@ -197,7 +207,7 @@ export class JmxService {
             });
     }
 
-    deleteFiltered(connectionSettings: ConnectionSettings, mbean: string, user: User , max: number = 50, offset: number = 0, filter: WorkflowFilter) {
+    deleteFiltered(connectionSettings: ConnectionSettings, mbean: string, user: User , max: number = 0, offset: number = 0, filter: WorkflowFilter) {
         return Axios.post(process.env.API_NAME, 
             [ this.createJmxExecRequest(connectionSettings, mbean, { operation: 'deleteFiltered(javax.management.openmbean.CompositeData)', arguments: [this.createWorkflowFilter(connectionSettings, filter.states, max, offset, filter)] }) ], {
                 auth: { username: user.name, password: user.password }
@@ -208,7 +218,7 @@ export class JmxService {
         });
     }
 
-    restartFiltered(connectionSettings: ConnectionSettings, mbean: string, user: User , max: number = 50, offset: number = 0, filter: WorkflowFilter) {
+    restartFiltered(connectionSettings: ConnectionSettings, mbean: string, user: User , max: number = 0, offset: number = 0, filter: WorkflowFilter) {
         return Axios.post(process.env.API_NAME, [
             this.createJmxExecRequest(connectionSettings, mbean, { operation: 'restartFiltered(javax.management.openmbean.CompositeData)', arguments: [this.createWorkflowFilter(connectionSettings, filter.states, max, offset, filter)]  })
             ], {
@@ -266,26 +276,13 @@ export class JmxService {
     }
 
     private createGetProcessorPoolsRequest(connectionSettings: ConnectionSettings, mbean: string, engineType: string) {
-        if (engineType === 'persistent') {
-            return {
-                type: 'READ',
-                mbean: mbean,
-                // that is attributes for persistent engine's procesor pool 
-                attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'UpperThreshold', 'LowerThreshold', 'NumberOfThreads', 'NumberOfActiveThreads'],
-                target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
-            };
-        }
-        else if (engineType === 'tranzient') {
-            return {
-                type: 'READ',
-                mbean: mbean,
-                // that is attributes for transient engine's procesor pool 
-                attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'MemoryQueueSize', 'QueueSize', 'NumberOfThreads', 'NumberOfActiveThreads'],
-                target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
-            };
-        } else {
-            return 'Engine Type not supported';
-        }
+        let attributes = ((engineType === 'persistent') ? ['Id', 'ProcessorPoolState', 'ThreadPriority', 'UpperThreshold', 'LowerThreshold', 'NumberOfThreads', 'NumberOfActiveThreads'] : ['Id', 'ProcessorPoolState', 'ThreadPriority', 'MemoryQueueSize', 'QueueSize', 'NumberOfThreads', 'NumberOfActiveThreads']);
+        return {
+            type: 'READ',
+            mbean: mbean,
+            attribute: attributes,
+            target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` }
+        };
     }
 
     private createQueryBrokenWFRequest(connectionSettings: ConnectionSettings, mbean: string, max: number, offset: number, filter: WorkflowFilter) {
@@ -295,10 +292,10 @@ export class JmxService {
         });
     }
 
-    private createCountWFRequest(connectionSettings: ConnectionSettings, mbean: string, states: State[]) {
+    private createCountWFRequest(connectionSettings: ConnectionSettings, mbean: string, states: State[], filter: WorkflowFilter = new WorkflowFilter) {
         return this.createJmxExecRequest(connectionSettings, mbean, {
             operation: 'countWorkflowInstances(javax.management.openmbean.CompositeData)',
-            arguments: [this.createWorkflowFilter(connectionSettings, states)], // get workflows with status Invalid
+            arguments: [this.createWorkflowFilter(connectionSettings, states, 0, 0, filter)], // get workflows with status Invalid
         });
     }
 
@@ -309,7 +306,7 @@ export class JmxService {
         });
     }
 
-    private createWorkflowFilter(connectionSettings: ConnectionSettings, states: State[], max: number = 50, offset: number = 0, filter: WorkflowFilter = new WorkflowFilter) {
+    private createWorkflowFilter(connectionSettings: ConnectionSettings, states: State[], max: number = 0, offset: number = 0, filter: WorkflowFilter = new WorkflowFilter) {
         let createTo = new Date().getTime();
         let modTo = new Date().getTime();
         if (filter.createTo != null) {
@@ -357,16 +354,24 @@ export class JmxService {
         };
     }
 
-    private parseProcessorPoolsResponse = (response, mbeans) => {
-        console.log(response);
+    parseCountWFRequest(response) {
         if (!response || !response.data 
             || response.data.length < 1
             || response.data.error) {
             console.log('Invalid responce:', response); 
             throw new Error('invalid response!');
         }
-        let mbeanIndex = 0;
-        let pools = response.data.map((pool) => {
+        return response.data.value;
+    }
+
+    private parseProcessorPoolsResponse = (response, mbeans) => {
+        if (!response || !response.data 
+            || response.data.length < 1
+            || response.data.error) {
+            console.log('Invalid responce:', response); 
+            throw new Error('invalid response!');
+        }
+        let pools = response.data.map((pool, index) => {
             let newPool = new ProcessorPool (
             pool.value.Id,
             pool.value.ProcessorPoolState,
@@ -380,9 +385,8 @@ export class JmxService {
             pool.value.LowerThreshold,
             pool.value.NumberOfThreads,
             pool.value.NumberOfActiveThreads, 
-            mbeans[mbeanIndex]
+            mbeans[index]
             );
-            mbeanIndex++;
             return newPool;
         });
         return pools;

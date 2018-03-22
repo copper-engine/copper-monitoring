@@ -7,11 +7,25 @@
     .scroll-header {
         h3 {
             font-size: 1.3em;
-            padding-left: 16px;
+            padding-left: 30px;
             padding-top: 16px;
         }
         button {
             margin-right: 15px;
+        }
+        .stopGrow {
+            flex-grow: 0;
+        }
+        .status-icon-cont {
+            width: 35px;
+            max-width: 35px;
+            padding-top: 12px;
+            padding-left: 15px;
+            
+            .status-icon {
+                margin-top: 6px;
+                font-size: 22px;
+            }
         }
         .scroll-info {
             padding: 10px;
@@ -74,10 +88,21 @@
         }
     }
 
-    .fade-enter-active, .fade-leave-active {
-        transition: opacity .5s;
+    .ps__scrollbar-y-rail {
+        z-index: 2;
     }
-    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+
+    .slide-enter-active, .slide-leave-active {
+        transition: transform 0.75s;
+    }
+    .slide-enter, .slide-leave-to {
+        transform: translateY(-100%);
+    }
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity 0.75s;
+    }
+    .fade-enter, .fade-leave-to {
         opacity: 0;
     }
+    
 }

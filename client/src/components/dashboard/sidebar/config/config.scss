@@ -6,6 +6,23 @@
         font-weight: 700;
     }
 
+    .config-input {
+        label {
+            color: white !important;
+        }
+        .input-group__input {
+            input {
+                color: white !important;
+            }
+        }
+        .input-group__details:before  {
+            background-color: white !important;
+        }
+        .input-group__details:after  {
+            color: white;
+        }
+    }
+
     form {
         padding-top: 8px;
         width: 100%;

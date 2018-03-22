@@ -30,6 +30,7 @@ export class EngineStatus {
         public instances: number,
         public state: string,
         public brokenWFCount: number,
+        public dbStorageMXBean: string,
         public wfRepoMXBean: string,
         public ppoolsMXBeans: string[]
     ) {}

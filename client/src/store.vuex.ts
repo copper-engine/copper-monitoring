@@ -10,7 +10,7 @@ Vue.use(Vuex);
 
 export class StoreState {
   public darkTheme = parseBoolean(localStorage.getItem('darkTheme')) && true;
-  public mbeans: MBeans = new MBeans([''], ['']);
+  public mbeans: MBeans = new MBeans();
 
   constructor(public connectionSettings: ConnectionSettings, public engineStatusList: EngineStatus[] = null, public user: User = null) {}
 }

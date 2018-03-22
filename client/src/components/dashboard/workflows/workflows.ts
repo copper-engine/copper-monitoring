@@ -39,6 +39,7 @@ export class WorkflowsComponent extends Vue {
     private eventHub: Vue = this.$services.eventHub;
     workflowsContext: Map<String, WorkflowContext> = new Map<String, WorkflowContext>(); 
     workflows: WorkflowInfo[] = [];
+    wfCount: number = 0;
     fetchBrokenWFInterval: any;
     page: number = 1;
     perPage: number = 10;
@@ -68,18 +69,17 @@ export class WorkflowsComponent extends Vue {
 
     get totalPages() {
         if (this.$store.state.engineStatusList[this.$route.params.id]) {
-             let total = Math.ceil((this.$store.state.engineStatusList[this.$route.params.id] as EngineStatus).brokenWFCount / this.perPage);
 
-             if (this.page > total) {
-                 this.page = 1; 
-             }
+            let total = Math.ceil(Number(this.wfCount) / this.perPage);
+            if (this.page > total) {
+                this.page = 1; 
+            }
 
-             return total;
+            return total;
         }
         this.page = 1;
         return 1;
     }
-
     
     private showSuccess(message: String) {
         this.eventHub.$emit('showNotification', new Notification(message));
@@ -87,6 +87,9 @@ export class WorkflowsComponent extends Vue {
 
     private getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User, filter) {
         // TODO fix selecting correct bean
+        this.jmxService.countWFRequest(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id], this.$store.state.user, this.filter).then((response: number) => {
+            this.wfCount = response;
+        });
         this.jmxService.getBrokenWorkflows(connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id], user, this.perPage, (this.page - 1) * this.perPage, filter).then((response: WorkflowInfo[]) => {
             this.workflows = response;
         });

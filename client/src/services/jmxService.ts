@@ -27,6 +27,16 @@ export class JmxService {
         ];
     }
 
+    countWFRequest(connectionSettings, mbean, user: User, filter: WorkflowFilter) {
+        return Axios.post(process.env.API_NAME, this.createCountWFRequest(connectionSettings, mbean, filter.states, filter), {
+            auth: { username: user.name, password: user.password }
+        })
+        .then(this.parseCountWFRequest)
+        .catch(error => {
+            console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
+        });
+    }
+
     getChartCounts(connectionSettings: ConnectionSettings, mbean: string, user: User) {
         return Axios.post(process.env.API_NAME, [
                 this.createCountWFRequest(connectionSettings, mbean, [ State.RUNNING ]),                
@@ -276,10 +286,10 @@ export class JmxService {
         });
     }
 
-    private createCountWFRequest(connectionSettings: ConnectionSettings, mbean: string, states: State[]) {
+    private createCountWFRequest(connectionSettings: ConnectionSettings, mbean: string, states: State[], filter: WorkflowFilter = new WorkflowFilter) {
         return this.createJmxExecRequest(connectionSettings, mbean, {
             operation: 'countWorkflowInstances(javax.management.openmbean.CompositeData)',
-            arguments: [this.createWorkflowFilter(connectionSettings, states)], // get workflows with status Invalid
+            arguments: [this.createWorkflowFilter(connectionSettings, states, 0, 0, filter)], // get workflows with status Invalid
         });
     }
 
@@ -336,6 +346,16 @@ export class JmxService {
                 url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi`
             }
         };
+    }
+
+    parseCountWFRequest(response) {
+        if (!response || !response.data 
+            || response.data.length < 1
+            || response.data.error) {
+            console.log('Invalid responce:', response); 
+            throw new Error('invalid response!');
+        }
+        return response.data.value;
     }
 
     private parseProcessorPoolsResponse = (response, mbeans) => {

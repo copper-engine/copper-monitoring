@@ -7,11 +7,25 @@
     .scroll-header {
         h3 {
             font-size: 1.3em;
-            padding-left: 16px;
+            padding-left: 30px;
             padding-top: 16px;
         }
         button {
             margin-right: 15px;
+        }
+        .stopGrow {
+            flex-grow: 0;
+        }
+        .status-icon-cont {
+            width: 35px;
+            max-width: 35px;
+            padding-top: 12px;
+            padding-left: 15px;
+            
+            .status-icon {
+                margin-top: 6px;
+                font-size: 22px;
+            }
         }
         .scroll-info {
             padding: 10px;

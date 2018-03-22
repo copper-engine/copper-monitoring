@@ -260,26 +260,13 @@ export class JmxService {
     }
 
     private createGetProcessorPoolsRequest(connectionSettings: ConnectionSettings, mbean: string, engineType: string) {
-        if (engineType === 'persistent') {
-            return {
-                type: 'READ',
-                mbean: mbean,
-                // that is attributes for persistent engine's procesor pool 
-                attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'UpperThreshold', 'LowerThreshold', 'NumberOfThreads', 'NumberOfActiveThreads'],
-                target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
-            };
-        }
-        else if (engineType === 'transient') {
-            return {
-                type: 'READ',
-                mbean: mbean,
-                // that is attributes for transient engine's procesor pool 
-                attribute: ['Id', 'ProcessorPoolState', 'ThreadPriority', 'MemoryQueueSize', 'QueueSize', 'NumberOfThreads', 'NumberOfActiveThreads'],
-                target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
-            };
-        } else {
-            return 'Engine Type not supported';
-        }
+        let attributes = ((engineType === 'persistent') ? ['Id', 'ProcessorPoolState', 'ThreadPriority', 'UpperThreshold', 'LowerThreshold', 'NumberOfThreads', 'NumberOfActiveThreads'] : ['Id', 'ProcessorPoolState', 'ThreadPriority', 'MemoryQueueSize', 'QueueSize', 'NumberOfThreads', 'NumberOfActiveThreads']);
+        return {
+            type: 'READ',
+            mbean: mbean,
+            attribute: attributes,
+            target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` }
+        };
     }
 
     private createQueryBrokenWFRequest(connectionSettings: ConnectionSettings, mbean: string, max: number, offset: number, filter: WorkflowFilter) {
@@ -352,15 +339,13 @@ export class JmxService {
     }
 
     private parseProcessorPoolsResponse = (response, mbeans) => {
-        console.log(response);
         if (!response || !response.data 
             || response.data.length < 1
             || response.data.error) {
             console.log('Invalid responce:', response); 
             throw new Error('invalid response!');
         }
-        let mbeanIndex = 0;
-        let pools = response.data.map((pool) => {
+        let pools = response.data.map((pool, index) => {
             let newPool = new ProcessorPool (
             pool.value.Id,
             pool.value.ProcessorPoolState,
@@ -374,9 +359,8 @@ export class JmxService {
             pool.value.LowerThreshold,
             pool.value.NumberOfThreads,
             pool.value.NumberOfActiveThreads, 
-            mbeans[mbeanIndex]
+            mbeans[index]
             );
-            mbeanIndex++;
             return newPool;
         });
         return pools;

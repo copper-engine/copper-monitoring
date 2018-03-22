@@ -2,27 +2,11 @@
     <v-card color="primary" class="white--text engine-status">
         <v-card-title primary-title>
             <v-layout>
-                <v-flex class="status-icon-cont">
-                    <v-icon 
-                    v-show="status" 
-                    class="status-icon" 
-                    color="light-green accent-4">
-                    mdi-brightness-1
-                        </v-icon> 
-                        <v-icon 
-                        v-show="!status" 
-                        class="status-icon" 
-                        color="red darken-4"> 
-                        mdi-brightness-1
-                    </v-icon> 
-                </v-flex>
-                
                 <v-flex class="headline-custom">
                     <span v-if="status" class="line header">
                         <div class="engine-id">{{status.engineId}}</div>
                         <div class="type">{{status.type}}</div>
                     </span>
-                    
                     <span v-show="!status" class="line header not-connected">
                         <div class="engine-id">{{ connectionSettings.host + ':' + connectionSettings.port }}</div>
                         <div class="type">Unable to connect</div>

@@ -2,6 +2,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { ConnectionSettings } from '../../../models/connectionSettings';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import './sidebar.scss';
+import { setTimeout } from 'timers';
 
 const statusComponent = () => import('./status').then(({ StatusComponent }) => StatusComponent);
 const configComponent = () => import('./config').then(({ ConfigComponent }) => ConfigComponent);
@@ -20,6 +21,24 @@ export class SidebarComponent extends Vue {
     settingsShowed = false;
     host = this.$store.state.connectionSettings.host;
     port = this.$store.state.connectionSettings.port;
+    closeAll = false;
+
+    get connected() {
+        return (this.$store.state.engineStatusList && this.$store.state.engineStatusList.length > 0);
+    }
+
+    showSettings() {
+        this.settingsShowed = !this.settingsShowed;
+        if (this.settingsShowed === true) {
+            this.closeAll = true;
+            setTimeout(this.setCloseAllFalse, 1000);
+        }
+
+    }
+
+    setCloseAllFalse() {
+        this.closeAll = false;
+    }
       
     updateTarget(connectionSettings) {
         this.settingsShowed = false;

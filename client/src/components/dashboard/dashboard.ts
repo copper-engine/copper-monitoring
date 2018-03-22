@@ -94,7 +94,6 @@ export class DashboardComponent extends Vue {
 
     private getEngineStatus(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User) {
         (this.$services.jmxService as JmxService).getEngineStatus(connectionSettings, mbeans, user).then((enginStatusList: EngineStatus[]) => {
-            console.log('engines: ', enginStatusList);
             this.$store.commit('updateEngineStatus', enginStatusList);
         });
     }

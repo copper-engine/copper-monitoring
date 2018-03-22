@@ -431,8 +431,6 @@ export class JmxService {
             throw new Error('invalid response!');
         }
 
-        console.log('parsing', response);
-
         return _.chunk(response.data, 3).map((data, index) => this.parseEngineStatusData(data, index));
     }
     private parseEngineStatusData = (data, id: number): EngineStatus => {

@@ -283,7 +283,7 @@ export class WorkflowsComponent extends Vue {
         if (!wfContext) {
             wfContext = new WorkflowContext();
         }
-        wfContext.open = !wfContext.open; 
+        wfContext.open = !wfContext.open;
         this.workflowsContext.set(workflow.id, wfContext);
         this.$forceUpdate();
     }

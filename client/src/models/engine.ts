@@ -76,6 +76,7 @@ export class WorkflowInfo {
     public id: string;
     public state: string;
     public priority: number;
+    public engineId: string;
     public processorPoolId: string;
     public timeout: Date;
     public workflowClassInfo: WorkflowClassInfo;

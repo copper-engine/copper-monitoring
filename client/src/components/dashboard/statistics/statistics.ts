@@ -125,7 +125,7 @@ export class StatisticsComponent extends Vue {
     }
 
     fetchingData(states: StatesPrint[], updateFn) {
-        this.jmxService.getChartCounts(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id], this.$store.state.user).then((newStates: StatesPrint) => {
+        this.jmxService.getChartCounts(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id].name, this.$store.state.user).then((newStates: StatesPrint) => {
             if (states.length > 10) {
                 states.shift();
             }

@@ -5,6 +5,9 @@ import './dependency-injection';
 import * as theme from './theme-config';
 import { createRouter, dashboardComponent, notificationsComponent } from './router';
 
+// import * as _ from 'lodash';
+// (window as any)._ = _;
+
 let store = (Vue.$ioc.resolve('store') as Store<StoreState>);
 let app = new Vue({
   el: '#app',

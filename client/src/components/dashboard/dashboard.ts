@@ -5,7 +5,7 @@ import * as utils from '../../util/utils';
 import './dashboard.scss';
 import { EngineStatus } from '../../models/engine';
 import { User } from '../../models/user';
-import { MBeans } from '../../models/mbeans';
+import { MBeans, MBean } from '../../models/mbeans';
 
 const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) => SidebarComponent);
 
@@ -69,19 +69,15 @@ export class DashboardComponent extends Vue {
     sheduleFetchingStatus() {
         (this.$services.jmxService as JmxService)
         .getMBeans(this.$store.state.connectionSettings, this.$store.state.user)
-        .then((mbeanNames: string[][]) => {
-            console.log('mbeanNames', mbeanNames);
-
+        .then((mbeans: MBean[]) => {
             if (this.updateStatusInterval) {
                 clearInterval(this.updateStatusInterval);
             }
 
             let connectionSettings: ConnectionSettings = this.$store.state.connectionSettings;
-            if (mbeanNames && mbeanNames.length === 2) {
-                this.$store.commit('updateMBeans', new MBeans(mbeanNames[0], mbeanNames[1]));
+            if (mbeans && mbeans.length > 0) {
+                this.$store.commit('updateMBeans', new MBeans(mbeans));
             }
-
-
 
             this.getEngineStatus(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user);
             this.updateStatusInterval = setInterval(() => {

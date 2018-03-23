@@ -1,24 +1,23 @@
 
+export class MBean {
+    constructor(public name: string, public atts: string[]) {
+
+    } 
+}
+
+
 export class MBeans {
     // Values will be fetched by first call to JMX
-    public engineMBeans: string[];
-    public wfRepoMBeans: string[];
-
-    constructor(engineMBeans: string[], wfRepoMBeans: string[]) {
+    constructor(public engineMBeans: MBean[] = [new MBean('', [])]) {
         this.setEngineMBeans(engineMBeans);
-        this.setWfRepoMBeans(wfRepoMBeans);
     }
 
-    setEngineMBeans(names: string[]) {
-        this.engineMBeans = names.map(name => 'copper.engine:' + name); 
+    setEngineMBeans(beans: MBean[]) {
+        beans.forEach(bean => bean.name = 'copper.engine:' + bean.name);
+        this.engineMBeans = beans;
     }
-    setWfRepoMBeans(names: string[]) {
-        this.wfRepoMBeans = names.map(name => 'copper.workflowrepo:' + name); 
-    }
-    addEngineMBean(name: string) {
-        this.engineMBeans.push('copper.engine:' + name); 
-    }
-    addWfRepoMBean(name: string) {
-        this.wfRepoMBeans.push('copper.workflowrepo:' + name); 
+    addEngineMBean(bean: MBean) {
+        bean.name = 'copper.engine:' + bean.name;
+        this.engineMBeans.push(bean); 
     }
 }

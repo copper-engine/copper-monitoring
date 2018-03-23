@@ -4,7 +4,7 @@ import { State, EngineStatus, WorkflowInfo, WorkflowClassInfo, WorkflowRepo, Sta
 import { ConnectionSettings } from '../models/connectionSettings';
 import moment from 'moment';
 import { User } from '../models/user';
-import { MBeans } from '../models/mbeans';
+import { MBeans, MBean } from '../models/mbeans';
 import * as _ from 'lodash';
 
 export class JmxService {
@@ -19,11 +19,11 @@ export class JmxService {
             });
     }
 
-    createEngineStatusRequest(connectionSettings, mbean) {
+    createEngineStatusRequest(connectionSettings, mbean: MBean) {
         return [
             this.createEngineInfoRequest(connectionSettings, mbean), 
-            this.createEngineActivityRequest(connectionSettings, mbean),
-            this.createCountWFRequest(connectionSettings, mbean, [ State.ERROR, State.INVALID ])                
+            this.createEngineActivityRequest(connectionSettings, mbean.name),
+            this.createCountWFRequest(connectionSettings, mbean.name, [ State.ERROR, State.INVALID ])                
         ];
     }
 
@@ -67,8 +67,10 @@ export class JmxService {
                     console.log('Invalid responce:', response);          
                     throw new Error('invalid response!');
                 }
-                
-                return [Object.keys(response.data[0].value['copper.engine']), Object.keys(response.data[0].value['copper.workflowrepo'])];
+                let engines = response.data[0].value['copper.engine'];
+                let mbeanNames = Object.keys(response.data[0].value['copper.engine']);
+
+                return mbeanNames.map((mbean) => new MBean(mbean, Object.keys(engines[mbean].attr)));
             })
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
@@ -253,11 +255,15 @@ export class JmxService {
             target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
         };
     }
-    private createEngineInfoRequest(connectionSettings: ConnectionSettings, mbean: string) {
+    private createEngineInfoRequest(connectionSettings: ConnectionSettings, mbean: MBean) {
+        let attributes = ['EngineId', 'EngineType', 'State', 'WorkflowRepository', 'ProcessorPools'];
+        if (mbean.atts.indexOf('DBStorage') >= 0) {
+            attributes.push('DBStorage');
+        }
         return {
             type: 'read',
-            mbean: mbean,
-            attribute: ['EngineId', 'EngineType', 'State', 'WorkflowRepository', 'ProcessorPools'],
+            mbean: mbean.name,
+            attribute: attributes,
             target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
         };
     }
@@ -449,6 +455,7 @@ export class JmxService {
             data[1].value.countWfiLastNMinutes,
             data[0].value.State.toLowerCase(),
             data[2].value,
+            data[0].value.DBStorage ? data[0].value.DBStorage.objectName : null,
             data[0].value.WorkflowRepository.objectName,
             data[0].value.ProcessorPools.map((mbean) => mbean.objectName)            
         );

@@ -20,6 +20,10 @@ export class StatesPrint {
         public invalid: number) {}
 }
 
+export class EngineGroup {
+    constructor(public name: string, public engines: EngineStatus[]) {}
+}
+
 export class EngineStatus {
     constructor(
         public id: number,
@@ -30,6 +34,7 @@ export class EngineStatus {
         public instances: number,
         public state: string,
         public brokenWFCount: number,
+        public dbStorageMXBean: string,
         public wfRepoMXBean: string,
         public ppoolsMXBeans: string[]
     ) {}

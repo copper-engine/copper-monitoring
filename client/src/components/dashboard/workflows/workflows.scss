@@ -212,10 +212,7 @@ code:after, kbd:after, code:before, kbd:before {
         animation-name: slowFade;
         animation-duration: 1s;
     }
-    .custom-loader {
-        animation: loader 1s infinite;
-        display: flex;
-    }
+    
     @keyframes slowFade {
         from {opacity: 1}
         to {opacity: 0.4}
@@ -224,37 +221,5 @@ code:after, kbd:after, code:before, kbd:before {
         0% {opacity: 0.35}
         50% {opacity: 0.8}
         100% {opacity: 0.45}
-    }
-    @-moz-keyframes loader {
-        from {
-            transform: rotate(0);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-    @-webkit-keyframes loader {
-        from {
-            transform: rotate(0);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-    @keyframes loader {
-        from {
-            transform: rotate(0);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-    @-o-keyframes loader {
-        from {
-            transform: rotate(0);
-        }
-        to {
-            transform: rotate(360deg);
-        }
     }
 }

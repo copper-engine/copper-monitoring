@@ -117,10 +117,10 @@
     }
 
     .extend-status-enter-active {
-        animation: extend-status 1s;
+        animation: extend-status 0.75s;
     }
     .extend-status-leave-active {
-        animation: extend-status 1s reverse;
+        animation: extend-status 0.7s reverse;
     }
     @keyframes extend-status {
         0% {height: 0px}
@@ -128,10 +128,10 @@
     }
 
     .extend-links-enter-active {
-        animation: extend-links 1s;
+        animation: extend-links 0.75s;
     }
     .extend-links-leave-active {
-        animation: extend-links 1s reverse;
+        animation: extend-links 0.5s reverse;
     }
     @keyframes extend-links {
         0% {height: 0px}

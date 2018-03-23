@@ -25,7 +25,7 @@
             'fade': workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton)
             }">
                 <v-layout class="workflow-layout secondary" column>
-                    <v-layout>
+                    <v-layout class="workflow-layout-header">
                         <v-flex class="number">
                             {{ (page - 1) * perPage + i + 1 }}
                         </v-flex>  

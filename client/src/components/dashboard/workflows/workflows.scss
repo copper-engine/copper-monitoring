@@ -35,6 +35,10 @@ code:after, kbd:after, code:before, kbd:before {
         align-items: center;
     }
 
+    .workflow-layout-header {
+        max-height: 97px !important;
+    }
+
     .workflows-cont {
         border-bottom: 1px solid;
 

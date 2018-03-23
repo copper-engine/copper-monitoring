@@ -204,7 +204,7 @@ code:after, kbd:after, code:before, kbd:before {
         animation-duration: 1s;
     }
     .extend-enter-active {
-        animation: extend 0.75s;
+        animation: extend 0.5s;
     }
     .extend-leave-active {
         animation: extend 0.5s reverse;

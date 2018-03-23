@@ -18,7 +18,7 @@
                     </v-btn>
                 </v-flex>
             </v-layout>
-            <transition name='fade'>
+            <transition name='extend-status'>
             <div v-show="open" v-if="status" class="engine-status-info">
                 <div class="line wf-number">
                     <span class="status-title">
@@ -52,12 +52,11 @@
                         {{status.runningSince | moment("HH:mm DD/MM/YYYY")}}
                     </span>
                 </div>
-                
             </div>
             </transition>
         </v-card-title>
     </v-card>
-    <transition name='slide'>
+    <transition name='extend-links'>
     <v-list v-show="open" class="link-list">
         <v-list-tile value="true" v-for="link in links" :key="link.path">
             <v-list-tile-content class="linkTile">

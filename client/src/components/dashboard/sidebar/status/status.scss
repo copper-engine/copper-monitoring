@@ -6,7 +6,6 @@
     .engine-status {
 
         border-radius: 0px;
-        z-index: 1;
 
         .settings-btn-cont {
             margin-right: 10px;
@@ -37,6 +36,7 @@
         }
         
         .engine-status-info {
+            overflow: hidden;
             padding: 16px 16px 0 16px;
             .line {
                 padding: 4px 0;
@@ -49,6 +49,6 @@
         }
     }
     .link-list {
-        z-index: -1;
+        overflow: hidden;
     }
 }

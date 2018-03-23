@@ -48,15 +48,14 @@
                         <v-icon v-html="'settings'" :class="{'active': true}"></v-icon>
                     </v-btn>
                 </v-layout>
-                <transition name='fade'>
+                <transition name="extend-config">
                 <config v-if="settingsShowed" @updateTarget="updateTarget" @hideSettings="settingsShowed = false"></config>
                 </transition>
             </div>
             <status v-for="engineStatus in $store.state.engineStatusList" key="engineStatus.id" 
             :status="engineStatus" 
             :connectionSettings="$store.state.connectionSettings" 
-            :closing="closeAll" 
-            @showSettings="settingsShowed = true">
+            :closing="closeAll">
             </status>
             <div class="scroll-footer"></div>
         </scroll>

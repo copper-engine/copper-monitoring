@@ -23,13 +23,18 @@
         min-width: 986px;
     }
     .filter-menu {    
+        overflow: hidden;
+        flex-wrap: nowrap;
+        h3 {
+            align-items: center;
+            padding-left: 35px;
+            padding-right: 0px;
+        }
         .filter-header {
+            min-height: 65px;
             align-items: center;
             padding-left: 15px;
             padding-right: 0px;
-            h3 {
-                padding-left: 20px;
-            }
         }
         .filter-layout {
             padding-left: 10px;
@@ -94,6 +99,7 @@
     }
     .chip-menu {
         padding: 15px;
+        overflow: hidden;
         flex-wrap: nowrap;
         .filter-chip-container {
             align-items: center;
@@ -123,5 +129,34 @@
         font-size: 1.1em;
         border-top-left-radius: 2px;
         border-top-right-radius: 2px;
+    }
+
+    .extend-filter-enter-active {
+        animation: extend-filter 0.75s;
+    }
+    .extend-filter-leave-active {
+        animation: extend-filter 0.75s reverse;
+    }
+    @keyframes extend-filter {
+        0% {height: 0px;
+            padding-top: 0px;
+            padding-bottom: 0px;}
+        100% {height: 194px;
+            padding-top: 20px;
+            padding-bottom: 20px;}
+    }
+    .extend-chip-enter-active {
+        animation: extend-chip 0.75s;
+    }
+    .extend-chip-leave-active {
+        animation: extend-chip 0.75s reverse;
+    }
+    @keyframes extend-chip {
+        0% {height: 0px;
+            padding-top: 0px;
+            padding-bottom: 0px;}
+        100% {height: 77px;
+            padding-top: 15px;
+            padding-bottom: 15px;}
     }
 }

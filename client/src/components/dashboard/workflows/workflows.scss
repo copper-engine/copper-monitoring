@@ -45,7 +45,8 @@ code:after, kbd:after, code:before, kbd:before {
             border-top: 1px solid;
 
             .workflow-info-layout {
-                padding: 0px;    
+                padding: 0px;
+                overflow: hidden;    
 
                 .details {
                     padding-top: 24px;
@@ -182,16 +183,6 @@ code:after, kbd:after, code:before, kbd:before {
         display: inline-block;
         margin-right: 10px;
     }
-    .list-enter-active, .list-leave-active {
-        transition: all 1s;
-    }
-    .list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    .list-move {
-        transition: transform 1s;
-    }
 
 
     .highlight-workflow-layout >* {
@@ -212,10 +203,22 @@ code:after, kbd:after, code:before, kbd:before {
         animation-name: slowFade;
         animation-duration: 1s;
     }
-    .custom-loader {
-        animation: loader 1s infinite;
-        display: flex;
+
+    .extend-enter-active {
+        animation: extend 0.5s;
     }
+    .extend-leave-active {
+        animation: extend 0.5s reverse;
+    }
+    @keyframes extend {
+        0% {max-height: 0px;
+            padding-top: 0px;
+            padding-bottom: 0px;}
+        100% {max-height: 500px;
+            padding-top: 24px;
+            padding-bottom: 24px;}
+    }
+    
     @keyframes slowFade {
         from {opacity: 1}
         to {opacity: 0.4}
@@ -224,37 +227,5 @@ code:after, kbd:after, code:before, kbd:before {
         0% {opacity: 0.35}
         50% {opacity: 0.8}
         100% {opacity: 0.45}
-    }
-    @-moz-keyframes loader {
-        from {
-            transform: rotate(0);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-    @-webkit-keyframes loader {
-        from {
-            transform: rotate(0);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-    @keyframes loader {
-        from {
-            transform: rotate(0);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-    @-o-keyframes loader {
-        from {
-            transform: rotate(0);
-        }
-        to {
-            transform: rotate(360deg);
-        }
     }
 }

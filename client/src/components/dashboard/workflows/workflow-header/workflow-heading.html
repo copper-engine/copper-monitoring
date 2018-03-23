@@ -46,10 +46,11 @@
         </v-flex>
     </v-layout>
 
+    <transition name="extend-filter">
     <v-layout v-show="openFilterMenu" class="filter-menu secondary" column>
-        <v-layout row class="filter-header">
+        <v-flex class="filter-label">
         <h3 class="themeText--text">Filter By:</h3>        
-        </v-layout>
+        </v-flex>
         <v-layout class="filter-layout" column>
             <v-layout row class="filter-header">
                 <v-flex class="select-container stopGrow">
@@ -126,7 +127,9 @@
             </v-layout>
         </v-layout>      
     </v-layout>
+    </transition>
 
+    <transition name="extend-chip">
     <v-layout v-show="filterApplied && !openFilterMenu" class="chip-menu secondary" row>
         <v-layout row class="filter-chip-container">
             <v-flex class="stopGrow">
@@ -152,6 +155,7 @@
             </v-btn>
         </v-flex>
     </v-layout>
+    </transition>
 
     <v-layout class="row-info primary textOnColor--text">
         <v-flex class="number">

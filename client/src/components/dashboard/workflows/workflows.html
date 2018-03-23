@@ -104,6 +104,7 @@
                         'highlight-workflow-layout': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloading, 
                         'fade': workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton)
                         }">
+                        <transition name="extend">
                         <div class="details accent" v-show="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).open">
                             <v-layout class="workflow-detail workflow-id">
                                 <v-flex class="detail-label"> Workflow ID:</v-flex>
@@ -147,6 +148,7 @@
                                 </v-flex>
                             </v-layout>
                         </div>
+                        </transition>
                     </v-layout>
                 </v-layout>
             </v-flex>

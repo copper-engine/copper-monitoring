@@ -87,23 +87,6 @@
             color: #efefef;
         }
     }
-
-    .ps__scrollbar-y-rail {
-        z-index: 2;
-    }
-
-    // .slide-enter-active, .slide-leave-active {
-    //     transition: transform 0.75s;
-    // }
-    // .slide-enter, .slide-leave-to {
-    //     transform: translateY(-100%);
-    // }
-    // .fade-enter-active, .fade-leave-active {
-    //     transition: opacity 0.75s;
-    // }
-    // .fade-enter, .fade-leave-to {
-    //     opacity: 0;
-    // }
     
     .extend-config-enter-active {
         animation: extend-config 1s;
@@ -120,22 +103,28 @@
         animation: extend-status 0.75s;
     }
     .extend-status-leave-active {
-        animation: extend-status 0.7s reverse;
+        animation: extend-status 0.75s reverse;
     }
     @keyframes extend-status {
-        0% {height: 0px}
-        100% {height: 132px}
+        0% {height: 0px;
+            padding-top: 0px;}
+        100% {height: 132px;
+            padding-top: 16px;}
     }
 
     .extend-links-enter-active {
         animation: extend-links 0.75s;
     }
     .extend-links-leave-active {
-        animation: extend-links 0.5s reverse;
+        animation: extend-links 0.75s reverse;
     }
     @keyframes extend-links {
-        0% {height: 0px}
-        100% {height: 208px}
+        0% {height: 0px;
+            padding-top: 0px;
+            padding-bottom: 0px;}
+        100% {height: 208px;
+            padding-top: 8px;
+            padding-bottom: 8px;}
     }
 
     

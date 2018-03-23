@@ -31,13 +31,11 @@ export class SidebarComponent extends Vue {
         this.settingsShowed = !this.settingsShowed;
         if (this.settingsShowed === true) {
             this.closeAll = true;
-            setTimeout(this.setCloseAllFalse, 1000);
+            setTimeout(() => { 
+                this.closeAll = false;
+            }, 1000);
         }
 
-    }
-
-    setCloseAllFalse() {
-        this.closeAll = false;
     }
       
     updateTarget(connectionSettings) {

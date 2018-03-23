@@ -87,10 +87,10 @@ export class WorkflowsComponent extends Vue {
 
     private getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User, filter) {
         // TODO fix selecting correct bean
-        this.jmxService.countWFRequest(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id], this.$store.state.user, this.filter).then((response: number) => {
+        this.jmxService.countWFRequest(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id].name, this.$store.state.user, this.filter).then((response: number) => {
             this.wfCount = response;
         });
-        this.jmxService.getBrokenWorkflows(connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id], user, this.perPage, (this.page - 1) * this.perPage, filter).then((response: WorkflowInfo[]) => {
+        this.jmxService.getBrokenWorkflows(connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id].name, user, this.perPage, (this.page - 1) * this.perPage, filter).then((response: WorkflowInfo[]) => {
             this.workflows = response;
         });
     }

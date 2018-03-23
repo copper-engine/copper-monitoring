@@ -27,6 +27,10 @@ export class SidebarComponent extends Vue {
         return (this.$store.state.engineStatusList && this.$store.state.engineStatusList.length > 0);
     }
 
+    parseGroupName(rawName: string) {
+        return rawName.substr(15);
+    }
+
     showSettings() {
         this.settingsShowed = !this.settingsShowed;
         if (this.settingsShowed === true) {

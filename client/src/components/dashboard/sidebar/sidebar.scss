@@ -110,10 +110,10 @@
     }
 
     .extend-general-links-enter-active {
-        animation: extend-general-links 1s;
+        animation: extend-general-links .5s;
     }
     .extend-general-links-leave-active {
-        animation: extend-general-links 1s reverse;
+        animation: extend-general-links .75s reverse;
     }
     @keyframes extend-general-links {
         0% {height: 0px;
@@ -128,7 +128,7 @@
         animation: extend-group 0.75s;
     }
     .extend-group-leave-active {
-        animation: extend-group 0.75s reverse;
+        animation: extend-group 0.5s reverse;
     }
 
     @keyframes extend-group {
@@ -167,10 +167,10 @@
     }
 
     .extend-links-limited-enter-active {
-        animation: extend-links-limited 0.75s;
+        animation: extend-links-limited 0.5s;
     }
     .extend-links-limited-leave-active {
-        animation: extend-links-limited 0.75s reverse;
+        animation: extend-links-limited 0.45s reverse;
     }
     @keyframes extend-links-limited {
         0% {height: 0px;

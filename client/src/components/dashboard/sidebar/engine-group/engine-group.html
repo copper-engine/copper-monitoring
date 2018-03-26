@@ -5,15 +5,40 @@
         </v-flex>
         <h2 class="textOnColor--text"> {{ parseGroupName(group.name) }} </h2>
         <v-spacer></v-spacer>
-        <v-btn dark icon @click="open = !open">
-            <v-icon :class="{ 'close-details-icon': open }">details</v-icon>
-        </v-btn>
+        <v-tooltip top content-class="tooltip-text">
+            <v-btn dark icon @click="open = !open" slot="activator">
+                <v-icon :class="{ 'close-details-icon': open }">details</v-icon>
+            </v-btn>
+            <span>Show Engines</span>
+        </v-tooltip>
     </v-layout>
+    <transition name="extend-general-links">
+    <v-list v-show="open" class="secondary general-link-list">
+        <v-list-tile value="true" v-for="link in links" :key="link.path">
+            <v-list-tile-content class="linkTile">
+                <router-link :to="link.path" active-class="back" class="link">
+                    <v-layout row>
+                        <v-flex class="iconFlex">
+                            <v-list-tile-action>
+                                <v-icon color="themeText">{{ link.icon }}</v-icon>
+                            </v-list-tile-action>
+                        </v-flex>
+                        <v-flex>
+                            <v-list-tile-title v-text="link.name" class="themeText--text"></v-list-tile-title>
+                        </v-flex>
+                    </v-layout>                  
+                </router-link>
+            </v-list-tile-content>
+        </v-list-tile>
+    </v-list>
+    </transition>
     <transition name="extend-group">
-        <div v-if="open" class="secondary" :class="{ 'status-container' : multiEngine }">
+        <div v-if="(open) || !multiEngine" class="secondary" :class="{ 'status-container' : multiEngine }">
             <status
             v-for="engineStatus in group.engines" key="engineStatus.id"
-            class="secondary" 
+            class="secondary"
+            :multiEngine="multiEngine"
+            :closing="closing"
             :status="engineStatus" 
             :connectionSettings="$store.state.connectionSettings">
             </status>

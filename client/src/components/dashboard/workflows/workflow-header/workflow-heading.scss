@@ -73,7 +73,6 @@
                 bottom: -7px;
                 left: 142px;
                 button, input, select, textarea {
-                    cursor: pointer;
                     background-color: transparent;
                     height: 75%;
                     width: 100%;
@@ -84,6 +83,7 @@
 
             .date-click-decorator{
                 z-index: 2;
+                cursor: pointer;
             }
             .input-group__details {
                 min-height: 0px !important;

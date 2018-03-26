@@ -41,7 +41,9 @@
                 }
             }
             .status-container {
-                padding: 10px;
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-bottom: 10px;
             }
         }
     }
@@ -54,15 +56,22 @@
         transform: rotate(180deg);
     }
 
-    .link {
-        padding: 20px 20px 20px 40px;
-        width: 100%;
+
+    .general-link-list {
+        padding-left: 10px;
+        padding-right: 10px;
     }
-    
+
     .linkTile {
         border-radius: 2px;
-        margin-right: -40px;
-        margin-left: -40px; 
+        margin-right: -15px;
+        margin-left: -15px;
+        .link {
+            padding-top: 20px;
+            padding-bottom: 20px;
+            padding-left: 20px;
+            width: 100%;
+        }
     }
 
     .iconFlex {
@@ -100,18 +109,32 @@
         100% {height: 419px}
     }
 
+    .extend-general-links-enter-active {
+        animation: extend-general-links 1s;
+    }
+    .extend-general-links-leave-active {
+        animation: extend-general-links 1s reverse;
+    }
+    @keyframes extend-general-links {
+        0% {height: 0px;
+            padding-top: 0px;
+            padding-bottom: 0px;}
+        100% {height: 112px;
+            padding-top: 8px;
+            padding-bottom: 8px;}
+    }
+
     .extend-group-enter-active {
         animation: extend-group 0.75s;
     }
     .extend-group-leave-active {
         animation: extend-group 0.75s reverse;
     }
+
     @keyframes extend-group {
         0% {max-height: 0px;
-            padding-top:0px;
             padding-bottom: 0px;}
         100% {max-height: 500px;
-            padding-top: 10px;
             padding-bottom: 10px;}
     }
 
@@ -143,5 +166,19 @@
             padding-bottom: 8px;}
     }
 
+    .extend-links-limited-enter-active {
+        animation: extend-links-limited 0.75s;
+    }
+    .extend-links-limited-leave-active {
+        animation: extend-links-limited 0.75s reverse;
+    }
+    @keyframes extend-links-limited {
+        0% {height: 0px;
+            padding-top: 0px;
+            padding-bottom: 0px;}
+        100% {height: 112px;
+            padding-top: 8px;
+            padding-bottom: 8px;}
+    }
     
 }

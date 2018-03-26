@@ -6,14 +6,22 @@
             </v-flex>
             <div v-if="status" class="engine-id">{{status.engineId}}</div>
             <v-flex v-show="!status">
-                <div class="engine-id">{{ connectionSettings.host + ':' + connectionSettings.port }}</div>
                 <div class="type">Unable to connect</div>
             </v-flex>
             <v-spacer></v-spacer>
+            <v-tooltip top content-class="tooltip-text">
+                <v-flex v-if="!open" class="summary" slot="activator">
+                    ( {{ status.instances }} / {{ status.brokenWFCount }} )
+                </v-flex>
+                <span>( Workflow Instances / Broken Workflows )</span>
+            </v-tooltip>
             <v-flex class="stopGrow">
-                <v-btn dark icon @click="open = !open">
-                    <v-icon :class="{ 'close-details-icon': open }">details</v-icon>
-                </v-btn>
+                <v-tooltip top content-class="tooltip-text">
+                    <v-btn dark icon @click="open = !open" slot="activator">
+                        <v-icon :class="{ 'close-details-icon': open }">details</v-icon>
+                    </v-btn>
+                    <span>Show Details</span>
+                </v-tooltip>
             </v-flex>
         </v-layout>
         <transition name='extend-status'>
@@ -53,8 +61,8 @@
         </div>
         </transition>
     </v-card>
-    <transition name='extend-links'>
-    <v-list v-show="open" class="link-list">
+    <transition :name="extendType">
+    <v-list v-show="open">
         <v-list-tile value="true" v-for="link in links" :key="link.path">
             <v-list-tile-content class="linkTile">
                 <router-link :to="link.path" active-class="back" class="link">

@@ -105,7 +105,7 @@ export class WorkflowsComponent extends Vue {
     }
 
     restartAll() {
-        this.jmxService.restartAll(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id], this.$store.state.user)
+        this.jmxService.restartAll(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id].name, this.$store.state.user)
             .then((done) => {
                 this.restartingAll = false;
                 this.forceStatusFetch(2000);
@@ -127,7 +127,7 @@ export class WorkflowsComponent extends Vue {
     }
 
     restartFiltered(newFilter: WorkflowFilter) {
-        this.jmxService.restartFiltered(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id], this.$store.state.user, 0, 0, newFilter)
+        this.jmxService.restartFiltered(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id].name, this.$store.state.user, 0, 0, newFilter)
             .then((done) => {
                 this.restartingAll = false;
                 this.forceStatusFetch(2000);
@@ -149,7 +149,7 @@ export class WorkflowsComponent extends Vue {
 
     deleteFiltered(newFilter: WorkflowFilter) {
         this.page = 1;
-        this.jmxService.deleteFiltered(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id], this.$store.state.user, 0, 0, newFilter)
+        this.jmxService.deleteFiltered(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id].name, this.$store.state.user, 0, 0, newFilter)
             .then((done) => {
                 this.deletingAll = false;
                 this.forceStatusFetch(500);
@@ -172,7 +172,7 @@ export class WorkflowsComponent extends Vue {
 
     restart(id: string) {
         this.toggleButtons(id, 'restart');
-        this.jmxService.restart(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id], id, this.$store.state.user)
+        this.jmxService.restart(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id].name, id, this.$store.state.user)
         .then((done) => {
             this.toggleButtons(id, 'restart');
             if (done) {
@@ -191,7 +191,7 @@ export class WorkflowsComponent extends Vue {
 
     deleteBroken(id: string) {
         this.toggleButtons(id, 'delete');
-        this.jmxService.deleteBroken(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id], id, this.$store.state.user)
+        this.jmxService.deleteBroken(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id].name, id, this.$store.state.user)
         .then((done) => {
             // this.forceStatusFetch();
             this.toggleButtons(id, 'delete');

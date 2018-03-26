@@ -102,9 +102,9 @@ export class JmxService {
             });
     }
 
-    getSourceCode(connectionSettings: ConnectionSettings, user: User, classname: String) {
+    getSourceCode(connectionSettings: ConnectionSettings, user: User, mbean: string, classname: String) {
         return Axios.post(process.env.API_NAME, [
-            this.createSourceCodeRequest(connectionSettings, classname)
+            this.createSourceCodeRequest(connectionSettings, mbean, classname)
             ], {
                 auth: { username: user.name, password: user.password }
             })
@@ -237,14 +237,13 @@ export class JmxService {
         })
     ]
 
-    private createSourceCodeRequest(connectionSettings: ConnectionSettings, classname: String) {
+    private createSourceCodeRequest(connectionSettings: ConnectionSettings, mbean: string, classname: String) {
         return {
-        type: 'EXEC',
-        mbean: 'copper.workflowrepo:name=wfRepository',
-        // mbean: 'copper.workflowrepo:name=workflowRepositoryMXBean',
-        operation: 'getWorkflowInfo',
-        arguments: [classname],
-        target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
+            type: 'EXEC',
+            mbean: mbean,
+            operation: 'getWorkflowInfo',
+            arguments: [classname],
+            target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
         };
     }
 

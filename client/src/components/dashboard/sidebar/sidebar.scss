@@ -56,6 +56,9 @@
                     margin-right: 5px;
                 }
             }
+            .status-container {
+                padding: 10px;
+            }
         }
     }
 
@@ -118,10 +121,10 @@
     }
 
     .extend-group-enter-active {
-        animation: extend-group 1s;
+        animation: extend-group 0.75s;
     }
     .extend-group-leave-active {
-        animation: extend-group 1s reverse;
+        animation: extend-group 0.75s reverse;
     }
     @keyframes extend-group {
         0% {max-height: 0px;

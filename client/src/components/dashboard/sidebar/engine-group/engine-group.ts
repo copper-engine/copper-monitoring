@@ -12,11 +12,24 @@ const statusComponent = () => import('./status').then(({ StatusComponent }) => S
 export class EngineGroupComponent extends Vue {
     @Prop() group: EngineGroup;
     @Prop() closing: boolean;
-    open: boolean = false;
+    open: boolean = true;
     closeAll: boolean = false;
+    multiEngine: boolean = false;
 
     parseGroupName(rawName: string) {
         return rawName.substr(15);
+    }
+
+    created() {
+        this.checkMultiEngine();
+    }
+
+    @Watch('group')
+    checkMultiEngine() {
+        if (this.group.engines.length > 1) {
+            this.multiEngine = true;
+            this.open = false;
+        }
     }
 
     @Watch('closing')

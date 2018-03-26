@@ -7,43 +7,22 @@
         <scroll class="scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 600}">
             <div class="primary textOnColor--text scroll-header">
                 <v-layout row>
-                    <v-flex class="stopGrow">
-                        <v-flex class="status-icon-cont">
-                            <v-icon 
-                                v-show="connected" 
-                                class="status-icon" 
-                                color="light-green accent-4">
-                                mdi-brightness-1
-                            </v-icon> 
-                            <v-icon 
-                                v-show="!connected" 
-                                class="status-icon" 
-                                color="red darken-4"> 
-                                mdi-brightness-1
-                            </v-icon> 
-                        </v-flex>
+                    <v-flex class="icon-container">
+                        <v-icon 
+                            v-show="connected"
+                            color="light-green accent-4">
+                            mdi-brightness-1
+                        </v-icon> 
+                        <v-icon 
+                            v-show="!connected"
+                            color="red darken-4"> 
+                            mdi-brightness-1
+                        </v-icon> 
                     </v-flex>
-                    <v-flex class="stopGrow">
-                        <h3>Connection</h3>
+                    <v-flex class="connection-info">
+                        {{ host }}:{{ port }}
                     </v-flex>
-                </v-layout>
-                <v-layout row>
-                    <v-layout class="scroll-label" column>
-                        <v-flex>
-                            Host:
-                        </v-flex>
-                        <v-flex>
-                            Port:
-                        </v-flex>
-                    </v-layout>
-                    <v-layout class="scroll-info" column>
-                        <v-flex>
-                            {{ host }}
-                        </v-flex>
-                        <v-flex>
-                            {{ port }}
-                        </v-flex>
-                    </v-layout>
+                    <v-spacer></v-spacer>
                     <v-btn dark icon @click.stop="showSettings">
                         <v-icon v-html="'settings'" :class="{'active': true}"></v-icon>
                     </v-btn>

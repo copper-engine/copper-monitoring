@@ -1,12 +1,16 @@
 <div>
-    <v-layout class="group-header" row>
-        <h2 class="textOnColor--text">Group: {{ parseGroupName(group.name) }} </h2>
+    <v-layout v-if="multiEngine" class="group-header" row>
+        <v-flex class="icon-container">
+            <v-icon>mdi-database</v-icon>
+        </v-flex>
+        <h2 class="textOnColor--text"> {{ parseGroupName(group.name) }} </h2>
+        <v-spacer></v-spacer>
         <v-btn dark icon @click="open = !open">
             <v-icon :class="{ 'close-details-icon': open }">details</v-icon>
         </v-btn>
     </v-layout>
     <transition name="extend-group">
-        <div v-if="open" class="secondary status-container">
+        <div v-if="open" class="secondary" :class="{ 'status-container' : multiEngine }">
             <status
             v-for="engineStatus in group.engines" key="engineStatus.id"
             class="secondary" 

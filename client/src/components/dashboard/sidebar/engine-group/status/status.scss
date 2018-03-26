@@ -5,20 +5,11 @@
 
     .engine-status {
 
+        padding: 10px;
         border-radius: 0px;
 
-        .settings-btn-cont {
-            margin-right: 10px;
-            width: 35px;
-            max-width: 35px;
-            
-            .settings-btn {
-                margin-top: 0px;
-            }
-        }
-
-        .card__title--primary {
-            padding-bottom: 24px;
+        .stopGrow {
+            flex-grow: 0;
         }
 
         .engine-id {
@@ -26,6 +17,7 @@
             font-weight: 700;
             word-wrap: break-word;
             max-width: 195px;
+            padding-top: 12px;
         }
         .type {
             color: #ccc;
@@ -34,7 +26,8 @@
         
         .engine-status-info {
             overflow: hidden;
-            padding: 16px 16px 0 16px;
+            padding-top: 10px;
+            padding-left: 10px;
             .line {
                 padding: 4px 0;
 

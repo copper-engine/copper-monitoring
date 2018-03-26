@@ -53,26 +53,11 @@
                 </transition>
             </div>
 
-            <div class="group primary" v-for="group in $store.state.groupsOfEngines" key="group.name">
-                <v-layout class="group-header" row>
-                <h2>Group: {{ parseGroupName(group.name) }} </h2>
-                <v-btn dark icon @click="showSettings">
-                    <v-icon>details</v-icon>
-                </v-btn>
-                </v-layout>
-                <status v-for="engineStatus in group.engines" key="engineStatus.id"
-                class="secondary" 
-                :status="engineStatus" 
-                :connectionSettings="$store.state.connectionSettings" 
-                :closing="closeAll">
-                </status>
-            </div>
-            
-            <!-- <status v-for="engineStatus in $store.state.engineStatusList" key="engineStatus.id" 
-            :status="engineStatus" 
-            :connectionSettings="$store.state.connectionSettings" 
+            <group class="group primary" 
+            v-for="group in $store.state.groupsOfEngines" key="group.name"
+            :group=group
             :closing="closeAll">
-            </status> -->
+            </group>
 
             <div class="scroll-footer"></div>
         </scroll>

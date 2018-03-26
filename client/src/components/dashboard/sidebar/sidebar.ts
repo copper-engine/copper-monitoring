@@ -1,17 +1,17 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { ConnectionSettings } from '../../../models/connectionSettings';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
-import './sidebar.scss';
 import { setTimeout } from 'timers';
+import './sidebar.scss';
 
-const statusComponent = () => import('./status').then(({ StatusComponent }) => StatusComponent);
 const configComponent = () => import('./config').then(({ ConfigComponent }) => ConfigComponent);
+const engineGroupComponent = () => import('./engine-group').then(({EngineGroupComponent}) => EngineGroupComponent);
 
 @Component({
     template: require('./sidebar.html'),
     components: {
-        'status': statusComponent,
         'config': configComponent,
+        'group': engineGroupComponent,
         'scroll': VuePerfectScrollbar
     }
 })
@@ -25,10 +25,6 @@ export class SidebarComponent extends Vue {
 
     get connected() {
         return (this.$store.state.engineStatusList && this.$store.state.engineStatusList.length > 0);
-    }
-
-    parseGroupName(rawName: string) {
-        return rawName.substr(15);
     }
 
     showSettings() {

@@ -1,0 +1,16 @@
+<div>
+    <v-layout class="group-header" row>
+        <h2>Group: {{ parseGroupName(group.name) }} </h2>
+        <v-btn dark icon @click="open = !open">
+            <v-icon :class="{ 'close-details-icon': open }">details</v-icon>
+        </v-btn>
+    </v-layout>
+    <transition name="extend-group">
+        <status v-if="open"
+        v-for="engineStatus in group.engines" key="engineStatus.id"
+        class="secondary" 
+        :status="engineStatus" 
+        :connectionSettings="$store.state.connectionSettings">
+        </status>
+    </transition>
+</div>

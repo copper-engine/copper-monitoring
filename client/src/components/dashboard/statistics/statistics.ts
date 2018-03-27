@@ -4,7 +4,7 @@ import LineChart from './chart';
 import './statistics.scss';
 import { VueCharts, Bar, Line, mixins } from 'vue-chartjs';
 import { JmxService } from '../../../services/jmxService';
-import { StatesPrint, EngineStatus } from '../../../models/engine';
+import { StatesPrint, EngineStatus, EngineGroup } from '../../../models/engine';
 import { ConnectionSettings } from '../../../models/connectionSettings';
 
 const INT_15_MIN = 15 * 60 * 1000;
@@ -26,15 +26,25 @@ const INT_1_MIN = 60 * 1000;
 })
 export class StatisticsComponent extends Vue {
     private jmxService: JmxService = this.$services.jmxService;
-    secondsStates: StatesPrint[] = this.getDataFromLS('secondsStates');
+    multiEngine = false;
+    id: string;
+    group: EngineGroup = null;
+
+    secondsKey = this.getKey('seconds');
+    // secondsStates: StatesPrint[] = this.getDataFromLS('secondsStates');
+    secondsStates: StatesPrint[] = this.getDataFromLS(this.secondsKey);
     secondsChartData = null;
     secondsInterval = null;
     
-    minutesStates: StatesPrint[] = this.getDataFromLS('minutesStates');
+    minutesKey = this.getKey('minutes');
+    // minutesStates: StatesPrint[] = this.getDataFromLS('minutesStates');
+    minutesStates: StatesPrint[] = this.getDataFromLS(this.minutesKey);
     minutesChartData = null;
     minutesInterval = null;
 
-    quoterMinStates: StatesPrint[] = this.getDataFromLS('quoterMinStates');
+    quoterKey = this.getKey('quoter');
+    // quoterMinStates: StatesPrint[] = this.getDataFromLS('quoterMinStates');
+    quoterMinStates: StatesPrint[] = this.getDataFromLS(this.quoterKey);
     quoterMinChartData = null;
     quoterMinInterval = null;
 
@@ -46,6 +56,78 @@ export class StatisticsComponent extends Vue {
         error: true,
         invalid: true
     };
+
+    mounted() { 
+        this.initCharts();
+     }
+ 
+     @Watch('states', { deep: true })
+     @Watch('$route.params')
+     initCharts() {
+         this.getId();
+         this.getGroup();
+         this.getKeySet();
+         this.initSecondsChart();
+         this.initMinutesChart();
+         this.initQuoterMinChart();
+     }
+
+    getKeySet() {
+        this.secondsKey = this.getKey('seconds');
+        this.minutesKey = this.getKey('minutes');
+        this.quoterKey = this.getKey('quoter');
+    }
+
+    getKey(base: string) {
+        if (this.id != null) {
+            if (this.multiEngine === false) {
+                return this.$store.state.connectionSettings.host + ':' 
+                        + this.$store.state.connectionSettings.port + ':'
+                        + this.$store.state.engineStatusList[this.id].engineId + ':' 
+                        + base;
+            } else {
+                return this.$store.state.connectionSettings.host + ':' 
+                        + this.$store.state.connectionSettings.port + ':'
+                        + this.$route.params.id.substr(6) + ':' 
+                        + base;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    getId() {
+        if (this.$route.params.id.substr(0, 5) === 'group') {
+            console.log('detecting group');
+            this.multiEngine = true;
+            for (let i = 0; i < this.$store.state.groupsOfEngines.length; i++) {
+                let group = this.$store.state.groupsOfEngines[i];
+                if (this.parseGroupName(group.name) === this.$route.params.id.substr(6)) {
+                    this.id = group.engines[0].id;
+                }
+            }
+        } else {
+            this.multiEngine = false;
+            this.id = this.$route.params.id;
+        }
+    }
+
+    getGroup() {
+        if (this.multiEngine === true) {
+            for (let i = 0; i < this.$store.state.groupsOfEngines.length; i++) {
+                let group = this.$store.state.groupsOfEngines[i];
+                if (this.parseGroupName(group.name) === this.$route.params.id.substr(6)) {
+                    this.group = group;
+                }
+            }
+        } else {
+            return null;
+        }
+    }
+
+    parseGroupName(rawName: string) {
+        return rawName.substr(15);
+    }
 
     getDataFromLS(key: string) {
         try {
@@ -67,24 +149,13 @@ export class StatisticsComponent extends Vue {
         }
     }
 
-    mounted() {
-       this.initCharts();
-    }
-
-    @Watch('states', { deep: true })
-    @Watch('$route.params')
-    initCharts() {
-        this.initSecondsChart();
-        this.initMinutesChart();
-        this.initQuoterMinChart();
-    }
-
     initSecondsChart() {
         if (this.secondsInterval) {
             clearInterval(this.secondsInterval);
         }
         let updateSecondsState = (states) => {
-            localStorage.setItem('secondsStates', JSON.stringify(states));
+            // localStorage.setItem('secondsStates', JSON.stringify(states));
+            localStorage.setItem(this.secondsKey, JSON.stringify(states));
             this.secondsChartData = this.getChartData(states);
         };
         console.log('this.secondsStates', this.secondsStates);
@@ -101,7 +172,8 @@ export class StatisticsComponent extends Vue {
             clearInterval(this.minutesInterval);
         }
         let updateMinutesState = (states) => {
-            localStorage.setItem('minutesStates', JSON.stringify(states));
+            // localStorage.setItem('minutesStates', JSON.stringify(states));
+            localStorage.setItem(this.minutesKey, JSON.stringify(states));
             this.minutesChartData = this.getChartData(states);
         };
         this.fetchingData(this.minutesStates, updateMinutesState);
@@ -115,7 +187,8 @@ export class StatisticsComponent extends Vue {
             clearInterval(this.quoterMinInterval);
         }
         let updateQuoterMinState = (states) => {
-            localStorage.setItem('quoterMinStates', JSON.stringify(states));
+            // localStorage.setItem('quoterMinStates', JSON.stringify(states));
+            localStorage.setItem(this.quoterKey, JSON.stringify(states));
             this.quoterMinChartData = this.getChartData(states);
         };
         this.fetchingData(this.quoterMinStates, updateQuoterMinState);
@@ -125,13 +198,68 @@ export class StatisticsComponent extends Vue {
     }
 
     fetchingData(states: StatesPrint[], updateFn) {
-        this.jmxService.getChartCounts(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id].name, this.$store.state.user).then((newStates: StatesPrint) => {
-            if (states.length > 10) {
-                states.shift();
+        if (this.secondsInterval !== null) {
+            if (this.multiEngine === false) {
+                this.jmxService.getChartCounts(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.id].name, this.$store.state.user).then((newStates: StatesPrint) => {
+                    if (states.length > 10) {
+                        states.shift();
+                    }
+                    states.push(newStates);
+                    updateFn(states);
+                });
+            } else {
+                this.jmxService.getGroupChartCounts(this.$store.state.connectionSettings, this.getBeans(), this.$store.state.user).then((response) => {
+                    let counter = this.getCounter();
+                    let running = 0;
+                    let dequeued = 0;
+                    let otherValues = [];
+
+                    if (states.length > 10) {
+                        states.shift();
+                    }
+
+                    for (let i = 0; i < counter; i++) {
+                        running = running + response.data[i].value;
+                    }
+                    for (let i = counter; i < (counter * 2); i++) {
+                        dequeued = dequeued + response.data[i].value;
+                    }
+                    for (let i = (counter * 2); i < response.data.length; i++) {
+                        otherValues.push(response.data[i].value);
+                    }
+
+                    let newStates = new StatesPrint(new Date(response.data[0].timestamp * 1000), 
+                        running, otherValues[0], otherValues[1], dequeued, otherValues[2], otherValues[3]);
+                    states.push(newStates);
+                    updateFn(states);
+                });
             }
-            states.push(newStates);
-            updateFn(states);
+        }
+    }
+
+    getCounter() {
+        for (let i = 0; i < this.$store.state.groupsOfEngines.length; i++) {
+            let group = this.$store.state.groupsOfEngines[i];
+                if (this.parseGroupName(group.name) === this.$route.params.id.substr(6)) {
+                    return group.engines.length;
+                }
+        }
+    }
+
+    getBeans() {
+        // for (let i = 0; i < this.$store.state.groupsOfEngines.length; i++) {
+        //     let group = this.$store.state.groupsOfEngines[i];
+        //         if (this.parseGroupName(group.name) === this.$route.params.id.substr(6)) {
+        //             let beans = group.engines.map((engine) => {
+        //                 return this.$store.state.mbeans.engineMBeans[engine.id].name;
+        //             });
+        //             return beans;
+        //         }
+        // }
+        let beans = this.group.engines.map((engine) => {
+            return this.$store.state.mbeans.engineMBeans[engine.id].name;
         });
+        return beans;
     }
 
     getChartData(statesPrint: StatesPrint[]) {

@@ -27,7 +27,7 @@ export class EngineGroupComponent extends Vue {
     get links(): Link[] {
         
         return [
-            new Link('Statistics', '/dashboard/statistics/' + this.group.engines[0].id + '?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-chart-bar'),
+            new Link('Statistics', '/dashboard/statistics/' + ('group:' + this.parseGroupName(this.group.name)) + '?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-chart-bar'),
             new Link('Broken Workflows', '/dashboard/workflows/' + this.group.engines[0].id + '?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-image-broken'),
         ];
     }

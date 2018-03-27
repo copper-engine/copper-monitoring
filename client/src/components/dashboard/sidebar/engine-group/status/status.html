@@ -4,7 +4,10 @@
             <v-flex class="icon-container">
                 <v-icon>extension</v-icon>
             </v-flex>
-            <div v-if="status" class="engine-id">{{status.engineId}}</div>
+            <v-layout column>
+                <div v-if="status" class="engine-id">{{status.engineId}}</div>
+                <div v-if="status" class="type">{{status.type}}</div>
+            </v-layout>
             <v-flex v-show="!status">
                 <div class="type">Unable to connect</div>
             </v-flex>

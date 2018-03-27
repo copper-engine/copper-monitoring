@@ -53,6 +53,41 @@ export class JmxService {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
             });
     }
+
+    getGroupChartCounts(connectionSettings: ConnectionSettings, mbeans: string[], user: User) {
+        let requests = [];
+        this.createGroupCountRequest(connectionSettings, user, mbeans, [ State.RUNNING ]).map((request) => {
+            requests.push(request);
+        });
+        this.createGroupCountRequest(connectionSettings, user, mbeans, [ State.DEQUEUED ]).map((request) => {
+            requests.push(request);
+        });
+        requests.push(this.createCountWFRequest(connectionSettings, mbeans[0], [ State.WAITING ]));
+        requests.push(this.createCountWFRequest(connectionSettings, mbeans[0], [ State.FINISHED ]));
+        
+        requests.push(this.createCountWFRequest(connectionSettings, mbeans[0], [ State.ERROR ]));
+        requests.push(this.createCountWFRequest(connectionSettings, mbeans[0], [ State.INVALID ]));
+        
+        return Axios.post(process.env.API_NAME, requests, {
+                auth: { username: user.name, password: user.password }
+            })
+            .then(this.parseGroupChartCountResponse)
+            .catch(error => {
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
+            });
+    }
+
+    createGroupCountRequest(connectionSettings: ConnectionSettings, user: User, mbeans: string[], state: State[]) {
+        let requests = mbeans.map((bean) => {
+            return this.createCountWFRequest(connectionSettings, bean, state);
+        });
+        return requests;
+    }
+
+    parseGroupChartCountResponse = (response) => {
+        return response;
+    }
+
     getMBeans(connectionSettings: ConnectionSettings, user: User) {
         return Axios.post(process.env.API_NAME, [
                 this.createMBeansListRequest(connectionSettings)

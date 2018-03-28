@@ -5,6 +5,9 @@
         </v-flex>
         <h2 class="textOnColor--text"> {{ parseGroupName(group.name) }} </h2>
         <v-spacer></v-spacer>
+        <v-flex v-if="!open" class="summary">
+            ( {{ wfCount }} / {{ brokenWFCount }} )
+        </v-flex>
         <v-tooltip top content-class="tooltip-text">
             <v-btn dark icon @click="open = !open" slot="activator">
                 <v-icon :class="{ 'close-details-icon': open }">details</v-icon>

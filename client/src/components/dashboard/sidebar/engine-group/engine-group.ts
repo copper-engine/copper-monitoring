@@ -1,5 +1,6 @@
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
-import { EngineGroup, EngineStatus } from '../../../../models/engine';
+import { EngineGroup, EngineStatus, WorkflowFilter } from '../../../../models/engine';
+import { JmxService } from '../../../../services/jmxService';
 import { Link } from '../../../../models/link';
 
 const statusComponent = () => import('./status').then(({ StatusComponent }) => StatusComponent);
@@ -11,8 +12,11 @@ const statusComponent = () => import('./status').then(({ StatusComponent }) => S
     }
 })
 export class EngineGroupComponent extends Vue {
+    private jmxService: JmxService = this.$services.jmxService;
     @Prop() group: EngineGroup;
     @Prop() closing: boolean;
+    brokenWFCount = 0;
+    wfCount = 0;
     open: boolean = false;
     multiEngine: boolean = false;
 
@@ -21,8 +25,21 @@ export class EngineGroupComponent extends Vue {
     }
 
     created() {
-        this.checkMultiEngine();
+        this.checkGroupInfo();
     }
+
+    getBrokenWFCount() {
+       this.jmxService.countWFRequest(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.group.engines[0].id].name, this.$store.state.user, new WorkflowFilter).then((response: number) => {
+            this.brokenWFCount = response;
+        });
+    }
+    getWFCount() {
+        let count = 0;
+        for (let i = 0; i < this.group.engines.length; i++) {
+            count = count + this.group.engines[i].instances;
+        }
+        this.wfCount = count;
+     }
 
     get links(): Link[] {
         
@@ -33,10 +50,12 @@ export class EngineGroupComponent extends Vue {
     }
 
     @Watch('group')
-    checkMultiEngine() {
+    checkGroupInfo() {
         if (this.group.engines.length > 1) {
             this.multiEngine = true;
         }
+        this.getBrokenWFCount();
+        this.getWFCount();
     }
 
     @Watch('closing')

@@ -17,12 +17,19 @@
             font-size: 1.3em;
             font-weight: 700;
             word-wrap: break-word;
-            max-width: 195px;
+            max-width: 100px;
             padding-top: -5px;
         }
         .summary {
             font-size: 1.1em;
             padding-top: 10px;
+            min-width: 75px;
+            cursor: default;
+        }
+        .summary-limited {
+            font-size: 1.1em;
+            padding-top: 10px;
+            min-width: 25px;
             cursor: default;
         }
         .type {

@@ -27,7 +27,7 @@
                 </v-tooltip>
             </v-flex>
         </v-layout>
-        <transition name='extend-status'>
+        <transition :name="extendStatusType">
         <div v-show="open" v-if="status" class="engine-status-info">
             <div class="line wf-number">
                 <span class="status-title">
@@ -37,7 +37,7 @@
                     {{status.instances}}
                 </span>
             </div>
-            <div class="line broken">
+            <div v-if="multiEngine === false" class="line broken">
                 <span class="status-title">
                     Broken WF instances:
                 </span>

@@ -24,6 +24,14 @@ export class StatusComponent extends Vue {
         }
     }
 
+    get extendStatusType() {
+        if (this.multiEngine === true) {
+            return 'extend-status-limited';
+        } else {
+            return 'extend-status';
+        }
+    }
+
     get links(): Link[] {
 
         if (this.multiEngine === true) {

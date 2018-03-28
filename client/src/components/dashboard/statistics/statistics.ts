@@ -26,7 +26,6 @@ const INT_1_MIN = 60 * 1000;
 })
 export class StatisticsComponent extends Vue {
     private jmxService: JmxService = this.$services.jmxService;
-    multiEngine = false;
     id: string;
     group: EngineGroup = null;
 
@@ -62,8 +61,8 @@ export class StatisticsComponent extends Vue {
     @Watch('$route.params')
     initCharts() {
         this.saveStates();
-        this.getId();
         this.getGroup();
+        this.getId();
         this.getKeySet();
         this.loadStates();
         this.initSecondsChart();
@@ -106,7 +105,7 @@ export class StatisticsComponent extends Vue {
 
     getKey(base: string) {
         if (this.id != null) {
-            if (this.multiEngine) {
+            if (this.group != null) {
                 return this.$store.state.connectionSettings.host + ':' 
                     + this.$store.state.connectionSettings.port + ':'
                     + this.$route.params.id.substr(6) + ':' 
@@ -124,24 +123,16 @@ export class StatisticsComponent extends Vue {
     }
 
     getId() {
-        if (this.$route.params.id.substr(0, 5) === 'group') {
+        if (this.group != null) {
             console.log('detecting group');
-            this.multiEngine = true;
-            for (let i = 0; i < this.$store.state.groupsOfEngines.length; i++) {
-                let group = this.$store.state.groupsOfEngines[i];
-                if (this.parseGroupName(group.name) === this.$route.params.id.substr(6)) {
-                    this.id = group.engines[0].id;
-                    break;
-                }
-            }
+            this.id = String(this.group.engines[0].id);
         } else {
-            this.multiEngine = false;
             this.id = this.$route.params.id;
         }
     }
 
     getGroup() {
-        if (this.multiEngine === true) {
+        if (this.$route.params.id.substr(0, 5) === 'group') {
             for (let i = 0; i < this.$store.state.groupsOfEngines.length; i++) {
                 let group = this.$store.state.groupsOfEngines[i];
                 if (this.parseGroupName(group.name) === this.$route.params.id.substr(6)) {
@@ -149,7 +140,7 @@ export class StatisticsComponent extends Vue {
                 }
             }
         } else {
-            return null;
+            this.group = null;
         }
     }
 
@@ -170,16 +161,12 @@ export class StatisticsComponent extends Vue {
             clearInterval(this.secondsInterval);
         }
         let updateSecondsState = (states) => {
-            // localStorage.setItem('secondsStates', JSON.stringify(states));
             localStorage.setItem(this.secondsKey, JSON.stringify(states));
             this.secondsChartData = this.getChartData(states);
         };
-        console.log('this.secondsStates', this.secondsStates);
         this.fetchingData(this.secondsStates, updateSecondsState);
         this.secondsInterval = setInterval(() => {
-            console.log('this.secondsStates', this.secondsStates);
             this.fetchingData(this.secondsStates, updateSecondsState);
-        // }, (this.$store.state.connectionSettings as ConnectionSettings).updatePeriod * 1000);
         }, 2000);        
     }
 
@@ -188,7 +175,6 @@ export class StatisticsComponent extends Vue {
             clearInterval(this.minutesInterval);
         }
         let updateMinutesState = (states) => {
-            // localStorage.setItem('minutesStates', JSON.stringify(states));
             localStorage.setItem(this.minutesKey, JSON.stringify(states));
             this.minutesChartData = this.getChartData(states);
         };
@@ -203,7 +189,6 @@ export class StatisticsComponent extends Vue {
             clearInterval(this.quoterMinInterval);
         }
         let updateQuoterMinState = (states) => {
-            // localStorage.setItem('quoterMinStates', JSON.stringify(states));
             localStorage.setItem(this.quoterKey, JSON.stringify(states));
             this.quoterMinChartData = this.getChartData(states);
         };
@@ -215,7 +200,7 @@ export class StatisticsComponent extends Vue {
 
     fetchingData(states: StatesPrint[], updateFn) {
         if (this.secondsInterval !== null) {
-            if (this.multiEngine === false) {
+            if (this.group === null) {
                 this.jmxService.getChartCounts(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.id].name, this.$store.state.user).then((newStates: StatesPrint) => {
                     if (states.length > 10) {
                         states.shift();
@@ -225,7 +210,7 @@ export class StatisticsComponent extends Vue {
                 });
             } else {
                 this.jmxService.getGroupChartCounts(this.$store.state.connectionSettings, this.getBeans(), this.$store.state.user).then((response) => {
-                    let counter = this.getCounter();
+                    let counter = this.group.engines.length;
                     let running = 0;
                     let dequeued = 0;
                     let otherValues = [];
@@ -253,24 +238,13 @@ export class StatisticsComponent extends Vue {
         }
     }
 
-    getCounter() {
-        for (let i = 0; i < this.$store.state.groupsOfEngines.length; i++) {
-            let group = this.$store.state.groupsOfEngines[i];
-                if (this.parseGroupName(group.name) === this.$route.params.id.substr(6)) {
-                    return group.engines.length;
-                }
-        }
-    }
-
     getBeans() {
-        let beans = this.group.engines.map((engine) => {
+        return this.group.engines.map((engine) => {
             return this.$store.state.mbeans.engineMBeans[engine.id].name;
         });
-        return beans;
     }
 
     getChartData(statesPrint: StatesPrint[]) {
-        // console.log('states:', this.states);
         let dataset = [];
         if (statesPrint) { 
             if (this.states.raw) {

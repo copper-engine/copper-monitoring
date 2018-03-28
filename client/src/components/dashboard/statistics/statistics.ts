@@ -31,19 +31,16 @@ export class StatisticsComponent extends Vue {
     group: EngineGroup = null;
 
     secondsKey = this.getKey('seconds');
-    // secondsStates: StatesPrint[] = this.getDataFromLS('secondsStates');
     secondsStates: StatesPrint[] = this.getDataFromLS(this.secondsKey);
     secondsChartData = null;
     secondsInterval = null;
     
     minutesKey = this.getKey('minutes');
-    // minutesStates: StatesPrint[] = this.getDataFromLS('minutesStates');
     minutesStates: StatesPrint[] = this.getDataFromLS(this.minutesKey);
     minutesChartData = null;
     minutesInterval = null;
 
     quoterKey = this.getKey('quoter');
-    // quoterMinStates: StatesPrint[] = this.getDataFromLS('quoterMinStates');
     quoterMinStates: StatesPrint[] = this.getDataFromLS(this.quoterKey);
     quoterMinChartData = null;
     quoterMinInterval = null;
@@ -64,9 +61,11 @@ export class StatisticsComponent extends Vue {
     @Watch('states', { deep: true })
     @Watch('$route.params')
     initCharts() {
+        this.saveStates();
         this.getId();
         this.getGroup();
         this.getKeySet();
+        this.loadStates();
         this.initSecondsChart();
         this.initMinutesChart();
         this.initQuoterMinChart();
@@ -84,6 +83,21 @@ export class StatisticsComponent extends Vue {
         }
     }
 
+    saveStates() {
+        localStorage.setItem(this.secondsKey, JSON.stringify(this.secondsStates));
+        localStorage.setItem(this.minutesKey, JSON.stringify(this.minutesStates));
+        localStorage.setItem(this.quoterKey, JSON.stringify(this.quoterMinStates));
+        this.secondsStates = [];
+        this.minutesStates = [];
+        this.quoterMinStates = [];
+    }
+
+    loadStates() {
+        this.secondsStates = this.getDataFromLS(this.secondsKey);
+        this.minutesStates = this.getDataFromLS(this.minutesKey);
+        this.quoterMinStates = this.getDataFromLS(this.quoterKey);  
+    }
+
     getKeySet() {
         this.secondsKey = this.getKey('seconds');
         this.minutesKey = this.getKey('minutes');
@@ -92,16 +106,17 @@ export class StatisticsComponent extends Vue {
 
     getKey(base: string) {
         if (this.id != null) {
-            if (this.multiEngine === false) {
+            if (this.multiEngine) {
                 return this.$store.state.connectionSettings.host + ':' 
-                        + this.$store.state.connectionSettings.port + ':'
-                        + this.$store.state.engineStatusList[this.id].engineId + ':' 
-                        + base;
+                    + this.$store.state.connectionSettings.port + ':'
+                    + this.$route.params.id.substr(6) + ':' 
+                    + base;
             } else {
                 return this.$store.state.connectionSettings.host + ':' 
-                        + this.$store.state.connectionSettings.port + ':'
-                        + this.$route.params.id.substr(6) + ':' 
-                        + base;
+                    + this.$store.state.connectionSettings.port + ':'
+                    + this.$store.state.engineStatusList[this.id].engineId + ':'
+                    + this.$store.state.engineStatusList[this.id].id + ':'
+                    + base;
             }
         } else {
             return null;
@@ -116,6 +131,7 @@ export class StatisticsComponent extends Vue {
                 let group = this.$store.state.groupsOfEngines[i];
                 if (this.parseGroupName(group.name) === this.$route.params.id.substr(6)) {
                     this.id = group.engines[0].id;
+                    break;
                 }
             }
         } else {
@@ -247,15 +263,6 @@ export class StatisticsComponent extends Vue {
     }
 
     getBeans() {
-        // for (let i = 0; i < this.$store.state.groupsOfEngines.length; i++) {
-        //     let group = this.$store.state.groupsOfEngines[i];
-        //         if (this.parseGroupName(group.name) === this.$route.params.id.substr(6)) {
-        //             let beans = group.engines.map((engine) => {
-        //                 return this.$store.state.mbeans.engineMBeans[engine.id].name;
-        //             });
-        //             return beans;
-        //         }
-        // }
         let beans = this.group.engines.map((engine) => {
             return this.$store.state.mbeans.engineMBeans[engine.id].name;
         });

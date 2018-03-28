@@ -17,6 +17,7 @@ export class WorkflowHeading extends Vue {
     @Prop() deletingAll: boolean;
     private jmxService: JmxService = this.$services.jmxService;
     openFilterMenu: boolean = false;
+    hideOverflow: boolean = true;
     filterApplied: boolean = false;
     currentFilters: string[][] = [];
     currentFilterObject: WorkflowFilter;
@@ -173,6 +174,11 @@ export class WorkflowHeading extends Vue {
             this.getPossibleClassNames();
         }
         this.openFilterMenu = !this.openFilterMenu;
+        if (this.openFilterMenu === true) {
+            setTimeout(() => { this.hideOverflow = false; }, 800);
+        } else {
+            this.hideOverflow = true;
+        }
     }
     clearFilter() {
         this.states = [];

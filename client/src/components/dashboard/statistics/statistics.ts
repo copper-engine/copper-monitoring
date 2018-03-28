@@ -59,18 +59,30 @@ export class StatisticsComponent extends Vue {
 
     mounted() { 
         this.initCharts();
-     }
+    }
  
-     @Watch('states', { deep: true })
-     @Watch('$route.params')
-     initCharts() {
-         this.getId();
-         this.getGroup();
-         this.getKeySet();
-         this.initSecondsChart();
-         this.initMinutesChart();
-         this.initQuoterMinChart();
-     }
+    @Watch('states', { deep: true })
+    @Watch('$route.params')
+    initCharts() {
+        this.getId();
+        this.getGroup();
+        this.getKeySet();
+        this.initSecondsChart();
+        this.initMinutesChart();
+        this.initQuoterMinChart();
+    }
+
+    destroyed() {
+        if (this.secondsInterval) {
+            clearInterval(this.secondsInterval);
+        }
+        if (this.minutesInterval) {
+            clearInterval(this.minutesInterval);
+        }
+        if (this.quoterMinInterval) {
+            clearInterval(this.quoterMinInterval);
+        }
+    }
 
     getKeySet() {
         this.secondsKey = this.getKey('seconds');
@@ -134,18 +146,6 @@ export class StatisticsComponent extends Vue {
             return JSON.parse(localStorage.getItem(key)) || [];
         } catch (err) {
             return [];    
-        }
-    }
-
-    destroyed() {
-        if (this.secondsInterval) {
-            clearInterval(this.secondsInterval);
-        }
-        if (this.minutesInterval) {
-            clearInterval(this.minutesInterval);
-        }
-        if (this.quoterMinInterval) {
-            clearInterval(this.quoterMinInterval);
         }
     }
 

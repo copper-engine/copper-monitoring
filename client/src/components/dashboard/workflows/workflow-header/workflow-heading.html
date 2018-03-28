@@ -47,7 +47,7 @@
     </v-layout>
 
     <transition name="extend-filter">
-    <v-layout v-show="openFilterMenu" class="filter-menu secondary" column>
+    <v-layout v-show="openFilterMenu" class="filter-menu secondary" :class="{ 'overflow-hidden' :  hideOverflow}" column>
         <v-flex class="filter-label">
         <h3 class="themeText--text">Filter By:</h3>        
         </v-flex>

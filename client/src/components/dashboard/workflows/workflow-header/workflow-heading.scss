@@ -13,6 +13,9 @@
             min-width: 620px;
         }
     }
+    .overflow-hidden {
+        overflow: hidden;
+    }
     .filter-menu,
     .chip-menu {
         flex-wrap: wrap; 
@@ -22,8 +25,7 @@
         padding-bottom: 20px;
         min-width: 986px;
     }
-    .filter-menu {    
-        overflow: hidden;
+    .filter-menu {  
         flex-wrap: nowrap;
         h3 {
             align-items: center;

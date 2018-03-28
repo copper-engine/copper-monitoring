@@ -200,37 +200,16 @@ export class StatisticsComponent extends Vue {
 
     fetchingData(states: StatesPrint[], updateFn) {
         if (this.secondsInterval !== null) {
+            if (states.length > 10) {
+                states.shift();
+            }
             if (this.group === null) {
-                this.jmxService.getChartCounts(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.id].name, this.$store.state.user).then((newStates: StatesPrint) => {
-                    if (states.length > 10) {
-                        states.shift();
-                    }
+                this.jmxService.getChartCounts(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.id].name, this.$store.state.user).then((newStates: StatesPrint) => {   
                     states.push(newStates);
                     updateFn(states);
                 });
             } else {
-                this.jmxService.getGroupChartCounts(this.$store.state.connectionSettings, this.getBeans(), this.$store.state.user).then((response) => {
-                    let counter = this.group.engines.length;
-                    let running = 0;
-                    let dequeued = 0;
-                    let otherValues = [];
-
-                    if (states.length > 10) {
-                        states.shift();
-                    }
-
-                    for (let i = 0; i < counter; i++) {
-                        running = running + response.data[i].value;
-                    }
-                    for (let i = counter; i < (counter * 2); i++) {
-                        dequeued = dequeued + response.data[i].value;
-                    }
-                    for (let i = (counter * 2); i < response.data.length; i++) {
-                        otherValues.push(response.data[i].value);
-                    }
-
-                    let newStates = new StatesPrint(new Date(response.data[0].timestamp * 1000), 
-                        running, otherValues[0], otherValues[1], dequeued, otherValues[2], otherValues[3]);
+                this.jmxService.getGroupChartCounts(this.$store.state.connectionSettings, this.getBeans(), this.group.engines.length, this.$store.state.user).then((newStates: StatesPrint) => {
                     states.push(newStates);
                     updateFn(states);
                 });

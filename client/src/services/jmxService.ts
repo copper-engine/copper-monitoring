@@ -54,7 +54,7 @@ export class JmxService {
             });
     }
 
-    getGroupChartCounts(connectionSettings: ConnectionSettings, mbeans: string[], user: User) {
+    getGroupChartCounts(connectionSettings: ConnectionSettings, mbeans: string[], length: number, user: User) {
         let requests = [];
         this.createGroupCountRequest(connectionSettings, user, mbeans, [ State.RUNNING ]).map((request) => {
             requests.push(request);
@@ -71,7 +71,7 @@ export class JmxService {
         return Axios.post(process.env.API_NAME, requests, {
                 auth: { username: user.name, password: user.password }
             })
-            .then(this.parseGroupChartCountResponse)
+            .then((response) => this.parseGroupChartCountResponse(response, length))
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
             });
@@ -84,8 +84,24 @@ export class JmxService {
         return requests;
     }
 
-    parseGroupChartCountResponse = (response) => {
-        return response;
+    parseGroupChartCountResponse = (response, length) => {
+        let counter = length;
+        let running = 0;
+        let dequeued = 0;
+        let otherValues = [];
+
+        for (let i = 0; i < counter; i++) {
+            running = running + response.data[i].value;
+        }
+        for (let i = counter; i < (counter * 2); i++) {
+            dequeued = dequeued + response.data[i].value;
+        }
+        for (let i = (counter * 2); i < response.data.length; i++) {
+            otherValues.push(response.data[i].value);
+        }
+
+        return new StatesPrint(new Date(response.data[0].timestamp * 1000), 
+            running, otherValues[0], otherValues[1], dequeued, otherValues[2], otherValues[3]);
     }
 
     getMBeans(connectionSettings: ConnectionSettings, user: User) {

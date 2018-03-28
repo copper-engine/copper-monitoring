@@ -134,10 +134,10 @@
     }
 
     .extend-filter-enter-active {
-        animation: extend-filter 0.75s;
+        animation: extend-filter 0.5s;
     }
     .extend-filter-leave-active {
-        animation: extend-filter 0.75s reverse;
+        animation: extend-filter 0.5s reverse;
     }
     @keyframes extend-filter {
         0% {height: 0px;

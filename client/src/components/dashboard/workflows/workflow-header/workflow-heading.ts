@@ -175,9 +175,10 @@ export class WorkflowHeading extends Vue {
         }
         this.openFilterMenu = !this.openFilterMenu;
         if (this.openFilterMenu === true) {
-            setTimeout(() => { this.hideOverflow = false; }, 800);
+            setTimeout(() => { this.hideOverflow = false; }, 250);
         } else {
             this.hideOverflow = true;
+            setTimeout(() => { this.hideOverflow = true; }, 250);
         }
     }
     clearFilter() {
@@ -195,6 +196,7 @@ export class WorkflowHeading extends Vue {
             this.getEpochTime(this.modTime.from),
             this.getEpochTime(this.modTime.to)
         );
+        this.hideOverflow = true;
         this.openFilterMenu = false;
         this.filterApplied = this.isFiltered(this.currentFilterObject);
         this.$emit('triggerApplyFilter', this.currentFilterObject);

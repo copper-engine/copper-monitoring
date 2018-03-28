@@ -150,10 +150,23 @@ export class StatisticsComponent extends Vue {
 
     getDataFromLS(key: string) {
         try {
-            return JSON.parse(localStorage.getItem(key)) || [];
+            let chartData = JSON.parse(localStorage.getItem(key)) || [];
+            if (chartData.length < 1) {
+                 return this.getEmptySet();
+            } else {
+                return chartData;
+            }
         } catch (err) {
             return [];    
         }
+    }
+
+    getEmptySet() {
+        let emptySet = [];
+        for (let i = 0; i < 10; i++) {
+            emptySet.push({});
+        }
+        return emptySet;
     }
 
     initSecondsChart() {

@@ -40,6 +40,21 @@
                     padding-top: 10px;
                 }
             }
+            .general-link-list {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            .linkTile {
+                border-radius: 2px;
+                margin-right: -15px;
+                margin-left: -15px;
+                .link {
+                    padding-top: 20px;
+                    padding-bottom: 20px;
+                    padding-left: 20px;
+                    width: 100%;
+                }
+            }
             .status-container {
                 padding-left: 10px;
                 padding-right: 10px;
@@ -50,28 +65,6 @@
 
     .scroll-footer {
         height: 75px;
-    }
-
-    .close-details-icon {
-        transform: rotate(180deg);
-    }
-
-
-    .general-link-list {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-
-    .linkTile {
-        border-radius: 2px;
-        margin-right: -15px;
-        margin-left: -15px;
-        .link {
-            padding-top: 20px;
-            padding-bottom: 20px;
-            padding-left: 20px;
-            width: 100%;
-        }
     }
 
     .iconFlex {
@@ -96,6 +89,10 @@
         .list__tile--active .list__tile__action:first-of-type .icon {
             color: #efefef;
         }
+    }
+
+    .close-details-icon {
+        transform: rotate(180deg);
     }
     
     .extend-config-enter-active {

@@ -7,7 +7,7 @@ import * as utils from '../../../util/utils';
 
 import { ConnectionSettings } from '../../../models/connectionSettings';
 import { User } from '../../../models/user';
-import { MBeans } from '../../../models/mbeans';
+import { MBeans, MBean } from '../../../models/mbeans';
 import { HighlitedLine } from '../../../models/highlited-line';
 
 import './workflows.scss';
@@ -34,14 +34,14 @@ const WorkflowFooter = () => import('./workflow-footer').then(({ WorkflowFooter 
     }
 })
 export class WorkflowsComponent extends Vue {
-
     private jmxService: JmxService = this.$services.jmxService;
     private eventHub: Vue = this.$services.eventHub;
+    mbean: MBean = null;
     newComponent = false;
     workflowsContext: Map<String, WorkflowContext> = new Map<String, WorkflowContext>(); 
     workflows: WorkflowInfo[] = [];
     wfCount: number = 0;
-    fetchBrokenWFInterval: any;
+    fetchBrokenWFInterval: any; // NodeJS.Timer
     page: number = 1;
     perPage: number = 10;
     perPageItems: number[] = [10, 15, 25, 50];
@@ -51,9 +51,10 @@ export class WorkflowsComponent extends Vue {
     dialogSourceCode = null;
     dialogHighlitedlines: HighlitedLine[] = null;
     sourceCodeAvailable = true;
-    filter: WorkflowFilter = new WorkflowFilter;
+    filter: WorkflowFilter = new WorkflowFilter();
 
     mounted() {
+        this.mbean = this.$store.state.mbeans.engineMBeans[this.$route.params.id];
         this.sheduleFetchingBrrokenWF();
     }
     beforeDestroy() {
@@ -86,12 +87,12 @@ export class WorkflowsComponent extends Vue {
         this.eventHub.$emit('showNotification', new Notification(message));
     }
 
-    private getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User, filter) {
+    private getBrokenWorkflows(user: User, filter) {
         // TODO fix selecting correct bean
-        this.jmxService.countWFRequest(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id].name, this.$store.state.user, this.filter).then((response: number) => {
+        this.jmxService.countWFRequest(this.mbean.connectionSettings, this.mbean.name, this.$store.state.user, this.filter).then((response: number) => {
             this.wfCount = response;
         });
-        this.jmxService.getBrokenWorkflows(connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id].name, user, this.perPage, (this.page - 1) * this.perPage, filter).then((response: WorkflowInfo[]) => {
+        this.jmxService.getBrokenWorkflows(this.mbean.connectionSettings, this.mbean.name, user, this.perPage, (this.page - 1) * this.perPage, filter).then((response: WorkflowInfo[]) => {
             this.workflows = response;
         });
     }
@@ -106,7 +107,7 @@ export class WorkflowsComponent extends Vue {
     }
 
     restartAll() {
-        this.jmxService.restartAll(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id].name, this.$store.state.user)
+        this.jmxService.restartAll(this.mbean.connectionSettings, this.mbean.name, this.$store.state.user)
             .then((done) => {
                 this.restartingAll = false;
                 this.forceStatusFetch(2000);
@@ -128,7 +129,7 @@ export class WorkflowsComponent extends Vue {
     }
 
     restartFiltered(newFilter: WorkflowFilter) {
-        this.jmxService.restartFiltered(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id].name, this.$store.state.user, 0, 0, newFilter)
+        this.jmxService.restartFiltered(this.mbean.connectionSettings, this.mbean.name, this.$store.state.user, 0, 0, newFilter)
             .then((done) => {
                 this.restartingAll = false;
                 this.forceStatusFetch(2000);
@@ -150,7 +151,7 @@ export class WorkflowsComponent extends Vue {
 
     deleteFiltered(newFilter: WorkflowFilter) {
         this.page = 1;
-        this.jmxService.deleteFiltered(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id].name, this.$store.state.user, 0, 0, newFilter)
+        this.jmxService.deleteFiltered(this.mbean.connectionSettings, this.mbean.name, this.$store.state.user, 0, 0, newFilter)
             .then((done) => {
                 this.deletingAll = false;
                 this.forceStatusFetch(500);
@@ -173,7 +174,7 @@ export class WorkflowsComponent extends Vue {
 
     restart(id: string) {
         this.toggleButtons(id, 'restart');
-        this.jmxService.restart(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id].name, id, this.$store.state.user)
+        this.jmxService.restart(this.mbean.connectionSettings, this.mbean.name, id, this.$store.state.user)
         .then((done) => {
             this.toggleButtons(id, 'restart');
             if (done) {
@@ -192,7 +193,7 @@ export class WorkflowsComponent extends Vue {
 
     deleteBroken(id: string) {
         this.toggleButtons(id, 'delete');
-        this.jmxService.deleteBroken(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id].name, id, this.$store.state.user)
+        this.jmxService.deleteBroken(this.mbean.connectionSettings, this.mbean.name, id, this.$store.state.user)
         .then((done) => {
             // this.forceStatusFetch();
             this.toggleButtons(id, 'delete');
@@ -214,29 +215,29 @@ export class WorkflowsComponent extends Vue {
 
     highlight(id: String, type: String) {
         let wfContext = this.workflowsContext.get(id);
-                if (!wfContext) {
-                    wfContext = new WorkflowContext();
-                }
-                if (type === 'reload') {
-                    wfContext.reloading = true;
-                    this.workflowsContext.set(id, wfContext);
-                    this.$forceUpdate();
-                    setTimeout(() => { 
-                        wfContext.reloading = false; 
-                        this.workflowsContext.set(id, wfContext);
-                        this.$forceUpdate();
-                    }, 800);
-                }
-                if (type === 'delete') {
-                    wfContext.deleting = true;
-                    this.workflowsContext.set(id, wfContext);
-                    this.$forceUpdate();
-                    setTimeout(() => { 
-                        wfContext.deleting = false; 
-                        this.workflowsContext.set(id, wfContext);
-                        this.$forceUpdate();
-                    }, 1500);
-                }
+        if (!wfContext) {
+            wfContext = new WorkflowContext();
+        }
+        if (type === 'reload') {
+            wfContext.reloading = true;
+            this.workflowsContext.set(id, wfContext);
+            this.$forceUpdate();
+            setTimeout(() => { 
+                wfContext.reloading = false; 
+                this.workflowsContext.set(id, wfContext);
+                this.$forceUpdate();
+            }, 800);
+        }
+        if (type === 'delete') {
+            wfContext.deleting = true;
+            this.workflowsContext.set(id, wfContext);
+            this.$forceUpdate();
+            setTimeout(() => { 
+                wfContext.deleting = false; 
+                this.workflowsContext.set(id, wfContext);
+                this.$forceUpdate();
+            }, 1500);
+        }
     }
 
     toggleButtons(id: String, type: String) {
@@ -255,7 +256,7 @@ export class WorkflowsComponent extends Vue {
     }
 
     showSourceCode(workflow: WorkflowInfo) {
-        this.jmxService.getSourceCode(this.$store.state.connectionSettings,  this.$store.state.user, this.$store.state.mbeans.engineMBeans[this.$route.params.id].name, workflow.workflowClassInfo.classname)
+        this.jmxService.getSourceCode(this.mbean.connectionSettings,  this.$store.state.user, this.mbean.name, workflow.workflowClassInfo.classname)
         .then((sourceCode) => {
             if (sourceCode && (sourceCode as string).trim().toLowerCase() !== 'na') {  
                 this.dialogSourceCode = sourceCode;
@@ -291,20 +292,22 @@ export class WorkflowsComponent extends Vue {
 
     @Watch('$store.state.connectionSettings')
     sheduleFetchingBrrokenWF() {
+
+        console.log('!!!this.mbean', this.mbean);
         if (this.fetchBrokenWFInterval) {
             clearInterval(this.fetchBrokenWFInterval);
         }
-        this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
+        this.getBrokenWorkflows(this.$store.state.user, this.filter);
         this.fetchBrokenWFInterval = setInterval(() => {
-            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
-        }, this.$store.state.connectionSettings.updatePeriod * 1000);
+            this.getBrokenWorkflows(this.$store.state.user, this.filter);
+        }, this.mbean.connectionSettings.updatePeriod * 1000);
     }
 
     @Watch('page')
     @Watch('perPage')
     private forceStatusFetch(delay: number = 0) {
         setTimeout(() => {
-            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
+            this.getBrokenWorkflows(this.$store.state.user, this.filter);
         }, delay);
     }
 
@@ -314,9 +317,10 @@ export class WorkflowsComponent extends Vue {
         setTimeout(() => {
             this.newComponent = false;
         }, 200);
+        this.mbean = this.$store.state.mbeans.engineMBeans[this.$route.params.id];
         this.workflows = [];
         this.wfCount = 0;
         this.filter = new WorkflowFilter;
-        this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
+        this.getBrokenWorkflows(this.$store.state.user, this.filter);
     }
 }

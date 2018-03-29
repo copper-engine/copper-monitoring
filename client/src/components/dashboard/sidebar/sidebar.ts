@@ -45,9 +45,9 @@ export class SidebarComponent extends Vue {
     updateTarget(connectionSettings) {
         this.settingsShowed = false;
         this.$store.commit('updateConnectionSettings', connectionSettings);
-        this.host = this.$store.state.connectionSettings.host;
-        this.port = this.$store.state.connectionSettings.port;
-        this.$router.push('/dashboard?connection=' + this.$store.state.connectionSettings.host + '|' + this.$store.state.connectionSettings.port);
+        this.host = this.$store.state.connectionSettings[0].host;
+        this.port = this.$store.state.connectionSettings[0].port;
+        this.$router.push('/dashboard?connection=' + this.$store.state.connectionSettings[0].host + '|' + this.$store.state.connectionSettings[0].port);
         this.updatedConnectedStatus();
     }
 

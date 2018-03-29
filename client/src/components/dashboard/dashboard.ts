@@ -87,8 +87,9 @@ export class DashboardComponent extends Vue {
                 this.$store.commit('updateMBeans', new MBeans(mbeans));
                 this.getEngineStatus(mbeans, this.$store.state.user);
                 this.updateStatusInterval = setInterval(() => {
+
                     this.getEngineStatus(mbeans, this.$store.state.user);
-                }, this.$store.state.connectionSettings.updatePeriod * 1000);
+                }, this.$store.state.connectionSettings[0].updatePeriod * 1000);
             } else {
                 // this.$store.commit('updateMBeans', new MBeans([]));
                 // this.$store.commit('updateEngineStatus', []);

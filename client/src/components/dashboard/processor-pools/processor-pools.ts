@@ -5,6 +5,7 @@ import { Notification } from '../../../models/notification';
 import Donut from './donut-graph';
 import './processor-pools.scss';
 import { StoreState } from '../../../store.vuex';
+import { MBean } from '../../../models/mbeans';
 
 @Component({
     template: require('./processor-pools.html'),
@@ -20,6 +21,7 @@ export class ProcessorPools extends Vue {
     fetchPoolInterval: any;
     processorPools: ProcessorPool[] = [];
     private engine: EngineStatus = null;
+    engineMbean: MBean;
     
     mounted() {
         this.init();
@@ -30,13 +32,13 @@ export class ProcessorPools extends Vue {
     }
 
     getProcessorPools() {
-        this.jmxService.getProcessorPools(this.$store.state.connectionSettings, this.engine.ppoolsMXBeans, this.engine.type, this.$store.state.user).then((response: any) => {
+        this.jmxService.getProcessorPools(this.engineMbean.connectionSettings, this.engine.ppoolsMXBeans, this.engine.type, this.$store.state.user).then((response: any) => {
             this.processorPools = response;
         });
     }
 
     resume(mbean: string) {
-        this.jmxService.resume(this.$store.state.connectionSettings, this.$store.state.user, mbean).then((done) => {
+        this.jmxService.resume(this.engineMbean.connectionSettings, this.$store.state.user, mbean).then((done) => {
             if (done) {
                 this.showSuccess('Workflows Resumed');
                 setTimeout(this.getProcessorPools(), 1500);
@@ -47,7 +49,7 @@ export class ProcessorPools extends Vue {
     }
 
     suspend(mbean: string) {
-        this.jmxService.suspend(this.$store.state.connectionSettings, this.$store.state.user, mbean).then((done) => {
+        this.jmxService.suspend(this.engineMbean.connectionSettings, this.$store.state.user, mbean).then((done) => {
             if (done) {
                 this.showSuccess('Workflows Suspended');
                 setTimeout(this.getProcessorPools(), 1500);                
@@ -58,7 +60,7 @@ export class ProcessorPools extends Vue {
     }
 
     resumeDeque(mbean: string) {
-        this.jmxService.resumeDeque(this.$store.state.connectionSettings, this.$store.state.user, mbean).then((done) => {
+        this.jmxService.resumeDeque(this.engineMbean.connectionSettings, this.$store.state.user, mbean).then((done) => {
             if (done) {
                 this.showSuccess('Deque Resumed');
                 setTimeout(this.getProcessorPools(), 1500);
@@ -69,7 +71,7 @@ export class ProcessorPools extends Vue {
     }
 
     suspendDeque(mbean: string) {
-        this.jmxService.suspendDeque(this.$store.state.connectionSettings, this.$store.state.user, mbean).then((done) => {
+        this.jmxService.suspendDeque(this.engineMbean.connectionSettings, this.$store.state.user, mbean).then((done) => {
             if (done) {
                 this.showSuccess('Deque Suspended');
                 setTimeout(this.getProcessorPools(), 1500);               
@@ -87,6 +89,7 @@ export class ProcessorPools extends Vue {
         }, 200);
         this.processorPools = [];
         this.engine = (this.$store.state as  StoreState).engineStatusList[this.$route.params.id];
+        this.engineMbean = this.$store.state.mbeans.engineMBeans[this.$route.params.id];
         this.scheduleFetchPools();
     }
 
@@ -98,7 +101,7 @@ export class ProcessorPools extends Vue {
         this.getProcessorPools();
         this.fetchPoolInterval = setInterval(() => {
             this.getProcessorPools();
-        }, this.$store.state.connectionSettings.updatePeriod * 1000);
+        }, this.engineMbean.connectionSettings.updatePeriod * 1000);
     }
     
     private showSuccess(message: string) {

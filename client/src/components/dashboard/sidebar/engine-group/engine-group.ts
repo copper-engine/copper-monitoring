@@ -19,17 +19,39 @@ export class EngineGroupComponent extends Vue {
     wfCount = 0;
     open: boolean = false;
     multiEngine: boolean = false;
+    mbean = null;
 
     parseGroupName(rawName: string) {
-        return rawName.substr(15);
+        if (rawName) {
+            return rawName.substr(15);
+        } else {
+            return 'noname';
+        }
     }
 
     created() {
         this.checkGroupInfo();
     }
-
+    
+    @Watch('group')
+    checkGroupInfo() {
+        if (this.group.engines.length > 1) {
+            this.multiEngine = true;
+        }
+        this.getBrokenWFCount();
+        this.getWFCount();
+    }
+    
+    @Watch('closing')
+    close() {
+        if (this.closing === true) {
+            this.open = false;
+        }
+    }
+    
     getBrokenWFCount() {
-       this.jmxService.countWFRequest(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.group.engines[0].id].name, this.$store.state.user, new WorkflowFilter).then((response: number) => {
+        this.mbean = this.$store.state.mbeans.engineMBeans[this.group.engines[0].id];
+        this.jmxService.countWFRequest(this.mbean.connectionSettings, this.mbean.name, this.$store.state.user, new WorkflowFilter).then((response: number) => {
             this.brokenWFCount = response;
         });
     }
@@ -50,21 +72,4 @@ export class EngineGroupComponent extends Vue {
             new Link('Waiting Workflows', '/dashboard/waiting-workflows/' + this.group.engines[0].id + params, 'mdi-timer-sand-empty')
         ];
     }
-
-    @Watch('group')
-    checkGroupInfo() {
-        if (this.group.engines.length > 1) {
-            this.multiEngine = true;
-        }
-        this.getBrokenWFCount();
-        this.getWFCount();
-    }
-
-    @Watch('closing')
-    close() {
-        if (this.closing === true) {
-            this.open = false;
-        }
-    }
-
 }

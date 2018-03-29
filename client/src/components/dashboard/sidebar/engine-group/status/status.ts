@@ -34,7 +34,7 @@ export class StatusComponent extends Vue {
 
     get links(): Link[] {
         let linkArray = [];
-        let params = this.status.id + '?connection=' + this.$store.state.connectionSettings.host + '|' + this.$store.state.connectionSettings.port;
+        let params = this.status.id + '?connection=' + this.connectionSettings.host + '|' + this.connectionSettings.port;
         if (!this.multiEngine) {
             linkArray = linkArray.concat([
                 new Link('Statistics', '/dashboard/statistics/' + params, 'mdi-chart-bar'),

@@ -27,8 +27,8 @@ export class JmxService {
         ];
     }
 
-    countWFRequest(connectionSettings, mbean, user: User, filter: WorkflowFilter) {
-        return Axios.post(process.env.API_NAME, this.createCountWFRequest(connectionSettings, mbean, filter.states, filter), {
+    countWFRequest(connectionSettings, mbeanName, user: User, filter: WorkflowFilter) {
+        return Axios.post(process.env.API_NAME, this.createCountWFRequest(connectionSettings, mbeanName, filter.states, filter), {
             auth: { username: user.name, password: user.password }
         })
         .then(this.parseCountWFRequest)
@@ -37,14 +37,14 @@ export class JmxService {
         });
     }
 
-    getChartCounts(connectionSettings: ConnectionSettings, mbean: string, user: User) {
+    getChartCounts(mbean: MBean, user: User) {
         return Axios.post(process.env.API_NAME, [
-                this.createCountWFRequest(connectionSettings, mbean, [ State.RUNNING ]),                
-                this.createCountWFRequest(connectionSettings, mbean, [ State.WAITING ]),                
-                this.createCountWFRequest(connectionSettings, mbean, [ State.FINISHED ]),                
-                this.createCountWFRequest(connectionSettings, mbean, [ State.DEQUEUED ]),                
-                this.createCountWFRequest(connectionSettings, mbean, [ State.ERROR ]),               
-                this.createCountWFRequest(connectionSettings, mbean, [ State.INVALID ])                
+                this.createCountWFRequest(mbean.connectionSettings, mbean.name, [ State.RUNNING ]),                
+                this.createCountWFRequest(mbean.connectionSettings, mbean.name, [ State.WAITING ]),                
+                this.createCountWFRequest(mbean.connectionSettings, mbean.name, [ State.FINISHED ]),                
+                this.createCountWFRequest(mbean.connectionSettings, mbean.name, [ State.DEQUEUED ]),                
+                this.createCountWFRequest(mbean.connectionSettings, mbean.name, [ State.ERROR ]),               
+                this.createCountWFRequest(mbean.connectionSettings, mbean.name, [ State.INVALID ])                
             ], {
                 auth: { username: user.name, password: user.password }
             })
@@ -54,19 +54,20 @@ export class JmxService {
             });
     }
 
-    getGroupChartCounts(connectionSettings: ConnectionSettings, mbeans: string[], length: number, user: User) {
+    getGroupChartCounts(mbeans: MBean[], length: number, user: User) {
         let requests = [];
-        this.createGroupCountRequest(connectionSettings, user, mbeans, [ State.RUNNING ]).map((request) => {
+        this.createGroupCountRequest(user, mbeans, [ State.RUNNING ]).map((request) => {
             requests.push(request);
         });
-        this.createGroupCountRequest(connectionSettings, user, mbeans, [ State.DEQUEUED ]).map((request) => {
+        this.createGroupCountRequest(user, mbeans, [ State.DEQUEUED ]).map((request) => {
             requests.push(request);
         });
-        requests.push(this.createCountWFRequest(connectionSettings, mbeans[0], [ State.WAITING ]));
-        requests.push(this.createCountWFRequest(connectionSettings, mbeans[0], [ State.FINISHED ]));
+
+        requests.push(this.createCountWFRequest(mbeans[0].connectionSettings, mbeans[0].name, [ State.WAITING ]));
+        requests.push(this.createCountWFRequest(mbeans[0].connectionSettings, mbeans[0].name, [ State.FINISHED ]));
         
-        requests.push(this.createCountWFRequest(connectionSettings, mbeans[0], [ State.ERROR ]));
-        requests.push(this.createCountWFRequest(connectionSettings, mbeans[0], [ State.INVALID ]));
+        requests.push(this.createCountWFRequest(mbeans[0].connectionSettings, mbeans[0].name, [ State.ERROR ]));
+        requests.push(this.createCountWFRequest(mbeans[0].connectionSettings, mbeans[0].name, [ State.INVALID ]));
         
         return Axios.post(process.env.API_NAME, requests, {
                 auth: { username: user.name, password: user.password }
@@ -77,9 +78,9 @@ export class JmxService {
             });
     }
 
-    createGroupCountRequest(connectionSettings: ConnectionSettings, user: User, mbeans: string[], state: State[]) {
+    createGroupCountRequest(user: User, mbeans: MBean[], state: State[]) {
         let requests = mbeans.map((bean) => {
-            return this.createCountWFRequest(connectionSettings, bean, state);
+            return this.createCountWFRequest(bean.connectionSettings, bean.name, state);
         });
         return requests;
     }

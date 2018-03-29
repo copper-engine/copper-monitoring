@@ -32,9 +32,9 @@ export class WorkflowRepository extends Vue {
         }, 200);
         this.wfRepo = new WorkflowRepo();
         let engine: EngineStatus = this.$store.state.engineStatusList[this.$route.params.id];
-        console.log('engine', engine);
+        let mbean = this.$store.state.mbeans.engineMBeans[this.$route.params.id];
         this.wfRepo =  new WorkflowRepo();
-        this.jmxService.getWfRepo(this.$store.state.connectionSettings, engine.wfRepoMXBean, this.$store.state.user).then((response: WorkflowRepo) => {
+        this.jmxService.getWfRepo(mbean.connectionSettings, engine.wfRepoMXBean, this.$store.state.user).then((response: WorkflowRepo) => {
             this.wfRepo = response;
         });
     }

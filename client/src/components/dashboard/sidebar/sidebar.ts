@@ -24,10 +24,6 @@ export class SidebarComponent extends Vue {
     port = this.$store.state.connectionSettings.port;
     closeAll = false;
 
-    // get connected() {
-    //     return (this.$store.state.engineStatusList && this.$store.state.engineStatusList.length > 0);
-    // }
-
     mounted() {
         this.updatedConnectedStatus();
     }
@@ -43,9 +39,8 @@ export class SidebarComponent extends Vue {
     }
 
     updatedConnectedStatus() {
-        setTimeout(() => {
-            this.connected = (this.$store.state.engineStatusList && this.$store.state.engineStatusList.length > 0);
-        }, 500);
+        this.connected = (this.$store.state.mbeans && this.$store.state.mbeans.engineMBeans.length > 0);
+        this.settingsShowed = !this.connected;
     }
       
     updateTarget(connectionSettings) {
@@ -57,7 +52,7 @@ export class SidebarComponent extends Vue {
         this.updatedConnectedStatus();
     }
 
-    @Watch('this.$store.state.engineStatusList') 
+    @Watch('$store.state.mbeans') 
     updateConnected() {
         this.updatedConnectedStatus();
     }

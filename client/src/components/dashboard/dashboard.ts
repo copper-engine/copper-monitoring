@@ -70,6 +70,7 @@ export class DashboardComponent extends Vue {
         (this.$services.jmxService as JmxService)
         .getMBeans(this.$store.state.connectionSettings, this.$store.state.user)
         .then((mbeans: MBean[]) => {
+
             if (this.updateStatusInterval) {
                 clearInterval(this.updateStatusInterval);
             }
@@ -77,7 +78,10 @@ export class DashboardComponent extends Vue {
             let connectionSettings: ConnectionSettings = this.$store.state.connectionSettings;
             if (mbeans && mbeans.length > 0) {
                 this.$store.commit('updateMBeans', new MBeans(mbeans));
+            } else {
+                this.$store.commit('updateMBeans', new MBeans([]));
             }
+            
 
             this.getEngineStatus(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user);
             this.updateStatusInterval = setInterval(() => {
@@ -94,6 +98,9 @@ export class DashboardComponent extends Vue {
 
     private getEngineStatus(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User) {
         (this.$services.jmxService as JmxService).getEngineStatus(connectionSettings, mbeans, user).then((enginStatusList: EngineStatus[]) => {
+            if (!enginStatusList) {
+                enginStatusList = [];
+            }
             this.$store.commit('updateEngineStatus', enginStatusList);
         });
     }

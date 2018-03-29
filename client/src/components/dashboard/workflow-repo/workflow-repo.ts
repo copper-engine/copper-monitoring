@@ -14,9 +14,8 @@ const sourceCodeComponent = () => import('./../../core/source-code').then(({ Sou
 export class WorkflowRepository extends Vue {
 
     private jmxService: JmxService = this.$services.jmxService;
-
+    newComponent = false;
     wfRepo: WorkflowRepo = new WorkflowRepo();
-
     page: number = 1;
     perPage: number = 10;
     perPageItems: number[] = [10, 15, 25, 50];
@@ -27,6 +26,10 @@ export class WorkflowRepository extends Vue {
     
     @Watch('$route.params')
     loadRepo() {
+        this.newComponent = true;
+        setTimeout(() => {
+            this.newComponent = false;
+        }, 1);
         this.wfRepo = new WorkflowRepo();
         let engine: EngineStatus = this.$store.state.engineStatusList[this.$route.params.id];
         console.log('engine', engine);

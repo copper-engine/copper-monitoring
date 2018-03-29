@@ -37,6 +37,7 @@ export class WorkflowsComponent extends Vue {
 
     private jmxService: JmxService = this.$services.jmxService;
     private eventHub: Vue = this.$services.eventHub;
+    newComponent = false;
     workflowsContext: Map<String, WorkflowContext> = new Map<String, WorkflowContext>(); 
     workflows: WorkflowInfo[] = [];
     wfCount: number = 0;
@@ -309,6 +310,10 @@ export class WorkflowsComponent extends Vue {
 
     @Watch('$route')
     newPage() {
+        this.newComponent = true;
+        setTimeout(() => {
+            this.newComponent = false;
+        }, 1);
         this.workflows = [];
         this.wfCount = 0;
         this.filter = new WorkflowFilter;

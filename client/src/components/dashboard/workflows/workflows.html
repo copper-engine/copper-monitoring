@@ -1,4 +1,4 @@
-<div class="workflows" :class="{'fade': disabled}">
+<div class="workflows" :class="{'fade': disabled}" v-if="!newComponent">
 
     <workflow-heading 
     @triggerRestartAll="restartAll"

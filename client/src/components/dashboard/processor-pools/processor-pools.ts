@@ -16,6 +16,7 @@ import { StoreState } from '../../../store.vuex';
 export class ProcessorPools extends Vue {
     private jmxService: JmxService = this.$services.jmxService;
     private eventHub: Vue = this.$services.eventHub;
+    newComponent = false;
     fetchPoolInterval: any;
     processorPools: ProcessorPool[] = [];
     private engine: EngineStatus = null;
@@ -80,6 +81,11 @@ export class ProcessorPools extends Vue {
 
     @Watch('$route.params')
     init() {
+        this.newComponent = true;
+        setTimeout(() => {
+            this.newComponent = false;
+        }, 1);
+        this.processorPools = [];
         this.engine = (this.$store.state as  StoreState).engineStatusList[this.$route.params.id];
         this.scheduleFetchPools();
     }
@@ -102,11 +108,4 @@ export class ProcessorPools extends Vue {
     private showError(message: string) {
         this.eventHub.$emit('showNotification', new Notification(message, 'error'));
     }
-
-    @Watch('$route')
-    newPage() {
-        this.processorPools = [];
-        this.getProcessorPools();
-    }
-
 }

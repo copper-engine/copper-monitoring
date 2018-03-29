@@ -84,7 +84,7 @@ export class ProcessorPools extends Vue {
         this.newComponent = true;
         setTimeout(() => {
             this.newComponent = false;
-        }, 1);
+        }, 200);
         this.processorPools = [];
         this.engine = (this.$store.state as  StoreState).engineStatusList[this.$route.params.id];
         this.scheduleFetchPools();

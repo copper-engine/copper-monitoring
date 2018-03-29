@@ -313,7 +313,7 @@ export class WorkflowsComponent extends Vue {
         this.newComponent = true;
         setTimeout(() => {
             this.newComponent = false;
-        }, 1);
+        }, 200);
         this.workflows = [];
         this.wfCount = 0;
         this.filter = new WorkflowFilter;

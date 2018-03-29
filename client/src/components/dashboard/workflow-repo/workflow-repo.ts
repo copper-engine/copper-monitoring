@@ -29,7 +29,7 @@ export class WorkflowRepository extends Vue {
         this.newComponent = true;
         setTimeout(() => {
             this.newComponent = false;
-        }, 1);
+        }, 200);
         this.wfRepo = new WorkflowRepo();
         let engine: EngineStatus = this.$store.state.engineStatusList[this.$route.params.id];
         console.log('engine', engine);

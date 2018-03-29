@@ -27,6 +27,7 @@ export class WorkflowRepository extends Vue {
     
     @Watch('$route.params')
     loadRepo() {
+        this.wfRepo = new WorkflowRepo();
         let engine: EngineStatus = this.$store.state.engineStatusList[this.$route.params.id];
         console.log('engine', engine);
         this.wfRepo =  new WorkflowRepo();

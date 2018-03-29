@@ -103,4 +103,10 @@ export class ProcessorPools extends Vue {
         this.eventHub.$emit('showNotification', new Notification(message, 'error'));
     }
 
+    @Watch('$route')
+    newPage() {
+        this.processorPools = [];
+        this.getProcessorPools();
+    }
+
 }

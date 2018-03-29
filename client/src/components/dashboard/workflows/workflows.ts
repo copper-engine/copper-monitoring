@@ -306,4 +306,12 @@ export class WorkflowsComponent extends Vue {
             this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
         }, delay);
     }
+
+    @Watch('$route')
+    newPage() {
+        this.workflows = [];
+        this.wfCount = 0;
+        this.filter = new WorkflowFilter;
+        this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
+    }
 }

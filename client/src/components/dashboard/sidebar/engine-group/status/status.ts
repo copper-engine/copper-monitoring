@@ -34,14 +34,19 @@ export class StatusComponent extends Vue {
 
     get links(): Link[] {
         let linkArray = [];
+        let params = this.status.id + '?connection=' + this.$store.state.connectionSettings.host + '|' + this.$store.state.connectionSettings.port;
         if (!this.multiEngine) {
-            linkArray.push(new Link('Statistics', '/dashboard/statistics/' + this.status.id + '?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-chart-bar'));
-            linkArray.push(new Link('Broken Workflows', '/dashboard/workflows/' + this.status.id + '?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-image-broken'));
-            linkArray.push(new Link('Waiting Workflows', '/dashboard/waiting-workflows/' + this.status.id + '?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-timer-sand-empty'));
+            linkArray = linkArray.concat([
+                new Link('Statistics', '/dashboard/statistics/' + params, 'mdi-chart-bar'),
+                new Link('Broken Workflows', '/dashboard/workflows/' + params, 'mdi-image-broken'),
+                new Link('Waiting Workflows', '/dashboard/waiting-workflows/' + this.status.id + params, 'mdi-timer-sand-empty')
+            ]);
         }
-        linkArray.push(new Link('Workflow Repository', '/dashboard/workflow-repo/' + this.status.id + '?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-file'));
-        linkArray.push(new Link('Processor Pools', '/dashboard/processor-pools/' + this.status.id + '?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-server'));
-        return linkArray;
+        
+        return linkArray.concat([
+            new Link('Workflow Repository', '/dashboard/workflow-repo/' + params, 'mdi-file'),
+            new Link('Processor Pools', '/dashboard/processor-pools/' + params, 'mdi-server')
+        ]);
     }
 
     @Watch('closing')

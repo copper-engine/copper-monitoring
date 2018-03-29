@@ -20,8 +20,8 @@ export class SidebarComponent extends Vue {
     miniVariant = false;
     settingsShowed = false;
     connected = false;
-    host = this.$store.state.connectionSettings.host;
-    port = this.$store.state.connectionSettings.port;
+    host = this.$store.state.connectionSettings[0].host;
+    port = this.$store.state.connectionSettings[0].port;
     closeAll = false;
 
     mounted() {
@@ -47,7 +47,7 @@ export class SidebarComponent extends Vue {
         this.$store.commit('updateConnectionSettings', connectionSettings);
         this.host = this.$store.state.connectionSettings.host;
         this.port = this.$store.state.connectionSettings.port;
-        this.$router.push('/dashboard?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port);
+        this.$router.push('/dashboard?connection=' + this.$store.state.connectionSettings.host + '|' + this.$store.state.connectionSettings.port);
         this.updatedConnectedStatus();
     }
 

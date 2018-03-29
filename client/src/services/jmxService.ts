@@ -1,29 +1,29 @@
 import Axios from 'axios';
 // import Vue from 'vue';
 import { State, EngineStatus, WorkflowInfo, WorkflowClassInfo, WorkflowRepo, StatesPrint, WorkflowFilter, ProcessorPool } from '../models/engine';
-import { ConnectionSettings } from '../models/connectionSettings';
+import { ConnectionSettings, ConnectionResult } from '../models/connectionSettings';
 import moment from 'moment';
 import { User } from '../models/user';
 import { MBeans, MBean } from '../models/mbeans';
 import * as _ from 'lodash';
 
 export class JmxService {
-    getEngineStatus(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User) {
-        let requests = _.flatten(mbeans.engineMBeans.map((mbean) => this.createEngineStatusRequest(connectionSettings, mbean)));
+    getEngineStatus(mbeans: MBean[], user: User) {
+        let requests = _.flatten(mbeans.map((mbean) => this.createEngineStatusRequest(mbean)));
         return Axios.post(process.env.API_NAME, requests, {
                 auth: { username: user.name, password: user.password }
             })
-            .then((response) => this.parseEngineStatusResponse(response, mbeans.engineMBeans.length))
+            .then((response) => this.parseEngineStatusResponse(response, mbeans.length))
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
             });
     }
 
-    createEngineStatusRequest(connectionSettings, mbean: MBean) {
+    createEngineStatusRequest(mbean: MBean) {
         return [
-            this.createEngineInfoRequest(connectionSettings, mbean), 
-            this.createEngineActivityRequest(connectionSettings, mbean.name),
-            this.createCountWFRequest(connectionSettings, mbean.name, [ State.ERROR, State.INVALID ])                
+            this.createEngineInfoRequest(mbean.connectionSettings, mbean), 
+            this.createEngineActivityRequest(mbean.connectionSettings, mbean.name),
+            this.createCountWFRequest(mbean.connectionSettings, mbean.name, [ State.ERROR, State.INVALID ])                
         ];
     }
 
@@ -104,27 +104,35 @@ export class JmxService {
             running, otherValues[0], otherValues[1], dequeued, otherValues[2], otherValues[3]);
     }
 
-    getMBeans(connectionSettings: ConnectionSettings, user: User) {
-        return Axios.post(process.env.API_NAME, [
-                this.createMBeansListRequest(connectionSettings)
-            ], {
-                auth: { username: user.name, password: user.password }
-            })
+    getConnectionResults(connectionSettingsList: ConnectionSettings[], user: User): Promise<void | ConnectionResult[]> {
+        return Axios.post(process.env.API_NAME, 
+                connectionSettingsList.map( connectionSettings => this.createMBeansListRequest(connectionSettings)), 
+                { auth: { username: user.name, password: user.password } })
             .then((response) => {
+                console.log('list responce', response);
                 if (!response || !response.data
-                    || response.data.length < 1
-                    || !this.isSubResponseValid(response.data[0])
-                ) {
+                    || response.data.length === 0) {
                     console.log('Invalid responce:', response);          
                     throw new Error('invalid response!');
                 }
-                let engines = response.data[0].value['copper.engine'];
-                let mbeanNames = Object.keys(response.data[0].value['copper.engine']);
 
-                return mbeanNames.map((mbean) => new MBean(mbean, Object.keys(engines[mbean].attr)));
+                let connectionResults: ConnectionResult[] = connectionSettingsList.map((connectionSettings, i) => {
+                    if (this.isSubResponseValid(response.data[i])) {
+                        let engines = response.data[i].value['copper.engine'];
+                        let mbeanNames = Object.keys(response.data[i].value['copper.engine']);
+                        let mbeans = mbeanNames.map((mbean) => new MBean(mbean, Object.keys(engines[mbean].attr), connectionSettings));
+
+                        return new ConnectionResult(connectionSettings, mbeans);
+                    } else {
+                        return new ConnectionResult(connectionSettings, []);
+                    }
+                });
+
+                console.log('connectionResults', connectionResults);
+                return connectionResults;
             })
             .catch(error => {
-                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error makink JMX connection:', error);
             });
     }
 

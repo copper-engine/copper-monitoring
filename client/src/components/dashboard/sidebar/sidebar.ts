@@ -43,11 +43,9 @@ export class SidebarComponent extends Vue {
     }
 
     updatedConnectedStatus() {
-        setTimeout(() => { 
-            console.log('new status');
-            console.log(this.$store.state.engineStatusList);
+        setTimeout(() => {
             this.connected = (this.$store.state.engineStatusList && this.$store.state.engineStatusList.length > 0);
-        }, 1000);
+        }, 500);
     }
       
     updateTarget(connectionSettings) {

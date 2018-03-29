@@ -78,15 +78,21 @@ export class DashboardComponent extends Vue {
             let connectionSettings: ConnectionSettings = this.$store.state.connectionSettings;
             if (mbeans && mbeans.length > 0) {
                 this.$store.commit('updateMBeans', new MBeans(mbeans));
+                this.getEngineStatus(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user);
+                this.updateStatusInterval = setInterval(() => {
+                    this.getEngineStatus(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user);
+                }, this.$store.state.connectionSettings.updatePeriod * 1000);
             } else {
                 this.$store.commit('updateMBeans', new MBeans([]));
+                this.$store.commit('updateEngineStatus', []);
+                this.getMBeans(this.$store.state.connectionSettings, this.$store.state.user);
+                this.updateStatusInterval = setInterval(() => {
+                    this.getMBeans(this.$store.state.connectionSettings, this.$store.state.user);
+                }, this.$store.state.connectionSettings.updatePeriod * 1000);
             }
             
 
-            this.getEngineStatus(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user);
-            this.updateStatusInterval = setInterval(() => {
-                this.getEngineStatus(this.$store.state.connectionSettings, this.$store.state.mbeans, this.$store.state.user);
-            }, this.$store.state.connectionSettings.updatePeriod * 1000);
+            
         });
     }
 
@@ -103,5 +109,15 @@ export class DashboardComponent extends Vue {
             }
             this.$store.commit('updateEngineStatus', enginStatusList);
         });
+    }
+
+    private getMBeans(connectionSettings: ConnectionSettings, user: User) {
+        (this.$services.jmxService as JmxService).getMBeans(this.$store.state.connectionSettings, this.$store.state.user).then((mbeans: MBean[]) => {
+            if (mbeans && mbeans.length > 0) {
+                this.$store.commit('updateMBeans', new MBeans(mbeans));
+            } else {
+                this.$store.commit('updateMBeans', new MBeans([]));
+            }
+       });
     }
 }

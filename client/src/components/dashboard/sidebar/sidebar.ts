@@ -39,8 +39,7 @@ export class SidebarComponent extends Vue {
     }
 
     updatedConnectedStatus() {
-        this.connected = (this.$store.state.mbeans && this.$store.state.mbeans.engineMBeans.length > 0);
-        this.settingsShowed = !this.connected;
+        this.connected = (this.$store.state.mbeans && this.$store.state.mbeans.engineMBeans.length > 0 && this.$store.state.engineStatusList && this.$store.state.engineStatusList.length > 0);
     }
       
     updateTarget(connectionSettings) {
@@ -52,6 +51,7 @@ export class SidebarComponent extends Vue {
         this.updatedConnectedStatus();
     }
 
+    @Watch('$store.state.engineStatusList')
     @Watch('$store.state.mbeans') 
     updateConnected() {
         this.updatedConnectedStatus();

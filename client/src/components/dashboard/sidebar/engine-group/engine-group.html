@@ -1,5 +1,4 @@
-<div>
-    <div class="header-container secondary">
+<div :class="{ 'single-status' : !multiEngine }">
     <v-layout v-if="multiEngine" class="primary group-header" row>
         <v-flex class="icon-container">
             <v-icon dark>group_work</v-icon>
@@ -19,20 +18,19 @@
             <span>Show Engines</span>
         </v-tooltip>
     </v-layout>
-    </div>
     <transition name="extend-general-links">
-    <v-list v-show="open" class="secondary general-link-list">
+    <v-list v-show="open" class="general-link-list">
         <v-list-tile value="true" v-for="link in links" :key="link.path">
             <v-list-tile-content class="linkTile">
                 <router-link :to="link.path" active-class="back" class="link">
                     <v-layout row>
                         <v-flex class="iconFlex">
                             <v-list-tile-action>
-                                <v-icon color="themeText">{{ link.icon }}</v-icon>
+                                <v-icon dark>{{ link.icon }}</v-icon>
                             </v-list-tile-action>
                         </v-flex>
                         <v-flex>
-                            <v-list-tile-title v-text="link.name" class="themeText--text"></v-list-tile-title>
+                            <v-list-tile-title v-text="link.name" class="textOnColor--text"></v-list-tile-title>
                         </v-flex>
                     </v-layout>                  
                 </router-link>
@@ -41,10 +39,9 @@
     </v-list>
     </transition>
     <transition name="extend-group">
-        <div v-if="(open) || !multiEngine" class="secondary" :class="{ 'status-container' : multiEngine }">
+        <div v-if="(open) || !multiEngine" :class="{ 'multi-status' : multiEngine }">
             <status
             v-for="engineStatus in group.engines" key="engineStatus.id"
-            class="secondary"
             :multiEngine="multiEngine"
             :closing="closing"
             :status="engineStatus" 

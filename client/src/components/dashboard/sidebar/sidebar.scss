@@ -31,29 +31,32 @@
             }
         }
 
+        .single-status {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
         .group{
             overflow: hidden;
-
-            .header-container {
-                border-top: 1px solid;
-                .group-header{
-                    padding: 10px;
-                    h2 {
-                        font-size: 1.3em;
-                        padding-top: 10px;
-                        word-wrap: break-word;
-                        max-width: 100px;
-                    }
-                    .summary {
-                        font-size: 1.1em;
-                        padding-top: 10px;
-                        min-width: 75px;
-                        max-width: 75px;
-                        cursor: default;
-                    }
+            .group-header{
+                padding: 10px;
+                h2 {
+                    font-size: 1.3em;
+                    padding-top: 10px;
+                    word-wrap: break-word;
+                    max-width: 100px;
+                }
+                .summary {
+                    font-size: 1.1em;
+                    padding-top: 10px;
+                    min-width: 75px;
+                    max-width: 75px;
+                    cursor: default;
                 }
             }
+            
             .general-link-list {
+                overflow: hidden;
                 padding-left: 10px;
                 padding-right: 10px;
             }
@@ -64,14 +67,14 @@
                 .link {
                     padding-top: 20px;
                     padding-bottom: 20px;
-                    padding-left: 20px;
+                    padding-left: 10px;
                     width: 100%;
                 }
             }
-            .status-container {
-                padding-left: 10px;
-                padding-right: 10px;
-                padding-bottom: 10px;
+            .multi-status {
+                padding-left: 15px;
+                padding-right: 15px;
+                padding-bottom: 15px;
             }
         }
     }
@@ -145,7 +148,7 @@
         0% {max-height: 0px;
             padding-bottom: 0px;}
         100% {max-height: 500px;
-            padding-bottom: 10px;}
+            padding-bottom: 15px;}
     }
 
     .extend-status-enter-active {

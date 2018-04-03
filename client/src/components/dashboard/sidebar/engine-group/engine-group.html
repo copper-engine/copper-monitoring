@@ -1,5 +1,6 @@
 <div>
-    <v-layout v-if="multiEngine" class="group-header" row>
+    <div class="header-container secondary">
+    <v-layout v-if="multiEngine" class="primary group-header" row>
         <v-flex class="icon-container">
             <v-icon dark>group_work</v-icon>
         </v-flex>
@@ -18,6 +19,7 @@
             <span>Show Engines</span>
         </v-tooltip>
     </v-layout>
+    </div>
     <transition name="extend-general-links">
     <v-list v-show="open" class="secondary general-link-list">
         <v-list-tile value="true" v-for="link in links" :key="link.path">

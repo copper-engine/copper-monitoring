@@ -1,0 +1,211 @@
+code:after, kbd:after, code:before, kbd:before {
+    content: "";
+    letter-spacing: 0px;
+}
+.card {
+    .code {
+        padding: 30px;
+        min-width: 783px;
+        min-height: 200px;
+    }
+}
+.card__text {
+    padding: 0px;
+    width: 100%;
+}
+.codeDialog {
+    padding: 30px;
+    border-radius: 0px;
+}
+
+.waiting {
+    width: 100%;
+    max-width: 1650px;
+    margin: auto;
+
+    .summary {
+        align-items: center;
+        .text {
+            font-size: 1.2em;
+            font-weight: 400;
+            color: #efefef;
+            max-width: 430px;
+            min-width: 292px;
+        }
+    }
+
+    .row-info {
+        overflow: hidden;
+        margin-top: 16px;
+        padding: 5px 16px 5px 16px;
+        align-items: center;
+        font-weight: 700;
+        font-size: 1.1em;
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px;
+    }
+
+    .workflow-layout >* {
+        padding: 8px 16px;
+        align-items: center;
+    }
+
+    .workflows-cont {
+        border-bottom: 1px solid;
+        overflow: hidden;
+
+        .alert {
+            margin: 20px;
+        }
+        .workflow {
+            border-top: 1px solid;
+
+            .workflow-info-layout {
+                padding: 0px;
+                overflow: hidden;    
+
+                .details {
+                    padding-top: 24px;
+                    padding-bottom: 24px;
+                    padding-left: 32px;
+                    padding-right: 10px;
+                    width: 100%;
+
+                    .workflow-detail {
+                        padding: 4px;
+                    }
+                    .detail-label {
+                        font-weight: 700;
+                        width: 200px;
+                        min-width: 200px;
+                        max-width: 200px;
+                    }
+                    .stacktrace .text {
+                        overflow-x: auto;
+                        border-radius: 3px;
+                        code {
+                            border-radius: 3px 3px 0px 0px;
+                            padding: 10px 30px; 
+                            min-width: 100%;
+                        }
+                    }
+                    .workflow-id {
+                        max-height: 24px;
+                    }
+                    .raise {
+                        margin-top: -40px;
+                    }
+                    button {
+                        border-radius: 5%;
+                        width: 185px;
+                        height: 36px;
+                    }
+                }
+            }
+        }
+    } 
+
+    .number,
+    .data,
+    .priority,
+    .processorPoolId,
+    .state,
+    .timeout,
+    .timestamps,
+    .engineId,
+    .actions {
+        word-wrap: break-word;
+        padding: 0 5px;
+    }
+    .number {
+        width: 35px;
+        min-width: 35px;
+        max-width: 35px;
+    }
+    .data {
+        min-width: 380px; 
+    }
+    .engineId {
+        width: 85px;
+        min-width: 85px;
+        max-width: 85px; 
+    }
+    .processorPoolId {
+        width: 130px;
+        min-width: 130px;
+        max-width: 130px;
+    }
+    .actions {
+        width: 150px;
+        min-width: 150px;
+        max-width: 150px;
+        button {
+            margin-right: 4px;
+            margin-left: 4px;
+            border-radius: 20%;
+        }
+        .close-details-icon {
+            transform: rotate(180deg);
+        }
+    }
+    .timestamps {
+        width: 150px;
+        min-width: 150px;
+        max-width: 150px;
+
+        .errorTS,
+        .lastModTS,
+        .creationTS {
+            padding: 3px 0;
+        }
+    }
+    .timeout {
+        width: 110px;
+        min-width: 110px;
+        max-width: 110px;
+    }
+    .priority,
+    .state {
+        width: 75px;
+        min-width: 75px;
+        max-width: 75px;
+    }
+
+    .pagination-cont {
+        align-items: center;
+        .pagination li span {
+            float: none;
+        }
+        .pagin-config {
+            align-items: center;
+            .per-page-label {
+                font-size: 1.1em;
+                font-weight: 700;
+                padding-left: 16px;
+                padding-bottom: 8px;
+            }
+            .per-page {
+                width: 60px;
+            }
+        }
+    }
+
+    .footer-card {
+        border-bottom-left-radius: 2px;
+        border-bottom-right-radius: 2px;
+    }
+
+    .list-item {
+        display: inline-block;
+        margin-right: 10px;
+    }
+    .fade {
+        opacity: 0.4;
+        animation-name: slowFade;
+        animation-duration: 1s;
+    }
+    @keyframes slowFade {
+        from {opacity: 1}
+        to {opacity: 0.4}
+    }
+}

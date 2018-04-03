@@ -45,8 +45,8 @@ export class EngineGroupComponent extends Vue {
         
         return [
             new Link('Statistics', '/dashboard/statistics/' + ('group:' + this.parseGroupName(this.group.name)) + '?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-chart-bar'),
-            new Link('Broken Workflows', '/dashboard/workflows/' + this.group.engines[0].id + '?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-image-broken'),
-            new Link('Waiting Workflows', '/dashboard/waiting-workflows/' + this.group.engines[0].id + '?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-timer-sand-empty')
+            new Link('Broken Workflows', '/dashboard/workflows/' + ('broken:' + this.group.engines[0].id) + '?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-image-broken'),
+            new Link('Waiting Workflows', '/dashboard/workflows/' + ('waiting:' + this.group.engines[0].id) + '?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-timer-sand-empty')
         ];
     }
 

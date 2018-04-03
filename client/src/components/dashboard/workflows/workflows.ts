@@ -1,6 +1,6 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { setTimeout } from 'timers';
-import { WorkflowInfo, EngineStatus, WorkflowRepo, WorkflowFilter } from '../../../models/engine';
+import { WorkflowInfo, EngineStatus, WorkflowRepo, WorkflowFilter, State } from '../../../models/engine';
 import { Notification } from '../../../models/notification';
 import { JmxService } from '../../../services/jmxService';
 import * as utils from '../../../util/utils';
@@ -41,7 +41,9 @@ export class WorkflowsComponent extends Vue {
     workflowsContext: Map<String, WorkflowContext> = new Map<String, WorkflowContext>(); 
     workflows: WorkflowInfo[] = [];
     wfCount: number = 0;
-    fetchBrokenWFInterval: any;
+    wfType: string = '';
+    engineId: string = '';
+    fetchWFInterval: any;
     page: number = 1;
     perPage: number = 10;
     perPageItems: number[] = [10, 15, 25, 50];
@@ -54,14 +56,37 @@ export class WorkflowsComponent extends Vue {
     filter: WorkflowFilter = new WorkflowFilter;
 
     mounted() {
-        this.sheduleFetchingBrrokenWF();
+        this.init();
     }
     beforeDestroy() {
-        clearInterval(this.fetchBrokenWFInterval);
+        clearInterval(this.fetchWFInterval);
+    }
+
+    init() {
+        this.getWorkflowType();
+        this.setFilterStates();
+        this.sheduleFetchingWF();
+    }
+
+    getWorkflowType() {
+        if (this.$route.params.id.substr(0, 6) === 'broken') {
+            this.wfType = 'broken';
+            this.engineId = this.$route.params.id.substr(7);
+        } else {
+            this.wfType = 'waiting';
+            this.engineId = this.$route.params.id.substr(8);
+        }
+    }
+
+    setFilterStates() {
+        this.filter = new WorkflowFilter;
+        if (this.wfType === 'waiting') {
+            this.filter.states = [State.WAITING];
+        }
     }
 
     get status() {
-        return this.$store.state.engineStatusList[this.$route.params.id];
+        return this.$store.state.engineStatusList[this.engineId];
     }
 
     get disabled() {
@@ -69,29 +94,23 @@ export class WorkflowsComponent extends Vue {
     }
 
     get totalPages() {
-        if (this.$store.state.engineStatusList[this.$route.params.id]) {
-
+        if (this.$store.state.engineStatusList[this.engineId]) {
             let total = Math.ceil(Number(this.wfCount) / this.perPage);
             if (this.page > total) {
                 this.page = 1; 
             }
-
             return total;
         }
         this.page = 1;
         return 1;
     }
-    
-    private showSuccess(message: String) {
-        this.eventHub.$emit('showNotification', new Notification(message));
-    }
 
-    private getBrokenWorkflows(connectionSettings: ConnectionSettings, user: User, filter) {
+    private getWorkflows(connectionSettings: ConnectionSettings, user: User, filter) {
         // TODO fix selecting correct bean
-        this.jmxService.countWFRequest(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id].name, this.$store.state.user, this.filter).then((response: number) => {
+        this.jmxService.countWFRequest(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.engineId].name, this.$store.state.user, this.filter).then((response: number) => {
             this.wfCount = response;
         });
-        this.jmxService.getBrokenWorkflows(connectionSettings, this.$store.state.mbeans.engineMBeans[this.$route.params.id].name, user, this.perPage, (this.page - 1) * this.perPage, filter).then((response: WorkflowInfo[]) => {
+        this.jmxService.getWorkflows(connectionSettings, this.$store.state.mbeans.engineMBeans[this.engineId].name, user, this.perPage, (this.page - 1) * this.perPage, filter).then((response: WorkflowInfo[]) => {
             this.workflows = response;
         });
     }
@@ -100,9 +119,13 @@ export class WorkflowsComponent extends Vue {
         this.eventHub.$emit('showNotification', new Notification(message, 'error'));
     }
 
+    private showSuccess(message: String) {
+        this.eventHub.$emit('showNotification', new Notification(message));
+    }
+
     applyFilter(newFilter: WorkflowFilter) {
         this.filter = newFilter;
-        this.sheduleFetchingBrrokenWF();
+        this.sheduleFetchingWF();
     }
 
     restartAll() {
@@ -290,13 +313,13 @@ export class WorkflowsComponent extends Vue {
     }
 
     @Watch('$store.state.connectionSettings')
-    sheduleFetchingBrrokenWF() {
-        if (this.fetchBrokenWFInterval) {
-            clearInterval(this.fetchBrokenWFInterval);
+    sheduleFetchingWF() {
+        if (this.fetchWFInterval) {
+            clearInterval(this.fetchWFInterval);
         }
-        this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
-        this.fetchBrokenWFInterval = setInterval(() => {
-            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
+        this.getWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
+        this.fetchWFInterval = setInterval(() => {
+            this.getWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
         }, this.$store.state.connectionSettings.updatePeriod * 1000);
     }
 
@@ -304,7 +327,7 @@ export class WorkflowsComponent extends Vue {
     @Watch('perPage')
     private forceStatusFetch(delay: number = 0) {
         setTimeout(() => {
-            this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
+            this.getWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
         }, delay);
     }
 
@@ -316,7 +339,6 @@ export class WorkflowsComponent extends Vue {
         }, 200);
         this.workflows = [];
         this.wfCount = 0;
-        this.filter = new WorkflowFilter;
-        this.getBrokenWorkflows(this.$store.state.connectionSettings, this.$store.state.user, this.filter);
+        this.init();
     }
 }

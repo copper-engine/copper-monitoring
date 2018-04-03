@@ -9,7 +9,6 @@ import { LoginComponent } from './components/login';
 export const dashboardComponent = () => import('./components/dashboard').then(({ DashboardComponent }) => DashboardComponent);
 export const notificationsComponent = () => import('./components/core/notifications').then(({ NotificationsComponent }) => NotificationsComponent);
 const workflowsComponent = () => import('./components/dashboard/workflows').then(({ WorkflowsComponent }) => WorkflowsComponent);
-const waitingWorkflowsComponent = () => import('./components/dashboard/waiting-workflows').then(({ WaitingWorkflows }) => WaitingWorkflows);
 const statisticsComponent = () => import('./components/dashboard/statistics').then(({ StatisticsComponent }) => StatisticsComponent);
 const workflowRepoComponent = () => import('./components/dashboard/workflow-repo').then(({ WorkflowRepository }) => WorkflowRepository);
 const processorPoolsComponent = () => import('./components/dashboard/processor-pools').then(({ ProcessorPools }) => ProcessorPools);
@@ -71,14 +70,6 @@ export const createRoutes: () => RouteConfig[] = () => [
         name: 'workflows',
         path: 'workflows/:id',
         component: workflowsComponent,
-        meta: {
-          requiresAuth: true
-        }
-      },
-      {
-        name: 'waiting-workflows',
-        path: 'waiting-workflows/:id',
-        component: waitingWorkflowsComponent,
         meta: {
           requiresAuth: true
         }

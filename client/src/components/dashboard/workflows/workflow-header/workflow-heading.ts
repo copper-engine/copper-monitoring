@@ -13,6 +13,7 @@ import './workflow-heading.scss';
 })
 export class WorkflowHeading extends Vue {
     @Prop() engineStatus;
+    @Prop() wfType: string;
     @Prop() restartingAll: boolean;
     @Prop() deletingAll: boolean;
     private jmxService: JmxService = this.$services.jmxService;
@@ -241,8 +242,7 @@ export class WorkflowHeading extends Vue {
     }
 
     getPossibleClassNames() {
-        let engine: EngineStatus = this.$store.state.engineStatusList[this.$route.params.id];
-        this.jmxService.getWfRepo(this.$store.state.connectionSettings, engine.wfRepoMXBean, this.$store.state.user).then((response: WorkflowRepo) => {
+        this.jmxService.getWfRepo(this.$store.state.connectionSettings, this.engineStatus.wfRepoMXBean, this.$store.state.user).then((response: WorkflowRepo) => {
             this.possibleClassnames = response.workFlowInfo.map((workflow, index) => {
                 return response.workFlowInfo[index].classname;
             });

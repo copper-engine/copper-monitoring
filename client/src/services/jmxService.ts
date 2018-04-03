@@ -129,13 +129,13 @@ export class JmxService {
     }
 
     // TODO logout if wrong credentials...
-    getBrokenWorkflows(connectionSettings: ConnectionSettings, mbean: string, user: User , max: number = 0, offset: number = 0, filter: WorkflowFilter) {
+    getWorkflows(connectionSettings: ConnectionSettings, mbean: string, user: User , max: number = 0, offset: number = 0, filter: WorkflowFilter) {
         return Axios.post(process.env.API_NAME, [
-                this.createQueryBrokenWFRequest(connectionSettings, mbean, max, offset, filter)
+                this.createQueryWFRequest(connectionSettings, mbean, max, offset, filter)
             ], {
                 auth: { username: user.name, password: user.password }
             })
-            .then(this.parseBrokenWorkflowsResponse)
+            .then(this.parseWorkflowsResponse)
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
             });
@@ -335,7 +335,7 @@ export class JmxService {
         };
     }
 
-    private createQueryBrokenWFRequest(connectionSettings: ConnectionSettings, mbean: string, max: number, offset: number, filter: WorkflowFilter) {
+    private createQueryWFRequest(connectionSettings: ConnectionSettings, mbean: string, max: number, offset: number, filter: WorkflowFilter) {
         return this.createJmxExecRequest(connectionSettings, mbean, {
             operation: 'queryWorkflowInstances(javax.management.openmbean.CompositeData)',
             arguments: [this.createWorkflowFilter(connectionSettings, filter.states, max, offset, filter)], // get workflows with status Invalid
@@ -540,7 +540,7 @@ export class JmxService {
         response.data[0].value, response.data[1].value, response.data[2].value, response.data[3].value, response.data[4].value, response.data[5].value);
     }
 
-    private parseBrokenWorkflowsResponse = (response): WorkflowInfo[] => {
+    private parseWorkflowsResponse = (response): WorkflowInfo[] => {
         if (!response || !response.data
             || response.data.length < 1
             || !this.isSubResponseValid(response.data[0])

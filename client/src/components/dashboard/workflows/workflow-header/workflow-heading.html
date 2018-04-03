@@ -36,7 +36,7 @@
             <v-btn dark
                 class="longButton"
                 color="primary"
-                :class="{ 'single-button' :  (wfType === 'waiting') }"
+                :class="{ 'only-filter' :  (wfType === 'waiting') }"
                 :loading="deletingAll"
                 :disabled="deletingAll || restartingAll"
                 @click="triggerFilterMenu">
@@ -161,7 +161,7 @@
     </v-layout>
     </transition>
 
-    <v-layout class="row-info primary textOnColor--text">
+    <v-layout class="row-info primary textOnColor--text" :class="{ 'correct-height' : (wfType === 'waiting') }">
         <v-flex class="number">
             #
         </v-flex>  
@@ -180,22 +180,22 @@
         <v-flex class="priority">
             Priority
         </v-flex>
-        <v-flex class="timeout">
+        <v-flex class="timeout" v-if="(wfType === 'broken')">
             Timeout
         </v-flex>
         <v-flex class="timestamps">
-            <div class="errorTS">
+            <div class="errorTS" v-if="(wfType === 'broken')">
                 Error Time
-            </div>
-            <div class="lastModTS">
-                Last Modification
             </div>
             <div class="creationTS">
                 Creation
-            </div>            
+            </div> 
+            <div class="lastModTS">
+                Last Modification
+            </div>   
         </v-flex>
-        <v-flex class="actions">
-            Actions
+        <v-flex :class="{ 'single-button' : (wfType === 'waiting'), 'actions' : (wfType === 'broken')}">
+                {{ (wfType === 'broken') ? 'Actions' : 'Details' }}
         </v-flex>
     </v-layout>
 </div>

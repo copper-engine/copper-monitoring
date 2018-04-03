@@ -38,6 +38,10 @@ code:after, kbd:after, code:before, kbd:before {
     .workflow-layout-header {
         max-height: 97px !important;
     }
+    .correct-height {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
 
     .workflows-cont {
         border-bottom: 1px solid;
@@ -124,10 +128,24 @@ code:after, kbd:after, code:before, kbd:before {
         min-width: 130px;
         max-width: 130px;
     }
+    
     .actions {
         width: 150px;
         min-width: 150px;
         max-width: 150px;
+        button {
+            margin-right: 4px;
+            margin-left: 4px;
+            border-radius: 20%;
+        }
+        .close-details-icon {
+            transform: rotate(180deg);
+        }
+    }
+    .single-button {
+        width: 50px;
+        min-width: 50px;
+        max-width: 50px;
         button {
             margin-right: 4px;
             margin-left: 4px;

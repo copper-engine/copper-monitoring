@@ -80,9 +80,9 @@ export class WorkflowsComponent extends Vue {
 
     setFilterStates() {
         this.filter = new WorkflowFilter;
-        // if (this.wfType === 'waiting') {
-        //     this.filter.states = [State.WAITING];
-        // }
+        if (this.wfType === 'waiting') {
+            this.filter.states = [State.WAITING];
+        }
     }
 
     get status() {

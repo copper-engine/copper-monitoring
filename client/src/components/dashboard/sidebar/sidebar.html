@@ -5,7 +5,7 @@
     class="sidebar secondary"
     mobile-break-point="1200" app>
         <scroll class="scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 600}">
-            <div class="secondary textOnColor--text scroll-header">
+            <div class="secondary themeText--text scroll-header">
                 <v-layout row>
                     <v-flex class="icon-container">
                         <v-icon 
@@ -23,7 +23,7 @@
                         {{ host }}:{{ port }}
                     </v-flex>
                     <v-spacer></v-spacer>
-                    <v-btn dark icon @click.stop="showSettings">
+                    <v-btn icon @click.stop="showSettings">
                         <v-icon v-html="'settings'" :class="{'active': true}"></v-icon>
                     </v-btn>
                 </v-layout>

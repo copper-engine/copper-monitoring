@@ -80,6 +80,14 @@
         100%  { transform: rotate(360deg); }
       }
     </style>
+    <script type="text/javascript">
+      function loadTheme() {
+        if (!localStorage.getItem('darkTheme')) {
+            localStorage.setItem('darkTheme', 'true');
+        }
+      }
+      window.onload = loadTheme();
+    </script>
   </head>
 
   <body>

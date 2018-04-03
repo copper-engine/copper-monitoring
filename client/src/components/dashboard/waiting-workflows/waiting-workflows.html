@@ -49,12 +49,7 @@
                 </v-alert>
             </v-card-text>
         </v-card>
-            <v-flex class="workflow" v-for="(workflow, i) in workflows" :key="workflow.id"
-            :class="{
-            'highlight-workflow-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting, 
-            'highlight-workflow-layout': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloading, 
-            'fade': workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton)
-            }">
+            <v-flex class="workflow" v-for="(workflow, i) in workflows" :key="workflow.id">
                 <v-layout class="workflow-layout secondary" column>
                     <v-layout class="workflow-layout-header">
                         <v-flex class="number">

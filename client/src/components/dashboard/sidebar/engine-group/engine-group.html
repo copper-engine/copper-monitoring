@@ -1,12 +1,12 @@
 <div>
     <v-layout v-if="multiEngine" class="group-header" row>
         <v-flex class="icon-container">
-            <v-icon>group_work</v-icon>
+            <v-icon dark>group_work</v-icon>
         </v-flex>
         <h2 class="textOnColor--text"> {{ parseGroupName(group.name) }} </h2>
         <v-spacer></v-spacer>
         <v-tooltip top content-class="tooltip-text">
-        <v-flex v-if="!open" class="summary" slot="activator">
+        <v-flex v-if="!open" class="textOnColor--text summary" slot="activator">
             ( {{ wfCount }} / {{ brokenWFCount }} )
         </v-flex>
         <span>( Workflow Instances / Broken Workflows )</span>

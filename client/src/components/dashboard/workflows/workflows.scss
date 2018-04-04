@@ -52,12 +52,11 @@ code:after, kbd:after, code:before, kbd:before {
             margin: 20px;
         }
         .workflow {
-            z-index: 1;
+            z-index: 0;
             border-top: 1px solid;
 
             .workflow-info-layout {
                 padding: 0px;
-                z-index: 1;
                 overflow: hidden;    
 
                 .details {

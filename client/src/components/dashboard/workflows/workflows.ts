@@ -176,7 +176,7 @@ export class WorkflowsComponent extends Vue {
         this.jmxService.deleteFiltered(this.$store.state.connectionSettings, this.$store.state.mbeans.engineMBeans[this.engineId].name, this.$store.state.user, 0, 0, newFilter)
             .then((done) => {
                 this.deletingAll = false;
-                this.forceStatusFetch(500);
+                this.forceStatusFetch(1500);
                 if (done) {
                     this.workflows.forEach((wf) => {
                         let currentID = wf.id;
@@ -258,7 +258,7 @@ export class WorkflowsComponent extends Vue {
                         wfContext.deleting = false; 
                         this.workflowsContext.set(id, wfContext);
                         this.$forceUpdate();
-                    }, 1500);
+                    }, 1800);
                 }
     }
 

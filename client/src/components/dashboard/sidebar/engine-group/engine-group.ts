@@ -2,6 +2,7 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import { EngineGroup, EngineStatus, WorkflowFilter } from '../../../../models/engine';
 import { JmxService } from '../../../../services/jmxService';
 import { Link } from '../../../../models/link';
+import './engine-group.scss';
 
 const statusComponent = () => import('./status').then(({ StatusComponent }) => StatusComponent);
 

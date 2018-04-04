@@ -1,0 +1,44 @@
+.group{
+    overflow: hidden;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    
+    .group-header{
+        padding: 10px;
+        h2 {
+            font-size: 1.3em;
+            padding-top: 10px;
+            word-wrap: break-word;
+            max-width: 100px;
+        }
+        .summary {
+            font-size: 1.1em;
+            padding-top: 10px;
+            min-width: 75px;
+            max-width: 75px;
+            cursor: default;
+        }
+    }
+    
+    .general-link-list {
+        overflow: hidden;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .linkTile {
+        border-radius: 2px;
+        margin-right: -15px;
+        margin-left: -15px;
+        .link {
+            padding-top: 20px;
+            padding-bottom: 20px;
+            padding-left: 10px;
+            width: 100%;
+        }
+    }
+    .multi-status {
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-bottom: 15px;
+    }
+}

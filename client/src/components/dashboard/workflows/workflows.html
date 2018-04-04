@@ -21,7 +21,8 @@
         </v-card>
             <v-flex class="workflow" v-for="(workflow, i) in workflows" :key="workflow.id"
             :class="{
-            'highlight-workflow-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting, 
+            'highlight-workflow-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting,
+            'highlight-workflow-extended-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting && workflowsContext.get(workflow.id).open,
             'highlight-workflow-layout': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloading, 
             'fade': workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton)
             }">
@@ -103,7 +104,7 @@
                         </v-flex>
                     </v-layout>
                     <v-layout class="workflow-info-layout" :class="{
-                        'highlight-workflow-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting, 
+                        'highlight-workflow-details-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting && workflowsContext.get(workflow.id).open, 
                         'highlight-workflow-layout': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloading, 
                         'fade': workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton)
                         }">

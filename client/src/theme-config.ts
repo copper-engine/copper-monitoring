@@ -32,8 +32,8 @@ let darkColors: VuetifyTheme = {
   
   let lightColors: VuetifyTheme = {
     primary: '#0D5494',
-    secondary: '#ebebeb',
-    accent: '#d6d6d6',
+    secondary: '#e4e2e2',
+    accent: '#cecece',
     side: '#009ecf',
     error: '#b71c1c',
     themeText: '#303030',

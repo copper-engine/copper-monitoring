@@ -4,6 +4,7 @@ import { ConnectionSettings } from '../../../../../models/connectionSettings';
 import './status.scss';
 import { Link } from '../../../../../models/link';
 import { EngineStatus } from '../../../../../models/engine';
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
 @Component({
     template: require('./status.html'),
@@ -15,6 +16,25 @@ export class StatusComponent extends Vue {
     @Prop() closing: boolean;
     @Prop() mbean: string;
     open: boolean = false;
+    hovered: boolean[] = [];
+
+    mounted() {
+        let numberOfLinks = 5;
+        if (this.multiEngine) {
+            numberOfLinks = 2;
+        }
+        for (let i = 0; i < numberOfLinks; i++) {
+            this.hovered.push(false);
+        }
+    }
+
+    hoverOff(index: number) {
+        Vue.set(this.hovered, index, false);
+    }
+
+    get hoveredOn() {
+        return this.hovered;
+    }
 
     get extendType() {
         if (this.multiEngine === true) {
@@ -41,6 +61,7 @@ export class StatusComponent extends Vue {
         }
         linkArray.push(new Link('Workflow Repository', '/dashboard/workflow-repo/' + this.status.id + '?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-file'));
         linkArray.push(new Link('Processor Pools', '/dashboard/processor-pools/' + this.status.id + '?host=' + this.$store.state.connectionSettings.host + '&port=' + this.$store.state.connectionSettings.port, 'mdi-server'));
+        
         return linkArray;
     }
 

@@ -23,9 +23,18 @@
                         {{ host }}:{{ port }}
                     </v-flex>
                     <v-spacer></v-spacer>
-                    <v-btn icon @click.stop="showSettings">
-                        <v-icon v-html="'settings'" :class="{'active': true}"></v-icon>
-                    </v-btn>
+                    <v-tooltip top content-class="tooltip-text">
+                        <v-btn dark icon @click.stop="showSettings" slot="activator">
+                            <v-icon v-html="'settings'"></v-icon>
+                        </v-btn>
+                        <span>Connection Settings</span>
+                    </v-tooltip>
+                    <v-tooltip top content-class="tooltip-text">
+                        <v-btn dark icon @click="triggerCloseAll" slot="activator">
+                            <v-icon>details</v-icon>
+                        </v-btn>
+                        <span>Collapse All</span>
+                    </v-tooltip>
                 </v-layout>
                 <transition name="extend-config">
                 <config v-if="settingsShowed" @updateTarget="updateTarget" @hideSettings="settingsShowed = false"></config>

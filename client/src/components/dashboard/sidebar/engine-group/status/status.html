@@ -74,7 +74,7 @@
     <v-list v-show="open" class="side">
         <v-list-tile value="true" v-for="link in links" :key="link.path">
             <v-list-tile-content class="linkTile">
-                <router-link :to="link.path" active-class="back" class="link">
+                <router-link :to="link.path" active-class="engineActive" class="link">
                     <v-layout row>
                         <v-flex class="iconFlex">
                             <v-list-tile-action>

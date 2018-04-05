@@ -19,7 +19,6 @@ export class EngineGroupComponent extends Vue {
     brokenWFCount = 0;
     wfCount = 0;
     open: boolean = false;
-    hovered: boolean[] = [false, false, false];
     multiEngine: boolean = false;
 
     created() {
@@ -28,14 +27,6 @@ export class EngineGroupComponent extends Vue {
 
     parseGroupName(rawName: string) {
         return rawName.substr(15);
-    }
-
-    hoverOff(index: number) {
-        Vue.set(this.hovered, index, false);
-    }
-
-    get hoveredOn() {
-        return this.hovered;
     }
 
     getBrokenWFCount() {

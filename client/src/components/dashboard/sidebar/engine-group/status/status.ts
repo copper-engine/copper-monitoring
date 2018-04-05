@@ -16,25 +16,6 @@ export class StatusComponent extends Vue {
     @Prop() closing: boolean;
     @Prop() mbean: string;
     open: boolean = false;
-    hovered: boolean[] = [];
-
-    mounted() {
-        let numberOfLinks = 5;
-        if (this.multiEngine) {
-            numberOfLinks = 2;
-        }
-        for (let i = 0; i < numberOfLinks; i++) {
-            this.hovered.push(false);
-        }
-    }
-
-    hoverOff(index: number) {
-        Vue.set(this.hovered, index, false);
-    }
-
-    get hoveredOn() {
-        return this.hovered;
-    }
 
     get extendType() {
         if (this.multiEngine === true) {

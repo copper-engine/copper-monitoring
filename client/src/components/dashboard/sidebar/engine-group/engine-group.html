@@ -20,8 +20,8 @@
     </v-layout>
     <transition name="extend-general-links">
     <v-list v-show="open" class="general-link-list">
-        <v-list-tile value="true" v-for="(link, index) in links" :key="link.path">
-            <v-list-tile-content class="linkTile" :class="{ 'groupActive' : (hoveredOn[index] === true ) }" @mouseover="hovered[index] = true" @mouseout="hoverOff(index)">
+        <v-list-tile value="true" v-for="link in links" :key="link.path">
+            <v-list-tile-content class="link-tile group-tile">
                 <router-link :to="link.path" active-class="groupActive" class="link">
                     <v-layout row>
                         <v-flex class="iconFlex">

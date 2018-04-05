@@ -16,14 +16,18 @@
 
 .dashboard {
     padding-bottom: 50px;
+    
+
+    .content {
+        margin-top: 0;
+        .container {
+            min-width: 975px;
+        }
+    }
 
     nav .user {
         font-size: 1.2em;
     }
-}
-
-.content {
-    margin-top: 0;
 }
 
 footer {

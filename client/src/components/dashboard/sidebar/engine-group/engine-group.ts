@@ -4,12 +4,12 @@ import { JmxService } from '../../../../services/jmxService';
 import { Link } from '../../../../models/link';
 import './engine-group.scss';
 
-const statusComponent = () => import('./status').then(({ StatusComponent }) => StatusComponent);
+const EngineComponent = () => import('./engine').then(({ EngineComponent }) => EngineComponent);
 
 @Component({
     template: require('./engine-group.html'),
     components: {
-        'status': statusComponent
+        'engine': EngineComponent
     }
 })
 export class EngineGroupComponent extends Vue {

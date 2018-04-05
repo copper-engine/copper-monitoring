@@ -40,13 +40,13 @@
     </transition>
     <transition name="extend-group">
         <div v-if="(open) || !multiEngine" :class="{ 'multi-status' : multiEngine }">
-            <status
+            <engine
             v-for="engineStatus in group.engines" key="engineStatus.id"
             :multiEngine="multiEngine"
             :closing="closing"
             :status="engineStatus" 
             :connectionSettings="$store.state.connectionSettings">
-            </status>
+        </engine>
         </div>
     </transition>
 </div>

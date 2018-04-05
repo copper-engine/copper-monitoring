@@ -174,7 +174,7 @@
         <v-flex class="processorPoolId">
             Processor Pool
         </v-flex>
-        <v-flex class="state">
+        <v-flex class="state" v-if="(wfType === 'broken')">
             State
         </v-flex>
         <v-flex class="priority">
@@ -195,7 +195,7 @@
             </div>   
         </v-flex>
         <v-flex :class="{ 'single-button' : (wfType === 'waiting'), 'actions' : (wfType === 'broken')}">
-                {{ (wfType === 'broken') ? 'Actions' : 'Details' }}
+                Actions
         </v-flex>
     </v-layout>
 </div>

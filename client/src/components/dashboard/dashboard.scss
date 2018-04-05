@@ -17,6 +17,9 @@
 .dashboard {
     padding-bottom: 50px;
     
+    .toolbar {
+        min-width: 975px;
+    }
 
     .content {
         margin-top: 0;

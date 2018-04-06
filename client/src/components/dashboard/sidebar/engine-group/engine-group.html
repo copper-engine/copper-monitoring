@@ -20,7 +20,7 @@
     </v-layout>
     <transition name="extend-general-links">
     <v-list v-show="open" class="general-link-list">
-        <v-list-tile value="true" v-for="link in links" :key="link.path">
+        <v-list-tile value="true" v-for="link in links" :key="link.path" class="link-tile-container">
             <v-list-tile-content class="link-tile group-tile">
                 <router-link :to="link.path" active-class="groupActive" class="link">
                     <v-layout row>

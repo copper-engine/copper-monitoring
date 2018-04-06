@@ -3,14 +3,21 @@
         <v-flex class="icon-container">
             <v-icon dark>group_work</v-icon>
         </v-flex>
-        <h2 class="textOnColor--text"> {{ parseGroupName(group.name) }} </h2>
+        <v-layout column>
+            <h2 class="textOnColor--text"> {{ parseGroupName(group.name) }} </h2>
+            <v-layout row>
+                <v-flex class="engine-count">
+                    engines: {{ this.group.engines.length }}
+                </v-flex>
+                <v-tooltip top content-class="tooltip-text">
+                    <v-flex v-if="!open" class="textOnColor--text summary" slot="activator">
+                        ( {{ wfCount }} / {{ brokenWFCount }} )
+                    </v-flex>
+                    <span>( Workflow Instances / Broken Workflows )</span>
+                </v-tooltip>
+            </v-layout>
+        </v-layout>
         <v-spacer></v-spacer>
-        <v-tooltip top content-class="tooltip-text">
-        <v-flex v-if="!open" class="textOnColor--text summary" slot="activator">
-            ( {{ wfCount }} / {{ brokenWFCount }} )
-        </v-flex>
-        <span>( Workflow Instances / Broken Workflows )</span>
-        </v-tooltip>
         <v-tooltip top content-class="tooltip-text">
             <v-btn dark icon @click="open = !open" slot="activator">
                 <v-icon :class="{ 'close-details-icon': open }">details</v-icon>

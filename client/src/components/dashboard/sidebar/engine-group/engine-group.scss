@@ -9,11 +9,15 @@
             font-size: 1.3em;
             padding-top: 10px;
             word-wrap: break-word;
-            max-width: 100px;
+            max-width: 400px;
+        }
+        .engine-count {
+            flex-grow: 0;
+            padding-right: 10px;
         }
         .summary {
-            font-size: 1.1em;
-            padding-top: 10px;
+            font-size: 1em;
+            padding-top: 0px;
             min-width: 85px;
             max-width: 85px;
             cursor: default;

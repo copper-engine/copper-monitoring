@@ -6,24 +6,26 @@
             </v-flex>
             <v-layout column>
                 <div v-if="status" class="engine-id">{{status.engineId}}</div>
-                <div v-if="status" class="type">{{status.type}}</div>
+                <v-layout row>
+                <div v-if="status">{{status.type}}</div>
+                <v-tooltip top content-class="tooltip-text">
+                    <v-flex v-if="!open && !multiEngine" class="summary" slot="activator">
+                        ( {{ status.instances }} / {{ status.brokenWFCount }} )
+                    </v-flex>
+                    <span>( Workflow Instances / Broken Workflows )</span>
+                </v-tooltip>
+                <v-tooltip top content-class="tooltip-text">
+                    <v-flex v-if="!open && multiEngine" class="summary-limited" slot="activator">
+                        ( {{ status.instances }} )
+                    </v-flex>
+                    <span>( Workflow Instances )</span>
+                </v-tooltip>
+                </v-layout>
             </v-layout>
             <v-flex v-show="!status">
                 <div class="type">Unable to connect</div>
             </v-flex>
             <v-spacer></v-spacer>
-            <v-tooltip top content-class="tooltip-text">
-                <v-flex v-if="!open && !multiEngine" class="summary" slot="activator">
-                    ( {{ status.instances }} / {{ status.brokenWFCount }} )
-                </v-flex>
-                <span>( Workflow Instances / Broken Workflows )</span>
-            </v-tooltip>
-            <v-tooltip top content-class="tooltip-text">
-                <v-flex v-if="!open && multiEngine" class="summary-limited" slot="activator">
-                    ( {{ status.instances }} )
-                </v-flex>
-                <span>( Workflow Instances )</span>
-            </v-tooltip>
             <v-flex class="stopGrow">
                 <v-tooltip top content-class="tooltip-text">
                     <v-btn dark icon @click="open = !open" slot="activator">

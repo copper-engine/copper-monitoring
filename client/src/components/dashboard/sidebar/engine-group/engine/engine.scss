@@ -20,23 +20,20 @@
             font-size: 1.3em;
             font-weight: 700;
             word-wrap: break-word;
-            max-width: 100px;
+            max-width: 400px;
             padding-top: -5px;
         }
         .summary {
-            font-size: 1.1em;
-            padding-top: 10px;
+            font-size: 1em;
+            padding-left: 10px;
             min-width: 85px;
             cursor: default;
         }
         .summary-limited {
             font-size: 1.1em;
-            padding-top: 10px;
+            padding-left: 10px;
             min-width: 25px;
             cursor: default;
-        }
-        .type {
-            font-size: 1.2em;
         }
         
     }

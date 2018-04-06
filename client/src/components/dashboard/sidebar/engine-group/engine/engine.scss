@@ -20,7 +20,7 @@
             font-size: 1.3em;
             font-weight: 700;
             word-wrap: break-word;
-            max-width: 400px;
+            max-width: 200px;
             padding-top: -5px;
         }
         .summary {
@@ -30,10 +30,13 @@
             cursor: default;
         }
         .summary-limited {
-            font-size: 1.1em;
+            font-size: 1em;
             padding-left: 10px;
             min-width: 25px;
             cursor: default;
+        }
+        .status-summary-container {
+            padding-top: 10px;
         }
         
     }

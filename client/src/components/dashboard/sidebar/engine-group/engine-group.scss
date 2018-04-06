@@ -7,9 +7,8 @@
         padding: 10px;
         h2 {
             font-size: 1.3em;
-            padding-top: 10px;
             word-wrap: break-word;
-            max-width: 400px;
+            max-width: 200px;
         }
         .engine-count {
             flex-grow: 0;
@@ -17,7 +16,6 @@
         }
         .summary {
             font-size: 1em;
-            padding-top: 0px;
             min-width: 85px;
             max-width: 85px;
             cursor: default;
@@ -30,7 +28,6 @@
 
     .status-summary {
         overflow: hidden;
-        padding-top: 10px;
         padding-left: 10px;
         .group-line {
             padding-left: 16px;

@@ -34,33 +34,33 @@
             </v-flex>
         </v-layout>
         <transition :name="extendStatusType">
-        <div v-show="open" v-if="status" class="engine-status-info">
-            <div class="line wf-number">
-                <span class="status-title">
+        <div v-show="open" v-if="status" class="status-summary">
+            <div class="line">
+                <span>
                     WF instances:
                 </span>
                 <span class="value">
                     {{status.instances}}
                 </span>
             </div>
-            <div v-if="multiEngine === false" class="line broken">
-                <span class="status-title">
+            <div v-if="multiEngine === false" class="line">
+                <span>
                     Broken WF instances:
                 </span>
                 <span class="value">
                     {{ status.brokenWFCount }}
                 </span>
             </div>
-            <div class="line last-processing">
-                <span class="status-title">
+            <div class="line">
+                <span>
                     Last activity:
                 </span>
                 <span class="value">
                     {{status.lastProcessing | moment("HH:mm DD/MM/YYYY")}}
                 </span>
             </div>
-            <div class="line running-since">
-                <span class="status-title">
+            <div class="line">
+                <span>
                     Started:
                 </span>
                 <span class="value">

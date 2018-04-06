@@ -19,24 +19,44 @@
         </v-tooltip>
     </v-layout>
     <transition name="extend-general-links">
-    <v-list v-show="open" class="general-link-list">
-        <v-list-tile value="true" v-for="link in links" :key="link.path" class="link-tile-container">
-            <v-list-tile-content class="link-tile group-tile">
-                <router-link :to="link.path" active-class="groupActive" class="link">
-                    <v-layout row>
-                        <v-flex class="iconFlex">
-                            <v-list-tile-action>
-                                <v-icon dark>{{ link.icon }}</v-icon>
-                            </v-list-tile-action>
-                        </v-flex>
-                        <v-flex>
-                            <v-list-tile-title v-text="link.name" class="textOnColor--text"></v-list-tile-title>
-                        </v-flex>
-                    </v-layout>                  
-                </router-link>
-            </v-list-tile-content>
-        </v-list-tile>
-    </v-list>
+    <div v-show="open" class="general-info">
+        <div class="status-summary">
+            <div class="group-line">
+                <span>
+                    WF instances:
+                </span>
+                <span class="value">
+                    {{wfCount}}
+                </span>
+            </div>
+            <div class="group-line">
+                <span>
+                    Broken WF instances:
+                </span>
+                <span class="value">
+                    {{ brokenWFCount }}
+                </span>
+            </div>
+        </div>
+        <v-list class="general-link-list">
+            <v-list-tile value="true" v-for="link in links" :key="link.path" class="link-tile-container">
+                <v-list-tile-content class="link-tile group-tile">
+                    <router-link :to="link.path" active-class="groupActive" class="link">
+                        <v-layout row>
+                            <v-flex class="iconFlex">
+                                <v-list-tile-action>
+                                    <v-icon dark>{{ link.icon }}</v-icon>
+                                </v-list-tile-action>
+                            </v-flex>
+                            <v-flex>
+                                <v-list-tile-title v-text="link.name" class="textOnColor--text"></v-list-tile-title>
+                            </v-flex>
+                        </v-layout>                  
+                    </router-link>
+                </v-list-tile-content>
+            </v-list-tile>
+        </v-list>
+    </div>
     </transition>
     <transition name="extend-group">
         <div v-if="(open) || !multiEngine" :class="{ 'multi-status' : multiEngine }">

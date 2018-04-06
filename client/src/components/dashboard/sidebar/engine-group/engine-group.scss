@@ -19,6 +19,26 @@
             cursor: default;
         }
     }
+
+    .general-info {
+        overflow: hidden;
+    }
+
+    .status-summary {
+        overflow: hidden;
+        padding-top: 10px;
+        padding-left: 10px;
+        .group-line {
+            padding-left: 16px;
+        }
+        .line {
+            padding: 4px 0;
+        }
+        .value {
+            padding-left: 8px;
+            font-weight: 700;
+        }
+    }
     
     .general-link-list {
         overflow: hidden;
@@ -30,12 +50,11 @@
         margin-top: 1px;
         .link-tile {
             border-radius: 5px;
-            margin-right: -15px;
             margin-left: -15px;
             .link {
                 padding-top: 20px;
                 padding-bottom: 20px;
-                padding-left: 10px;
+                padding-left: 15px;
                 width: 100%;
             }
         }

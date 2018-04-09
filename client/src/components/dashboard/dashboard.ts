@@ -18,17 +18,27 @@ const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) =
 })
 export class DashboardComponent extends Vue {
     updateStatusInterval: any;
-
-    toggleTheme() {
-        this.$store.commit('updateTheme', !this.$store.state.darkTheme);
-    }
+    menuOpen: boolean = false;
+    periods: number[] = [];
+    compareInterval: any;
     
     get user() {
         return this.$store.state.user;
     }
+    get connectionSettings() {
+        return this.$store.state.connectionSettings;
+    }
 
-    created() {  
+    created() {
+        this.periods[0] = this.connectionSettings.fetchPeriod;
+        this.periods[1] = this.connectionSettings.updatePeriod;
+        this.menuOpen = false;
         (this.$services.eventHub as Vue).$on('forceStatusFetch', this.forceFetchingStatus);
+    }
+
+    mounted() {  
+        this.parseRoute();
+        this.sheduleFetchingStatus();
     }
         
     beforeDestroy() {
@@ -36,16 +46,28 @@ export class DashboardComponent extends Vue {
         (this.$services.eventHub as Vue).$off('forceStatusFetch', this.forceFetchingStatus);
     }
 
-
-    mounted() {
-
-        this.parseRoute();
-        this.sheduleFetchingStatus();
+    toggleTheme() {
+        console.log(this.periods);
+        this.$store.commit('updateTheme', !this.$store.state.darkTheme);
     }
 
     logout() {
         this.$store.commit('setUser', null);
         this.$router.replace('/login'); 
+    }
+
+
+    setPeriods(periods: number[]) {
+        let settings = new ConnectionSettings(this.connectionSettings.host, this.connectionSettings.port, this.periods[0], this.periods[1]);
+        this.$store.commit('updateConnectionSettings', settings);
+    }
+
+    @Watch('periods')
+    checkNewPeriodSettings() {
+        clearTimeout(this.compareInterval);
+        this.compareInterval = setTimeout(() => {
+            this.setPeriods(this.periods);
+        }, 2000);
     }
 
     @Watch('$route')

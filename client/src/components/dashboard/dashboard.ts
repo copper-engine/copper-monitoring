@@ -7,6 +7,7 @@ import { EngineStatus } from '../../models/engine';
 import { User } from '../../models/user';
 import { MBeans, MBean } from '../../models/mbeans';
 import * as _ from 'lodash';
+import { Mutations } from '../../store.vuex';
 
 const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) => SidebarComponent);
 
@@ -49,17 +50,17 @@ export class DashboardComponent extends Vue {
 
 
     toggleTheme() {
-        this.$store.commit('updateTheme', !this.$store.state.darkTheme);
+        this.$store.commit(Mutations.updateTheme, !this.$store.state.darkTheme);
     }
 
     logout() {
-        this.$store.commit('setUser', null);
+        this.$store.commit(Mutations.setUser, null);
         this.$router.replace('/login'); 
     }
 
     setPeriods(periods: number[]) {
         let settings = new ConnectionSettings(this.connectionSettings.host, this.connectionSettings.port, this.periods[0], this.periods[1]);
-        this.$store.commit('updateConnectionSettings', settings);
+        this.$store.commit(Mutations.updateConnectionSettings, settings);
     }
 
     @Watch('periods')
@@ -91,7 +92,8 @@ export class DashboardComponent extends Vue {
                     });
 
                     if (settings.length > 0) {
-                        this.$store.commit('setConnectionSettings', settings);
+                        // this.$store.commit(Mutations.setConnectionSettings, settings);
+                        this.$store.commit(Mutations.setConnectionSettings, settings);
                     }
                 }
             }
@@ -104,9 +106,9 @@ export class DashboardComponent extends Vue {
             if (this.updateStatusInterval) {
                 clearInterval(this.updateStatusInterval);
             }
-            this.$store.commit('updateMBeans', new MBeans([]));
-            this.$store.commit('updateEngineStatus', []);
-            this.$store.commit('updateConnectionResults', []);
+            this.$store.commit(Mutations.updateMBeans, new MBeans([]));
+            this.$store.commit(Mutations.updateEngineStatus, []);
+            this.$store.commit(Mutations.updateConnectionResults, []);
             return;
         }
 
@@ -114,7 +116,7 @@ export class DashboardComponent extends Vue {
         .getConnectionResults(this.$store.state.connectionSettings, this.$store.state.user)
         .then((results: ConnectionResult[]) => {
             console.log('getConnectionResults', results);
-            this.$store.commit('updateConnectionResults', results);
+            this.$store.commit(Mutations.updateConnectionResults, results);
 
             if (this.updateStatusInterval) {
                 clearInterval(this.updateStatusInterval);
@@ -122,15 +124,15 @@ export class DashboardComponent extends Vue {
 
             let mbeans: MBean[] = _.flatMap(results.map(result => result.mbeans ));
             if (mbeans && mbeans.length > 0) {
-                this.$store.commit('updateMBeans', new MBeans(mbeans));
+                this.$store.commit(Mutations.updateMBeans, new MBeans(mbeans));
                 this.getEngineStatus(mbeans, this.$store.state.user);
                 this.updateStatusInterval = setInterval(() => {
 
                     this.getEngineStatus(mbeans, this.$store.state.user);
                 }, this.$store.state.connectionSettings[0].updatePeriod * 1000);
             } else {
-                this.$store.commit('updateMBeans', new MBeans([]));
-                this.$store.commit('updateEngineStatus', []);
+                this.$store.commit(Mutations.updateMBeans, new MBeans([]));
+                this.$store.commit(Mutations.updateEngineStatus, []);
                 // this.getMBeans(this.$store.state.connectionSettings, this.$store.state.user);
                 // this.updateStatusInterval = setInterval(() => {
                 //     this.getMBeans(this.$store.state.connectionSettings, this.$store.state.user);
@@ -152,16 +154,16 @@ export class DashboardComponent extends Vue {
                 enginStatusList = [];
             }
 
-            this.$store.commit('updateEngineStatus', enginStatusList);
+            this.$store.commit(Mutations.updateEngineStatus, enginStatusList);
         });
     }
 
     // private getMBeans(connectionSettings: ConnectionSettings, user: User) {
     //     (this.$services.jmxService as JmxService).getMBeans(this.$store.state.connectionSettings, this.$store.state.user).then((mbeans: MBean[]) => {
     //         if (mbeans && mbeans.length > 0) {
-    //             this.$store.commit('updateMBeans', new MBeans(mbeans));
+    //             this.$store.commit(Mutations.updateMBeans, new MBeans(mbeans));
     //         } else {
-    //             this.$store.commit('updateMBeans', new MBeans([]));
+    //             this.$store.commit(Mutations.updateMBeans, new MBeans([]));
     //         }
     //    });
     // }

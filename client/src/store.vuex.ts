@@ -21,33 +21,45 @@ export class StoreState {
   constructor() {}
 }
 
+export const Mutations = {
+  updateTheme: 'updateTheme',
+  setConnectionSettings: 'setConnectionSettings',
+  updateConnectionSettings: 'updateConnectionSettings',
+  deleteConnectionSettings: 'deleteConnectionSettings',
+  updateConnectionResults: 'updateConnectionResults',
+  updateMBeans: 'updateMBeans',
+  updateEngineStatus: 'updateEngineStatus',
+  setUser: 'setUser'
+};
+
 export const store = new Vuex.Store<StoreState>({
     state: new StoreState(),
     mutations: {
-      updateTheme(state, darkTheme) {
+      [Mutations.updateTheme](state, darkTheme) {
         state.darkTheme = darkTheme;
       },
-      setConnectionSettings(state, connectionSettings: ConnectionSettings[]) {
+      [Mutations.setConnectionSettings](state, connectionSettings: ConnectionSettings[]) {
+        console.log('connection settings is set in store');
         state.connectionSettings = connectionSettings;
       },
-      updateConnectionSettings(state, { index: index, connectionSettings: connectionSettings }) {
+      [Mutations.updateConnectionSettings](state, { index: index, connectionSettings: connectionSettings }) {
         if (index === -1) {
           state.connectionSettings.push(connectionSettings);
         } else {
           Vue.set(state.connectionSettings, index, connectionSettings);
         }
       },
-      deleteConnectionSettings(state, index: number) {
+      [Mutations.deleteConnectionSettings](state, index: number) {
         console.log('deleteing', index);
         state.connectionSettings.splice(index, 1);
       },
-      updateConnectionResults(state, connectionResults) {
+      [Mutations.updateConnectionResults](state, connectionResults) {
         state.connectionResults = connectionResults;
       },
-      updateMBeans(state, mbeans) {
+      [Mutations.updateMBeans](state, mbeans) {
         state.mbeans = mbeans;
       },
-      updateEngineStatus(state, engineStatusList: EngineStatus[]) {
+      [Mutations.updateEngineStatus](state, engineStatusList: EngineStatus[]) {
         if (engineStatusList) {
           state.engineStatusList = engineStatusList;
           let groups: EngineGroup[] = engineStatusList.filter((engine) => !engine.dbStorageMXBean).map((engine) => new EngineGroup(null, [ engine ]));
@@ -60,7 +72,7 @@ export const store = new Vuex.Store<StoreState>({
           state.groupsOfEngines = null;
         }
       },
-      setUser(state, user: User) {
+      [Mutations.setUser](state, user: User) {
         state.user = user;
         if (user) {
           state.connectionSettings.push(new ConnectionSettings(user.settings.defaultHost, user.settings.defaultPort));

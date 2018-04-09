@@ -3,6 +3,7 @@ import { ConnectionSettings } from '../../../models/connectionSettings';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import { setTimeout } from 'timers';
 import './sidebar.scss';
+import { Mutations } from '../../../store.vuex';
 
 const connectionStatusComponent = () => import('./connection-status').then(({ ConnectionStatusComponent }) => ConnectionStatusComponent);
 const engineGroupComponent = () => import('./engine-group').then(({EngineGroupComponent}) => EngineGroupComponent);
@@ -42,12 +43,12 @@ export class SidebarComponent extends Vue {
       
     updateTarget(index: number, connectionSettings: ConnectionSettings) {
         this.settingsShowed = false;
-        this.$store.commit('updateConnectionSettings', {index: index, connectionSettings: connectionSettings});
+        this.$store.commit(Mutations.updateConnectionSettings, {index: index, connectionSettings: connectionSettings});
         this.$router.push('/dashboard?' + this.$store.getters.connectionsAsParams);
     }
 
     deleteSettings(index: number) {
-        this.$store.commit('deleteConnectionSettings', index);
+        this.$store.commit(Mutations.deleteConnectionSettings, index);
         this.$router.push('/dashboard?' + this.$store.getters.connectionsAsParams);
     }
 }

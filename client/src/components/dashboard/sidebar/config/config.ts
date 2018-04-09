@@ -28,6 +28,10 @@ export class ConfigComponent extends Vue {
         this.updatePeriod = this.connectionSettings.updatePeriod;
     }
 
+    deleteSettings() {
+        this.$emit('deleteSettings');
+    }
+
     submit() {
         this.$emit('updateTarget', new ConnectionSettings(this.host, this.port, this.fetchPeriod, this.updatePeriod));
     }

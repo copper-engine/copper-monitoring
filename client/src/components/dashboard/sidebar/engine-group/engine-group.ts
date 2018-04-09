@@ -64,7 +64,7 @@ export class EngineGroupComponent extends Vue {
      }
 
     get links(): Link[] {
-        let params = '?connection=' + this.$store.state.connectionSettings.host + '|' + this.$store.state.connectionSettings.port;
+        let params = '?' + this.$store.getters.connectionsAsParams;
         
         return [
             new Link('Statistics', '/dashboard/statistics/' + ('group:' + this.parseGroupName(this.group.name)) + params, 'mdi-chart-bar'),

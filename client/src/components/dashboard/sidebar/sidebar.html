@@ -15,38 +15,17 @@
                     <v-icon v-html="'add'" :class="{'active': true}"></v-icon>
                 </v-btn>
             </v-layout>
-        </div>
-        <div class="secondary textOnColor--text scroll-header">
-            <v-layout row>
-                <v-flex class="icon-container">
-                    <v-icon 
-                        v-show="connected"
-                        color="light-green accent-4">
-                        mdi-brightness-1
-                    </v-icon> 
-                    <v-icon 
-                        v-show="!connected"
-                        color="red darken-4"> 
-                        mdi-brightness-1
-                    </v-icon> 
-                </v-flex>
-                <v-flex class="connection-info">
-                    {{ host }}:{{ port }}
-                </v-flex>
-                <v-spacer></v-spacer>
-                <v-btn dark icon @click.stop="showSettings">
-                    <v-icon v-html="'settings'" :class="{'active': true}"></v-icon>
-                </v-btn>
-            </v-layout>
-            <transition name="extend-config">
-                <config v-if="settingsShowed" :connectionSettings="$store.state.connectionSettings[0]" @updateTarget="updateTarget" @hideSettings="settingsShowed = false"></config>
-            </transition>
+            <config v-if="settingsShowed" :connectionSettings="emptyConnectionSettings" 
+            @updateTarget="updateTarget(-1, $event)" @hideSettings="settingsShowed = false"></config>
+            <connection-status v-for="(connection, index) in $store.state.connectionResults" :key="connection.settings.host + connection.settings.port"
+                :connection="connection" @updateTarget="updateTarget(index, $event)" @deleteSettings="deleteSettings(index)"></connection-status>
+            
         </div>
 
         <group class="group primary" 
-        v-for="group in $store.state.groupsOfEngines" key="group.name"
-        :group=group
-        :closing="closeAll">
+            v-for="group in $store.state.groupsOfEngines" key="group.name"
+            :group=group
+            :closing="closeAll">
         </group>
 
         <div class="scroll-footer"></div>

@@ -48,30 +48,46 @@ export class DashboardComponent extends Vue {
         this.$router.replace('/login'); 
     }
 
-    @Watch('$route')
+    // @Watch('$route')
     parseRoute() {
-        // if (this.$route.fullPath.split('?').length > 1 ) {
-        //     let params = this.$route.fullPath.split('?');
-        //     if (params && params[1]) {
-        //         console.log('decodeURI(params[1])', decodeURI(params[1]));
-        //         params = decodeURI(params[1]).split('&');
-        //         if (params && params[0]) {
-        //             params = params[0].split('=');
-        //             params = params[1].split('|');
-        //             let settings: ConnectionSettings[] = this.$store.state.connectionSettings;
-        //             let host: string = params[0] ? params[0] : settings.host;
-        //             let port: string = params[1] ? params[1] : settings.port;
-    
-        //             if (host !== settings.host || port !== settings.port) {
-        //                 this.$store.commit('updateConnectionSettings', new ConnectionSettings(host, port, settings.fetchPeriod, settings.updatePeriod));
-        //             }
-        //         }
-        //     }
-        // }
+        if (this.$route.fullPath.split('?').length > 1 ) {
+            let params = this.$route.fullPath.split('?');
+            if (params && params[1]) {
+                params = decodeURI(params[1]).split('&');
+                if (params) {
+                    let settings: ConnectionSettings[] = [];
+                    params.forEach(connection => {
+                        let parsed = connection.split('=');
+
+                        if (parsed && parsed[0] === 'connection') {
+                            parsed = parsed[1].split('|');
+                            
+                            if (parsed[0] && parsed[1]) {
+                                settings.push(new ConnectionSettings(parsed[0], parsed[1]));
+                            }
+                        }
+                    });
+
+                    if (settings.length > 0) {
+                        this.$store.commit('setConnectionSettings', settings);
+                    }
+                }
+            }
+        }
     }
 
     @Watch('$store.state.connectionSettings')
     sheduleFetchingStatus() {
+        if (this.$store.state.connectionSettings.length === 0) {
+            if (this.updateStatusInterval) {
+                clearInterval(this.updateStatusInterval);
+            }
+            this.$store.commit('updateMBeans', new MBeans([]));
+            this.$store.commit('updateEngineStatus', []);
+            this.$store.commit('updateConnectionResults', []);
+            return;
+        }
+
         (this.$services.jmxService as JmxService)
         .getConnectionResults(this.$store.state.connectionSettings, this.$store.state.user)
         .then((results: ConnectionResult[]) => {
@@ -91,8 +107,8 @@ export class DashboardComponent extends Vue {
                     this.getEngineStatus(mbeans, this.$store.state.user);
                 }, this.$store.state.connectionSettings[0].updatePeriod * 1000);
             } else {
-                // this.$store.commit('updateMBeans', new MBeans([]));
-                // this.$store.commit('updateEngineStatus', []);
+                this.$store.commit('updateMBeans', new MBeans([]));
+                this.$store.commit('updateEngineStatus', []);
                 // this.getMBeans(this.$store.state.connectionSettings, this.$store.state.user);
                 // this.updateStatusInterval = setInterval(() => {
                 //     this.getMBeans(this.$store.state.connectionSettings, this.$store.state.user);

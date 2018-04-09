@@ -4,15 +4,17 @@ import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import { setTimeout } from 'timers';
 import './sidebar.scss';
 
-const configComponent = () => import('./config').then(({ ConfigComponent }) => ConfigComponent);
+const connectionStatusComponent = () => import('./connection-status').then(({ ConnectionStatusComponent }) => ConnectionStatusComponent);
 const engineGroupComponent = () => import('./engine-group').then(({EngineGroupComponent}) => EngineGroupComponent);
+const configComponent = () => import('./config').then(({ ConfigComponent }) => ConfigComponent);
 
 @Component({
     template: require('./sidebar.html'),
     components: {
-        'config': configComponent,
+        'connection-status': connectionStatusComponent,
         'group': engineGroupComponent,
-        'scroll': VuePerfectScrollbar
+        'scroll': VuePerfectScrollbar,
+        'config': configComponent
     }
 })
 export class SidebarComponent extends Vue {
@@ -20,13 +22,9 @@ export class SidebarComponent extends Vue {
     miniVariant = false;
     settingsShowed = false;
     connected = false;
-    host = this.$store.state.connectionSettings[0].host;
-    port = this.$store.state.connectionSettings[0].port;
     closeAll = false;
 
-    mounted() {
-        this.updatedConnectedStatus();
-    }
+    emptyConnectionSettings = new ConnectionSettings();
 
     showSettings() {
         this.settingsShowed = !this.settingsShowed;
@@ -37,23 +35,15 @@ export class SidebarComponent extends Vue {
             }, 1000);
         }
     }
-
-    updatedConnectedStatus() {
-        this.connected = (this.$store.state.mbeans && this.$store.state.mbeans.engineMBeans.length > 0 && this.$store.state.engineStatusList && this.$store.state.engineStatusList.length > 0);
-    }
       
-    updateTarget(connectionSettings) {
+    updateTarget(index: number, connectionSettings: ConnectionSettings) {
         this.settingsShowed = false;
-        this.$store.commit('updateConnectionSettings', connectionSettings);
-        this.host = this.$store.state.connectionSettings[0].host;
-        this.port = this.$store.state.connectionSettings[0].port;
-        this.$router.push('/dashboard?connection=' + this.$store.state.connectionSettings[0].host + '|' + this.$store.state.connectionSettings[0].port);
-        this.updatedConnectedStatus();
+        this.$store.commit('updateConnectionSettings', {index: index, connectionSettings: connectionSettings});
+        this.$router.push('/dashboard?' + this.$store.getters.connectionsAsParams);
     }
 
-    @Watch('$store.state.engineStatusList')
-    @Watch('$store.state.mbeans') 
-    updateConnected() {
-        this.updatedConnectedStatus();
+    deleteSettings(index: number) {
+        this.$store.commit('deleteConnectionSettings', index);
+        this.$router.push('/dashboard?' + this.$store.getters.connectionsAsParams);
     }
 }

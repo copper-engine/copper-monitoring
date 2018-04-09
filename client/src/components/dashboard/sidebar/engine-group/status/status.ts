@@ -34,12 +34,12 @@ export class StatusComponent extends Vue {
 
     get links(): Link[] {
         let linkArray = [];
-        let params = this.status.id + '?connection=' + this.connectionSettings.host + '|' + this.connectionSettings.port;
+        let params = this.status.id + '?' + this.$store.getters.connectionsAsParams;
         if (!this.multiEngine) {
             linkArray = linkArray.concat([
                 new Link('Statistics', '/dashboard/statistics/' + params, 'mdi-chart-bar'),
                 new Link('Broken Workflows', '/dashboard/workflows/' + params, 'mdi-image-broken'),
-                new Link('Waiting Workflows', '/dashboard/waiting-workflows/' + this.status.id + params, 'mdi-timer-sand-empty')
+                new Link('Waiting Workflows', '/dashboard/waiting-workflows/' + params, 'mdi-timer-sand-empty')
             ]);
         }
         

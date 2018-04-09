@@ -14,4 +14,8 @@ export class ConnectionSettings {
 export class ConnectionResult {    
     constructor(public settings: ConnectionSettings, public mbeans: MBean[]) {
     }
+
+    isConnected() {
+        return this.mbeans && this.mbeans.length > 0;
+    }
 }

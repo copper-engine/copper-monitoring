@@ -1,6 +1,6 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { setTimeout } from 'timers';
-import { WorkflowInfo, EngineStatus, WorkflowRepo, WorkflowFilter } from '../../../models/engine';
+import { WorkflowInfo, EngineStatus, WorkflowRepo, WorkflowFilter, State } from '../../../models/engine';
 import { Notification } from '../../../models/notification';
 import { JmxService } from '../../../services/jmxService';
 import * as utils from '../../../util/utils';
@@ -41,7 +41,9 @@ export class WorkflowsComponent extends Vue {
     workflowsContext: Map<String, WorkflowContext> = new Map<String, WorkflowContext>(); 
     workflows: WorkflowInfo[] = [];
     wfCount: number = 0;
-    fetchBrokenWFInterval: any; // NodeJS.Timer
+    wfType: string = '';
+    engineId: string = '';
+    fetchWFInterval: any; // NodeJS.Timer
     page: number = 1;
     perPage: number = 10;
     perPageItems: number[] = [10, 15, 25, 50];
@@ -55,14 +57,38 @@ export class WorkflowsComponent extends Vue {
 
     mounted() {
         this.mbean = this.$store.state.mbeans.engineMBeans[this.$route.params.id];
-        this.sheduleFetchingBrrokenWF();
+        this.init();
     }
+
     beforeDestroy() {
-        clearInterval(this.fetchBrokenWFInterval);
+        clearInterval(this.fetchWFInterval);
+    }
+
+    init() {
+        this.getWorkflowType();
+        this.setFilterStates();
+        this.sheduleFetchingWF();
+    }
+
+    getWorkflowType() {
+        if (this.$route.params.id.substr(0, 6) === 'broken') {
+            this.wfType = 'broken';
+            this.engineId = this.$route.params.id.substr(7);
+        } else {
+            this.wfType = 'waiting';
+            this.engineId = this.$route.params.id.substr(8);
+        }
+    }
+
+    setFilterStates() {
+        this.filter = new WorkflowFilter();
+        if (this.wfType === 'waiting') {
+            this.filter.states = [State.WAITING];
+        }
     }
 
     get status() {
-        return this.$store.state.engineStatusList[this.$route.params.id];
+        return this.$store.state.engineStatusList[this.engineId];
     }
 
     get disabled() {
@@ -70,29 +96,22 @@ export class WorkflowsComponent extends Vue {
     }
 
     get totalPages() {
-        if (this.$store.state.engineStatusList[this.$route.params.id]) {
-
+        if (this.$store.state.engineStatusList[this.engineId]) {
             let total = Math.ceil(Number(this.wfCount) / this.perPage);
             if (this.page > total) {
                 this.page = 1; 
             }
-
             return total;
         }
         this.page = 1;
         return 1;
     }
-    
-    private showSuccess(message: String) {
-        this.eventHub.$emit('showNotification', new Notification(message));
-    }
 
-    private getBrokenWorkflows(user: User, filter) {
-        // TODO fix selecting correct bean
+    private getWorkflows(user: User, filter) {
         this.jmxService.countWFRequest(this.mbean.connectionSettings, this.mbean.name, this.$store.state.user, this.filter).then((response: number) => {
             this.wfCount = response;
         });
-        this.jmxService.getBrokenWorkflows(this.mbean.connectionSettings, this.mbean.name, user, this.perPage, (this.page - 1) * this.perPage, filter).then((response: WorkflowInfo[]) => {
+        this.jmxService.getWorkflows(this.mbean.connectionSettings, this.mbean.name, user, this.perPage, (this.page - 1) * this.perPage, filter).then((response: WorkflowInfo[]) => {
             this.workflows = response;
         });
     }
@@ -101,9 +120,13 @@ export class WorkflowsComponent extends Vue {
         this.eventHub.$emit('showNotification', new Notification(message, 'error'));
     }
 
+    private showSuccess(message: String) {
+        this.eventHub.$emit('showNotification', new Notification(message));
+    }
+
     applyFilter(newFilter: WorkflowFilter) {
         this.filter = newFilter;
-        this.sheduleFetchingBrrokenWF();
+        this.sheduleFetchingWF();
     }
 
     restartAll() {
@@ -154,7 +177,7 @@ export class WorkflowsComponent extends Vue {
         this.jmxService.deleteFiltered(this.mbean.connectionSettings, this.mbean.name, this.$store.state.user, 0, 0, newFilter)
             .then((done) => {
                 this.deletingAll = false;
-                this.forceStatusFetch(500);
+                this.forceStatusFetch(1500);
                 if (done) {
                     this.workflows.forEach((wf) => {
                         let currentID = wf.id;
@@ -215,6 +238,7 @@ export class WorkflowsComponent extends Vue {
 
     highlight(id: String, type: String) {
         let wfContext = this.workflowsContext.get(id);
+
         if (!wfContext) {
             wfContext = new WorkflowContext();
         }
@@ -236,7 +260,7 @@ export class WorkflowsComponent extends Vue {
                 wfContext.deleting = false; 
                 this.workflowsContext.set(id, wfContext);
                 this.$forceUpdate();
-            }, 1500);
+            }, 1800);
         }
     }
 
@@ -291,15 +315,13 @@ export class WorkflowsComponent extends Vue {
     }
 
     @Watch('$store.state.connectionSettings')
-    sheduleFetchingBrrokenWF() {
-
-        console.log('!!!this.mbean', this.mbean);
-        if (this.fetchBrokenWFInterval) {
-            clearInterval(this.fetchBrokenWFInterval);
+    sheduleFetchingWF() {
+        if (this.fetchWFInterval) {
+            clearInterval(this.fetchWFInterval);
         }
-        this.getBrokenWorkflows(this.$store.state.user, this.filter);
-        this.fetchBrokenWFInterval = setInterval(() => {
-            this.getBrokenWorkflows(this.$store.state.user, this.filter);
+        this.getWorkflows(this.$store.state.user, this.filter);
+        this.fetchWFInterval = setInterval(() => {
+            this.getWorkflows(this.$store.state.user, this.filter);
         }, this.mbean.connectionSettings.updatePeriod * 1000);
     }
 
@@ -307,7 +329,7 @@ export class WorkflowsComponent extends Vue {
     @Watch('perPage')
     private forceStatusFetch(delay: number = 0) {
         setTimeout(() => {
-            this.getBrokenWorkflows(this.$store.state.user, this.filter);
+            this.getWorkflows(this.$store.state.user, this.filter);
         }, delay);
     }
 
@@ -320,7 +342,6 @@ export class WorkflowsComponent extends Vue {
         this.mbean = this.$store.state.mbeans.engineMBeans[this.$route.params.id];
         this.workflows = [];
         this.wfCount = 0;
-        this.filter = new WorkflowFilter;
-        this.getBrokenWorkflows(this.$store.state.user, this.filter);
+        this.init();
     }
 }

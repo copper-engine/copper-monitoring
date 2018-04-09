@@ -1,20 +1,52 @@
 <div class="dashboard">    
     <sidebar ref="drawer"></sidebar>
-    <v-toolbar app fixed clipped-left>
+    <v-toolbar app fixed clipped-left class="toolbar">
         <v-toolbar-side-icon @click.stop="$refs.drawer.drawer = !$refs.drawer.drawer"></v-toolbar-side-icon>
         <v-toolbar-title>Copper Monitoring</v-toolbar-title>
         <v-spacer></v-spacer>
-        <div class="user" v-if="!!user">
+        <!-- <div class="user" v-if="!!user">
             User: <span class="username"> {{ user.name }} </span>
-        </div>
-        <v-btn @click="toggleTheme" v-if="!!user">
-            <v-icon>mdi-theme-light-dark</v-icon>
-            {{ $store.state.darkTheme ? 'Light Theme' : 'Dark Theme' }}
-        </v-btn>
-        <v-btn @click="logout" v-if="!!user">
-            <v-icon>mdi-logout</v-icon>
-            Logout
-        </v-btn>
+        </div> -->
+        <v-menu v-model="menuOpen" offset-y class="user-menu" :close-on-content-click="false">
+            <v-btn @click="menuOpen = !menuOpen" slot="activator">  <v-icon>mdi-account</v-icon> User Settings </v-btn>
+            <v-card class="user-menu-card">
+                <v-layout column class="card-content">
+                    <div class="user" v-if="!!user">
+                        User: {{ user.name }}
+                    </div>
+                    <v-layout row>
+                        <v-flex class="input-label">
+                            Get data every 'x' seconds
+                        </v-flex>
+                        <v-flex class="input">
+                            <v-text-field
+                            v-model="periods[1]"
+                            ></v-text-field>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row>
+                        <v-flex class="input-label">
+                            Not older than 'y' seconds
+                        </v-flex>
+                        <v-flex class="input">
+                            <v-text-field
+                            v-model="periods[0]"
+                            ></v-text-field>
+                        </v-flex>
+                    </v-layout>
+                </v-layout>
+                <v-card-actions>
+                    <v-btn @click="toggleTheme" v-if="!!user">
+                        <v-icon>mdi-theme-light-dark</v-icon>
+                        {{ $store.state.darkTheme ? 'Light Theme' : 'Dark Theme' }}
+                    </v-btn>
+                    <v-btn @click="logout" v-if="!!user">
+                        <v-icon>mdi-logout</v-icon>
+                        Logout
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-menu>
     </v-toolbar>
 
     <!-- {{ connectionSettings }} -->

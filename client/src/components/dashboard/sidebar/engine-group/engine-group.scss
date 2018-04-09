@@ -1,0 +1,85 @@
+.group{
+    overflow: hidden;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    
+    .group-header{
+        padding: 10px;
+        h2 {
+            font-size: 1.3em;
+            word-wrap: break-word;
+            max-width: 200px;
+        }
+        .engine-count {
+            flex-grow: 0;
+            padding-right: 10px;
+        }
+        .summary {
+            font-size: 1em;
+            min-width: 85px;
+            max-width: 85px;
+            cursor: default;
+        }
+    }
+
+    .general-info {
+        overflow: hidden;
+    }
+
+    .status-summary {
+        overflow: hidden;
+        padding-left: 10px;
+        .group-line {
+            padding-left: 16px;
+        }
+        .line {
+            padding: 4px 0;
+        }
+        .value {
+            padding-left: 8px;
+            font-weight: 700;
+        }
+    }
+    
+    .general-link-list {
+        overflow: hidden;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .link-tile-container {
+        margin-top: 1px;
+        .link-tile {
+            border-radius: 5px;
+            margin-left: -15px;
+            .link {
+                padding-top: 20px;
+                padding-bottom: 20px;
+                padding-left: 15px;
+                width: 100%;
+            }
+        }
+    }
+    .group-tile {
+        .theme--light &:hover {        
+            background: #2381d5;
+        }
+        .theme--dark &:hover {        
+            background: #1f9485;
+        }
+    }
+    .engine-tile {
+        .theme--light &:hover {        
+            background: #00c3ff;
+        }
+        .theme--dark &:hover {        
+            background: #5ab076;
+        }
+    }
+
+    .multi-status {
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-bottom: 20px;
+    }
+}

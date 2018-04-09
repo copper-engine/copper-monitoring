@@ -1,14 +1,15 @@
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import { JmxService } from '../../../../../services/jmxService';
 import { ConnectionSettings } from '../../../../../models/connectionSettings';
-import './status.scss';
+import './engine.scss';
 import { Link } from '../../../../../models/link';
 import { EngineStatus } from '../../../../../models/engine';
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
 @Component({
-    template: require('./status.html'),
+    template: require('./engine.html'),
 })
-export class StatusComponent extends Vue {
+export class EngineComponent extends Vue {
     @Prop() status: EngineStatus;
     @Prop() connectionSettings: ConnectionSettings;
     @Prop() multiEngine: boolean;

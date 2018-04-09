@@ -3,7 +3,7 @@
     clipped
     v-model="drawer" 
     class="sidebar secondary"
-    mobile-break-point="1200" app>
+    mobile-break-point="1570" app>
     <scroll class="scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 600}">
         <div class="connection">
             <v-layout row>
@@ -21,6 +21,42 @@
                 :connection="connection" @updateTarget="updateTarget(index, $event)" @deleteSettings="deleteSettings(index)"></connection-status>
             
         </div>
+        
+            <!-- <div class="secondary themeText--text scroll-header">
+                <v-layout row>
+                    <v-flex class="icon-container">
+                        <v-icon 
+                            v-show="connected"
+                            color="light-green accent-4">
+                            mdi-brightness-1
+                        </v-icon> 
+                        <v-icon 
+                            v-show="!connected"
+                            color="red darken-4"> 
+                            mdi-brightness-1
+                        </v-icon> 
+                    </v-flex>
+                    <v-flex class="connection-info">
+                        {{ host }}:{{ port }}
+                    </v-flex>
+                    <v-spacer></v-spacer>
+                    <v-tooltip top content-class="tooltip-text">
+                        <v-btn icon @click.stop="showSettings" slot="activator">
+                            <v-icon v-html="'settings'"></v-icon>
+                        </v-btn>
+                        <span>Connection Settings</span>
+                    </v-tooltip>
+                    <v-tooltip top content-class="tooltip-text">
+                        <v-btn icon @click="triggerCloseAll" slot="activator">
+                            <v-icon>details</v-icon>
+                        </v-btn>
+                        <span>Collapse All</span>
+                    </v-tooltip>
+                </v-layout>
+                <transition name="extend-config">
+                <config v-if="settingsShowed" @updateTarget="updateTarget" @hideSettings="settingsShowed = false"></config>
+                </transition>
+            </div> -->
 
         <group class="group primary" 
             v-for="group in $store.state.groupsOfEngines" key="group.name"

@@ -14,16 +14,46 @@
     opacity: 0;
 }
 
+// .input-group__details {
+//     min-height: 0px !important;
+// }
+
+.user-menu-card {
+    .card-content {
+        padding-left: 15px;
+        padding-right: 15px;
+        .user {
+            font-size: 1.1em;
+            padding-top: 25px;
+        }
+        .input-label {
+            flex-grow: 0;
+            padding-top: 25px;
+            padding-right: 15px;
+        }
+        .input {
+            max-width: 30px;
+        }
+    }
+}
+
 .dashboard {
     padding-bottom: 50px;
+    
+    .toolbar {
+        min-width: 975px;
+    }
+
+    .content {
+        margin-top: 0;
+        .container {
+            min-width: 975px;
+        }
+    }
 
     nav .user {
         font-size: 1.2em;
     }
-}
-
-.content {
-    margin-top: 0;
 }
 
 footer {

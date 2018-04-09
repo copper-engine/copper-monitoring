@@ -1,29 +1,31 @@
-<div class="status">
-    <v-card color="primary" class="white--text engine-status">
+<div class="status" :class="{ 'in-group' : multiEngine }">
+    <v-card flat color="side" class="white--text engine-status">
         <v-layout row>
             <v-flex class="icon-container">
-                <v-icon>extension</v-icon>
+                <v-icon dark>extension</v-icon>
             </v-flex>
             <v-layout column>
                 <div v-if="status" class="engine-id">{{status.engineId}}</div>
-                <div v-if="status" class="type">{{status.type}}</div>
+                <v-layout row>
+                <div v-if="status">{{status.type}}</div>
+                <v-tooltip top content-class="tooltip-text">
+                    <v-flex v-if="!open && !multiEngine" class="summary" slot="activator">
+                        ( {{ status.instances }} / {{ status.brokenWFCount }} )
+                    </v-flex>
+                    <span>( Workflow Instances / Broken Workflows )</span>
+                </v-tooltip>
+                <v-tooltip top content-class="tooltip-text">
+                    <v-flex v-if="!open && multiEngine" class="summary-limited" slot="activator">
+                        ( {{ status.instances }} )
+                    </v-flex>
+                    <span>( Workflow Instances )</span>
+                </v-tooltip>
+                </v-layout>
             </v-layout>
             <v-flex v-show="!status">
                 <div class="type">Unable to connect</div>
             </v-flex>
             <v-spacer></v-spacer>
-            <v-tooltip top content-class="tooltip-text">
-                <v-flex v-if="!open && !multiEngine" class="summary" slot="activator">
-                    ( {{ status.instances }} / {{ status.brokenWFCount }} )
-                </v-flex>
-                <span>( Workflow Instances / Broken Workflows )</span>
-            </v-tooltip>
-            <v-tooltip top content-class="tooltip-text">
-                <v-flex v-if="!open && multiEngine" class="summary-limited" slot="activator">
-                    ( {{ status.instances }} )
-                </v-flex>
-                <span>( Workflow Instances )</span>
-            </v-tooltip>
             <v-flex class="stopGrow">
                 <v-tooltip top content-class="tooltip-text">
                     <v-btn dark icon @click="open = !open" slot="activator">
@@ -34,33 +36,33 @@
             </v-flex>
         </v-layout>
         <transition :name="extendStatusType">
-        <div v-show="open" v-if="status" class="engine-status-info">
-            <div class="line wf-number">
-                <span class="status-title">
+        <div v-show="open" v-if="status" class="status-summary status-summary-container">
+            <div class="line">
+                <span>
                     WF instances:
                 </span>
                 <span class="value">
                     {{status.instances}}
                 </span>
             </div>
-            <div v-if="multiEngine === false" class="line broken">
-                <span class="status-title">
+            <div v-if="multiEngine === false" class="line">
+                <span>
                     Broken WF instances:
                 </span>
                 <span class="value">
                     {{ status.brokenWFCount }}
                 </span>
             </div>
-            <div class="line last-processing">
-                <span class="status-title">
+            <div class="line">
+                <span>
                     Last activity:
                 </span>
                 <span class="value">
                     {{status.lastProcessing | moment("HH:mm DD/MM/YYYY")}}
                 </span>
             </div>
-            <div class="line running-since">
-                <span class="status-title">
+            <div class="line">
+                <span>
                     Started:
                 </span>
                 <span class="value">
@@ -71,18 +73,18 @@
         </transition>
     </v-card>
     <transition :name="extendType">
-    <v-list v-show="open">
-        <v-list-tile value="true" v-for="link in links" :key="link.path">
-            <v-list-tile-content class="linkTile">
-                <router-link :to="link.path" active-class="back" class="link">
-                    <v-layout row>
+    <v-list v-show="open" class="side">
+        <v-list-tile value="true" v-for="link in links" :key="link.path" class="link-tile-container">
+            <v-list-tile-content class="link-tile engine-tile">
+                <router-link :to="link.path" active-class="engineActive" class="link">
+                    <v-layout row> 
                         <v-flex class="iconFlex">
                             <v-list-tile-action>
-                                <v-icon color="themeText">{{ link.icon }}</v-icon>
+                                <v-icon dark>{{ link.icon }}</v-icon>
                             </v-list-tile-action>
                         </v-flex>
                         <v-flex>
-                            <v-list-tile-title v-text="link.name" class="themeText--text"></v-list-tile-title>
+                            <v-list-tile-title v-text="link.name" class="textOnColor--text"></v-list-tile-title>
                         </v-flex>
                     </v-layout>                  
                 </router-link>

@@ -47,7 +47,6 @@ export class DashboardComponent extends Vue {
     }
 
     toggleTheme() {
-        console.log(this.periods);
         this.$store.commit('updateTheme', !this.$store.state.darkTheme);
     }
 

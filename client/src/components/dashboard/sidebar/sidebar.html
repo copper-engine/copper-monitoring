@@ -16,11 +16,13 @@
                 </v-btn>
             </v-layout>
         </div>
-        <config v-if="settingsShowed" 
-        :connectionSettings="emptyConnectionSettings" 
-        @updateTarget="updateTarget(-1, $event)" 
-        @hideSettings="settingsShowed = false">
-        </config>
+        <transition name="extend-create-config">
+            <config v-if="settingsShowed" 
+            :connectionSettings="emptyConnectionSettings" 
+            @updateTarget="updateTarget(-1, $event)" 
+            @hideSettings="settingsShowed = false">
+            </config>
+        </transition>
         
         <connection-status v-for="(connection, index) in $store.state.connectionResults" :key="connection.settings.host + connection.settings.port"
             :connection="connection" 

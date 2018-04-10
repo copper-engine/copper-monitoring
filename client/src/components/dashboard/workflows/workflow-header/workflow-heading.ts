@@ -14,6 +14,7 @@ import './workflow-heading.scss';
 export class WorkflowHeading extends Vue {
     @Prop() engineStatus;
     @Prop() wfType: string;
+    @Prop() wfCount: number;
     @Prop() restartingAll: boolean;
     @Prop() deletingAll: boolean;
     private jmxService: JmxService = this.$services.jmxService;

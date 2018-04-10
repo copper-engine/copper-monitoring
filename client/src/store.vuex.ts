@@ -5,8 +5,6 @@ import { EngineStatus, EngineGroup } from './models/engine';
 import { MBeans } from './models/mbeans';
 import { User } from './models/user';
 import { parseBoolean }  from './util/utils';
-import { Notification } from './models/notification';
-import * as utils from './util/utils';
 import * as _ from 'lodash';
 
 Vue.use(Vuex);
@@ -45,15 +43,11 @@ export const store = new Vuex.Store<StoreState>({
         state.connectionSettings = connectionSettings;
       },
       [Mutations.updateConnectionSettings](state, { index: index, connectionSettings: connectionSettings }) {
-        if (utils.checkDuplicateConnection(connectionSettings, state.connectionSettings) === false) {
           if (index === -1) {
             state.connectionSettings.push(connectionSettings);
           } else {
             Vue.set(state.connectionSettings, index, connectionSettings);
           }
-        } else {
-          this.$services.eventHub.$emit('showNotification', new Notification('Connection was a duplicate', 'error'));
-        }
       },
       [Mutations.deleteConnectionSettings](state, index: number) {
         console.log('deleteing', index);

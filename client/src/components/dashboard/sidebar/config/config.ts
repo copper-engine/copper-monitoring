@@ -1,7 +1,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
-
-import './config.scss';
+import { Notification } from '../../../../models/notification';
 import { ConnectionSettings } from '../../../../models/connectionSettings';
+import './config.scss';
 
 @Component({
     template: require('./config.html')
@@ -33,7 +33,23 @@ export class ConfigComponent extends Vue {
     }
 
     submit() {
-        this.$emit('updateTarget', new ConnectionSettings(this.host, this.port, this.fetchPeriod, this.updatePeriod));
+        let newConncection = new ConnectionSettings(this.host, this.port, this.fetchPeriod, this.updatePeriod);
+        if (this.checkDuplicateConnection(newConncection) === false) {
+            this.$emit('updateTarget', new ConnectionSettings(this.host, this.port, this.fetchPeriod, this.updatePeriod));
+        } else {
+            this.$services.eventHub.$emit('showNotification', new Notification('Connection is a duplicate', 'error'));
+        }
+    }
+
+    checkDuplicateConnection(newConnection: ConnectionSettings) {
+        let currentConnections = this.$store.state.connectionSettings;
+        let duplicate = false;
+        for (let i = 0; i < currentConnections.length; i++) {
+            if ((newConnection.host === currentConnections[i].host) && (newConnection.port === currentConnections[i].port)) {
+                duplicate = true;
+            }
+        }
+        return duplicate;
     }
 
 }

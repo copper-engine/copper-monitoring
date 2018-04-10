@@ -3,6 +3,9 @@
         <div class="headline-custom"> 
             <!-- <v-icon> mdi-settings</v-icon>  -->
             <span>Configuration</span>
+            <v-btn dark icon @click.stop="deleteSettings">
+                <v-icon v-html="'delete'"></v-icon>
+            </v-btn>
         </div>
         <v-form v-model="valid" ref="form" lazy-validation>
             <v-text-field class="config-input"
@@ -17,7 +20,7 @@
                 :rules="portRules"
                 required
             ></v-text-field>
-            <v-text-field class="config-input"
+            <!-- <v-text-field class="config-input"
                 label="Get data every 'x' seconds"
                 v-model="updatePeriod"
                 :rules="numberRules"
@@ -26,7 +29,7 @@
                 label="not older than 'y' min"
                 v-model="fetchPeriod"
                 :rules="numberRules"
-            ></v-text-field>
+            ></v-text-field> -->
         
             <v-btn
                 @click="submit"

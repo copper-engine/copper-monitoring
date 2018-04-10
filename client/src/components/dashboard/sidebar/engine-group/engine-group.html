@@ -71,9 +71,9 @@
             v-for="engineStatus in group.engines" key="engineStatus.id"
             :multiEngine="multiEngine"
             :closing="closing"
-            :status="engineStatus" 
-            :connectionSettings="$store.state.connectionSettings">
+            :status="engineStatus">
         </engine>
+
         </div>
     </transition>
 </div>

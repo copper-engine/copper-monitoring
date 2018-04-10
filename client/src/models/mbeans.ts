@@ -1,6 +1,8 @@
+import { ConnectionSettings } from './connectionSettings';
+
 
 export class MBean {
-    constructor(public name: string, public atts: string[]) {
+    constructor(public name: string, public atts: string[], public connectionSettings: ConnectionSettings) {
 
     } 
 }
@@ -8,7 +10,7 @@ export class MBean {
 
 export class MBeans {
     // Values will be fetched by first call to JMX
-    constructor(public engineMBeans: MBean[] = [new MBean('', [])]) {
+    constructor(public engineMBeans: MBean[] = [new MBean('', [], null)]) {
         this.setEngineMBeans(engineMBeans);
     }
 

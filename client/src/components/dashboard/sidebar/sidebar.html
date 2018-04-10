@@ -4,8 +4,25 @@
     v-model="drawer" 
     class="sidebar secondary"
     mobile-break-point="1570" app>
-        <scroll class="scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 600}">
-            <div class="secondary themeText--text scroll-header">
+    <scroll class="scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 600}">
+        <div class="connection">
+            <v-layout row>
+                <v-flex class="connection-title">
+                    Connections
+                </v-flex>
+                <v-spacer></v-spacer>
+                <v-btn dark icon @click.stop="showSettings">
+                    <v-icon v-html="'add'" :class="{'active': true}"></v-icon>
+                </v-btn>
+            </v-layout>
+            <config v-if="settingsShowed" :connectionSettings="emptyConnectionSettings" 
+            @updateTarget="updateTarget(-1, $event)" @hideSettings="settingsShowed = false"></config>
+            <connection-status v-for="(connection, index) in $store.state.connectionResults" :key="connection.settings.host + connection.settings.port"
+                :connection="connection" @updateTarget="updateTarget(index, $event)" @deleteSettings="deleteSettings(index)"></connection-status>
+            
+        </div>
+        
+            <!-- <div class="secondary themeText--text scroll-header">
                 <v-layout row>
                     <v-flex class="icon-container">
                         <v-icon 
@@ -39,14 +56,14 @@
                 <transition name="extend-config">
                 <config v-if="settingsShowed" @updateTarget="updateTarget" @hideSettings="settingsShowed = false"></config>
                 </transition>
-            </div>
+            </div> -->
 
-            <group class="group primary" 
+        <group class="group primary" 
             v-for="group in $store.state.groupsOfEngines" key="group.name"
             :group=group
             :closing="closeAll">
-            </group>
+        </group>
 
-            <div class="scroll-footer"></div>
-        </scroll>
+        <div class="scroll-footer"></div>
+    </scroll>
 </v-navigation-drawer>

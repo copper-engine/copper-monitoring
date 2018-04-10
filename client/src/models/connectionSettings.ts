@@ -1,3 +1,5 @@
+import { MBean } from './mbeans';
+
 export class ConnectionSettings {
     
     constructor(
@@ -7,5 +9,13 @@ export class ConnectionSettings {
         public fetchPeriod: number = 5, 
         // updatePeriod is in seconds
         public updatePeriod: number = 10) {
+    }
+}
+export class ConnectionResult {    
+    constructor(public settings: ConnectionSettings, public mbeans: MBean[]) {
+    }
+
+    isConnected() {
+        return this.mbeans && this.mbeans.length > 0;
     }
 }

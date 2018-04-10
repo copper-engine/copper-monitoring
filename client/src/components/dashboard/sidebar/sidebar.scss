@@ -18,7 +18,6 @@
         height: 100%; 
 
         .scroll-header {
-            padding: 10px;
             h3 {
                 font-size: 1.3em;
                 padding-left: 30px;
@@ -27,10 +26,61 @@
             .connection-info {
                 padding-top: 12px;
                 font-size: 1.3em;
-                font-weight: 700;
             }
         }
 
+        .connection {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 10px;
+        }
+
+        .connection-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            padding: 10px 0px;
+        }
+
+        .group{
+            overflow: hidden;
+            .group-header{
+                border-top: 1px solid #323232;
+                padding: 10px;
+                h2 {
+                    font-size: 1.3em;
+                    padding-top: 10px;
+                    word-wrap: break-word;
+                    max-width: 100px;
+                }
+                .summary {
+                    font-size: 1.1em;
+                    padding-top: 10px;
+                    min-width: 75px;
+                    max-width: 75px;
+                    cursor: default;
+                }
+            }
+            .general-link-list {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            .linkTile {
+                border-radius: 2px;
+                margin-right: -15px;
+                margin-left: -15px;
+                .link {
+                    padding-top: 20px;
+                    padding-bottom: 20px;
+                    padding-left: 20px;
+                    width: 100%;
+                }
+            }
+            .status-container {
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-bottom: 10px;
+            }
+        }
         .single-status {
             margin-top: 5px;
             margin-bottom: 5px;

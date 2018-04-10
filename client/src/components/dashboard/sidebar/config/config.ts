@@ -8,7 +8,7 @@ import { ConnectionSettings } from '../../../../models/connectionSettings';
     // dependencies : ['myService']
 })
 export class ConfigComponent extends Vue {
-    // @Prop() connectionSettings: ConnectionSettings;
+    @Prop() connectionSettings: ConnectionSettings;
 
     host: string = '';
     port: string = '1099';
@@ -21,15 +21,15 @@ export class ConfigComponent extends Vue {
     portRules = [ (v) => !!v || 'Port is required' ];
     numberRules = [ (v) => /^\d+$/.test(v) || 'Should be number' ];
     
-    get connectionSettings() {
-        return this.$store.state.connectionSettings;
-    }
-
     mounted() {
         this.host = this.connectionSettings.host;
         this.port = this.connectionSettings.port;
         this.fetchPeriod = this.connectionSettings.fetchPeriod;
         this.updatePeriod = this.connectionSettings.updatePeriod;
+    }
+
+    deleteSettings() {
+        this.$emit('deleteSettings');
     }
 
     submit() {

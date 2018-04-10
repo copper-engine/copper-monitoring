@@ -4,6 +4,7 @@
     
     .group-header{
         padding: 10px 0px 10px 10px;
+        
         h2 {
             font-size: 1.3em;
             word-wrap: break-word;
@@ -14,6 +15,7 @@
             padding-right: 10px;
         }
         .summary {
+            padding: 0px;
             font-size: 1em;
             min-width: 85px;
             max-width: 85px;

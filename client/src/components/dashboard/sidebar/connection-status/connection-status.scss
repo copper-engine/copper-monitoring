@@ -1,10 +1,18 @@
-.engine-connection-config {
+.connection-config {
+    margin-top: 4px;
     border-radius: 0px;
     overflow: hidden;
     
-    .headline-custom {
-        font-size: 1.3em;
-        font-weight: 700;
+    .connection-container {
+        padding-left: 10px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        height: 69px;
+        .connection-info {
+            padding-top: 12px;
+            font-size: 1.3em;
+            font-weight: 700;
+        }
     }
 
     .config-input {
@@ -22,6 +30,10 @@
         .input-group__details:after  {
             color: white;
         }
+    }
+
+    .card__title--primary {
+        padding-top: 0px;
     }
 
     form {

@@ -121,7 +121,6 @@ export const createRouter = () => {
     
     if (requiresAuth && !store.state.user) {
       router.nextPath = to.fullPath.replace(/(\/#){2,}/g, '\/#');
-      console.log('router.nextPath', router.nextPath);
       next('/login');
     } else {
       next();

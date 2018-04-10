@@ -43,11 +43,11 @@ export const store = new Vuex.Store<StoreState>({
         state.connectionSettings = connectionSettings;
       },
       [Mutations.updateConnectionSettings](state, { index: index, connectionSettings: connectionSettings }) {
-        if (index === -1) {
-          state.connectionSettings.push(connectionSettings);
-        } else {
-          Vue.set(state.connectionSettings, index, connectionSettings);
-        }
+          if (index === -1) {
+            state.connectionSettings.push(connectionSettings);
+          } else {
+            Vue.set(state.connectionSettings, index, connectionSettings);
+          }
       },
       [Mutations.deleteConnectionSettings](state, index: number) {
         state.connectionSettings.splice(index, 1);

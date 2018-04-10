@@ -202,6 +202,10 @@ export class WorkflowHeading extends Vue {
             setTimeout(() => { this.hideOverflow = true; }, 250);
         }
     }
+    clearChips() {
+        this.filterApplied = false;
+        setTimeout(() => { this.clearFilter(); this.applyFilter(); }, 750);
+    }
     clearFilter() {
         this.states = [];
         this.classNames = null;

@@ -45,16 +45,15 @@
             overflow: hidden;
             .group-header{
                 border-top: 1px solid #323232;
-                padding: 10px;
+                padding-left: 10px;
+                padding-top: 10px;
+                padding-bottom: 10px;
                 h2 {
                     font-size: 1.3em;
-                    padding-top: 10px;
                     word-wrap: break-word;
-                    max-width: 100px;
+                    max-width: 200px;
                 }
                 .summary {
-                    font-size: 1.1em;
-                    padding-top: 10px;
                     min-width: 75px;
                     max-width: 75px;
                     cursor: default;

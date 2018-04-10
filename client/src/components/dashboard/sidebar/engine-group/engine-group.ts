@@ -22,14 +22,6 @@ export class EngineGroupComponent extends Vue {
     multiEngine: boolean = false;
     mbean = null;
 
-    parseGroupName(rawName: string) {
-        if (rawName) {
-            return rawName.substr(15);
-        } else {
-            return 'noname';
-        }
-    }
-
     created() {
         this.checkGroupInfo();
     }
@@ -68,7 +60,7 @@ export class EngineGroupComponent extends Vue {
         let params = '?' + this.$store.getters.connectionsAsParams;
         
         return [
-            new Link('Statistics', '/dashboard/statistics/' + ('group:' + this.parseGroupName(this.group.name)) + params, 'mdi-chart-bar'),
+            new Link('Statistics', '/dashboard/statistics/' + ('group:' + this.group.name) + params, 'mdi-chart-bar'),
             new Link('Broken Workflows', '/dashboard/workflows/broken:' + this.group.engines[0].id + params, 'mdi-image-broken'),
             new Link('Waiting Workflows', '/dashboard/workflows/waiting:' + this.group.engines[0].id + params, 'mdi-timer-sand-empty')
         ];

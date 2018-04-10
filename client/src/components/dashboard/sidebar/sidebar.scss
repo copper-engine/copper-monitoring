@@ -18,6 +18,7 @@
         height: 100%; 
 
         .scroll-header {
+            padding-left: 10px;
             h3 {
                 font-size: 1.3em;
                 padding-left: 30px;
@@ -25,23 +26,26 @@
             }
             .connection-info {
                 padding-top: 12px;
+                padding-left: 10px;
                 font-size: 1.3em;
+                color: #d6d6d6;
             }
         }
 
         .connection {
             padding-top: 10px;
             padding-bottom: 10px;
-            padding-left: 10px;
+            border-bottom: 3px solid #595959;
         }
 
-        .connection-title {
+        .connection-title, .engines-title {
             font-size: 1.3em;
             font-weight: 700;
-            padding: 10px 0px;
+            padding: 10px 0px 0px 10px;
+            color: #989898;
         }
 
-        .group{
+        .group {
             overflow: hidden;
             .group-header{
                 border-top: 1px solid #323232;
@@ -82,8 +86,8 @@
             }
         }
         .single-status {
-            margin-top: 5px;
-            margin-bottom: 5px;
+            // margin-top: 5px;
+            // margin-bottom: 5px;
         }
     }
 

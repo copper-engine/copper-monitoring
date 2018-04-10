@@ -29,6 +29,7 @@ export class EngineStatus {
         public id: number,
         public runningSince: Date,
         public lastProcessing: Date,
+        public appClusterId: string,
         public engineId: string,
         public type: string,
         public instances: number,

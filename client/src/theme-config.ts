@@ -22,7 +22,7 @@ let darkColors: VuetifyTheme = {
     error: '#b71c1c',
     themeText: '#f5f5f5',
     textOnColor: '#f5f5f5',
-    engineActive: '#5ab076',
+    engineActive: '#585858',
     groupActive: '#1f9485',
     info: '#2196F3',
     success: '#4CAF50',

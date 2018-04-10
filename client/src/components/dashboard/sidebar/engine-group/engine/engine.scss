@@ -1,27 +1,34 @@
 .in-group {
-    margin-top: 4px;
-    margin-bottom: 4px;
+    // margin-top: 4px;
+    // margin-bottom: 4px;
 }
 
-.status {
-
+.engine-status-card {
     overflow: hidden;
-    
+    // border-bottom: 1px solid #79797b;
+    padding-bottom: 10px;
+
+    .card {
+        background: none;
+    }
+    .icon {
+        color: #e4e4e4;
+    }
     .engine-status {
 
-        padding: 10px 0 10px 10px;
+        padding: 10px 0 0px 10px;
         border-radius: 0px;
-
+        
         .stopGrow {
             flex-grow: 0;
         }
-
+        
         .engine-id {
             font-size: 1.3em;
             font-weight: 700;
             word-wrap: break-word;
             max-width: 200px;
-            padding-top: -5px;
+            color: #d6d6d6;
         }
         .summary {
             font-size: 1em;

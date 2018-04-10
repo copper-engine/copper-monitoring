@@ -1,5 +1,5 @@
-<div class="status" :class="{ 'in-group' : multiEngine }">
-    <v-card flat color="side" class="white--text engine-status">
+<div class="engine-status-card" :class="{ 'in-group' : multiEngine }">
+    <v-card flat class="white--text engine-status">
         <v-layout row>
             <v-flex class="icon-container">
                 <v-icon dark>extension</v-icon>
@@ -73,7 +73,7 @@
         </transition>
     </v-card>
     <transition :name="extendType">
-    <v-list v-show="open" class="side">
+    <v-list v-show="open">
         <v-list-tile value="true" v-for="link in links" :key="link.path" class="link-tile-container">
             <v-list-tile-content class="link-tile engine-tile">
                 <router-link :to="link.path" active-class="engineActive" class="link">

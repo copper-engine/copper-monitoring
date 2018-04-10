@@ -50,7 +50,6 @@ export const store = new Vuex.Store<StoreState>({
         }
       },
       [Mutations.deleteConnectionSettings](state, index: number) {
-        console.log('deleteing', index);
         state.connectionSettings.splice(index, 1);
       },
       [Mutations.updateConnectionResults](state, connectionResults) {
@@ -62,11 +61,11 @@ export const store = new Vuex.Store<StoreState>({
       [Mutations.updateEngineStatus](state, engineStatusList: EngineStatus[]) {
         if (engineStatusList) {
           state.engineStatusList = engineStatusList;
-          let groups: EngineGroup[] = engineStatusList.filter((engine) => !engine.dbStorageMXBean).map((engine) => new EngineGroup(null, [ engine ]));
-          let dbGrouped = _(engineStatusList.filter((engine) => engine.dbStorageMXBean))
-            .groupBy('dbStorageMXBean').map((engines, dbMBean) => new EngineGroup( dbMBean, engines)).value();
+          let groups: EngineGroup[] = engineStatusList.filter((engine) => !engine.appClusterId).map((engine) => new EngineGroup(null, [ engine ]));
+          let appClusterGrouped = _(engineStatusList.filter((engine) => engine.appClusterId))
+            .groupBy('appClusterId').map((engines, clusterName) => new EngineGroup( clusterName, engines)).value();
           
-          state.groupsOfEngines = groups.concat(dbGrouped);
+          state.groupsOfEngines = groups.concat(appClusterGrouped);
         } else {
           state.engineStatusList = null;
           state.groupsOfEngines = null;

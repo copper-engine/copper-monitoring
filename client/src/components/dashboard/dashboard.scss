@@ -23,16 +23,36 @@
         padding-left: 15px;
         padding-right: 15px;
         .user {
-            font-size: 1.1em;
-            padding-top: 25px;
+            font-size: 1.3em;
+            font-weight: 700;
+            padding-top: 15px;
         }
-        .input-label {
-            flex-grow: 0;
-            padding-top: 25px;
+        .switch-container {
+            padding-top: 15px;
+            max-height: 55px;
+            .switch-label {
+                flex-grow: 0;
+                padding-right: 108px;
+            }
+        }
+        .input-container {
+            padding-top: 15px;
             padding-right: 15px;
+            max-height: 40px;
+            .input-label {
+                flex-grow: 0;
+                padding-right: 25px;   
+            }
+        }
+        .input-group {
+            padding: 0px;
         }
         .input {
-            max-width: 30px;
+            max-width: 35px;
+            margin-top: -10px;
+            label {
+                margin-top: -10px;
+            }
         }
     }
 }

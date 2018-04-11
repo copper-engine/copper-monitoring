@@ -22,7 +22,10 @@ export class DashboardComponent extends Vue {
     updateStatusInterval: any;
     menuOpen: boolean = false;
     periods: number[] = [];
+    // currentFetch: string = '0';
+    // currentUpdate: string = '0';
     compareInterval: any;
+    themeSwitch: boolean = this.$store.state.darkTheme;
     
     get user() {
         return this.$store.state.user;
@@ -32,8 +35,8 @@ export class DashboardComponent extends Vue {
     }
 
     created() {
-        this.periods[0] = this.connectionSettings.fetchPeriod;
-        this.periods[1] = this.connectionSettings.updatePeriod;
+        this.getTheme();
+        this.getPeriodSettings();
         this.menuOpen = false;
         (this.$services.eventHub as Vue).$on('forceStatusFetch', this.forceFetchingStatus);
     }
@@ -48,6 +51,9 @@ export class DashboardComponent extends Vue {
         (this.$services.eventHub as Vue).$off('forceStatusFetch', this.forceFetchingStatus);
     }
 
+    getTheme() {
+        this.themeSwitch = this.$store.state.darkTheme;
+    }
 
     toggleTheme() {
         this.$store.commit(Mutations.updateTheme, !this.$store.state.darkTheme);
@@ -58,17 +64,32 @@ export class DashboardComponent extends Vue {
         this.$router.replace('/login'); 
     }
 
-    setPeriods(periods: number[]) {
-        let settings = new ConnectionSettings(this.connectionSettings.host, this.connectionSettings.port, this.periods[0], this.periods[1]);
-        this.$store.commit(Mutations.updateConnectionSettings, settings);
+    getPeriodSettings() {
+        if (localStorage.getItem('updatePeriod') === null) {
+            this.periods[1] = this.$store.state.connectionSettings[0].updatePeriod;
+        } else {
+            this.periods[1] = parseInt(localStorage.getItem('updatePeriod'));
+        }
+        if (localStorage.getItem('fetchPeriod') === null) {
+            this.periods[0] = this.$store.state.connectionSettings[0].fetchPeriod;
+        } else {
+            this.periods[0] = parseInt(localStorage.getItem('fetchPeriod'));
+        }
     }
 
-    @Watch('periods')
-    checkNewPeriodSettings() {
-        clearTimeout(this.compareInterval);
-        this.compareInterval = setTimeout(() => {
-            this.setPeriods(this.periods);
-        }, 2000);
+    setPeriods(periods: number[]) {
+        localStorage.setItem('fetchPeriod', String(this.periods[0]));
+        localStorage.setItem('updatePeriod', String(this.periods[1]));
+        let settings = new ConnectionSettings(this.connectionSettings.host, this.connectionSettings.port, this.forceInt(this.periods[0]), this.forceInt(this.periods[1]));
+        this.$store.commit(Mutations.updateConnectionSettings, {index: 0, connectionSettings: settings});
+    }
+
+    forceInt(data: any) {
+        if (typeof data === 'number') {
+            return data;
+        } else {
+            return parseInt(data);
+        }
     }
 
     // @Watch('$route')
@@ -100,8 +121,23 @@ export class DashboardComponent extends Vue {
         }
     }
 
+    @Watch('themeSwitch')
+    checkToggleTheme() {
+        this.$store.commit(Mutations.updateTheme, this.themeSwitch);
+    }
+
+    @Watch('periods')
+    checkNewPeriodSettings() {
+        clearTimeout(this.compareInterval);
+        this.compareInterval = setTimeout(() => {
+            this.setPeriods(this.periods);
+        }, 2000);
+    }
+
     @Watch('$store.state.connectionSettings')
     sheduleFetchingStatus() {
+        console.log('dashboard detected change, new settings...');
+        console.log(this.$store.state.connectionSettings);
         if (this.$store.state.connectionSettings.length === 0) {
             if (this.updateStatusInterval) {
                 clearInterval(this.updateStatusInterval);
@@ -115,7 +151,6 @@ export class DashboardComponent extends Vue {
         (this.$services.jmxService as JmxService)
         .getConnectionResults(this.$store.state.connectionSettings, this.$store.state.user)
         .then((results: ConnectionResult[]) => {
-            console.log('getConnectionResults', results);
             this.$store.commit(Mutations.updateConnectionResults, results);
 
             if (this.updateStatusInterval) {

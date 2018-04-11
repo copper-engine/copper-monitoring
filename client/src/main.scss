@@ -1,8 +1,23 @@
+@import 'variables';
+
 html { 
+    color: #eaeaea;
     min-width: 900px;
     overflow-x: auto 
 }
 
 body {
     min-width: 900px; 
+}
+
+.theme--dark .footer {
+    background: $base-dark-color;
+    border-top: 1px solid $base-border-color;
+}
+.theme--dark .toolbar, .application .theme--dark.toolbar {
+    background-color: $base-dark-color;
+}
+
+.application.theme--dark {
+    background: #2f333d;
 }

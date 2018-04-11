@@ -15,14 +15,14 @@ if (utils.parseBoolean(localStorage.getItem('darkTheme')) === null) {
 }
 
 let darkColors: VuetifyTheme = {
-    primary: '#00695C',
-    secondary: '#424242',
-    accent: '#616161',
+    primary: '#41a578',
+    secondary: '#363b46',
+    accent: '#474d5a',
     side: '#36834f',
     error: '#b71c1c',
     themeText: '#f5f5f5',
     textOnColor: '#f5f5f5',
-    engineActive: '#585858',
+    engineActive: '#3d4352',
     groupActive: '#1f9485',
     info: '#2196F3',
     success: '#4CAF50',

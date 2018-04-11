@@ -1,4 +1,4 @@
-// @import '../../../variables';
+@import '../../../variables';
 
 .sidebar {
     // background: $test-import-color !important;
@@ -6,19 +6,29 @@
     padding: 0px;
     margin-top: 64px;
 
+    
     .icon-container {
         width: 35px;
         max-width: 35px;
         min-width: 35px;
         padding-top: 12px;
-    }
 
+    }
+    .control-icon {
+        color: #b8c2d8 !important;
+    }
+    
     .scroll-area {
         position: relative;
         margin: auto;
         width: 100%;
         height: 100%; 
-
+        background: $base-dark-color;
+        // background: #0b2732; /* Old browsers */
+        // background: -moz-linear-gradient(left, #0b2732 0%, #123643 100%); /* FF3.6-15 */
+        // background: -webkit-linear-gradient(left, #0b2732 0%,#123643 100%); /* Chrome10-25,Safari5.1-6 */
+        // background: linear-gradient(to right, #0b2732 0%,#123643 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        
         .scroll-header {
             padding-left: 10px;
             h3 {
@@ -36,15 +46,18 @@
 
         .connection {
             padding-top: 10px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #595959;
+            padding-bottom: 25px;
         }
 
         .connection-title, .engines-title {
             font-size: 1.3em;
             font-weight: 700;
             padding: 10px 0px 0px 10px;
-            color: #989898;
+            color: #a0b4dc;
+        }
+        
+        .engine-card {
+            padding-top: 15px; 
         }
 
         .group {
@@ -85,10 +98,6 @@
                 padding-right: 10px;
                 padding-bottom: 10px;
             }
-        }
-        .single-status {
-            // margin-top: 5px;
-            // margin-bottom: 5px;
         }
     }
 

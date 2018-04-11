@@ -1,11 +1,23 @@
+@import '../../../../variables';
+
 .engine-group {
     overflow: hidden;
-    border-bottom: 1px solid #79797b;
+    // border-bottom: 1px solid #79797b;
+    @include sidebar-border-bottom;
+    
+    .group-icon {
+        color: #7397dc;
+    }
+
+    &:last-child {
+        border-bottom: none; 
+    }
     
     .group-header{
         padding: 10px 0px 10px 10px;
         
         h2 {
+            color: #eaeaea;
             font-size: 1.3em;
             word-wrap: break-word;
             max-width: 200px;
@@ -14,6 +26,11 @@
             flex-grow: 0;
             padding-right: 10px;
         }
+
+        .engine-sub-details {
+            color: #eaeaea99 !important;
+        }
+
         .summary {
             padding: 0px;
             font-size: 1em;
@@ -51,14 +68,16 @@
         padding: 0 0 0 10px;
 
         &:hover {
-            background: #00695c;
+            background: #44bb85;
 
             .list__tile {
-                background: #4e4e4e;
+                background: #353b4a;
             }
         }
         .list__tile {
             padding: 0;
+            -webkit-transition: none; 
+            transition: none;
         }
         .link-tile {
             .link {
@@ -90,8 +109,8 @@
         padding: 0 10px 10px;
 
         .engine-status-card {
-            border-bottom: 1px solid #79797b;
-            background: #3c3a3a;
+            border-bottom: 1px solid #262a34;
+            background: #2f343d;
             
             &:last-child {
                 border-bottom: none;

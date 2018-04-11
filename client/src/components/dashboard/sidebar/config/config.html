@@ -1,10 +1,10 @@
-<v-card flat color="primary" class="textOnColor--text engine-connection-config">
+<v-card flat class="textOnColor--text engine-connection-config">
     <v-card-title primary-title>
         <div class="headline-custom"> 
             <!-- <v-icon> mdi-settings</v-icon>  -->
             <span>Configuration</span>
             <v-btn dark icon @click.stop="deleteSettings">
-                <v-icon v-html="'delete'"></v-icon>
+                <v-icon class="control-icon" v-html="'delete'"></v-icon>
             </v-btn>
         </div>
         <v-form v-model="valid" ref="form" lazy-validation>

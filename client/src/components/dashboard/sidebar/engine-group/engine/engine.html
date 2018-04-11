@@ -2,41 +2,38 @@
     <v-card flat class="white--text engine-status">
         <v-layout row>
             <v-flex class="icon-container">
-                <v-icon dark>extension</v-icon>
+                <v-icon class="engine-icon">extension</v-icon>
             </v-flex>
             <v-layout column>
-                <div v-if="status" class="engine-id">{{status.engineId}}</div>
-                <v-layout row>
-                <div v-if="status">{{status.type}}</div>
-                <v-tooltip top content-class="tooltip-text">
-                    <v-flex v-if="!open && !multiEngine" class="summary" slot="activator">
-                        ( {{ status.instances }} / {{ status.brokenWFCount }} )
-                    </v-flex>
-                    <span>( Workflow Instances / Broken Workflows )</span>
-                </v-tooltip>
-                <v-tooltip top content-class="tooltip-text">
-                    <v-flex v-if="!open && multiEngine" class="summary-limited" slot="activator">
-                        ( {{ status.instances }} )
-                    </v-flex>
-                    <span>( Workflow Instances )</span>
-                </v-tooltip>
+                <div class="engine-id">{{status.engineId}}</div>
+                <v-layout row class="engine-sub-details">
+                    <div>{{status.type}}</div>
+                    <v-tooltip top content-class="tooltip-text">
+                        <v-flex v-if="!open && !multiEngine" class="summary" slot="activator">
+                            ( {{ status.instances }} / {{ status.brokenWFCount }} )
+                        </v-flex>
+                        <span>( Workflow Instances / Broken Workflows )</span>
+                    </v-tooltip>
+                    <v-tooltip top content-class="tooltip-text">
+                        <v-flex v-if="!open && multiEngine" class="summary-limited" slot="activator">
+                            ( {{ status.instances }} )
+                        </v-flex>
+                        <span>( Workflow Instances )</span>
+                    </v-tooltip>
                 </v-layout>
             </v-layout>
-            <v-flex v-show="!status">
-                <div class="type">Unable to connect</div>
-            </v-flex>
             <v-spacer></v-spacer>
             <v-flex class="stopGrow">
                 <v-tooltip top content-class="tooltip-text">
                     <v-btn dark icon @click="open = !open" slot="activator">
-                        <v-icon :class="{ 'close-details-icon': open }">details</v-icon>
+                        <v-icon :class="{ 'close-details-icon': open }" class="control-icon">details</v-icon>
                     </v-btn>
                     <span>Show Details</span>
                 </v-tooltip>
             </v-flex>
         </v-layout>
         <transition :name="extendStatusType">
-        <div v-show="open" v-if="status" class="status-summary status-summary-container">
+        <div v-show="open" class="status-summary status-summary-container">
             <div class="line">
                 <span>
                     WF instances:

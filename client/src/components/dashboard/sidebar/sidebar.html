@@ -43,7 +43,7 @@
                 </v-tooltip>
             </v-layout>
             <group class="engine-group"
-                v-for="group in $store.state.groupsOfEngines" key="group.name"
+                v-for="group in $store.getters.groupsOfEngines" key="group.name"
                 :group=group
                 :closing="closeAll">
             </group>

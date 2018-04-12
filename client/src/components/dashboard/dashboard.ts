@@ -142,7 +142,6 @@ export class DashboardComponent extends Vue {
             if (this.updateStatusInterval) {
                 clearInterval(this.updateStatusInterval);
             }
-            this.$store.commit(Mutations.updateMBeans, new MBeans([]));
             this.$store.commit(Mutations.updateEngineStatus, []);
             this.$store.commit(Mutations.updateConnectionResults, []);
             return;
@@ -157,31 +156,22 @@ export class DashboardComponent extends Vue {
                 clearInterval(this.updateStatusInterval);
             }
 
-            let mbeans: MBean[] = _.flatMap(results.map(result => result.mbeans ));
-            if (mbeans && mbeans.length > 0) {
-                this.$store.commit(Mutations.updateMBeans, new MBeans(mbeans));
-                this.getEngineStatus(mbeans, this.$store.state.user);
+            if (this.$store.getters.engineMBeans && this.$store.getters.engineMBeans.length > 0) {
+                this.getEngineStatus(this.$store.getters.engineMBeans, this.$store.state.user);
                 this.updateStatusInterval = setInterval(() => {
-
-                    this.getEngineStatus(mbeans, this.$store.state.user);
+                    this.getEngineStatus(this.$store.getters.engineMBeans, this.$store.state.user);
                 }, this.$store.state.connectionSettings[0].updatePeriod * 1000);
             } else {
-                this.$store.commit(Mutations.updateMBeans, new MBeans([]));
                 this.$store.commit(Mutations.updateEngineStatus, []);
-                // this.getMBeans(this.$store.state.connectionSettings, this.$store.state.user);
-                // this.updateStatusInterval = setInterval(() => {
-                //     this.getMBeans(this.$store.state.connectionSettings, this.$store.state.user);
-                // }, this.$store.state.connectionSettings.updatePeriod * 1000);
             }
         });
     }
 
     forceFetchingStatus(delay: number = 0) {
         setTimeout(() => {
-            this.getEngineStatus(this.$store.state.mbeans, this.$store.state.user);
+            this.getEngineStatus(this.$store.getters.engineMBeans, this.$store.state.user);
         }, delay);
     }
-
 
     private getEngineStatus(mbeans: MBean[], user: User) {
         (this.$services.jmxService as JmxService).getEngineStatus(mbeans, user).then((enginStatusList: EngineStatus[]) => {
@@ -192,14 +182,4 @@ export class DashboardComponent extends Vue {
             this.$store.commit(Mutations.updateEngineStatus, enginStatusList);
         });
     }
-
-    // private getMBeans(connectionSettings: ConnectionSettings, user: User) {
-    //     (this.$services.jmxService as JmxService).getMBeans(this.$store.state.connectionSettings, this.$store.state.user).then((mbeans: MBean[]) => {
-    //         if (mbeans && mbeans.length > 0) {
-    //             this.$store.commit(Mutations.updateMBeans, new MBeans(mbeans));
-    //         } else {
-    //             this.$store.commit(Mutations.updateMBeans, new MBeans([]));
-    //         }
-    //    });
-    // }
 }

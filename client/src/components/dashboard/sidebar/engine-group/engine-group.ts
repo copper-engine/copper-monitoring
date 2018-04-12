@@ -43,7 +43,7 @@ export class EngineGroupComponent extends Vue {
     }
     
     getBrokenWFCount() {
-        this.mbean = this.$store.state.mbeans.engineMBeans[this.group.engines[0].id];
+        this.mbean = this.$store.getters.engineMBeans[this.group.engines[0].id];
         this.jmxService.countWFRequest(this.mbean.connectionSettings, this.mbean.name, this.$store.state.user, new WorkflowFilter).then((response: number) => {
             this.brokenWFCount = response;
         });

@@ -89,7 +89,7 @@ export class ProcessorPools extends Vue {
         }, 200);
         this.processorPools = [];
         this.engine = (this.$store.state as  StoreState).engineStatusList[this.$route.params.id];
-        this.engineMbean = this.$store.state.mbeans.engineMBeans[this.$route.params.id];
+        this.engineMbean = this.$store.getters.engineMBeans[this.$route.params.id];
         this.scheduleFetchPools();
     }
 
@@ -99,9 +99,10 @@ export class ProcessorPools extends Vue {
             clearInterval(this.fetchPoolInterval);
         }
         this.getProcessorPools();
+        // TODO get time from usersettings
         this.fetchPoolInterval = setInterval(() => {
             this.getProcessorPools();
-        }, this.engineMbean.connectionSettings.updatePeriod * 1000);
+        }, 10 * 1000);
     }
     
     private showSuccess(message: string) {

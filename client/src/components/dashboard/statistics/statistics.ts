@@ -62,7 +62,7 @@ export class StatisticsComponent extends Vue {
     @Watch('states', { deep: true })
     @Watch('$route.params')
     initCharts() {
-        this.mbean = this.$store.state.mbeans.engineMBeans[this.$route.params.id];
+        this.mbean = this.$store.getters.engineMBeans[this.$route.params.id];
         this.saveStates();
         this.getGroup();
         this.getId();
@@ -136,8 +136,8 @@ export class StatisticsComponent extends Vue {
 
     getGroup() {
         if (this.$route.params.id.substr(0, 5) === 'group') {
-            for (let i = 0; i < this.$store.state.groupsOfEngines.length; i++) {
-                let group = this.$store.state.groupsOfEngines[i];
+            for (let i = 0; i < this.$store.getters.groupsOfEngines.length; i++) {
+                let group = this.$store.getters.groupsOfEngines[i];
                 if (this.parseGroupName(group.name) === this.$route.params.id.substr(6)) {
                     this.group = group;
                 }
@@ -240,7 +240,7 @@ export class StatisticsComponent extends Vue {
     // TODO Beans from diferent locations
     getBeans(): MBean[] {
         return this.group.engines.map((engine) => {
-            return this.$store.state.mbeans.engineMBeans[engine.id];
+            return this.$store.getters.engineMBeans[engine.id];
         });
     }
 

@@ -77,7 +77,7 @@ export class WorkflowsComponent extends Vue {
             this.wfType = 'waiting';
             this.engineId = this.$route.params.id.substr(8);
         }
-        this.mbean = this.$store.state.mbeans.engineMBeans[this.engineId];
+        this.mbean = this.$store.getters.engineMBeans[this.engineId];
     }
 
     setFilterStates() {
@@ -339,7 +339,7 @@ export class WorkflowsComponent extends Vue {
         setTimeout(() => {
             this.newComponent = false;
         }, 200);
-        this.mbean = this.$store.state.mbeans.engineMBeans[this.$route.params.id];
+        this.mbean = this.$store.getters.engineMBeans[this.$route.params.id];
         this.workflows = [];
         this.wfCount = 0;
         this.init();

@@ -1,15 +1,15 @@
-<div class="secondary textOnColor--text connection-config">
+<div class="textOnColor--text connection-config">
     <div class="connection-container">
     <v-layout row>
         <v-flex class="icon-container">
             <v-icon 
                 v-show="connection.isConnected()"
-                color="light-green accent-4">
+                class="connected-icon">
                 fiber_manual_record
             </v-icon> 
             <v-icon 
                 v-show="!connection.isConnected()"
-                color="red darken-4"> 
+                class="not-connected-icon"> 
                 fiber_manual_record
             </v-icon> 
         </v-flex>
@@ -18,7 +18,7 @@
         </v-flex>
         <v-spacer></v-spacer>
         <v-btn dark icon @click.stop="showSettings = !showSettings">
-            <v-icon v-html="'settings'" :class="{'active': true}"></v-icon>
+            <v-icon v-html="'settings'" class="control-icon active"></v-icon>
         </v-btn>
     </v-layout>
     </div>

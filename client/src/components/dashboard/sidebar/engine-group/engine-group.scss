@@ -1,12 +1,28 @@
+@import '../../../../variables';
+
 .engine-group {
     overflow: hidden;
-    border-bottom: 1px solid #79797b;
+    // border-bottom: 1px solid #79797b;
+    @include sidebar-border-bottom;
+    
+    .group-icon {
+        color: #7397dc;
+    }
+
+    .engine-icon {
+        color: #69c57e;
+    }
+
+    &:last-child {
+        border-bottom: none; 
+    }
     
     .tile-header{
 
         padding: 10px 0px 10px 10px;
         
         h2 {
+            color: #eaeaea;
             font-size: 1.3em;
             word-wrap: break-word;
             max-width: 200px;
@@ -15,6 +31,11 @@
             flex-grow: 0;
             padding-right: 10px;
         }
+
+        .engine-sub-details {
+            color: #eaeaea99 !important;
+        }
+
         .count-info {
             padding: 0px;
             font-size: 1em;
@@ -25,60 +46,67 @@
     }
 
     .tile-interior {
-        overflow: hidden;
-        .info-summary {
+        .tile-info {
             overflow: hidden;
-            padding-left: 10px;
-            .label {
-                padding-left: 16px;
-            }
-            .value {
-                padding-left: 8px;
-                font-weight: 700;
+            .info-summary {
+                overflow: hidden;
+                padding-left: 10px;
+                .label {
+                    padding-left: 16px;
+                }
+                .value {
+                    padding-left: 8px;
+                    font-weight: 700;
+                }
             }
         }
     }
     
     .link-list {
         overflow: hidden;
+
         .link-tile-container {
             margin-top: 1px;
             padding: 0 0 0 10px;
     
-            // &:hover {
-            //     background: #00695c;
+            &:hover {
+                background: #44bb85;
     
-            //     .list__tile {
-            //         background: #4e4e4e;
-            //     }
-            // }
+                .list__tile {
+                    background: #353b4a;
+                }
+            }
+
             .list__tile {
                 padding: 0;
+                -webkit-transition: none;
+                transition: none;
             }
             .link-tile {
                 .link {
+                    color: #eaeaea;
                     padding-top: 20px;
                     padding-bottom: 20px;
                     padding-left: 5px;
                     width: 100%;
                 }
             }
-            .group-tile {
-                .theme--light:hover {        
-                    background: #2381d5;
-                }
-                .theme--dark:hover {        
-                    background: #777777;
-                }
-            }
-            .engine-tile {
-                .theme--light:hover {        
-                    background: #00c3ff;
-                }
-                .theme--dark:hover {        
-                    background: #818181;
-                }
-            }
+            // .group-tile {
+            //     .theme--light:hover {        
+            //         background: #2381d5;
+            //     }
+            //     .theme--dark:hover {        
+            //         background: #777777;
+            //     }
+            // }
+            // .engine-tile {
+            //     .theme--light:hover {        
+            //         background: #00c3ff;
+            //     }
+            //     .theme--dark:hover {        
+            //         background: #818181;
+            //     }
+            // }
         }
     }
 }

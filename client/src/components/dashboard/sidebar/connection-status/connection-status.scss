@@ -1,17 +1,27 @@
+@import '../../../../variables';
+
 .connection-config {
-    margin-top: 4px;
+    @include sidebar-border-bottom;
     border-radius: 0px;
     overflow: hidden;
     
+    &:last-child {
+        border-bottom: none; 
+    }
+    
     .connection-container {
         padding-left: 10px;
-        padding-bottom: 10px;
-        padding-top: 10px;
-        height: 69px;
         .connection-info {
+            color: #eaeaea;
             padding-top: 12px;
-            font-size: 1.3em;
-            font-weight: 700;
+            font-size: 1.2em;
+            font-weight: 400;
+        }
+        .not-connected-icon{
+            color: #c53332;
+        }
+        .connected-icon{
+            color: #69c57e;
         }
     }
 

@@ -1,11 +1,11 @@
 <div :class="{ 'in-group' : multiEngine }">
     <v-layout row class="tile-header">
         <v-flex class="icon-container">
-            <v-icon dark>extension</v-icon>
+                <v-icon class="engine-icon">extension</v-icon>
         </v-flex>
         <v-layout column>
             <h2 class="textOnColor--text"> {{status.engineId}} </h2>
-            <v-layout row>
+            <v-layout row class="engine-sub-details">
                 <v-flex class="textOnColor--text sub-info">
                     {{status.type}}
                 </v-flex>
@@ -26,13 +26,14 @@
         <v-spacer></v-spacer>
         <v-tooltip top content-class="tooltip-text">
             <v-btn dark icon @click="open = !open" slot="activator">
-                <v-icon :class="{ 'close-details-icon': open }">details</v-icon>
+                <v-icon :class="{ 'close-details-icon': open }" class="control-icon">details</v-icon>
             </v-btn>
             <span>Show Details</span>
         </v-tooltip>
     </v-layout>
-    <transition :name="extendStatusType">
-    <div v-show="open" v-if="status" class="tile-interior">
+    <transition :name="extendTypeOfEngine">
+    <div class="tile-interior" v-show="open">
+    <div v-if="status" class="tile-info">
         <div class="info-summary">
             <div class="label">
                 <span>
@@ -68,9 +69,7 @@
             </div>
         </div>
     </div>
-    </transition>
-    <transition :name="extendType">
-    <v-list v-show="open">
+    <v-list class="link-list">
         <v-list-tile value="true" v-for="link in links" :key="link.path" class="link-tile-container">
             <v-list-tile-content class="link-tile engine-tile">
                 <router-link :to="link.path" active-class="engineActive" class="link">
@@ -81,12 +80,13 @@
                             </v-list-tile-action>
                         </v-flex>
                         <v-flex>
-                            <v-list-tile-title v-text="link.name" class="textOnColor--text"></v-list-tile-title>
+                            <v-list-tile-title v-text="link.name"></v-list-tile-title>
                         </v-flex>
                     </v-layout>                  
                 </router-link>
             </v-list-tile-content>
         </v-list-tile>
     </v-list>
+    </div>
     </transition>
 </div>

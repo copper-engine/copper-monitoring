@@ -15,19 +15,11 @@ export class EngineComponent extends Vue {
     @Prop() mbean: string;
     open: boolean = false;
 
-    get extendType() {
+    get extendTypeOfEngine() {
         if (this.multiEngine === true) {
-            return 'extend-links-limited';
+            return 'extend-engine-limited';
         } else {
-            return 'extend-links';
-        }
-    }
-
-    get extendStatusType() {
-        if (this.multiEngine === true) {
-            return 'extend-status-limited';
-        } else {
-            return 'extend-status';
+            return 'extend-engine';
         }
     }
 

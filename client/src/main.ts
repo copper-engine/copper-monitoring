@@ -5,6 +5,8 @@ import './dependency-injection';
 import * as theme from './theme-config';
 import { createRouter, dashboardComponent, notificationsComponent } from './router';
 
+import './main.scss';
+
 // import * as _ from 'lodash';
 // (window as any)._ = _;
 

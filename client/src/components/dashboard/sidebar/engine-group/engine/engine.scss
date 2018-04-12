@@ -1,12 +1,19 @@
 .in-group {
-    // margin-top: 4px;
-    // margin-bottom: 4px;
+    margin-left: 15px;
+    margin-right: 15px;
+    border-bottom: 1px solid #79797b;
+    background: #3c3a3a;
+    
+    &:last-child {
+        margin-bottom: 15px;
+        border-bottom: none;
+    }
 }
 
 .engine-status-card {
     overflow: hidden;
     // border-bottom: 1px solid #79797b;
-    padding-bottom: 10px;
+    // padding-bottom: 10px;
 
     .card {
         background: none;
@@ -16,8 +23,8 @@
     }
     .engine-status {
 
-        padding: 10px 0 0px 10px;
-        border-radius: 0px;
+        // padding: 10px 0 0px 10px;
+        // border-radius: 0px;
         
         .stopGrow {
             flex-grow: 0;

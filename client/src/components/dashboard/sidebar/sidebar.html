@@ -30,9 +30,18 @@
             </connection-status>
         </div>
         <div class="engine-card">
-            <div class="engines-title">
-                Engines
-            </div>
+            <v-layout row>
+                <div class="engines-title">
+                    Engines
+                </div>
+                <v-spacer></v-spacer>
+                <v-tooltip top content-class="tooltip-text">
+                    <v-btn dark icon @click="triggerCloseAll" slot="activator">
+                        <v-icon>change_history</v-icon>
+                    </v-btn>
+                    <span>Collapse All</span>
+                </v-tooltip>
+            </v-layout>
             <group class="engine-group"
                 v-for="group in $store.state.groupsOfEngines" key="group.name"
                 :group=group

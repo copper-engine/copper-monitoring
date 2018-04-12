@@ -2,7 +2,8 @@
     overflow: hidden;
     border-bottom: 1px solid #79797b;
     
-    .group-header{
+    .tile-header{
+
         padding: 10px 0px 10px 10px;
         
         h2 {
@@ -10,11 +11,11 @@
             word-wrap: break-word;
             max-width: 200px;
         }
-        .engine-count {
+        .sub-info {
             flex-grow: 0;
             padding-right: 10px;
         }
-        .summary {
+        .count-info {
             padding: 0px;
             font-size: 1em;
             min-width: 85px;
@@ -23,78 +24,64 @@
         }
     }
 
-    .general-info {
+    .tile-interior {
         overflow: hidden;
-    }
 
-    .status-summary {
-        overflow: hidden;
-        padding-left: 10px;
-        .group-line {
-            padding-left: 16px;
-        }
-        .line {
-            padding: 4px 0;
-        }
-        .value {
-            padding-left: 8px;
-            font-weight: 700;
+        .info-summary {
+            overflow: hidden;
+            padding-left: 10px;
+            .label {
+                padding-left: 16px;
+            }
+            // .line {
+            //     padding: 4px 0;
+            // }
+            .value {
+                padding-left: 8px;
+                font-weight: 700;
+            }
         }
     }
     
-    .general-link-list {
+    .link-list {
         overflow: hidden;
-    }
-
-    .link-tile-container {
-        margin-top: 1px;
-        padding: 0 0 0 10px;
-
-        &:hover {
-            background: #00695c;
-
+        .link-tile-container {
+            margin-top: 1px;
+            padding: 0 0 0 10px;
+    
+            // &:hover {
+            //     background: #00695c;
+    
+            //     .list__tile {
+            //         background: #4e4e4e;
+            //     }
+            // }
             .list__tile {
-                background: #4e4e4e;
+                padding: 0;
             }
-        }
-        .list__tile {
-            padding: 0;
-        }
-        .link-tile {
-            .link {
-                padding-top: 20px;
-                padding-bottom: 20px;
-                padding-left: 5px;
-                width: 100%;
+            .link-tile {
+                .link {
+                    padding-top: 20px;
+                    padding-bottom: 20px;
+                    padding-left: 5px;
+                    width: 100%;
+                }
             }
-        }
-    }
-    .group-tile {
-        .theme--light:hover {        
-            background: #2381d5;
-        }
-        .theme--dark:hover {        
-            background: #777777;
-        }
-    }
-    .engine-tile {
-        .theme--light:hover {        
-            background: #00c3ff;
-        }
-        .theme--dark:hover {        
-            background: #818181;
-        }
-    }
-
-    .multi-status {
-        padding: 0 10px 10px;
-
-        .engine-status-card {
-            border-bottom: 1px solid #79797b;
-            background: #3c3a3a;
-            
-            &:last-child {
-                border-bottom: none;
+            .group-tile {
+                .theme--light:hover {        
+                    background: #2381d5;
+                }
+                .theme--dark:hover {        
+                    background: #777777;
+                }
+            }
+            .engine-tile {
+                .theme--light:hover {        
+                    background: #00c3ff;
+                }
+                .theme--dark:hover {        
+                    background: #818181;
+                }
             }
         }
     }

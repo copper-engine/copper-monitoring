@@ -55,57 +55,59 @@
                 }
                 .value {
                     padding-left: 8px;
-                    font-weight: 700;
+                    // font-weight: 700;
                 }
             }
         }
     }
-    
-    .link-list {
-        overflow: hidden;
 
-        .link-tile-container {
-            margin-top: 1px;
-            padding: 0 0 0 10px;
-    
-            &:hover {
-                background: #44bb85;
-    
-                .list__tile {
+    .link-list-container {
+        overflow: hidden;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        a {
+            text-decoration: none;
+        }
+        .link-container {
+            .activeLink {
+                .link-background {
+                   background: #44bb85; 
+                }
+                .link-interior {
                     background: #353b4a;
                 }
             }
-
-            .list__tile {
-                padding: 0;
-                -webkit-transition: none;
-                transition: none;
-            }
-            .link-tile {
-                .link {
-                    color: #eaeaea;
-                    padding-top: 20px;
-                    padding-bottom: 20px;
-                    padding-left: 5px;
-                    width: 100%;
+            &:hover {
+                .link-background {
+                    background: #44bb85;
+                }
+                .link-interior {
+                    background: #3e4658;
                 }
             }
-            // .group-tile {
-            //     .theme--light:hover {        
-            //         background: #2381d5;
-            //     }
-            //     .theme--dark:hover {        
-            //         background: #777777;
-            //     }
-            // }
-            // .engine-tile {
-            //     .theme--light:hover {        
-            //         background: #00c3ff;
-            //     }
-            //     .theme--dark:hover {        
-            //         background: #818181;
-            //     }
-            // }
+            .link {
+                .link-background {
+                    padding-left: 10px; 
+                }
+                .link-interior {
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                    padding-left: 5px;
+                    color: #eaeaea;
+                    width: 100%;
+                    .link-icon {
+                        flex-grow: 0;
+                        padding-right: 15px;
+                        .icon {
+                            display: block;
+                        }
+                    }
+                    .link-name {
+                        font-size: 1.3em;
+                        font-weight: 400;
+                    }
+                }
+            }
         }
     }
 }

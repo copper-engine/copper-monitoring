@@ -69,24 +69,22 @@
             </div>
         </div>
     </div>
-    <v-list class="link-list">
-        <v-list-tile value="true" v-for="link in links" :key="link.path" class="link-tile-container">
-            <v-list-tile-content class="link-tile engine-tile">
-                <router-link :to="link.path" active-class="engineActive" class="link">
-                    <v-layout row> 
-                        <v-flex class="iconFlex">
-                            <v-list-tile-action>
-                                <v-icon dark>{{ link.icon }}</v-icon>
-                            </v-list-tile-action>
+    <div class="link-list-container">
+        <v-flex v-for="link in links" :key="link.path" class="link-container">
+            <router-link :to="link.path" active-class="activeLink" class="link">
+                <div class="link-background">
+                    <v-layout row class="link-interior">
+                        <v-flex class="link-icon">
+                            <v-icon dark>{{ link.icon }}</v-icon>
                         </v-flex>
-                        <v-flex>
-                            <v-list-tile-title v-text="link.name"></v-list-tile-title>
-                        </v-flex>
-                    </v-layout>                  
-                </router-link>
-            </v-list-tile-content>
-        </v-list-tile>
-    </v-list>
+                        <div class="link-name">
+                            {{ link.name }}
+                        </div>
+                    </v-layout>
+                </div>                
+            </router-link>
+        </v-flex>
+    </div>
     </div>
     </transition>
 </div>

@@ -46,7 +46,7 @@
                         </span>
                     </div>
                 </div>
-                <v-list class="link-list">
+                <!-- <v-list class="link-list">
                     <v-list-tile value="true" v-for="link in links" :key="link.path" class="link-tile-container">
                         <v-list-tile-content class="link-tile group-tile">
                             <router-link :to="link.path" active-class="groupActive" class="link">
@@ -63,7 +63,23 @@
                             </router-link>
                         </v-list-tile-content>
                     </v-list-tile>
-                </v-list>
+                </v-list> -->
+                <div class="link-list-container">
+                    <div v-for="link in links" :key="link.path" class="link-container">
+                        <router-link :to="link.path" active-class="activeLink" class="link">
+                            <div class="link-background">
+                                <v-layout row class="link-interior">
+                                    <v-flex class="link-icon">
+                                        <v-icon dark>{{ link.icon }}</v-icon>
+                                    </v-flex>
+                                    <div class="link-name">
+                                        {{ link.name }}
+                                    </div>
+                                </v-layout> 
+                            </div>                 
+                        </router-link>
+                    </div>
+                </div>
             </div>
         </transition>
         <transition name="extend-group">

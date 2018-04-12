@@ -46,24 +46,6 @@
                         </span>
                     </div>
                 </div>
-                <!-- <v-list class="link-list">
-                    <v-list-tile value="true" v-for="link in links" :key="link.path" class="link-tile-container">
-                        <v-list-tile-content class="link-tile group-tile">
-                            <router-link :to="link.path" active-class="groupActive" class="link">
-                                <v-layout row>
-                                    <v-flex class="iconFlex">
-                                        <v-list-tile-action>
-                                            <v-icon dark>{{ link.icon }}</v-icon>
-                                        </v-list-tile-action>
-                                    </v-flex>
-                                    <v-flex>
-                                        <v-list-tile-title v-text="link.name"></v-list-tile-title>
-                                    </v-flex>
-                                </v-layout>                  
-                            </router-link>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                </v-list> -->
                 <div class="link-list-container">
                     <div v-for="link in links" :key="link.path" class="link-container">
                         <router-link :to="link.path" active-class="activeLink" class="link">

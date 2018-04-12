@@ -10,9 +10,8 @@ import * as _ from 'lodash';
 Vue.use(Vuex);
 
 export class StoreState {
+  // TODO move to user settings
   public darkTheme = parseBoolean(localStorage.getItem('darkTheme')) && true;
-  public mbeans: MBeans = new MBeans();
-  public groupsOfEngines: EngineGroup[] = null;
   public engineStatusList: EngineStatus[] = null;
   public user: User = null;
   public connectionSettings: ConnectionSettings[] = [];
@@ -27,7 +26,6 @@ export const Mutations = {
   updateConnectionSettings: 'updateConnectionSettings',
   deleteConnectionSettings: 'deleteConnectionSettings',
   updateConnectionResults: 'updateConnectionResults',
-  updateMBeans: 'updateMBeans',
   updateEngineStatus: 'updateEngineStatus',
   setUser: 'setUser'
 };
@@ -39,7 +37,6 @@ export const store = new Vuex.Store<StoreState>({
         state.darkTheme = darkTheme;
       },
       [Mutations.setConnectionSettings](state, connectionSettings: ConnectionSettings[]) {
-        console.log('connection settings is set in store');
         state.connectionSettings = connectionSettings;
       },
       [Mutations.updateConnectionSettings](state, { index: index, connectionSettings: connectionSettings }) {
@@ -55,21 +52,8 @@ export const store = new Vuex.Store<StoreState>({
       [Mutations.updateConnectionResults](state, connectionResults) {
         state.connectionResults = connectionResults;
       },
-      [Mutations.updateMBeans](state, mbeans) {
-        state.mbeans = mbeans;
-      },
       [Mutations.updateEngineStatus](state, engineStatusList: EngineStatus[]) {
-        if (engineStatusList) {
-          state.engineStatusList = engineStatusList;
-          let groups: EngineGroup[] = engineStatusList.filter((engine) => !engine.appClusterId).map((engine) => new EngineGroup(null, [ engine ]));
-          let appClusterGrouped = _(engineStatusList.filter((engine) => engine.appClusterId))
-            .groupBy('appClusterId').map((engines, clusterName) => new EngineGroup( clusterName, engines)).value();
-          
-          state.groupsOfEngines = groups.concat(appClusterGrouped);
-        } else {
-          state.engineStatusList = null;
-          state.groupsOfEngines = null;
-        }
+        state.engineStatusList = engineStatusList;
       },
       [Mutations.setUser](state, user: User) {
         state.user = user;
@@ -81,6 +65,22 @@ export const store = new Vuex.Store<StoreState>({
     getters: {
       connectionsAsParams: state => {
         return state.connectionSettings.map((connection: ConnectionSettings) => 'connection=' + connection.host + '|' + connection.port).join('&');
+      },
+      engineMBeans: state => {
+        return _.flatMap(state.connectionResults.map(result => result.mbeans.map(mbean => {
+          mbean.name = 'copper.engine:' + mbean.name;
+          return mbean;
+        })));
+      },
+      groupsOfEngines: state => {
+        if (!state.engineStatusList) 
+            return null;
+
+        let groups: EngineGroup[] = state.engineStatusList.filter((engine) => !engine.appClusterId).map((engine) => new EngineGroup(null, [ engine ]));
+        let appClusterGrouped = _(state.engineStatusList.filter((engine) => engine.appClusterId))
+          .groupBy('appClusterId').map((engines, clusterName) => new EngineGroup( clusterName, engines)).value();
+        
+        return groups.concat(appClusterGrouped);
       }
     }
   });

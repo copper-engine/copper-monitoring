@@ -156,13 +156,13 @@
         100% {height: 268px}
     }
 
-    .extend-general-links-enter-active {
-        animation: extend-general-links .75s;
+    .extend-group-links-enter-active {
+        animation: extend-group-links .75s;
     }
-    .extend-general-links-leave-active {
-        animation: extend-general-links .75s reverse;
+    .extend-group-links-leave-active {
+        animation: extend-group-links .75s reverse;
     }
-    @keyframes extend-general-links {
+    @keyframes extend-group-links {
         0% {height: 0px;}
         100% {height: 205px;}
     }
@@ -181,60 +181,28 @@
             padding-bottom: 20px;}
     }
 
-    .extend-status-enter-active {
-        animation: extend-status 0.75s;
+    .extend-engine-enter-active {
+        animation: extend-engine 0.75s;
     }
-    .extend-status-leave-active {
-        animation: extend-status 0.75s reverse;
-    }
-    @keyframes extend-status {
-        0% {height: 0px;
-            padding-top: 0px;}
-        100% {height: 126px;
-            padding-top: 10px;}
+    .extend-engine-leave-active {
+        animation: extend-engine 0.75s reverse;
     }
 
-    .extend-status-limited-enter-active {
-        animation: extend-status-limited 0.75s;
-    }
-    .extend-status-limited-leave-active {
-        animation: extend-status-limited 0.75s reverse;
-    }
-    @keyframes extend-status-limited {
-        0% {height: 0px;
-            padding-top: 0px;}
-        100% {height: 97px;
-            padding-top: 10px;}
+    @keyframes extend-engine {
+        0% {height: 0px;}
+        100% {height: 345px;}
     }
 
-    .extend-links-enter-active {
-        animation: extend-links 0.75s;
+    .extend-engine-limited-enter-active {
+        animation: extend-engine-limited 0.75s;
     }
-    .extend-links-leave-active {
-        animation: extend-links 0.75s reverse;
-    }
-    @keyframes extend-links {
-        0% {height: 0px;
-            padding-top: 0px;
-            padding-bottom: 0px;}
-        100% {height: 266px;
-            padding-top: 8px;
-            padding-bottom: 8px;}
+    .extend-engine-limited-leave-active {
+        animation: extend-engine-limited 0.75s reverse;
     }
 
-    .extend-links-limited-enter-active {
-        animation: extend-links-limited 0.75s;
-    }
-    .extend-links-limited-leave-active {
-        animation: extend-links-limited 0.75s reverse;
-    }
-    @keyframes extend-links-limited {
-        0% {height: 0px;
-            padding-top: 0px;
-            padding-bottom: 0px;}
-        100% {height: 112px;
-            padding-top: 8px;
-            padding-bottom: 8px;}
+    @keyframes extend-engine-limited {
+        0% {height: 0px;}
+        100% {height: 177px;}
     }
     
 }

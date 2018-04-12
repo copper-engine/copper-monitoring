@@ -1,40 +1,41 @@
-<div class="engine-status-card" :class="{ 'in-group' : multiEngine }">
-    <v-card flat class="white--text engine-status">
-        <v-layout row>
-            <v-flex class="icon-container">
+<div :class="{ 'in-group' : multiEngine }">
+    <v-layout row class="tile-header">
+        <v-flex class="icon-container">
                 <v-icon class="engine-icon">extension</v-icon>
-            </v-flex>
-            <v-layout column>
-                <div class="engine-id">{{status.engineId}}</div>
-                <v-layout row class="engine-sub-details">
-                    <div>{{status.type}}</div>
-                    <v-tooltip top content-class="tooltip-text">
-                        <v-flex v-if="!open && !multiEngine" class="summary" slot="activator">
-                            ( {{ status.instances }} / {{ status.brokenWFCount }} )
-                        </v-flex>
-                        <span>( Workflow Instances / Broken Workflows )</span>
-                    </v-tooltip>
-                    <v-tooltip top content-class="tooltip-text">
-                        <v-flex v-if="!open && multiEngine" class="summary-limited" slot="activator">
-                            ( {{ status.instances }} )
-                        </v-flex>
-                        <span>( Workflow Instances )</span>
-                    </v-tooltip>
-                </v-layout>
-            </v-layout>
-            <v-spacer></v-spacer>
-            <v-flex class="stopGrow">
+        </v-flex>
+        <v-layout column>
+            <h2 class="textOnColor--text"> {{status.engineId}} </h2>
+            <v-layout row class="engine-sub-details">
+                <v-flex class="textOnColor--text sub-info">
+                    {{status.type}}
+                </v-flex>
                 <v-tooltip top content-class="tooltip-text">
-                    <v-btn dark icon @click="open = !open" slot="activator">
-                        <v-icon :class="{ 'close-details-icon': open }" class="control-icon">details</v-icon>
-                    </v-btn>
-                    <span>Show Details</span>
+                    <v-flex v-if="!open && !multiEngine" class="count-info" slot="activator">
+                        ( {{ status.instances }} / {{ status.brokenWFCount }} )
+                    </v-flex>
+                    <span>( Workflow Instances / Broken Workflows )</span>
                 </v-tooltip>
-            </v-flex>
+                <v-tooltip top content-class="tooltip-text">
+                    <v-flex v-if="!open && multiEngine" class="count-info" slot="activator">
+                        ( {{ status.instances }} )
+                    </v-flex>
+                    <span>( Workflow Instances )</span>
+                </v-tooltip>
+            </v-layout>
         </v-layout>
-        <transition :name="extendStatusType">
-        <div v-show="open" class="status-summary status-summary-container">
-            <div class="line">
+        <v-spacer></v-spacer>
+        <v-tooltip top content-class="tooltip-text">
+            <v-btn dark icon @click="open = !open" slot="activator">
+                <v-icon :class="{ 'close-details-icon': open }" class="control-icon">details</v-icon>
+            </v-btn>
+            <span>Show Details</span>
+        </v-tooltip>
+    </v-layout>
+    <transition :name="extendTypeOfEngine">
+    <div class="tile-interior" v-show="open">
+    <div v-if="status" class="tile-info">
+        <div class="info-summary">
+            <div class="label">
                 <span>
                     WF instances:
                 </span>
@@ -42,7 +43,7 @@
                     {{status.instances}}
                 </span>
             </div>
-            <div v-if="multiEngine === false" class="line">
+            <div v-if="multiEngine === false" class="label">
                 <span>
                     Broken WF instances:
                 </span>
@@ -50,7 +51,7 @@
                     {{ status.brokenWFCount }}
                 </span>
             </div>
-            <div class="line">
+            <div class="label">
                 <span>
                     Last activity:
                 </span>
@@ -58,7 +59,7 @@
                     {{status.lastProcessing | moment("HH:mm DD/MM/YYYY")}}
                 </span>
             </div>
-            <div class="line">
+            <div class="label">
                 <span>
                     Started:
                 </span>
@@ -67,10 +68,8 @@
                 </span>
             </div>
         </div>
-        </transition>
-    </v-card>
-    <transition :name="extendType">
-    <v-list v-show="open">
+    </div>
+    <v-list class="link-list">
         <v-list-tile value="true" v-for="link in links" :key="link.path" class="link-tile-container">
             <v-list-tile-content class="link-tile engine-tile">
                 <router-link :to="link.path" active-class="engineActive" class="link">
@@ -81,12 +80,13 @@
                             </v-list-tile-action>
                         </v-flex>
                         <v-flex>
-                            <v-list-tile-title v-text="link.name" class="textOnColor--text"></v-list-tile-title>
+                            <v-list-tile-title v-text="link.name"></v-list-tile-title>
                         </v-flex>
                     </v-layout>                  
                 </router-link>
             </v-list-tile-content>
         </v-list-tile>
     </v-list>
+    </div>
     </transition>
 </div>

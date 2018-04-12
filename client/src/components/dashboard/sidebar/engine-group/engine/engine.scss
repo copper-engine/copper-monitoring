@@ -1,54 +1,13 @@
 .in-group {
-}
-
-.engine-status-card {
+    margin-left: 15px;
+    margin-right: 15px;
+    // border-bottom: 1px solid #79797b;
+    margin-bottom: 2px;
+    background: #2f333d;
     overflow: hidden;
-    padding-bottom: 10px;
-
-    .card {
-        background: none;
-    }
-    .engine-icon {
-        color: #69c57e;
-    }
-    .engine-status {
-
-        padding: 10px 0 0px 10px;
-        border-radius: 0px;
-
-        .engine-sub-details {
-            color: #eaeaea99 !important;
-        }
-        
-        .stopGrow {
-            flex-grow: 0;
-        }
-        
-        .engine-id {
-            font-size: 1.3em;
-            font-weight: 700;
-            word-wrap: break-word;
-            max-width: 200px;
-            color: #eaeaea;
-        }
-        .summary {
-            font-size: 1em;
-            padding-left: 10px;
-            min-width: 85px;
-            cursor: default;
-        }
-        .summary-limited {
-            font-size: 1em;
-            padding-left: 10px;
-            min-width: 25px;
-            cursor: default;
-        }
-        .status-summary-container {
-            padding-top: 10px;
-        }
-        
-    }
-    .link-list {
-        overflow: hidden;
+    
+    &:last-child {
+        margin-bottom: 15px;
+        border-bottom: none;
     }
 }

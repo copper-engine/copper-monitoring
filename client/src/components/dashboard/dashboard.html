@@ -14,32 +14,41 @@
                     <div class="user" v-if="!!user">
                         User: {{ user.name }}
                     </div>
-                    <v-layout row>
+                    <v-layout row class="input-container">
                         <v-flex class="input-label">
                             Get data every 'x' seconds
                         </v-flex>
                         <v-flex class="input">
                             <v-text-field
                             v-model="periods[1]"
+                            mask="###"
                             ></v-text-field>
                         </v-flex>
                     </v-layout>
-                    <v-layout row>
+                    <v-layout row class="input-container">
                         <v-flex class="input-label">
                             Not older than 'y' seconds
                         </v-flex>
                         <v-flex class="input">
                             <v-text-field
                             v-model="periods[0]"
+                            mask="###"
                             ></v-text-field>
                         </v-flex>
                     </v-layout>
+                    <v-layout row class="switch-container">
+                        <v-flex class="switch-label">
+                            Dark Theme
+                        </v-flex>
+                        <v-switch v-model="themeSwitch"></v-switch>
+                    </v-layout>
                 </v-layout>
                 <v-card-actions>
-                    <v-btn @click="toggleTheme" v-if="!!user">
+                    <!-- <v-btn @click="toggleTheme" v-if="!!user">
                         <v-icon>mdi-theme-light-dark</v-icon>
                         {{ $store.state.darkTheme ? 'Light Theme' : 'Dark Theme' }}
-                    </v-btn>
+                    </v-btn> -->
+                    <v-spacer></v-spacer>
                     <v-btn @click="logout" v-if="!!user">
                         <v-icon>mdi-logout</v-icon>
                         Logout

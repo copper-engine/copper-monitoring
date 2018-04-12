@@ -67,6 +67,9 @@ export const store = new Vuex.Store<StoreState>({
         return state.connectionSettings.map((connection: ConnectionSettings) => 'connection=' + connection.host + '|' + connection.port).join('&');
       },
       engineMBeans: state => {
+        if (!state.connectionResults) 
+          return [];
+
         return _.flatMap(state.connectionResults.map(result => result.mbeans.map(mbean => {
           mbean.name = 'copper.engine:' + mbean.name;
           return mbean;

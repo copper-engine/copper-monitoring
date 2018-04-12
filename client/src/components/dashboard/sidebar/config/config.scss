@@ -1,7 +1,15 @@
+@import '../../../../variables';
+
 .engine-connection-config {
     border-radius: 0px;
     overflow: hidden;
+    background-color: $base-dark-color !important;
     
+
+    .submit-btn {
+        background: #41a578;
+    }
+
     .headline-custom {
         font-size: 1.3em;
         font-weight: 700;

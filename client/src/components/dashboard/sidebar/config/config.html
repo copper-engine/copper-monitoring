@@ -1,4 +1,4 @@
-<v-card flat class="textOnColor--text engine-connection-config">
+<v-card flat class="engine-connection-config">
     <v-card-title primary-title>
         <div class="headline-custom"> 
             <!-- <v-icon> mdi-settings</v-icon>  -->
@@ -31,7 +31,7 @@
                 :rules="numberRules"
             ></v-text-field> -->
         
-            <v-btn
+            <v-btn color="primary"
                 @click="submit"
                 :disabled="!valid"
             >

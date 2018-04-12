@@ -19,7 +19,7 @@ const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) =
     }
 })
 export class DashboardComponent extends Vue {
-    updateStatusInterval: any;
+    interval: any;
     menuOpen: boolean = false;
     periods: number[] = [];
     // currentFetch: string = '0';
@@ -47,7 +47,7 @@ export class DashboardComponent extends Vue {
     }
         
     beforeDestroy() {
-        clearInterval(this.updateStatusInterval);
+        clearInterval(this.interval);
         (this.$services.eventHub as Vue).$off('forceStatusFetch', this.forceFetchingStatus);
     }
 
@@ -136,14 +136,13 @@ export class DashboardComponent extends Vue {
 
     @Watch('$store.state.connectionSettings')
     sheduleFetchingStatus() {
-        console.log('dashboard detected change, new settings...');
-        console.log(this.$store.state.connectionSettings);
         if (this.$store.state.connectionSettings.length === 0) {
-            if (this.updateStatusInterval) {
-                clearInterval(this.updateStatusInterval);
+            if (this.interval) {
+                clearInterval(this.interval);
             }
             this.$store.commit(Mutations.updateEngineStatus, []);
             this.$store.commit(Mutations.updateConnectionResults, []);
+
             return;
         }
 
@@ -152,17 +151,22 @@ export class DashboardComponent extends Vue {
         .then((results: ConnectionResult[]) => {
             this.$store.commit(Mutations.updateConnectionResults, results);
 
-            if (this.updateStatusInterval) {
-                clearInterval(this.updateStatusInterval);
+            if (this.interval) {
+                clearInterval(this.interval);
             }
 
             if (this.$store.getters.engineMBeans && this.$store.getters.engineMBeans.length > 0) {
                 this.getEngineStatus(this.$store.getters.engineMBeans, this.$store.state.user);
-                this.updateStatusInterval = setInterval(() => {
+                this.interval = setInterval(() => {
                     this.getEngineStatus(this.$store.getters.engineMBeans, this.$store.state.user);
                 }, this.$store.state.connectionSettings[0].updatePeriod * 1000);
             } else {
                 this.$store.commit(Mutations.updateEngineStatus, []);
+
+                console.error('Got no engine status. Will Shuedule refetching MBeans in two seccond');
+                setTimeout(() => {
+                    this.sheduleFetchingStatus();
+                }, 2000);
             }
         });
     }
@@ -174,12 +178,17 @@ export class DashboardComponent extends Vue {
     }
 
     private getEngineStatus(mbeans: MBean[], user: User) {
-        (this.$services.jmxService as JmxService).getEngineStatus(mbeans, user).then((enginStatusList: EngineStatus[]) => {
-            if (!enginStatusList) {
-                enginStatusList = [];
+        (this.$services.jmxService as JmxService).getEngineStatus(mbeans, user).then((engineStatusList: EngineStatus[]) => {
+            if (!engineStatusList) {
+                engineStatusList = [];
+                if (this.interval) {
+                    clearInterval(this.interval);
+                }
+
+                this.sheduleFetchingStatus();
             }
 
-            this.$store.commit(Mutations.updateEngineStatus, enginStatusList);
+            this.$store.commit(Mutations.updateEngineStatus, engineStatusList);
         });
     }
 }

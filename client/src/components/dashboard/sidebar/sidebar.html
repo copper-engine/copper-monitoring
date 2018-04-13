@@ -17,7 +17,7 @@
             </v-layout>
             <transition name="extend-config">
                 <config v-if="settingsShowed" 
-                    :connectionSettings="emptyConnectionSettings" 
+                    :connectionSettings="emptyConnectionSettings"
                     :type="'createNew'"
                     @updateTarget="updateTarget(-1, $event)" 
                     @hideSettings="settingsShowed = false">
@@ -25,8 +25,11 @@
             </transition>
             
             <connection-status v-for="(connection, index) in $store.state.connectionResults" :key="connection.settings.host + connection.settings.port"
-                :connection="connection" 
-                @updateTarget="updateTarget(index, $event)" 
+                :connection="connection"
+                :index="index"
+                :closingConnections="selectConnectionsToClose"
+                @updateTarget="updateTarget(index, $event)"
+                @closeOthers="closeSelectConnections(index)"
                 @deleteSettings="deleteSettings(index)">
             </connection-status>
         </div>
@@ -37,7 +40,7 @@
                 </div>
                 <v-spacer></v-spacer>
                 <v-tooltip top content-class="tooltip-text">
-                    <v-btn dark icon @click="triggerCloseAll" class="control-icon" slot="activator">
+                    <v-btn dark icon @click="triggerCloseAllEngines" class="control-icon" slot="activator">
                         <v-icon>change_history</v-icon>
                     </v-btn>
                     <span>Collapse All</span>
@@ -46,7 +49,7 @@
             <group class="engine-group"
                 v-for="group in $store.getters.groupsOfEngines" key="group.name"
                 :group=group
-                :closing="closeAll">
+                :closing="closeAllEngines">
             </group>
         </div>
 

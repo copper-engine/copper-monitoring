@@ -17,7 +17,7 @@
             {{ connection.settings.host }}:{{ connection.settings.port }}
         </v-flex>
         <v-spacer></v-spacer>
-        <v-btn dark icon @click.stop="showSettings = !showSettings">
+        <v-btn dark icon @click.stop="openSettings">
             <v-icon v-html="'settings'" class="control-icon active"></v-icon>
         </v-btn>
     </v-layout>

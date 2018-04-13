@@ -23,22 +23,37 @@ export class SidebarComponent extends Vue {
     miniVariant = false;
     settingsShowed = false;
     connected = false;
-    closeAll = false;
+    closeAllEngines = false;
+    selectConnectionsToClose = [];
 
     emptyConnectionSettings = new ConnectionSettings();
 
     showSettings() {
         this.settingsShowed = !this.settingsShowed;
         if (this.settingsShowed === true) {
-            this.triggerCloseAll();
+            this.triggerCloseAllEngines();
+            this.closeSelectConnections(-1);
         }
     }
 
-    triggerCloseAll() {
-        this.closeAll = true;
+    triggerCloseAllEngines() {
+        this.closeAllEngines = true;
         setTimeout(() => { 
-            this.closeAll = false;
+            this.closeAllEngines = false;
         }, 1000);
+    }
+
+    closeSelectConnections(opened: number) {
+        if (opened !== -1) {
+            this.settingsShowed = false;
+        } 
+        this.selectConnectionsToClose = this.$store.state.connectionResults.map((connection, index) => {
+            if (index !== opened) {
+                return index;
+            } else {
+                return null;
+            }
+        });
     }
       
     updateTarget(index: number, connectionSettings: ConnectionSettings) {

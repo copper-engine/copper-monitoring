@@ -118,9 +118,9 @@ export class JmxService {
                 }
 
                 let connectionResults: ConnectionResult[] = connectionSettingsList.map((connectionSettings, i) => {
-                    if (this.isSubResponseValid(response.data[i])) {
+                    if (this.isSubResponseValid(response.data[i]) && response.data[i].value['copper.engine']) {
                         let engines = response.data[i].value['copper.engine'];
-                        let mbeanNames = Object.keys(response.data[i].value['copper.engine']);
+                        let mbeanNames = Object.keys(engines);
                         let mbeans = mbeanNames.map((mbean) => new MBean(mbean, Object.keys(engines[mbean].attr), connectionSettings));
 
                         return new ConnectionResult(connectionSettings, mbeans);

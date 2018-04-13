@@ -1,8 +1,11 @@
+@import '../../../../variables';
+
 .engine-connection-config {
     border-radius: 0px;
     overflow: hidden;
     background-color: #2f333d !important;
-    
+    // background-color: $base-dark-color !important;
+
     .header {
         align-items: center;
         padding-top: 5px;
@@ -20,6 +23,9 @@
         width: 275px;
         .button-container {
             padding-left: 67px;
+            .submit-btn {
+                background: #41a578 !important;
+            }
         }
     }
 

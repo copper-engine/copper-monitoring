@@ -1,7 +1,6 @@
-<v-card flat class="textOnColor--text engine-connection-config">
+<v-card flat class="engine-connection-config">
     <div primary-title>
-        <v-layout row class="header"> 
-            <!-- <v-icon> mdi-settings</v-icon>  -->
+        <v-layout row class="header">
             <h2>Configuration</h2>
             <v-spacer></v-spacer>
             <v-btn dark icon v-if="type !== 'createNew'" @click.stop="deleteSettings">
@@ -33,6 +32,7 @@
             ></v-text-field> -->
             <v-layout row class="button-container">
             <v-btn
+                class="submit-btn"
                 @click="submit"
                 :disabled="!valid"
             >

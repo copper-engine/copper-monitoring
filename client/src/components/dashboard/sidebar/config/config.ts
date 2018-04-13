@@ -9,6 +9,7 @@ import './config.scss';
 })
 export class ConfigComponent extends Vue {
     @Prop() connectionSettings: ConnectionSettings;
+    @Prop() type: string;
 
     host: string = '';
     port: string = '1099';

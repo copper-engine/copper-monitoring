@@ -1,12 +1,13 @@
 <v-card flat class="textOnColor--text engine-connection-config">
-    <v-card-title primary-title>
-        <div class="headline-custom"> 
+    <div primary-title>
+        <v-layout row class="header"> 
             <!-- <v-icon> mdi-settings</v-icon>  -->
-            <span>Configuration</span>
-            <v-btn dark icon @click.stop="deleteSettings">
+            <h2>Configuration</h2>
+            <v-spacer></v-spacer>
+            <v-btn dark icon v-if="type !== 'createNew'" @click.stop="deleteSettings">
                 <v-icon class="control-icon" v-html="'delete'"></v-icon>
             </v-btn>
-        </div>
+        </v-layout>
         <v-form v-model="valid" ref="form" lazy-validation>
             <v-text-field class="config-input"
                 label="Host"
@@ -30,7 +31,7 @@
                 v-model="fetchPeriod"
                 :rules="numberRules"
             ></v-text-field> -->
-        
+            <v-layout row class="button-container">
             <v-btn
                 @click="submit"
                 :disabled="!valid"
@@ -42,6 +43,7 @@
             >
                 Cancel
             </v-btn>
+            </v-layout>
         </v-form>
-    </v-card-title>
+    </div>
 </v-card>

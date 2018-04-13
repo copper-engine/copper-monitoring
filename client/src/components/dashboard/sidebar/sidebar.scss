@@ -133,17 +133,6 @@
     .close-details-icon {
         transform: rotate(180deg);
     }
-
-    .extend-create-config-enter-active {
-        animation: extend-create-config 1s;
-    }
-    .extend-create-config-leave-active {
-        animation: extend-create-config 1s reverse;
-    }
-    @keyframes extend-create-config {
-        0% {height: 0px}
-        100% {height: 292px}
-    }
     
     .extend-config-enter-active {
         animation: extend-config 1s;
@@ -153,7 +142,7 @@
     }
     @keyframes extend-config {
         0% {height: 0px}
-        100% {height: 268px}
+        100% {height: 258px}
     }
 
     .extend-group-links-enter-active {

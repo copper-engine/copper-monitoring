@@ -23,7 +23,7 @@
     </v-layout>
     </div>
     <transition name="extend-config">
-        <config v-if="showSettings" :connectionSettings="connection.settings" 
+        <config v-if="showSettings" :connectionSettings="connection.settings" :type="'created'"
         @updateTarget="updateTarget" @hideSettings="showSettings = false" @deleteSettings="deleteSettings"></config>
     </transition>
 </div>

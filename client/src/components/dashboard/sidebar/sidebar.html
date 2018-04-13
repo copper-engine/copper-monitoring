@@ -15,9 +15,10 @@
                     <v-icon v-html="'add'" class="active control-icon"></v-icon>
                 </v-btn>
             </v-layout>
-            <transition name="extend-create-config">
+            <transition name="extend-config">
                 <config v-if="settingsShowed" 
                     :connectionSettings="emptyConnectionSettings" 
+                    :type="'createNew'"
                     @updateTarget="updateTarget(-1, $event)" 
                     @hideSettings="settingsShowed = false">
                 </config>

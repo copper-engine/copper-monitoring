@@ -16,6 +16,7 @@ export class ConnectionStatusComponent extends Vue {
     @Prop() index: number;
     @Prop() closingConnections: number[];
     showSettings = false;
+    clickAllowed = true;
 
     @Watch('closingConnections')
     checkClosing() {
@@ -27,9 +28,15 @@ export class ConnectionStatusComponent extends Vue {
     }
 
     openSettings() {
-        this.showSettings = !this.showSettings;
-        if (this.showSettings === true) {
-            this.$emit('closeOthers');
+        if (this.clickAllowed === true) {
+            this.showSettings = !this.showSettings;
+            if (this.showSettings === true) {
+                this.$emit('closeOthers');
+            }
+            this.clickAllowed = false;
+            setTimeout(() => { 
+                this.clickAllowed = true;
+            }, 1000);
         }
     }
 

@@ -21,6 +21,7 @@ export class EngineGroupComponent extends Vue {
     open: boolean = false;
     multiEngine: boolean = false;
     mbean = null;
+    clickAllowed = true;
 
     created() {
         this.checkGroupInfo();
@@ -39,6 +40,16 @@ export class EngineGroupComponent extends Vue {
     close() {
         if (this.closing === true) {
             this.open = false;
+        }
+    }
+
+    openGroup() {
+        if (this.clickAllowed === true) {
+            this.open = !this.open;
+            this.clickAllowed = false;
+            setTimeout(() => { 
+                this.clickAllowed = true;
+            }, 1000);
         }
     }
     

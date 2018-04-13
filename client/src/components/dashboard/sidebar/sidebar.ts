@@ -25,14 +25,21 @@ export class SidebarComponent extends Vue {
     connected = false;
     closeAllEngines = false;
     selectConnectionsToClose = [];
+    clickAllowed = true;
 
     emptyConnectionSettings = new ConnectionSettings();
 
     showSettings() {
-        this.settingsShowed = !this.settingsShowed;
-        if (this.settingsShowed === true) {
-            this.triggerCloseAllEngines();
-            this.closeSelectConnections(-1);
+        if (this.clickAllowed === true) {
+            this.settingsShowed = !this.settingsShowed;
+            if (this.settingsShowed === true) {
+                this.triggerCloseAllEngines();
+                this.closeSelectConnections(-1);
+            }
+            this.clickAllowed = false;
+            setTimeout(() => { 
+                this.clickAllowed = true;
+            }, 1000);
         }
     }
 

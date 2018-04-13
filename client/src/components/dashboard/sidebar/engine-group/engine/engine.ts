@@ -14,6 +14,24 @@ export class EngineComponent extends Vue {
     @Prop() closing: boolean;
     @Prop() mbean: string;
     open: boolean = false;
+    clickAllowed = true;
+
+    @Watch('closing')
+    close() {
+        if (this.closing === true) {
+            this.open = false;
+        }
+    }
+
+    openEngine() {
+        if (this.clickAllowed === true) {
+            this.open = !this.open;
+            this.clickAllowed = false;
+            setTimeout(() => { 
+                this.clickAllowed = true;
+            }, 1000);
+        }
+    }
 
     get extendTypeOfEngine() {
         if (this.multiEngine === true) {
@@ -39,12 +57,4 @@ export class EngineComponent extends Vue {
             new Link('Processor Pools', '/dashboard/processor-pools/' + params, 'mdi-server')
         ]);
     }
-
-    @Watch('closing')
-    close() {
-        if (this.closing === true) {
-            this.open = false;
-        }
-    }
-
 }

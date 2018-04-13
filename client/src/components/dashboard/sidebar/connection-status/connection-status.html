@@ -1,27 +1,32 @@
 <div class="textOnColor--text connection-config">
-    <div class="connection-container">
-    <v-layout row>
-        <v-flex class="icon-container">
-            <v-icon 
-                v-show="connection.isConnected()"
-                class="connected-icon">
-                fiber_manual_record
-            </v-icon> 
-            <v-icon 
-                v-show="!connection.isConnected()"
-                class="not-connected-icon"> 
-                fiber_manual_record
-            </v-icon> 
-        </v-flex>
-        <v-flex class="connection-info">
-            {{ connection.settings.host }}:{{ connection.settings.port }}
-        </v-flex>
-        <v-spacer></v-spacer>
-        <v-btn dark icon @click.stop="showSettings = !showSettings">
-            <v-icon v-html="'settings'" class="control-icon active"></v-icon>
-        </v-btn>
-    </v-layout>
-    </div>
+    <transition name="extend-connection-header">
+        <div class="connection-container" v-if="!showSettings">
+            <v-layout row>
+                <v-flex class="icon-container">
+                    <v-icon 
+                        v-show="connection.isConnected()"
+                        class="connected-icon">
+                        fiber_manual_record
+                    </v-icon> 
+                    <v-icon 
+                        v-show="!connection.isConnected()"
+                        class="not-connected-icon"> 
+                        fiber_manual_record
+                    </v-icon> 
+                </v-flex>
+                <v-flex class="connection-info">
+                    {{ connection.settings.host }}:{{ connection.settings.port }}
+                </v-flex>
+                <v-spacer></v-spacer>
+                <v-tooltip top content-class="tooltip-text">
+                    <v-btn dark icon @click.stop="openSettings" slot="activator">
+                        <v-icon v-html="'settings'" class="control-icon active"></v-icon>
+                    </v-btn>
+                    <span>Connection Settings</span>
+                </v-tooltip>
+            </v-layout>
+        </div>
+    </transition>
     <transition name="extend-config">
         <config v-if="showSettings" :connectionSettings="connection.settings" :type="'created'"
         @updateTarget="updateTarget" @hideSettings="showSettings = false" @deleteSettings="deleteSettings"></config>

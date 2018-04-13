@@ -133,6 +133,17 @@
     .close-details-icon {
         transform: rotate(180deg);
     }
+
+    .extend-connection-header-enter-active {
+        animation: extend-connection-header 1s;
+    }
+    .extend-connection-header-leave-active {
+        animation: extend-connection-header 1s reverse;
+    }
+    @keyframes extend-connection-header {
+        0% {height: 0px}
+        100% {height: 48px}
+    }
     
     .extend-config-enter-active {
         animation: extend-config 1s;

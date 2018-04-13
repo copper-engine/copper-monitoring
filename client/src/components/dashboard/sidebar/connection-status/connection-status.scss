@@ -12,10 +12,12 @@
     .connection-container {
         padding-left: 10px;
         .connection-info {
+            overflow: hidden;
             color: #eaeaea;
             padding-top: 12px;
             font-size: 1.2em;
             font-weight: 400;
+            max-width: 200px;
         }
         .not-connected-icon{
             color: #c53332;

@@ -2,6 +2,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Notification } from '../../../../models/notification';
 import { ConnectionSettings } from '../../../../models/connectionSettings';
 import './config.scss';
+import { setTimeout } from 'timers';
 
 @Component({
     template: require('./config.html')
@@ -16,6 +17,7 @@ export class ConfigComponent extends Vue {
     fetchPeriod: number = 5;
     updatePeriod: number = 10;
     valid = true;
+    deleting = false;
 
     // Form Validation Rules
     hostRules = [ (v) => !!v || 'Host is required' ];
@@ -30,6 +32,7 @@ export class ConfigComponent extends Vue {
     }
 
     deleteSettings() {
+        this.deleting = true;
         this.$emit('deleteSettings');
     }
 

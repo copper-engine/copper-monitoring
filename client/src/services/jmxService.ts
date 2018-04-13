@@ -315,9 +315,12 @@ export class JmxService {
         };
     }
     private createEngineInfoRequest(connectionSettings: ConnectionSettings, mbean: MBean) {
-        let attributes = ['AppClusterId', 'EngineId', 'EngineType', 'State', 'WorkflowRepository', 'ProcessorPools'];
+        let attributes = ['EngineId', 'EngineType', 'State', 'WorkflowRepository', 'ProcessorPools'];
         if (mbean.atts.indexOf('DBStorage') >= 0) {
             attributes.push('DBStorage');
+        }
+        if (mbean.atts.indexOf('EngineClusterId') >= 0) {
+            attributes.push('EngineClusterId');
         }
         return {
             type: 'read',
@@ -509,7 +512,7 @@ export class JmxService {
             id,
             data[1].value.startupTS,
             data[1].value.lastActivityTS,
-            data[0].value.AppClusterId,
+            data[0].value.EngineClusterId,
             data[0].value.EngineId,
             data[0].value.EngineType,
             data[1].value.countWfiLastNMinutes,

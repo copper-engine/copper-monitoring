@@ -79,9 +79,9 @@ export const store = new Vuex.Store<StoreState>({
         if (!state.engineStatusList) 
             return null;
 
-        let groups: EngineGroup[] = state.engineStatusList.filter((engine) => !engine.appClusterId).map((engine) => new EngineGroup(null, [ engine ]));
-        let appClusterGrouped = _(state.engineStatusList.filter((engine) => engine.appClusterId))
-          .groupBy('appClusterId').map((engines, clusterName) => new EngineGroup( clusterName, engines)).value();
+        let groups: EngineGroup[] = state.engineStatusList.filter((engine) => !engine.engineClusterId).map((engine) => new EngineGroup(null, [ engine ]));
+        let appClusterGrouped = _(state.engineStatusList.filter((engine) => engine.engineClusterId))
+          .groupBy('engineClusterId').map((engines, clusterName) => new EngineGroup( clusterName, engines)).value();
         
         return groups.concat(appClusterGrouped);
       }

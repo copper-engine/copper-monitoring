@@ -54,6 +54,7 @@ export class WorkflowsComponent extends Vue {
     dialogHighlitedlines: HighlitedLine[] = null;
     sourceCodeAvailable = true;
     filter: WorkflowFilter = new WorkflowFilter();
+    clickAllowed: boolean[] = [];
 
     mounted() {
         this.init();
@@ -113,7 +114,14 @@ export class WorkflowsComponent extends Vue {
         });
         this.jmxService.getWorkflows(this.mbean.connectionSettings, this.mbean.name, user, this.perPage, (this.page - 1) * this.perPage, filter).then((response: WorkflowInfo[]) => {
             this.workflows = response;
+            this.getClickAllowedList(this.workflows.length);
         });
+    }
+
+    getClickAllowedList(amount: number) {
+        for (let i = 0; i < amount; i++) {
+            this.clickAllowed.push(true);
+        }
     }
 
     private showError(message: String) {
@@ -304,14 +312,20 @@ export class WorkflowsComponent extends Vue {
         });
     }
 
-    showDetails(workflow: WorkflowInfo) {
-        let wfContext = this.workflowsContext.get(workflow.id);
-        if (!wfContext) {
-            wfContext = new WorkflowContext();
+    showDetails(workflow: WorkflowInfo, index: number) {
+        if (this.clickAllowed[index] === true) {
+            let wfContext = this.workflowsContext.get(workflow.id);
+            if (!wfContext) {
+                wfContext = new WorkflowContext();
+            }
+            wfContext.open = !wfContext.open;
+            this.workflowsContext.set(workflow.id, wfContext);
+            this.$forceUpdate();
+            this.clickAllowed[index] = false;
+            setTimeout(() => {
+                this.clickAllowed[index] = true;
+            }, 750);
         }
-        wfContext.open = !wfContext.open;
-        this.workflowsContext.set(workflow.id, wfContext);
-        this.$forceUpdate();
     }
 
     @Watch('$store.state.connectionSettings')

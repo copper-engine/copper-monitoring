@@ -96,7 +96,7 @@
                                     color="primary"
                                     class="squareButton"
                                     :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"                                                                
-                                    @click="showDetails(workflow)"
+                                    @click="showDetails(workflow, i)"
                                     slot="activator">
                                     <v-icon :class="{ 'close-details-icon': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).open }">details</v-icon>
                                 </v-btn>

@@ -18,6 +18,7 @@ export class WorkflowHeading extends Vue {
     @Prop() restartingAll: boolean;
     @Prop() deletingAll: boolean;
     private jmxService: JmxService = this.$services.jmxService;
+    clickAllowed = true;
     openFilterMenu: boolean = false;
     hideOverflow: boolean = true;
     filterApplied: boolean = false;
@@ -191,15 +192,19 @@ export class WorkflowHeading extends Vue {
     }
 
     triggerFilterMenu() {
-        if (this.possibleClassnames.length < 1) {
-            this.getPossibleClassNames();
-        }
-        this.openFilterMenu = !this.openFilterMenu;
-        if (this.openFilterMenu === true) {
-            setTimeout(() => { this.hideOverflow = false; }, 250);
-        } else {
-            this.hideOverflow = true;
-            setTimeout(() => { this.hideOverflow = true; }, 250);
+        if (this.clickAllowed === true) {
+            if (this.possibleClassnames.length < 1) {
+                this.getPossibleClassNames();
+            }
+            this.openFilterMenu = !this.openFilterMenu;
+            if (this.openFilterMenu === true) {
+                setTimeout(() => { this.hideOverflow = false; }, 250);
+            } else {
+                this.hideOverflow = true;
+                setTimeout(() => { this.hideOverflow = true; }, 250);
+            }
+            this.clickAllowed = false;
+            setTimeout(() => { this.clickAllowed = true; }, 750);
         }
     }
     clearChips() {
@@ -271,9 +276,9 @@ export class WorkflowHeading extends Vue {
         }
         
     }
-
+    
     getPossibleClassNames() {
-        this.jmxService.getWfRepo(this.$store.state.connectionSettings, this.engineStatus.wfRepoMXBean, this.$store.state.user).then((response: WorkflowRepo) => {
+        this.jmxService.getWfRepo(this.$store.getters.engineMBeans[this.engineStatus.id].connectionSettings, this.engineStatus.wfRepoMXBean, this.$store.state.user).then((response: WorkflowRepo) => {
             this.possibleClassnames = response.workFlowInfo.map((workflow, index) => {
                 return response.workFlowInfo[index].classname;
             });

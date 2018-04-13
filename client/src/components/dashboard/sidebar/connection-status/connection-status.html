@@ -17,9 +17,12 @@
             {{ connection.settings.host }}:{{ connection.settings.port }}
         </v-flex>
         <v-spacer></v-spacer>
-        <v-btn dark icon @click.stop="openSettings">
-            <v-icon v-html="'settings'" class="control-icon active"></v-icon>
-        </v-btn>
+        <v-tooltip top content-class="tooltip-text">
+            <v-btn dark icon @click.stop="openSettings" slot="activator">
+                <v-icon v-html="'settings'" class="control-icon active"></v-icon>
+            </v-btn>
+            <span>Connection Settings</span>
+        </v-tooltip>
     </v-layout>
     </div>
     <transition name="extend-config">

@@ -3,9 +3,12 @@
         <v-layout row class="header">
             <h2>Configuration</h2>
             <v-spacer></v-spacer>
-            <v-btn dark icon v-if="type !== 'createNew'" @click.stop="deleteSettings">
+            <v-tooltip top content-class="tooltip-text">
+            <v-btn dark icon v-if="type !== 'createNew'" @click.stop="deleteSettings" slot="activator">
                 <v-icon class="control-icon" v-html="'delete'"></v-icon>
             </v-btn>
+            <span>Delete Connection</span>
+            </v-tooltip>
         </v-layout>
         <v-form v-model="valid" ref="form" lazy-validation>
             <v-text-field class="config-input"

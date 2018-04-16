@@ -13,4 +13,8 @@ export class WorkflowDetails extends Vue {
     openWorkflowDialog() {
         this.$emit('openWorkflowDialog', this.workflow);
     }
+
+    showSourceCode() {
+        this.$emit('showSourceCode', this.workflow);        
+    }
 }

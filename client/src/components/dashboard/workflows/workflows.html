@@ -116,7 +116,8 @@
                             :workflow="workflow"
                             :wfType="wfType"
                             :inDialog="false"
-                            @openWorkflowDialog="openWorkflowDialog($event)">
+                            @openWorkflowDialog="openWorkflowDialog($event)"
+                            @showSourceCode="showSourceCode($event)">
                             </workflow-details>
                         </v-layout>
                     </transition>
@@ -153,7 +154,8 @@
                 <workflow-details
                 :workflow="dialogWF"
                 :wfType="wfType"
-                :inDialog="true">
+                :inDialog="true"
+                @showSourceCode="showSourceCode($event)">
                 </workflow-details>
             </v-card-text>
         </v-card>

@@ -323,7 +323,7 @@ export class WorkflowsComponent extends Vue {
     }
 
     showSourceCode(workflow: WorkflowInfo) {
-        this.jmxService.getSourceCode(this.$store.getters.engineMBeans[this.status.id].connectionSettings,  this.$store.state.user, this.mbean.name, workflow.workflowClassInfo.classname)
+        this.jmxService.getSourceCode(this.$store.getters.engineMBeans[this.status.id].connectionSettings,  this.$store.state.user, this.status.wfRepoMXBean, workflow.workflowClassInfo.classname)
         .then((sourceCode) => {
             if (sourceCode && (sourceCode as string).trim().toLowerCase() !== 'na') {  
                 this.dialogSourceCode = sourceCode;

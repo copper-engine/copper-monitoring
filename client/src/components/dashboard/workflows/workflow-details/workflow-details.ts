@@ -10,7 +10,7 @@ export class WorkflowDetails extends Vue {
     @Prop() wfType: string;
     @Prop() inDialog: boolean;
 
-    openWorkflowDialog(workflow: WorkflowInfo) {
-        this.$emit('openWorkflowDialog', workflow);
+    openWorkflowDialog() {
+        this.$emit('openWorkflowDialog', this.workflow);
     }
 }

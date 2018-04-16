@@ -1,0 +1,46 @@
+<div class="workflow-details accent">
+    <v-layout class="workflow-detail workflow-id">
+        <v-flex class="detail-label"> Workflow ID:</v-flex>
+        <v-flex class="text"> {{workflow.id}} </v-flex>                               
+    </v-layout>
+    <v-layout class="workflow-detail workflow-id">
+        <v-flex class="detail-label"> Workflow Data:</v-flex>
+        <v-flex class="text"> {{ workflow.dataAsString }} </v-flex>                               
+    </v-layout>
+    <v-layout class="workflow-detail class-info" row>
+        <v-flex class="detail-label">Class:</v-flex>
+        <v-flex class="text">
+            {{ workflow.workflowClassInfo.classname }}                                  
+        </v-flex> 
+        <v-spacer></v-spacer>
+        <v-flex class="stopGrow raise">
+            <v-btn depressed color="primary" slot="activator" @click="showSourceCode(workflow)">Source Code</v-btn>
+        </v-flex>
+        <v-flex class="stopGrow raise" v-if="!inDialog">
+                <v-btn depressed color="primary" slot="activator" @click="openWorkflowDialog(workflow)">Open in Pop Up</v-btn>
+        </v-flex>
+    </v-layout>
+    <v-layout class="workflow-detail version">
+        <v-flex class="detail-label">Version:</v-flex>
+        <v-flex class="text"> 
+            {{workflow.workflowClassInfo.majorVersion}}.{{workflow.workflowClassInfo.minorVersion}}.{{workflow.workflowClassInfo.patchLevel}}
+        </v-flex>
+    </v-layout>
+    <v-layout class="workflow-detail stacktrace" v-if="(wfType === 'broken')">
+        <v-flex class="detail-label">Last waiting Stack Trace:</v-flex>
+        <v-flex class="text">
+            <code v-show="workflow.lastWaitStackTrace">
+                {{ workflow.lastWaitStackTrace }}
+            </code>
+            <span v-show="!workflow.lastWaitStackTrace">There is no waiting stack trace</span>
+        </v-flex>
+    </v-layout>
+    <v-layout class="workflow-detail stacktrace" v-if="(wfType === 'broken')">
+        <v-flex class="detail-label">Error Stack Trace:</v-flex>
+        <v-flex class="text">
+            <code>
+                {{ workflow.errorData ? workflow.errorData.exceptionStackTrace : '' }}
+            </code>
+        </v-flex>
+    </v-layout>
+</div>

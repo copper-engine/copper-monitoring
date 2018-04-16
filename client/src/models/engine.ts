@@ -85,7 +85,7 @@ export class WorkflowInfo {
     public engineId: string;
     public processorPoolId: string;
     public timeout: Date;
-    public workflowClassInfo: WorkflowClassInfo;
+    public workflowClassInfo: WorkflowClassInfo = new WorkflowClassInfo;
     public dataAsstring: string;
     public lastWaitStackTrace: string;
     public errorData: ErrorData;
@@ -135,13 +135,13 @@ export class WorkflowClassInfo {
     public sourceCodeLines: string[];
 
     constructor(
-        public classname: string,
-        public alias: string,
-        public majorVersion: number,
-        public minorVersion: number,
-        public patchLevel: number,
-        public serialversionuid: number,
-        public sourceCode: string,
+        public classname: string = '',
+        public alias: string = '',
+        public majorVersion: number = 0,
+        public minorVersion: number = 0,
+        public patchLevel: number = 0,
+        public serialversionuid: number = 0,
+        public sourceCode: string = '',
         public open: Boolean = false
     ) {}
 }

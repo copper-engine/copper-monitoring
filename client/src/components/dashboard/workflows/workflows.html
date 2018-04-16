@@ -112,7 +112,13 @@
                             'highlight-workflow-layout': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloading, 
                             'fade': workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton)
                             }">
-                            <div class="details accent">
+                            <workflow-details
+                            :workflow="workflow"
+                            :wfType="wfType"
+                            :inDialog="false"
+                            @openWorkflowDialog="openWorkflowDialog($event)">
+                            </workflow-details>
+                            <!-- <div class="details accent">
                                 <v-layout class="workflow-detail workflow-id">
                                     <v-flex class="detail-label"> Workflow ID:</v-flex>
                                     <v-flex class="text"> {{workflow.id}} </v-flex>                               
@@ -129,6 +135,9 @@
                                     <v-spacer></v-spacer>
                                     <v-flex class="stopGrow raise">
                                         <v-btn depressed color="primary" slot="activator" @click="showSourceCode(workflow)">Source Code</v-btn>
+                                    </v-flex>
+                                    <v-flex class="stopGrow raise">
+                                            <v-btn depressed color="primary" slot="activator" @click="openWorkflowDialog(workflow)">Open in Pop Up</v-btn>
                                     </v-flex>
                                 </v-layout>
                                 <v-layout class="workflow-detail version">
@@ -154,25 +163,43 @@
                                         </code>
                                     </v-flex>
                                 </v-layout>
-                            </div>
+                            </div> -->
                         </v-layout>
                     </transition>
                 </v-layout>
             </v-flex>
     </v-layout>
 
-    <v-dialog v-model="dialog" scrollable max-width="800px" position="absolute">
+    <v-dialog v-model="dialogSourceOpen" scrollable max-width="800px" position="absolute">
         <v-card>
             <v-card-title position="absolute">
                 <h2>{{ sourceCodeAvailable ? 'Source Code' : 'Source Code - Not Available' }}</h2>
                 <v-spacer></v-spacer>                  
-                    <v-btn depressed class="squareButton" color="primary" @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>      
+                    <v-btn depressed class="squareButton" color="primary" @click="dialogSourceOpen = false"><v-icon>mdi-close</v-icon></v-btn>      
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>
                 <div>
                     <source-code :sourceCode="dialogSourceCode" :highliteLines="dialogHighlitedlines"></source-code>
                 </div>
+            </v-card-text>
+        </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialogWFOpen" scrollable max-width="1200px" position="absolute">
+        <v-card>
+            <v-card-title position="absolute">
+                <h2> Workflow: {{ dialogWF.id }}</h2>
+                <v-spacer></v-spacer>                  
+                    <v-btn depressed class="squareButton" color="primary" @click="dialogWFOpen = false"><v-icon>mdi-close</v-icon></v-btn>      
+            </v-card-title>
+            <v-divider></v-divider>
+            <v-card-text>
+                <workflow-details
+                :workflow="dialogWF"
+                :wfType="wfType"
+                :inDialog="true">
+                </workflow-details>
             </v-card-text>
         </v-card>
     </v-dialog>

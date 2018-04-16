@@ -23,6 +23,7 @@ export class WorkflowContext {
 const sourceCodeomponent = () => import('./../../core/source-code').then(({ SourceCodeComponent }) => SourceCodeComponent);
 const WorkflowHeading = () => import('./workflow-header').then(({ WorkflowHeading }) => WorkflowHeading);
 const WorkflowFooter = () => import('./workflow-footer').then(({ WorkflowFooter }) => WorkflowFooter);
+const WorkflowDetails = () => import('./workflow-details').then(({ WorkflowDetails }) => WorkflowDetails);
 
 @Component({
     template: require('./workflows.html'),
@@ -30,6 +31,7 @@ const WorkflowFooter = () => import('./workflow-footer').then(({ WorkflowFooter 
     components: {
         'workflow-heading': WorkflowHeading,
         'workflow-footer': WorkflowFooter,
+        'workflow-details': WorkflowDetails,
         'source-code': sourceCodeomponent,
     }
 })
@@ -49,9 +51,11 @@ export class WorkflowsComponent extends Vue {
     perPageItems: number[] = [10, 15, 25, 50];
     restartingAll = false;
     deletingAll = false;
-    dialog = false;
+    dialogSourceOpen = false;
     dialogSourceCode = null;
     dialogHighlitedlines: HighlitedLine[] = null;
+    dialogWFOpen = false;
+    dialogWF: WorkflowInfo = new WorkflowInfo;
     sourceCodeAvailable = true;
     filter: WorkflowFilter = new WorkflowFilter();
     clickAllowed: boolean[] = [];
@@ -68,6 +72,37 @@ export class WorkflowsComponent extends Vue {
         this.getWorkflowType();
         this.setFilterStates();
         this.sheduleFetchingWF();
+    }
+
+    @Watch('$store.state.connectionSettings')
+    sheduleFetchingWF() {
+        if (this.fetchWFInterval) {
+            clearInterval(this.fetchWFInterval);
+        }
+        this.getWorkflows(this.$store.state.user, this.filter);
+        this.fetchWFInterval = setInterval(() => {
+            this.getWorkflows(this.$store.state.user, this.filter);
+        }, this.mbean.connectionSettings.updatePeriod * 1000);
+    }
+
+    @Watch('page')
+    @Watch('perPage')
+    private forceStatusFetch(delay: number = 0) {
+        setTimeout(() => {
+            this.getWorkflows(this.$store.state.user, this.filter);
+        }, delay);
+    }
+
+    @Watch('$route')
+    newPage() {
+        this.newComponent = true;
+        setTimeout(() => {
+            this.newComponent = false;
+        }, 200);
+        this.mbean = this.$store.getters.engineMBeans[this.$route.params.id];
+        this.workflows = [];
+        this.wfCount = 0;
+        this.init();
     }
 
     getWorkflowType() {
@@ -308,7 +343,7 @@ export class WorkflowsComponent extends Vue {
                 this.dialogSourceCode = 'No Source Code Available';
                 this.sourceCodeAvailable = false;
             }
-            this.dialog = true;
+            this.dialogSourceOpen = true;
         });
     }
 
@@ -328,34 +363,8 @@ export class WorkflowsComponent extends Vue {
         }
     }
 
-    @Watch('$store.state.connectionSettings')
-    sheduleFetchingWF() {
-        if (this.fetchWFInterval) {
-            clearInterval(this.fetchWFInterval);
-        }
-        this.getWorkflows(this.$store.state.user, this.filter);
-        this.fetchWFInterval = setInterval(() => {
-            this.getWorkflows(this.$store.state.user, this.filter);
-        }, this.mbean.connectionSettings.updatePeriod * 1000);
-    }
-
-    @Watch('page')
-    @Watch('perPage')
-    private forceStatusFetch(delay: number = 0) {
-        setTimeout(() => {
-            this.getWorkflows(this.$store.state.user, this.filter);
-        }, delay);
-    }
-
-    @Watch('$route')
-    newPage() {
-        this.newComponent = true;
-        setTimeout(() => {
-            this.newComponent = false;
-        }, 200);
-        this.mbean = this.$store.getters.engineMBeans[this.$route.params.id];
-        this.workflows = [];
-        this.wfCount = 0;
-        this.init();
+    openWorkflowDialog(workflow: WorkflowInfo) {
+        this.dialogWF = workflow;
+        this.dialogWFOpen = true;
     }
 }

@@ -17,6 +17,9 @@ code:after, kbd:after, code:before, kbd:before {
     padding: 30px;
     border-radius: 0px;
 }
+.dialog-title {
+    background-color: #2F333D;
+}
 
 .workflows {
     width: 100%;
@@ -170,7 +173,6 @@ code:after, kbd:after, code:before, kbd:before {
         display: inline-block;
         margin-right: 10px;
     }
-
 
     .highlight-workflow-layout >* {
         background: #27695c !important;

@@ -127,7 +127,7 @@
 
     <v-dialog v-model="dialogSourceOpen" scrollable max-width="800px" position="absolute">
         <v-card>
-            <v-card-title position="absolute">
+            <v-card-title position="absolute" class="dialog-title">
                 <h2>{{ sourceCodeAvailable ? 'Source Code' : 'Source Code - Not Available' }}</h2>
                 <v-spacer></v-spacer>               
                     <v-btn depressed class="squareButton" color="primary" @click="dialogSourceOpen = false"><v-icon>mdi-close</v-icon></v-btn>      
@@ -143,7 +143,7 @@
 
     <v-dialog v-model="dialogWFOpen" scrollable max-width="1200px" position="absolute">
         <v-card>
-            <v-card-title position="absolute">
+            <v-card-title position="absolute" class="dialog-title">
                 <h2> Workflow: {{ dialogWF.id }}</h2>
                 <v-spacer></v-spacer>        
                     <v-btn depressed color="primary" @click="showSourceCode(dialogWF)">Source Code</v-btn>          

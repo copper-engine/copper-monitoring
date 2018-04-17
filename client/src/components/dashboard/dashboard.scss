@@ -1,3 +1,5 @@
+@import '../../variables';
+
 .router-component-enter-active, .router-component-leave-active {
     transition: opacity 0.3s;
 }
@@ -14,12 +16,16 @@
     opacity: 0;
 }
 
-// .input-group__details {
-//     min-height: 0px !important;
-// }
-
 .user-menu-card {
-    background-color: #363B46 !important;
+    background-color: $light-secondary !important;
+    color: $dark-text-color !important;
+    button {
+        background-color: $light-tertiary !important;
+        color: $dark-text-color !important;
+        .icon {
+            color: $dark-text-color;
+        }
+    }
     .card-content {
         padding-left: 15px;
         padding-right: 15px;
@@ -46,14 +52,45 @@
             }
         }
         .input-group {
-            padding: 0px;
-            color: #69c57e !important;
+            color: $light-primary !important;
         }
         .input {
             max-width: 35px;
             margin-top: -10px;
             label {
                 margin-top: -10px;
+            }
+            .input-group {
+                padding: 0px;
+                color: $light-primary !important;
+                .input-group__input {
+                    input {
+                        color: $dark-text-color !important;
+                        caret-color: $light-primary !important;
+                    }
+                }
+                .input-group__details {
+                    .input-group__hint {
+                        color: $dark-text-color !important;
+                    }
+                }
+                .input-group__details::before {
+                    background-color: $light-primary;
+                }
+            }
+            .input-group--focused {
+                color: $light-primary !important;
+                .input-group__details::before {
+                    background-color: $light-primary;
+                }
+                .input-group__details::after {
+                    background-color: $light-primary;
+                }
+            }
+            .input-group:hover {
+                .input-group__details::before {
+                    background-color: $light-tertiary !important;
+                }
             }
         }
     }
@@ -64,10 +101,25 @@
     
     .toolbar {
         min-width: 975px;
+        background-color: $light-secondary;
+        color: $dark-text-color;
+        .icon {
+            color: $dark-text-color;
+        }
+        .menu {
+            button {
+                background-color: $light-tertiary !important;
+                color: $dark-text-color;
+                .icon {
+                    color: $dark-text-color;
+                }
+            }
+        }
     }
 
     .content {
         margin-top: 0;
+        background-color: $light-background;
         .container {
             min-width: 975px;
         }
@@ -82,5 +134,79 @@ footer {
     border-top: 1px solid #737373;
     span {
         padding-right: 24px;
+    }
+}
+
+.dark {
+    .user-menu-card {
+        background-color: $dark-secondary !important;
+        color: $light-text-color !important;
+        button {
+            background-color: $dark-tertiary !important;
+            color: $light-text-color !important;
+            .icon {
+                color: $light-text-color;
+            }
+        }
+        .card-content {
+            .input-group {
+                color: $dark-primary !important;
+            }
+            .input {
+                .input-group {
+                    color: $dark-primary !important;
+                    .input-group__input {
+                        input {
+                            color: $light-text-color !important;
+                            caret-color: $dark-primary !important;
+                        }
+                    }
+                    .input-group__details {
+                        .input-group__hint {
+                            color: $light-text-color !important;
+                        }
+                    }
+                    .input-group__details::before {
+                        background-color: $dark-primary;
+                    }
+                }
+                .input-group--focused {
+                    color: $dark-primary !important;
+                    .input-group__details::before {
+                        background-color: $dark-primary;
+                    }
+                    .input-group__details::after {
+                        background-color: $dark-primary;
+                    }
+                }
+                .input-group:hover {
+                    .input-group__details::before {
+                        background-color: $dark-tertiary !important;
+                    }
+                }
+            }
+        }
+    }
+
+    .dashboard {
+        .toolbar {
+            background-color: $dark-secondary;
+            color: $light-text-color;
+            .icon {
+                color: $light-text-color;
+            }
+            .menu {
+                button {
+                    background-color: $dark-tertiary !important;
+                    color: $light-text-color;
+                    .icon {
+                        color: $light-text-color;
+                    }
+                }
+            }
+        }
+        .content {
+            background-color: $dark-background;
+        }
     }
 }

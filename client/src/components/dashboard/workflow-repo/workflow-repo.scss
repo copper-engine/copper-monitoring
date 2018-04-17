@@ -225,6 +225,7 @@
             .actions {
                 button {
                     background-color: $dark-primary !important;
+                    color: $light-text-color;
                 }
             }
         }
@@ -250,6 +251,7 @@
             }
             button {
                 background-color: $dark-background;
+                color: $light-text-color;
             }
         }
     }

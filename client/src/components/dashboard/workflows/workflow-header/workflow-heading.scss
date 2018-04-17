@@ -11,6 +11,9 @@
         .heading-buttons {
             padding-right: 10px;
             min-width: 620px;
+            .only-filter {
+                margin-left: 415px;
+            }
         }
     }
     .overflow-hidden {
@@ -37,6 +40,9 @@
             align-items: center;
             padding-left: 15px;
             padding-right: 0px;
+            .hide-state-select {
+                opacity: 0;
+            }
         }
         .filter-layout {
             padding-left: 10px;
@@ -57,8 +63,8 @@
             .select-container {
                 max-width: 380px;
                 min-width:380px;
-                // width: 380px;
                 padding-top: 0px;
+                padding-bottom: 3px;
                 padding-left: 10px;
                 padding-right: 10px;
                 .select {
@@ -80,11 +86,9 @@
                     width: 100%;
                     opacity: 0;
                 }
-                z-index: 1;
             }
 
             .date-click-decorator{
-                z-index: 2;
                 cursor: pointer;
             }
             .input-group__details {
@@ -124,6 +128,7 @@
         }
     }
     .row-info {
+        overflow: hidden;
         margin-top: 16px;
         padding: 5px 16px 5px 16px;
         align-items: center;
@@ -134,10 +139,10 @@
     }
 
     .extend-filter-enter-active {
-        animation: extend-filter 0.75s;
+        animation: extend-filter 0.5s;
     }
     .extend-filter-leave-active {
-        animation: extend-filter 0.75s reverse;
+        animation: extend-filter 0.5s reverse;
     }
     @keyframes extend-filter {
         0% {height: 0px;
@@ -154,10 +159,10 @@
         animation: extend-chip 0.75s reverse;
     }
     @keyframes extend-chip {
-        0% {height: 0px;
+        0% {max-height: 0px;
             padding-top: 0px;
             padding-bottom: 0px;}
-        100% {height: 77px;
+        100% {max-height: 129px;
             padding-top: 15px;
             padding-bottom: 15px;}
     }

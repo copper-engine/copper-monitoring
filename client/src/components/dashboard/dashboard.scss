@@ -1,5 +1,5 @@
 .router-component-enter-active, .router-component-leave-active {
-    transition: opacity 0.15s;
+    transition: opacity 0.3s;
 }
 .router-component-enter {
     opacity: 0;
@@ -14,16 +14,67 @@
     opacity: 0;
 }
 
+// .input-group__details {
+//     min-height: 0px !important;
+// }
+
+.user-menu-card {
+    .card-content {
+        padding-left: 15px;
+        padding-right: 15px;
+        .user {
+            font-size: 1.3em;
+            font-weight: 700;
+            padding-top: 15px;
+        }
+        .switch-container {
+            padding-top: 15px;
+            max-height: 55px;
+            .switch-label {
+                flex-grow: 0;
+                padding-right: 108px;
+            }
+        }
+        .input-container {
+            padding-top: 15px;
+            padding-right: 15px;
+            max-height: 40px;
+            .input-label {
+                flex-grow: 0;
+                padding-right: 25px;   
+            }
+        }
+        .input-group {
+            padding: 0px;
+            color: #69c57e !important;
+        }
+        .input {
+            max-width: 35px;
+            margin-top: -10px;
+            label {
+                margin-top: -10px;
+            }
+        }
+    }
+}
+
 .dashboard {
     padding-bottom: 50px;
+    
+    .toolbar {
+        min-width: 975px;
+    }
+
+    .content {
+        margin-top: 0;
+        .container {
+            min-width: 975px;
+        }
+    }
 
     nav .user {
         font-size: 1.2em;
     }
-}
-
-.content {
-    margin-top: 0;
 }
 
 footer {

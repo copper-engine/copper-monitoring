@@ -13,9 +13,12 @@ import './workflow-heading.scss';
 })
 export class WorkflowHeading extends Vue {
     @Prop() engineStatus;
+    @Prop() wfType: string;
+    @Prop() wfCount: number;
     @Prop() restartingAll: boolean;
     @Prop() deletingAll: boolean;
     private jmxService: JmxService = this.$services.jmxService;
+    clickAllowed = true;
     openFilterMenu: boolean = false;
     hideOverflow: boolean = true;
     filterApplied: boolean = false;
@@ -33,13 +36,13 @@ export class WorkflowHeading extends Vue {
 
     clickedFromDate(dateTimeName, dateTimeRef) {
         if (this[dateTimeName]['fromSelect'] === null || this[dateTimeName]['fromSelect'] === '') {
-            this[dateTimeName]['fromSelect'] = this.formatTimeForSelect(this.getNow('0000'));
+            this[dateTimeName]['fromSelect'] = this.formatTimeForSelectAuto(this.getNow('0000'));
         }
         this.emitClick(dateTimeRef);
     }
     clickedToDate(dateTimeName, dateTimeRef) {
         if (this[dateTimeName]['toSelect'] === null || this[dateTimeName]['toSelect'] === '') {
-            this[dateTimeName]['toSelect'] = this.formatTimeForSelect(this.getNow('2359'));
+            this[dateTimeName]['toSelect'] = this.formatTimeForSelectAuto(this.getNow('2359'));
         }
         this.emitClick(dateTimeRef);
     }
@@ -129,6 +132,25 @@ export class WorkflowHeading extends Vue {
         return time.substr(0, 4) + '-' + time.substr(4, 2) + '-' + time.substr(6, 2) + 'T' + time.substr(8, 2) + ':' + time.substr(10, 2);
     }
 
+    formatTimeForSelectAuto(time) {
+        return time.substr(0, 4) + '-' + time.substr(4, 2) + '-' + time.substr(6, 2) + 'T' + time.substr(8, 2) + ':' + time.substr(10, 2) + ':00.000' + this.getOffset();
+    }
+
+    getOffset() {
+        let sign = '';
+        let offset = new Date().getTimezoneOffset();
+        if (offset > 0) {
+            sign = '-';
+        } else {
+            sign = '+';
+        }
+        let hours = String(Math.abs(offset) / 60);
+        if (parseInt(hours)  < 10) {
+            hours = '0' + hours;
+        }
+        return (sign + hours + ':00');
+    }
+
     getNow(addition: string) {
         let date = new Date();
         let now = String(date.getFullYear());
@@ -170,15 +192,24 @@ export class WorkflowHeading extends Vue {
     }
 
     triggerFilterMenu() {
-        if (this.possibleClassnames.length < 1) {
-            this.getPossibleClassNames();
+        if (this.clickAllowed === true) {
+            if (this.possibleClassnames.length < 1) {
+                this.getPossibleClassNames();
+            }
+            this.openFilterMenu = !this.openFilterMenu;
+            if (this.openFilterMenu === true) {
+                setTimeout(() => { this.hideOverflow = false; }, 250);
+            } else {
+                this.hideOverflow = true;
+                setTimeout(() => { this.hideOverflow = true; }, 250);
+            }
+            this.clickAllowed = false;
+            setTimeout(() => { this.clickAllowed = true; }, 750);
         }
-        this.openFilterMenu = !this.openFilterMenu;
-        if (this.openFilterMenu === true) {
-            setTimeout(() => { this.hideOverflow = false; }, 800);
-        } else {
-            this.hideOverflow = true;
-        }
+    }
+    clearChips() {
+        this.filterApplied = false;
+        setTimeout(() => { this.clearFilter(); this.applyFilter(); }, 750);
     }
     clearFilter() {
         this.states = [];
@@ -186,7 +217,7 @@ export class WorkflowHeading extends Vue {
         this.createTime.clear();
         this.modTime.clear();
     }
-    applyFilter() {   
+    applyFilter() {
         this.currentFilterObject = new WorkflowFilter (
             this.parseStates(),
             this.classNames,
@@ -195,6 +226,7 @@ export class WorkflowHeading extends Vue {
             this.getEpochTime(this.modTime.from),
             this.getEpochTime(this.modTime.to)
         );
+        this.hideOverflow = true;
         this.openFilterMenu = false;
         this.filterApplied = this.isFiltered(this.currentFilterObject);
         this.$emit('triggerApplyFilter', this.currentFilterObject);
@@ -204,8 +236,10 @@ export class WorkflowHeading extends Vue {
         if (newFilter.classname !== null) {
             this.currentFilters.push(['Classname', newFilter.classname]);
         }
-        if (newFilter.states.length < 2) {
-            this.currentFilters.push(['States', String(this.states)]);
+        if (this.wfType === 'broken') {
+            if (newFilter.states.length < 2) {
+                this.currentFilters.push(['States', String(this.states)]);
+            }
         }
         if (newFilter.createFrom > 0) {
             this.currentFilters.push(['Created from:', this.createTime.from]);
@@ -223,24 +257,28 @@ export class WorkflowHeading extends Vue {
     }
 
     parseStates() {
-        let stateArray: State[] = [];
-        this.states.forEach((state) => {
-            if (state === 'Error') {
-                stateArray.push(State.ERROR);
+        if (this.wfType === 'broken') {
+            let stateArray: State[] = [];
+            this.states.forEach((state) => {
+                if (state === 'Error') {
+                    stateArray.push(State.ERROR);
+                }
+                else if (state === 'Invalid') {
+                    stateArray.push(State.INVALID);
+                }
+            });
+            if (stateArray.length < 1) {
+                stateArray = [State.ERROR, State.INVALID];
             }
-            else if (state === 'Invalid') {
-                stateArray.push(State.INVALID);
-            }
-        });
-        if (stateArray.length < 1) {
-            stateArray = [State.ERROR, State.INVALID];
+            return stateArray;
+        } else {
+            return [State.WAITING];
         }
-        return stateArray;
+        
     }
-
+    
     getPossibleClassNames() {
-        let engine: EngineStatus = this.$store.state.engineStatusList[this.$route.params.id];
-        this.jmxService.getWfRepo(this.$store.state.connectionSettings, engine.wfRepoMXBean, this.$store.state.user).then((response: WorkflowRepo) => {
+        this.jmxService.getWfRepo(this.$store.getters.engineMBeans[this.engineStatus.id].connectionSettings, this.engineStatus.wfRepoMXBean, this.$store.state.user).then((response: WorkflowRepo) => {
             this.possibleClassnames = response.workFlowInfo.map((workflow, index) => {
                 return response.workFlowInfo[index].classname;
             });
@@ -248,7 +286,7 @@ export class WorkflowHeading extends Vue {
     }
 
     getEpochTime(time) {
-        if (time != null && time !== NaN) {
+        if (time !== null && time !== NaN) {
             let date = new Date(time);
             return date.getTime();
         } else {

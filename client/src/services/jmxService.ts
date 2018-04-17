@@ -1,34 +1,34 @@
 import Axios from 'axios';
 // import Vue from 'vue';
 import { State, EngineStatus, WorkflowInfo, WorkflowClassInfo, WorkflowRepo, StatesPrint, WorkflowFilter, ProcessorPool } from '../models/engine';
-import { ConnectionSettings } from '../models/connectionSettings';
+import { ConnectionSettings, ConnectionResult } from '../models/connectionSettings';
 import moment from 'moment';
 import { User } from '../models/user';
 import { MBeans, MBean } from '../models/mbeans';
 import * as _ from 'lodash';
 
 export class JmxService {
-    getEngineStatus(connectionSettings: ConnectionSettings, mbeans: MBeans, user: User) {
-        let requests = _.flatten(mbeans.engineMBeans.map((mbean) => this.createEngineStatusRequest(connectionSettings, mbean)));
+    getEngineStatus(mbeans: MBean[], user: User) {
+        let requests = _.flatten(mbeans.map((mbean) => this.createEngineStatusRequest(mbean)));
         return Axios.post(process.env.API_NAME, requests, {
                 auth: { username: user.name, password: user.password }
             })
-            .then((response) => this.parseEngineStatusResponse(response, mbeans.engineMBeans.length))
+            .then((response) => this.parseEngineStatusResponse(response, mbeans.length))
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
             });
     }
 
-    createEngineStatusRequest(connectionSettings, mbean: MBean) {
+    createEngineStatusRequest(mbean: MBean) {
         return [
-            this.createEngineInfoRequest(connectionSettings, mbean), 
-            this.createEngineActivityRequest(connectionSettings, mbean.name),
-            this.createCountWFRequest(connectionSettings, mbean.name, [ State.ERROR, State.INVALID ])                
+            this.createEngineInfoRequest(mbean.connectionSettings, mbean), 
+            this.createEngineActivityRequest(mbean.connectionSettings, mbean.name),
+            this.createCountWFRequest(mbean.connectionSettings, mbean.name, [ State.ERROR, State.INVALID ])                
         ];
     }
 
-    countWFRequest(connectionSettings, mbean, user: User, filter: WorkflowFilter) {
-        return Axios.post(process.env.API_NAME, this.createCountWFRequest(connectionSettings, mbean, filter.states, filter), {
+    countWFRequest(connectionSettings, mbeanName, user: User, filter: WorkflowFilter) {
+        return Axios.post(process.env.API_NAME, this.createCountWFRequest(connectionSettings, mbeanName, filter.states, filter), {
             auth: { username: user.name, password: user.password }
         })
         .then(this.parseCountWFRequest)
@@ -37,14 +37,14 @@ export class JmxService {
         });
     }
 
-    getChartCounts(connectionSettings: ConnectionSettings, mbean: string, user: User) {
+    getChartCounts(mbean: MBean, user: User) {
         return Axios.post(process.env.API_NAME, [
-                this.createCountWFRequest(connectionSettings, mbean, [ State.RUNNING ]),                
-                this.createCountWFRequest(connectionSettings, mbean, [ State.WAITING ]),                
-                this.createCountWFRequest(connectionSettings, mbean, [ State.FINISHED ]),                
-                this.createCountWFRequest(connectionSettings, mbean, [ State.DEQUEUED ]),                
-                this.createCountWFRequest(connectionSettings, mbean, [ State.ERROR ]),               
-                this.createCountWFRequest(connectionSettings, mbean, [ State.INVALID ])                
+                this.createCountWFRequest(mbean.connectionSettings, mbean.name, [ State.RUNNING ]),                
+                this.createCountWFRequest(mbean.connectionSettings, mbean.name, [ State.WAITING ]),                
+                this.createCountWFRequest(mbean.connectionSettings, mbean.name, [ State.FINISHED ]),                
+                this.createCountWFRequest(mbean.connectionSettings, mbean.name, [ State.DEQUEUED ]),                
+                this.createCountWFRequest(mbean.connectionSettings, mbean.name, [ State.ERROR ]),               
+                this.createCountWFRequest(mbean.connectionSettings, mbean.name, [ State.INVALID ])                
             ], {
                 auth: { username: user.name, password: user.password }
             })
@@ -54,72 +54,97 @@ export class JmxService {
             });
     }
 
-    getGroupChartCounts(connectionSettings: ConnectionSettings, mbeans: string[], user: User) {
+    getGroupChartCounts(mbeans: MBean[], length: number, user: User) {
         let requests = [];
-        this.createGroupCountRequest(connectionSettings, user, mbeans, [ State.RUNNING ]).map((request) => {
+        this.createGroupCountRequest(user, mbeans, [ State.RUNNING ]).map((request) => {
             requests.push(request);
         });
-        this.createGroupCountRequest(connectionSettings, user, mbeans, [ State.DEQUEUED ]).map((request) => {
+        this.createGroupCountRequest(user, mbeans, [ State.DEQUEUED ]).map((request) => {
             requests.push(request);
         });
-        requests.push(this.createCountWFRequest(connectionSettings, mbeans[0], [ State.WAITING ]));
-        requests.push(this.createCountWFRequest(connectionSettings, mbeans[0], [ State.FINISHED ]));
+
+        requests.push(this.createCountWFRequest(mbeans[0].connectionSettings, mbeans[0].name, [ State.WAITING ]));
+        requests.push(this.createCountWFRequest(mbeans[0].connectionSettings, mbeans[0].name, [ State.FINISHED ]));
         
-        requests.push(this.createCountWFRequest(connectionSettings, mbeans[0], [ State.ERROR ]));
-        requests.push(this.createCountWFRequest(connectionSettings, mbeans[0], [ State.INVALID ]));
+        requests.push(this.createCountWFRequest(mbeans[0].connectionSettings, mbeans[0].name, [ State.ERROR ]));
+        requests.push(this.createCountWFRequest(mbeans[0].connectionSettings, mbeans[0].name, [ State.INVALID ]));
         
         return Axios.post(process.env.API_NAME, requests, {
                 auth: { username: user.name, password: user.password }
             })
-            .then(this.parseGroupChartCountResponse)
+            .then((response) => this.parseGroupChartCountResponse(response, length))
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
             });
     }
 
-    createGroupCountRequest(connectionSettings: ConnectionSettings, user: User, mbeans: string[], state: State[]) {
+    createGroupCountRequest(user: User, mbeans: MBean[], state: State[]) {
         let requests = mbeans.map((bean) => {
-            return this.createCountWFRequest(connectionSettings, bean, state);
+            return this.createCountWFRequest(bean.connectionSettings, bean.name, state);
         });
         return requests;
     }
 
-    parseGroupChartCountResponse = (response) => {
-        return response;
+    parseGroupChartCountResponse = (response, length) => {
+        let counter = length;
+        let running = 0;
+        let dequeued = 0;
+        let otherValues = [];
+
+        for (let i = 0; i < counter; i++) {
+            running = running + response.data[i].value;
+        }
+        for (let i = counter; i < (counter * 2); i++) {
+            dequeued = dequeued + response.data[i].value;
+        }
+        for (let i = (counter * 2); i < response.data.length; i++) {
+            otherValues.push(response.data[i].value);
+        }
+
+        return new StatesPrint(new Date(response.data[0].timestamp * 1000), 
+            running, otherValues[0], otherValues[1], dequeued, otherValues[2], otherValues[3]);
     }
 
-    getMBeans(connectionSettings: ConnectionSettings, user: User) {
-        return Axios.post(process.env.API_NAME, [
-                this.createMBeansListRequest(connectionSettings)
-            ], {
-                auth: { username: user.name, password: user.password }
-            })
+    getConnectionResults(connectionSettingsList: ConnectionSettings[], user: User): Promise<void | ConnectionResult[]> {
+        return Axios.post(process.env.API_NAME, 
+                connectionSettingsList.map( connectionSettings => this.createMBeansListRequest(connectionSettings)), 
+                { auth: { username: user.name, password: user.password } })
             .then((response) => {
+                console.log('list responce', response);
                 if (!response || !response.data
-                    || response.data.length < 1
-                    || !this.isSubResponseValid(response.data[0])
-                ) {
+                    || response.data.length === 0) {
                     console.log('Invalid responce:', response);          
                     throw new Error('invalid response!');
                 }
-                let engines = response.data[0].value['copper.engine'];
-                let mbeanNames = Object.keys(response.data[0].value['copper.engine']);
 
-                return mbeanNames.map((mbean) => new MBean(mbean, Object.keys(engines[mbean].attr)));
+                let connectionResults: ConnectionResult[] = connectionSettingsList.map((connectionSettings, i) => {
+                    if (this.isSubResponseValid(response.data[i]) && response.data[i].value['copper.engine']) {
+                        let engines = response.data[i].value['copper.engine'];
+                        let mbeanNames = Object.keys(engines);
+                        let mbeans = mbeanNames.map((mbean) => new MBean(mbean, Object.keys(engines[mbean].attr), connectionSettings));
+
+                        return new ConnectionResult(connectionSettings, mbeans);
+                    } else {
+                        return new ConnectionResult(connectionSettings, []);
+                    }
+                });
+
+                console.log('connectionResults', connectionResults);
+                return connectionResults;
             })
             .catch(error => {
-                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error makink JMX connection:', error);
             });
     }
 
     // TODO logout if wrong credentials...
-    getBrokenWorkflows(connectionSettings: ConnectionSettings, mbean: string, user: User , max: number = 0, offset: number = 0, filter: WorkflowFilter) {
+    getWorkflows(connectionSettings: ConnectionSettings, mbean: string, user: User , max: number = 0, offset: number = 0, filter: WorkflowFilter) {
         return Axios.post(process.env.API_NAME, [
-                this.createQueryBrokenWFRequest(connectionSettings, mbean, max, offset, filter)
+                this.createQueryWFRequest(connectionSettings, mbean, max, offset, filter)
             ], {
                 auth: { username: user.name, password: user.password }
             })
-            .then(this.parseBrokenWorkflowsResponse)
+            .then(this.parseWorkflowsResponse)
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
             });
@@ -294,6 +319,9 @@ export class JmxService {
         if (mbean.atts.indexOf('DBStorage') >= 0) {
             attributes.push('DBStorage');
         }
+        if (mbean.atts.indexOf('EngineClusterId') >= 0) {
+            attributes.push('EngineClusterId');
+        }
         return {
             type: 'read',
             mbean: mbean.name,
@@ -319,7 +347,7 @@ export class JmxService {
         };
     }
 
-    private createQueryBrokenWFRequest(connectionSettings: ConnectionSettings, mbean: string, max: number, offset: number, filter: WorkflowFilter) {
+    private createQueryWFRequest(connectionSettings: ConnectionSettings, mbean: string, max: number, offset: number, filter: WorkflowFilter) {
         return this.createJmxExecRequest(connectionSettings, mbean, {
             operation: 'queryWorkflowInstances(javax.management.openmbean.CompositeData)',
             arguments: [this.createWorkflowFilter(connectionSettings, filter.states, max, offset, filter)], // get workflows with status Invalid
@@ -484,6 +512,7 @@ export class JmxService {
             id,
             data[1].value.startupTS,
             data[1].value.lastActivityTS,
+            data[0].value.EngineClusterId,
             data[0].value.EngineId,
             data[0].value.EngineType,
             data[1].value.countWfiLastNMinutes,
@@ -524,7 +553,7 @@ export class JmxService {
         response.data[0].value, response.data[1].value, response.data[2].value, response.data[3].value, response.data[4].value, response.data[5].value);
     }
 
-    private parseBrokenWorkflowsResponse = (response): WorkflowInfo[] => {
+    private parseWorkflowsResponse = (response): WorkflowInfo[] => {
         if (!response || !response.data
             || response.data.length < 1
             || !this.isSubResponseValid(response.data[0])

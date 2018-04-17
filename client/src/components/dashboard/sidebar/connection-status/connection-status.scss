@@ -1,0 +1,56 @@
+@import '../../../../variables';
+
+.connection-config {
+    @include sidebar-border-bottom;
+    border-radius: 0px;
+    overflow: hidden;
+    
+    &:last-child {
+        border-bottom: none; 
+    }
+    
+    .connection-container {
+        padding-left: 10px;
+        .connection-info {
+            overflow: hidden;
+            color: #eaeaea;
+            padding-top: 12px;
+            font-size: 1.2em;
+            font-weight: 400;
+            max-width: 200px;
+        }
+        .not-connected-icon{
+            color: #c53332;
+        }
+        .connected-icon{
+            color: #69c57e;
+        }
+    }
+
+    .config-input {
+        label {
+            color: white !important;
+        }
+        .input-group__input {
+            input {
+                color: white !important;
+            }
+        }
+        .input-group__details:before  {
+            background-color: white !important;
+        }
+        .input-group__details:after  {
+            color: white;
+        }
+    }
+
+    .card__title--primary {
+        padding-top: 0px;
+    }
+
+    form {
+        padding-top: 8px;
+        width: 100%;
+    }
+    
+}

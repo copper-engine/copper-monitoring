@@ -3,41 +3,59 @@
     clipped
     v-model="drawer" 
     class="sidebar secondary"
-    mobile-break-point="1200" app>
-        <scroll class="scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 600}">
-            <div class="secondary textOnColor--text scroll-header">
-                <v-layout row>
-                    <v-flex class="icon-container">
-                        <v-icon 
-                            v-show="connected"
-                            color="light-green accent-4">
-                            mdi-brightness-1
-                        </v-icon> 
-                        <v-icon 
-                            v-show="!connected"
-                            color="red darken-4"> 
-                            mdi-brightness-1
-                        </v-icon> 
-                    </v-flex>
-                    <v-flex class="connection-info">
-                        {{ host }}:{{ port }}
-                    </v-flex>
-                    <v-spacer></v-spacer>
-                    <v-btn dark icon @click.stop="showSettings">
-                        <v-icon v-html="'settings'" :class="{'active': true}"></v-icon>
+    mobile-break-point="1570" app>
+    <scroll class="scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 600}">
+        <div class="connection">
+            <v-layout row>
+                <v-flex class="connection-title">
+                    Connections
+                </v-flex>
+                <v-spacer></v-spacer>
+                <v-tooltip top content-class="tooltip-text">
+                    <v-btn dark icon @click.stop="showSettings" slot="activator">
+                        <v-icon v-html="'add'" class="active control-icon"></v-icon>
                     </v-btn>
-                </v-layout>
-                <transition name="extend-config">
-                <config v-if="settingsShowed" @updateTarget="updateTarget" @hideSettings="settingsShowed = false"></config>
-                </transition>
-            </div>
-
-            <group class="group primary" 
-            v-for="group in $store.state.groupsOfEngines" key="group.name"
-            :group=group
-            :closing="closeAll">
+                    <span>New Connection</span>
+                </v-tooltip>
+            </v-layout>
+            <transition name="extend-config">
+                <config v-if="settingsShowed" 
+                    :connectionSettings="emptyConnectionSettings"
+                    :type="'createNew'"
+                    @updateTarget="updateTarget(-1, $event)" 
+                    @hideSettings="settingsShowed = false">
+                </config>
+            </transition>
+            
+            <connection-status v-for="(connection, index) in $store.state.connectionResults" :key="connection.settings.host + connection.settings.port"
+                :connection="connection"
+                :index="index"
+                :closingConnections="selectConnectionsToClose"
+                @updateTarget="updateTarget(index, $event)"
+                @closeOthers="closeSelectConnections(index)"
+                @deleteSettings="deleteSettings(index)">
+            </connection-status>
+        </div>
+        <div class="engine-card">
+            <v-layout row>
+                <div class="engines-title">
+                    Engines
+                </div>
+                <v-spacer></v-spacer>
+                <v-tooltip top content-class="tooltip-text">
+                    <v-btn dark icon @click="triggerCloseAllEngines" class="control-icon" slot="activator">
+                        <v-icon>change_history</v-icon>
+                    </v-btn>
+                    <span>Collapse All</span>
+                </v-tooltip>
+            </v-layout>
+            <group class="engine-group"
+                v-for="group in $store.getters.groupsOfEngines" key="group.name"
+                :group=group
+                :closing="closeAllEngines">
             </group>
+        </div>
 
-            <div class="scroll-footer"></div>
-        </scroll>
+        <div class="scroll-footer"></div>
+    </scroll>
 </v-navigation-drawer>

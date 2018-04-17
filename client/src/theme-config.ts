@@ -15,13 +15,15 @@ if (utils.parseBoolean(localStorage.getItem('darkTheme')) === null) {
 }
 
 let darkColors: VuetifyTheme = {
-    primary: '#00695C',
-    secondary: '#424242',
-    accent: '#616161',
+    primary: '#41a578',
+    secondary: '#363b46',
+    accent: '#474d5a',
+    side: '#36834f',
     error: '#b71c1c',
     themeText: '#f5f5f5',
     textOnColor: '#f5f5f5',
-    back: '#303030',
+    engineActive: '#3d4352',
+    groupActive: '#3d4352',
     info: '#2196F3',
     success: '#4CAF50',
     warning: '#FFC107',
@@ -30,12 +32,14 @@ let darkColors: VuetifyTheme = {
   
   let lightColors: VuetifyTheme = {
     primary: '#0D5494',
-    secondary: '#ebebeb',
-    accent: '#d6d6d6',
+    secondary: '#e4e2e2',
+    accent: '#cecece',
+    side: '#009ecf',
     error: '#b71c1c',
     themeText: '#303030',
     textOnColor: '#f5f5f5',
-    back: '#d6d6d6',
+    engineActive: '#00c3ff',
+    groupActive: '#2381d5',
     info: '#2196F3',
     success: '#4CAF50',
     warning: '#FFC107',

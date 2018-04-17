@@ -1,47 +1,78 @@
 <div>
-    <v-layout v-if="multiEngine" class="group-header" row>
+    <v-layout v-if="multiEngine" class="tile-header" row>
         <v-flex class="icon-container">
-            <v-icon>group_work</v-icon>
+            <v-icon class="group-icon">group_work</v-icon>
         </v-flex>
-        <h2 class="textOnColor--text"> {{ parseGroupName(group.name) }} </h2>
+        <v-layout column>
+            <h2> {{ group.name }} </h2>
+            <v-layout row class="engine-sub-details"> 
+                <v-flex class="sub-info">
+                    engines: {{ this.group.engines.length }}
+                </v-flex>
+                <v-tooltip top content-class="tooltip-text">
+                    <v-flex class="count-info" v-if="!open" slot="activator">
+                        ( {{ wfCount }} / {{ brokenWFCount }} )
+                    </v-flex>
+                    <span>( Workflow Instances / Broken Workflows )</span>
+                </v-tooltip>
+            </v-layout>
+        </v-layout>
         <v-spacer></v-spacer>
         <v-tooltip top content-class="tooltip-text">
-            <v-btn dark icon @click="open = !open" slot="activator">
-                <v-icon :class="{ 'close-details-icon': open }">details</v-icon>
+            <v-btn dark icon @click="openGroup" slot="activator">
+                <v-icon :class="{ 'close-details-icon': open }" class="control-icon">details</v-icon>
             </v-btn>
             <span>Show Engines</span>
         </v-tooltip>
     </v-layout>
-    <transition name="extend-general-links">
-    <v-list v-show="open" class="secondary general-link-list">
-        <v-list-tile value="true" v-for="link in links" :key="link.path">
-            <v-list-tile-content class="linkTile">
-                <router-link :to="link.path" active-class="back" class="link">
-                    <v-layout row>
-                        <v-flex class="iconFlex">
-                            <v-list-tile-action>
-                                <v-icon color="themeText">{{ link.icon }}</v-icon>
-                            </v-list-tile-action>
-                        </v-flex>
-                        <v-flex>
-                            <v-list-tile-title v-text="link.name" class="themeText--text"></v-list-tile-title>
-                        </v-flex>
-                    </v-layout>                  
-                </router-link>
-            </v-list-tile-content>
-        </v-list-tile>
-    </v-list>
-    </transition>
-    <transition name="extend-group">
-        <div v-if="(open) || !multiEngine" class="secondary" :class="{ 'status-container' : multiEngine }">
-            <status
-            v-for="engineStatus in group.engines" key="engineStatus.id"
-            class="secondary"
-            :multiEngine="multiEngine"
-            :closing="closing"
-            :status="engineStatus" 
-            :connectionSettings="$store.state.connectionSettings">
-            </status>
-        </div>
-    </transition>
+    <div class="tile-interior">
+        <transition name="extend-group-links">
+            <div v-show="open" class="tile-info">
+                <div class="info-summary">
+                    <div class="label">
+                        <span>
+                            WF instances:
+                        </span>
+                        <span class="value">
+                            {{wfCount}}
+                        </span>
+                    </div>
+                    <div class="label">
+                        <span>
+                            Broken WF instances:
+                        </span>
+                        <span class="value">
+                            {{ brokenWFCount }}
+                        </span>
+                    </div>
+                </div>
+                <div class="link-list-container">
+                    <div v-for="link in links" :key="link.path" class="link-container">
+                        <router-link :to="link.path" active-class="activeLink" class="link">
+                            <div class="link-background">
+                                <v-layout row class="link-interior">
+                                    <v-flex class="link-icon">
+                                        <v-icon dark>{{ link.icon }}</v-icon>
+                                    </v-flex>
+                                    <div class="link-name">
+                                        {{ link.name }}
+                                    </div>
+                                </v-layout> 
+                            </div>                 
+                        </router-link>
+                    </div>
+                </div>
+            </div>
+        </transition>
+        <transition name="extend-group">
+            <div v-if="(open) || !multiEngine">
+                <engine
+                    v-for="engineStatus in group.engines" key="engineStatus.id"
+                    :multiEngine="multiEngine"
+                    :closing="closing"
+                    :status="engineStatus">
+                </engine>
+            </div>
+        </transition>
+    </div>
 </div>

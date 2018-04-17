@@ -120,7 +120,7 @@ export const createRouter = () => {
     let requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     
     if (requiresAuth && !store.state.user) {
-      router.nextPath = to.fullPath;
+      router.nextPath = to.fullPath.replace(/(\/#){2,}/g, '\/#');
       next('/login');
     } else {
       next();

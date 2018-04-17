@@ -1,10 +1,32 @@
+@import '../../../../variables';
+
 .engine-connection-config {
     border-radius: 0px;
     overflow: hidden;
-    
-    .headline-custom {
-        font-size: 1.3em;
-        font-weight: 700;
+    background-color: #2f333d !important;
+    // background-color: $base-dark-color !important;
+
+    .header {
+        align-items: center;
+        padding-top: 5px;
+        padding-left: 10px;
+        min-height: 53px;
+        h2 {
+            font-size: 1.2em;
+        }
+    }
+
+    form {
+        padding-top: 4px;
+        padding-left: 10px;
+        padding-bottom: 5px;
+        width: 275px;
+        .button-container {
+            padding-left: 30px;
+            .submit-btn {
+                background: #41a578 !important;
+            }
+        }
     }
 
     .config-input {
@@ -22,11 +44,6 @@
         .input-group__details:after  {
             color: white;
         }
-    }
-
-    form {
-        padding-top: 8px;
-        width: 100%;
     }
     
 }

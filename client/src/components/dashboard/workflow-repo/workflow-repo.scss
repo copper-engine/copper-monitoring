@@ -36,11 +36,12 @@
     }
 
     .workflows-cont {
-        border-bottom: 1px solid;
+        border-bottom: 1px solid #494f5d;
+        overflow: hidden;
     }
 
     .workflow {
-        border-top: 1px solid;
+        border-top: 1px solid #494f5d;
     }
 
     .workflow-layout >* {
@@ -84,7 +85,7 @@
         min-width: 110px;
 
         button {
-            margin-left: 32px;
+            margin-left: 12px;
             border-radius: 20%;
         }
 

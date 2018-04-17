@@ -37,58 +37,27 @@ code:after, kbd:after, code:before, kbd:before {
 
     .workflow-layout-header {
         max-height: 97px !important;
+        overflow: hidden;
+    }
+    .correct-height {
+        padding-top: 20px;
+        padding-bottom: 20px;
     }
 
     .workflows-cont {
         border-bottom: 1px solid;
+        overflow: hidden;
 
         .alert {
             margin: 20px;
         }
         .workflow {
+            z-index: 0;
             border-top: 1px solid;
 
             .workflow-info-layout {
                 padding: 0px;
-                overflow: hidden;    
-
-                .details {
-                    padding-top: 24px;
-                    padding-bottom: 24px;
-                    padding-left: 32px;
-                    padding-right: 10px;
-                    width: 100%;
-
-                    .workflow-detail {
-                        padding: 4px;
-                    }
-                    .detail-label {
-                        font-weight: 700;
-                        width: 200px;
-                        min-width: 200px;
-                        max-width: 200px;
-                    }
-                    .stacktrace .text {
-                        overflow-x: auto;
-                        border-radius: 3px;
-                        code {
-                            border-radius: 3px 3px 0px 0px;
-                            padding: 10px 30px; 
-                            min-width: 100%;
-                        }
-                    }
-                    .workflow-id {
-                        max-height: 24px;
-                    }
-                    .raise {
-                        margin-top: -40px;
-                    }
-                    button {
-                        border-radius: 5%;
-                        width: 185px;
-                        height: 36px;
-                    }
-                }
+                overflow: hidden;
             }
         }
     } 
@@ -123,10 +92,24 @@ code:after, kbd:after, code:before, kbd:before {
         min-width: 130px;
         max-width: 130px;
     }
+    
     .actions {
         width: 150px;
         min-width: 150px;
         max-width: 150px;
+        button {
+            margin-right: 4px;
+            margin-left: 4px;
+            border-radius: 20%;
+        }
+        .close-details-icon {
+            transform: rotate(180deg);
+        }
+    }
+    .single-button {
+        width: 50px;
+        min-width: 50px;
+        max-width: 50px;
         button {
             margin-right: 4px;
             margin-left: 4px;
@@ -148,9 +131,9 @@ code:after, kbd:after, code:before, kbd:before {
         }
     }
     .timeout {
-        width: 110px;
-        min-width: 110px;
-        max-width: 110px;
+        width: 130px;
+        min-width: 130px;
+        max-width: 130px;
     }
     .priority,
     .state {
@@ -196,40 +179,75 @@ code:after, kbd:after, code:before, kbd:before {
         animation-duration: 1s;
         animation-timing-function: ease-out;
     }
-    .highlight-workflow-deleting >* {
-        background: #e74615 !important;
-        opacity: 0;
-        transition: background 1.3s;
-        transition: opacity 2s;
-    }
-    .fade {
-        opacity: 0.4;
-        animation-name: slowFade;
-        animation-duration: 1s;
-    }
-
-    .extend-enter-active {
-        animation: extend 0.5s;
-    }
-    .extend-leave-active {
-        animation: extend 0.5s reverse;
-    }
-    @keyframes extend {
-        0% {max-height: 0px;
-            padding-top: 0px;
-            padding-bottom: 0px;}
-        100% {max-height: 500px;
-            padding-top: 24px;
-            padding-bottom: 24px;}
-    }
-    
-    @keyframes slowFade {
-        from {opacity: 1}
-        to {opacity: 0.4}
-    }
     @keyframes highlightCurve {
         0% {opacity: 0.35}
         50% {opacity: 0.8}
         100% {opacity: 0.45}
     }
+    .highlight-workflow-deleting >* {
+        background: #e74615 !important;
+        color: #f5f5f5 !important;
+        height: 97px;
+        opacity: 1;
+        z-index: -1;
+        animation-name: deleteAnimation;
+        animation-duration: 1.5s;
+    }
+    @keyframes deleteAnimation {
+        0% {height: 97px;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            opactiy: 1;}
+        100% {height: 0px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+            opactiy: 0;}
+    }
+    .highlight-workflow-extended-deleting >* {
+        background: #e74615 !important;
+        color: #f5f5f5 !important;
+        z-index: -1;
+        max-height: 999px;
+        opacity: 1;
+        animation-name: deleteAnimationExtended;
+        animation-duration: 1.5s;
+    }
+    @keyframes deleteAnimationExtended {
+        0% {max-height: 999px;
+            opactiy: 1;
+            padding-top: 40px;
+            padding-bottom: 40px;}
+        100% {max-height: 0px;
+            opactiy: 0;
+            padding-top: 0px;
+            padding-bottom: 0px;}
+    }
+    .highlight-workflow-details-deleting >* {
+        background: #e74615 !important;
+    }
+
+    .fade {
+        opacity: 0.4;
+        animation-name: slowFade;
+        animation-duration: 1s;
+    }
+    @keyframes slowFade {
+        from {opacity: 1}
+        to {opacity: 0.4}
+    }
+
+    .extend-enter-active {
+        animation: extend 0.75s;
+    }
+    .extend-leave-active {
+        animation: extend 0.75s reverse;
+    }
+    @keyframes extend {
+        0% {max-height: 0px;
+            padding-top: 0px;}
+        100% {max-height: 900px;;}
+    }
+    
+    
+    
 }

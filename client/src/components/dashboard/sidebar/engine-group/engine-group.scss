@@ -1,0 +1,113 @@
+@import '../../../../variables';
+
+.engine-group {
+    overflow: hidden;
+    @include sidebar-border-bottom;
+    
+    .group-icon {
+        color: #7397dc;
+    }
+
+    .engine-icon {
+        color: #69c57e;
+    }
+
+    &:last-child {
+        border-bottom: none; 
+    }
+    
+    .tile-header{
+
+        padding: 10px 0px 10px 10px;
+        
+        h2 {
+            color: #eaeaea;
+            font-size: 1.3em;
+            word-wrap: break-word;
+            max-width: 200px;
+        }
+        .sub-info {
+            flex-grow: 0;
+            padding-right: 10px;
+        }
+
+        .engine-sub-details {
+            color: #eaeaea99 !important;
+        }
+
+        .count-info {
+            padding: 0px;
+            font-size: 1em;
+            min-width: 85px;
+            max-width: 85px;
+            cursor: default;
+        }
+    }
+
+    .tile-interior {
+        .tile-info {
+            overflow: hidden;
+            .info-summary {
+                overflow: hidden;
+                padding-left: 10px;
+                .label {
+                    padding-left: 16px;
+                }
+                .value {
+                    padding-left: 8px;
+                    // font-weight: 700;
+                }
+            }
+        }
+    }
+
+    .link-list-container {
+        overflow: hidden;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        a {
+            text-decoration: none;
+        }
+        .link-container {
+            .activeLink {
+                .link-background {
+                   background: #44bb85; 
+                }
+                .link-interior {
+                    background: #353b4a;
+                }
+            }
+            &:hover {
+                .link-background {
+                    background: #44bb85;
+                }
+                .link-interior {
+                    background: #3e4658;
+                }
+            }
+            .link {
+                .link-background {
+                    padding-left: 10px; 
+                }
+                .link-interior {
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                    padding-left: 5px;
+                    color: #eaeaea;
+                    width: 100%;
+                    .link-icon {
+                        flex-grow: 0;
+                        padding-right: 15px;
+                        .icon {
+                            display: block;
+                        }
+                    }
+                    .link-name {
+                        font-size: 1.3em;
+                        font-weight: 400;
+                    }
+                }
+            }
+        }
+    }
+}

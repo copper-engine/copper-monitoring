@@ -1,0 +1,84 @@
+<div class="workflow-details accent">
+    <div v-if="inDialog === true">
+            <v-layout class="workflow-detail workflow-id">
+                <v-flex class="detail-label"> Alias:</v-flex>
+                <v-flex class="text"> {{workflow.workflowClassInfo.alias}} </v-flex>                               
+            </v-layout>
+            <v-layout class="workflow-detail workflow-id">
+                <v-flex class="detail-label"> Engine:</v-flex>
+                <v-flex class="text"> {{ workflow.engineId }} </v-flex>                               
+            </v-layout>
+            <v-layout class="workflow-detail workflow-id">
+                <v-flex class="detail-label"> Processor Pool:</v-flex>
+                <v-flex class="text"> {{workflow.processorPoolId}} </v-flex>                               
+            </v-layout>
+            <v-layout class="workflow-detail workflow-id">
+                <v-flex class="detail-label"> State:</v-flex>
+                <v-flex class="text"> {{ workflow.processorPoolId }} </v-flex>                               
+            </v-layout>
+            <v-layout class="workflow-detail workflow-id">
+                <v-flex class="detail-label"> Priority:</v-flex>
+                <v-flex class="text"> {{workflow.priority}} </v-flex>                               
+            </v-layout>
+            <v-layout class="workflow-detail workflow-id">
+                <v-flex class="detail-label"> Timeout:</v-flex>
+                <v-flex class="text"> {{ workflow.engineId }} </v-flex>                               
+            </v-layout>
+            <v-layout class="workflow-detail workflow-id">
+                <v-flex class="detail-label"> Error Time:</v-flex>
+                <v-flex class="text"> {{!workflow.errorData ? '' : workflow.errorData.errorTS | moment("HH:mm DD/MM/YYYY")}} </v-flex>                               
+            </v-layout>
+            <v-layout class="workflow-detail workflow-id">
+                <v-flex class="detail-label"> Creation:</v-flex>
+                <v-flex class="text"> {{ workflow.creationTS | moment("HH:mm DD/MM/YYYY") }} </v-flex>                               
+            </v-layout>
+            <v-layout class="workflow-detail workflow-id">
+                <v-flex class="detail-label"> Last Modification:</v-flex>
+                <v-flex class="text"> {{ workflow.lastModTS | moment("HH:mm DD/MM/YYYY") }} </v-flex>                               
+            </v-layout>
+    </div>
+    <v-layout class="workflow-detail workflow-id">
+        <v-flex class="detail-label"> Workflow ID:</v-flex>
+        <v-flex class="text"> {{workflow.id}} </v-flex>                               
+    </v-layout>
+    <v-layout class="workflow-detail workflow-id">
+        <v-flex class="detail-label"> Workflow Data:</v-flex>
+        <v-flex class="text"> {{ workflow.dataAsString }} </v-flex>                               
+    </v-layout>
+    <v-layout class="workflow-detail class-info" row>
+        <v-flex class="detail-label">Class:</v-flex>
+        <v-flex class="text">
+            {{ workflow.workflowClassInfo.classname }}                                  
+        </v-flex> 
+        <v-spacer></v-spacer>
+        <v-flex class="stopGrow raise" v-if="!inDialog">
+            <v-btn depressed color="primary" slot="activator" @click="showSourceCode(workflow)">Source Code</v-btn>
+        </v-flex>
+        <v-flex class="stopGrow raise" v-if="!inDialog">
+                <v-btn depressed color="primary" slot="activator" @click="openWorkflowDialog(workflow)">Open in Pop Up</v-btn>
+        </v-flex>
+    </v-layout>
+    <v-layout class="workflow-detail version">
+        <v-flex class="detail-label">Version:</v-flex>
+        <v-flex class="text"> 
+            {{workflow.workflowClassInfo.majorVersion}}.{{workflow.workflowClassInfo.minorVersion}}.{{workflow.workflowClassInfo.patchLevel}}
+        </v-flex>
+    </v-layout>
+    <v-layout class="workflow-detail stacktrace" v-if="(wfType === 'broken')">
+        <v-flex class="detail-label">Last waiting Stack Trace:</v-flex>
+        <v-flex class="text">
+            <code v-show="workflow.lastWaitStackTrace">
+                {{ workflow.lastWaitStackTrace }}
+            </code>
+            <span v-show="!workflow.lastWaitStackTrace">There is no waiting stack trace</span>
+        </v-flex>
+    </v-layout>
+    <v-layout class="workflow-detail stacktrace" v-if="(wfType === 'broken')">
+        <v-flex class="detail-label">Error Stack Trace:</v-flex>
+        <v-flex class="text">
+            <code>
+                {{ workflow.errorData ? workflow.errorData.exceptionStackTrace : '' }}
+            </code>
+        </v-flex>
+    </v-layout>
+</div>

@@ -5,6 +5,7 @@ import { Notification } from '../../../models/notification';
 import Donut from './donut-graph';
 import './processor-pools.scss';
 import { StoreState } from '../../../store.vuex';
+import { MBean } from '../../../models/mbeans';
 
 @Component({
     template: require('./processor-pools.html'),
@@ -16,9 +17,11 @@ import { StoreState } from '../../../store.vuex';
 export class ProcessorPools extends Vue {
     private jmxService: JmxService = this.$services.jmxService;
     private eventHub: Vue = this.$services.eventHub;
+    newComponent = false;
     fetchPoolInterval: any;
     processorPools: ProcessorPool[] = [];
     private engine: EngineStatus = null;
+    engineMbean: MBean;
     
     mounted() {
         this.init();
@@ -29,13 +32,13 @@ export class ProcessorPools extends Vue {
     }
 
     getProcessorPools() {
-        this.jmxService.getProcessorPools(this.$store.state.connectionSettings, this.engine.ppoolsMXBeans, this.engine.type, this.$store.state.user).then((response: any) => {
+        this.jmxService.getProcessorPools(this.engineMbean.connectionSettings, this.engine.ppoolsMXBeans, this.engine.type, this.$store.state.user).then((response: any) => {
             this.processorPools = response;
         });
     }
 
     resume(mbean: string) {
-        this.jmxService.resume(this.$store.state.connectionSettings, this.$store.state.user, mbean).then((done) => {
+        this.jmxService.resume(this.engineMbean.connectionSettings, this.$store.state.user, mbean).then((done) => {
             if (done) {
                 this.showSuccess('Workflows Resumed');
                 setTimeout(this.getProcessorPools(), 1500);
@@ -46,7 +49,7 @@ export class ProcessorPools extends Vue {
     }
 
     suspend(mbean: string) {
-        this.jmxService.suspend(this.$store.state.connectionSettings, this.$store.state.user, mbean).then((done) => {
+        this.jmxService.suspend(this.engineMbean.connectionSettings, this.$store.state.user, mbean).then((done) => {
             if (done) {
                 this.showSuccess('Workflows Suspended');
                 setTimeout(this.getProcessorPools(), 1500);                
@@ -57,7 +60,7 @@ export class ProcessorPools extends Vue {
     }
 
     resumeDeque(mbean: string) {
-        this.jmxService.resumeDeque(this.$store.state.connectionSettings, this.$store.state.user, mbean).then((done) => {
+        this.jmxService.resumeDeque(this.engineMbean.connectionSettings, this.$store.state.user, mbean).then((done) => {
             if (done) {
                 this.showSuccess('Deque Resumed');
                 setTimeout(this.getProcessorPools(), 1500);
@@ -68,7 +71,7 @@ export class ProcessorPools extends Vue {
     }
 
     suspendDeque(mbean: string) {
-        this.jmxService.suspendDeque(this.$store.state.connectionSettings, this.$store.state.user, mbean).then((done) => {
+        this.jmxService.suspendDeque(this.engineMbean.connectionSettings, this.$store.state.user, mbean).then((done) => {
             if (done) {
                 this.showSuccess('Deque Suspended');
                 setTimeout(this.getProcessorPools(), 1500);               
@@ -80,7 +83,13 @@ export class ProcessorPools extends Vue {
 
     @Watch('$route.params')
     init() {
+        this.newComponent = true;
+        setTimeout(() => {
+            this.newComponent = false;
+        }, 200);
+        this.processorPools = [];
         this.engine = (this.$store.state as  StoreState).engineStatusList[this.$route.params.id];
+        this.engineMbean = this.$store.getters.engineMBeans[this.$route.params.id];
         this.scheduleFetchPools();
     }
 
@@ -90,9 +99,10 @@ export class ProcessorPools extends Vue {
             clearInterval(this.fetchPoolInterval);
         }
         this.getProcessorPools();
+        // TODO get time from usersettings
         this.fetchPoolInterval = setInterval(() => {
             this.getProcessorPools();
-        }, this.$store.state.connectionSettings.updatePeriod * 1000);
+        }, 10 * 1000);
     }
     
     private showSuccess(message: string) {
@@ -102,5 +112,4 @@ export class ProcessorPools extends Vue {
     private showError(message: string) {
         this.eventHub.$emit('showNotification', new Notification(message, 'error'));
     }
-
 }

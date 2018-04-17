@@ -1,0 +1,9 @@
+// $test-import-color: red;
+$darkest: #040d10;
+
+$base-border-color: #444c5f;
+$base-dark-color: #262a34;
+
+@mixin sidebar-border-bottom {
+    border-bottom: 1px solid $base-border-color;
+}

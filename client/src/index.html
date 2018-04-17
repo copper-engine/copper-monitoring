@@ -10,12 +10,12 @@
     <title>Copper Monitoring</title>
     <style>
       html { 
-          min-width: 900px;
-          overflow-x: auto 
+          min-width: 1270px;
+          overflow-x: auto !important;
       }
       body {
-          min-width: 900px;
-          background: #424242;
+          min-width: 990px;
+          background: #2f333d;
       }
       .tooltip-text {
         font-size: 1.2em !important;
@@ -80,6 +80,14 @@
         100%  { transform: rotate(360deg); }
       }
     </style>
+    <script type="text/javascript">
+      function loadTheme() {
+        if (!localStorage.getItem('darkTheme')) {
+            localStorage.setItem('darkTheme', 'true');
+        }
+      }
+      window.onload = loadTheme();
+    </script>
   </head>
 
   <body>

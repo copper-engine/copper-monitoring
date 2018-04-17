@@ -159,24 +159,34 @@
         padding: 15px;
         overflow: hidden;
         flex-wrap: nowrap;
+        background-color: $light-secondary;
         .filter-chip-container {
             align-items: center;
             flex-wrap: wrap;
+            h3 {
+                color: $dark-text-color;
+                min-width: 85px;
+            }
             .filter-chip-flex {
                 padding: 5px;
-            }
-            .inner-chip { 
-                margin-left: -7px !important;
-            }
-            .chip__content {
-                padding: 5px;
-            }
-            h3 {
-                min-width: 85px;
+                .filter-chip {
+                    background-color: $light-tertiary !important;
+                    color: $dark-text-color;
+                    .inner-chip { 
+                        background-color: $light-primary;
+                        color: $light-text-color;
+                        margin-left: -7px !important;
+                    }
+                    .chip__content {
+                        padding: 5px;
+                    }
+                }
             }
         }
         button {
             margin-right: 5px;
+            background-color: $light-primary !important;
+            color: $light-text-color;
         }
     }
     .row-info {
@@ -291,6 +301,29 @@
             .input-group:hover {
                 .input-group__details::before {
                     background-color: $dark-tertiary !important;
+                }
+            }
+            button {
+                background-color: $dark-primary !important;
+                color: $light-text-color;
+            }
+        }
+        .chip-menu {
+            background-color: $dark-secondary;
+            .filter-chip-container {
+                h3 {
+                    color: $light-text-color;
+                    min-width: 85px;
+                }
+                .filter-chip-flex {
+                    .filter-chip {
+                    background-color: $dark-tertiary !important;
+                        color: $light-text-color;
+                        .inner-chip { 
+                            background-color: $dark-primary;
+                            color: $light-text-color;
+                        }
+                    }
                 }
             }
             button {

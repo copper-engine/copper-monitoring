@@ -22,6 +22,27 @@ body {
     background: #2f333d;
 }
 
+body .light .vdatetime-year-picker__item--selected,
+body .light .vdatetime-time-picker__item--selected,
+body .light .vdatetime-popup__actions__button {
+    color: $light-primary;
+}
+body .light .vdatetime-popup__header,
+body .light .vdatetime-calendar__month__day--selected > span > span,
+body .light .vdatetime-calendar__month__day--selected:hover > span > span {
+    background: $light-primary;
+}
+body .dark .vdatetime-year-picker__item--selected,
+body .dark .vdatetime-time-picker__item--selected,
+body .dark .vdatetime-popup__actions__button {
+    color: $dark-primary;
+}
+body .dark .vdatetime-popup__header,
+body .dark .vdatetime-calendar__month__day--selected > span > span,
+body .dark .vdatetime-calendar__month__day--selected:hover > span > span {
+    background: $dark-primary;
+}
+
 body .list {
     background-color: $light-background !important;
 }

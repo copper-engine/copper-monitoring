@@ -1,4 +1,9 @@
+@import '../../../../variables';
+
 .workflow-header {
+    h2 {
+        color: $dark-text-color;
+    }
     .summary {
         align-items: center;
         .text {
@@ -7,12 +12,17 @@
             color: #efefef;
             max-width: 430px;
             min-width: 292px;
+            color: $dark-text-color;
         }
         .heading-buttons {
             padding-right: 10px;
             min-width: 620px;
             .only-filter {
                 margin-left: 415px;
+            }
+            button {
+                background-color: $light-primary !important;
+                color: $light-text-color;
             }
         }
     }
@@ -30,10 +40,12 @@
     }
     .filter-menu {  
         flex-wrap: nowrap;
+        background-color: $light-secondary;
         h3 {
             align-items: center;
             padding-left: 35px;
             padding-right: 0px;
+            color: $dark-text-color;
         }
         .filter-header {
             min-height: 65px;
@@ -42,6 +54,9 @@
             padding-right: 0px;
             .hide-state-select {
                 opacity: 0;
+            }
+            label {
+                color: $dark-text-color !important;
             }
         }
         .filter-layout {
@@ -58,6 +73,9 @@
                     max-width: 190px;
                     min-width: 190px;
                     padding: 5px;
+                    .icon {
+                        color: $light-primary !important;
+                    }
                 }
             }
             .select-container {
@@ -69,6 +87,9 @@
                 padding-right: 10px;
                 .select {
                     max-width: 380px;
+                    .icon {
+                        color: $light-primary !important;
+                    }
                 }
             }
             .date-time-picker {
@@ -91,14 +112,45 @@
             .date-click-decorator{
                 cursor: pointer;
             }
-            .input-group__details {
-                min-height: 0px !important;
+            .input-group {
+                color: $light-primary !important;
+                .input-group__input {
+                    input {
+                        color: $dark-text-color !important;
+                        caret-color: $light-primary !important;
+                    }
+                }
+                .input-group__details {
+                    min-height: 0px !important;
+                    .input-group__hint {
+                        color: $dark-text-color !important;
+                    }
+                }
+                .input-group__details::before {
+                    background-color: $light-primary;
+                }
+            }
+            .input-group:hover {
+                .input-group__details::before {
+                    background-color: $light-tertiary !important;
+                }
+            }
+            .input-group--focused {
+                color: $light-primary !important;
+                .input-group__details::before {
+                    background-color: $light-primary;
+                }
+                .input-group__details::after {
+                    background-color: $light-primary;
+                }
             }
             button {
                 height: 36px;
                 width: 150px;
                 min-width: 150px;
                 margin-bottom: -15px;
+                background-color: $light-primary !important;
+                color: $light-text-color;
             }
         }
         
@@ -165,5 +217,86 @@
         100% {max-height: 129px;
             padding-top: 15px;
             padding-bottom: 15px;}
+    }
+}
+
+.dark {
+    .workflow-header {
+        h2 {
+            color: $light-text-color;
+        }
+        .summary {
+            .text {
+                color: $light-text-color; 
+            }
+        }
+        .heading-buttons {
+            button {
+                background-color: $dark-primary !important;
+                color: $light-text-color; 
+            }
+        }
+        .filter-menu {
+            background-color: $dark-secondary;
+            h3 {
+                color: $light-text-color;  
+            }
+            .filter-header {
+                label {
+                    color: $light-text-color !important;
+                }
+            }
+            .filter-layout {
+                .time-field-container {
+                    .time-field {
+                        .icon {
+                            color: $dark-primary !important;
+                        }
+                    }
+                }
+            }
+            .select-container {
+                .select {
+                    .icon {
+                        color: $dark-primary !important;
+                    }
+                }
+            }
+            .input-group {
+                color: $dark-primary !important;
+                .input-group__input {
+                    input {
+                        color: $light-text-color !important;
+                        caret-color: $dark-primary !important;
+                    }
+                }
+                .input-group__details {
+                    .input-group__hint {
+                        color: $light-text-color !important;
+                    }
+                }
+                .input-group__details::before {
+                    background-color: $dark-primary;
+                }
+            }
+            .input-group--focused {
+                color: $light-primary !important;
+                .input-group__details::before {
+                    background-color: $dark-primary;
+                }
+                .input-group__details::after {
+                    background-color: $dark-primary;
+                }
+            }
+            .input-group:hover {
+                .input-group__details::before {
+                    background-color: $dark-tertiary !important;
+                }
+            }
+            button {
+                background-color: $dark-primary !important;
+                color: $light-text-color;
+            }
+        }
     }
 }

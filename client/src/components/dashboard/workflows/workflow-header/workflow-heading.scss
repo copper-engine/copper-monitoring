@@ -198,6 +198,8 @@
         font-size: 1.1em;
         border-top-left-radius: 2px;
         border-top-right-radius: 2px;
+        background-color: $light-primary !important;
+        color: $light-text-color !important;
     }
 
     .extend-filter-enter-active {
@@ -330,6 +332,10 @@
                 background-color: $dark-primary !important;
                 color: $light-text-color;
             }
+        }
+        .row-info {
+            background-color: $dark-primary !important;
+            color: $light-text-color !important;
         }
     }
 }

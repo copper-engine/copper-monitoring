@@ -13,9 +13,9 @@
     </workflow-heading>
     
     <v-layout class="workflows-cont" column>
-        <v-card v-show="!workflows || workflows.length === 0" class="secondary">
+        <v-card v-show="!workflows || workflows.length === 0">
             <v-card-text>
-                <v-alert color="primary" icon="info" value="true" >
+                <v-alert icon="info" value="true" >
                     There are no available {{ wfType }} workflows
                 </v-alert>
             </v-card-text>

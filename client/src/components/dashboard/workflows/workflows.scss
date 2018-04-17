@@ -52,10 +52,20 @@ code:after, kbd:after, code:before, kbd:before {
     .workflows-cont {
         border-bottom: 1px solid;
         overflow: hidden;
-
-        .alert {
-            margin: 20px;
+        border-color: $light-tertiary;
+        .card {
+            background-color: $light-secondary !important;
+            .card__text {
+                background-color: $light-secondary !important;
+                .alert {
+                    margin: 20px;
+                    background-color: $light-tertiary !important;
+                    border-color: $light-tertiary !important;
+                    color: $dark-text-color;
+                }
+            }
         }
+        
         .workflow {
             z-index: 0;
             border-top: 1px solid;
@@ -292,6 +302,20 @@ code:after, kbd:after, code:before, kbd:before {
             button {
                 background-color: $dark-background;
                 color: $light-text-color;
+            }
+        }
+        .workflows-cont {
+            border-color: $dark-tertiary;
+            .card {
+                background-color: $dark-secondary !important;
+                .card__text {
+                    background-color: $dark-secondary !important;
+                    .alert {
+                        background-color: $dark-tertiary !important;
+                        border-color: $dark-tertiary !important;
+                        color: $light-text-color;
+                    }
+                }
             }
         }
     }

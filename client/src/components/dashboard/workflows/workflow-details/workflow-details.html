@@ -1,4 +1,4 @@
-<div class="workflow-details accent">
+<div class="workflow-details">
     <div v-if="inDialog === true">
             <v-layout class="workflow-detail workflow-id">
                 <v-flex class="detail-label"> Alias:</v-flex>
@@ -52,10 +52,10 @@
         </v-flex> 
         <v-spacer></v-spacer>
         <v-flex class="stopGrow raise" v-if="!inDialog">
-            <v-btn depressed color="primary" slot="activator" @click="showSourceCode(workflow)">Source Code</v-btn>
+            <v-btn depressed slot="activator" @click="showSourceCode(workflow)">Source Code</v-btn>
         </v-flex>
         <v-flex class="stopGrow raise" v-if="!inDialog">
-                <v-btn depressed color="primary" slot="activator" @click="openWorkflowDialog(workflow)">Open in Pop Up</v-btn>
+                <v-btn depressed slot="activator" @click="openWorkflowDialog(workflow)">Open in Pop Up</v-btn>
         </v-flex>
     </v-layout>
     <v-layout class="workflow-detail version">

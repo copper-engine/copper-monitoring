@@ -51,12 +51,14 @@
     }
 
     .workflows-cont {
-        border-bottom: 1px solid #494f5d;
+        border-bottom: 1px solid;
+        border-color: $dark-text-color;
         overflow: hidden;
     }
 
     .workflow {
-        border-top: 1px solid #494f5d;
+        border-top: 1px solid;
+        border-color: $dark-text-color;
     }
 
     .workflow-layout >* {
@@ -224,6 +226,13 @@
             .error-message {
                 background-color: $dark-primary;
             }
+        }
+        .workflows-cont {
+            border-color: $light-text-color;
+        }
+    
+        .workflow {
+            border-color: $light-text-color;
         }
         .workflow-layout >* {
             background-color: $dark-secondary;

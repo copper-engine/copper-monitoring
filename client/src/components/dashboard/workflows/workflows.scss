@@ -52,7 +52,7 @@ code:after, kbd:after, code:before, kbd:before {
     .workflows-cont {
         border-bottom: 1px solid;
         overflow: hidden;
-        border-color: $light-tertiary;
+        border-color: $dark-text-color;
         .card {
             background-color: $light-secondary !important;
             .card__text {
@@ -64,15 +64,22 @@ code:after, kbd:after, code:before, kbd:before {
                     color: $dark-text-color;
                 }
             }
-        }
-        
+        }       
         .workflow {
             z-index: 0;
             border-top: 1px solid;
-
-            .workflow-info-layout {
-                padding: 0px;
-                overflow: hidden;
+            border-color: $dark-text-color;
+            .workflow-layout {
+                background-color: $light-secondary !important;
+                color: $dark-text-color;
+                button {
+                    background-color: $light-primary !important;
+                    color: $light-text-color;
+                }
+                .workflow-info-layout {
+                    padding: 0px;
+                    overflow: hidden;
+                }
             }
         }
     } 
@@ -305,7 +312,7 @@ code:after, kbd:after, code:before, kbd:before {
             }
         }
         .workflows-cont {
-            border-color: $dark-tertiary;
+            border-color: $light-text-color;
             .card {
                 background-color: $dark-secondary !important;
                 .card__text {
@@ -313,6 +320,17 @@ code:after, kbd:after, code:before, kbd:before {
                     .alert {
                         background-color: $dark-tertiary !important;
                         border-color: $dark-tertiary !important;
+                        color: $light-text-color;
+                    }
+                }
+            }
+            .workflow {
+                border-color: $light-text-color;
+                .workflow-layout {
+                    background-color: $dark-secondary !important;
+                    color: $light-text-color;
+                    button {
+                        background-color: $dark-primary !important;
                         color: $light-text-color;
                     }
                 }

@@ -1,18 +1,28 @@
+@import '../../../../variables';
+
 .workflow-details {
     padding-top: 24px;
     padding-bottom: 24px;
     padding-left: 32px;
     padding-right: 10px;
     width: 100%;
-
+    background-color: $light-tertiary !important;
+    color: $dark-text-color;
     .workflow-detail {
         padding: 4px;
-    }
-    .detail-label {
-        font-weight: 700;
-        width: 200px;
-        min-width: 200px;
-        max-width: 200px;
+        .detail-label {
+            font-weight: 700;
+            width: 200px;
+            min-width: 200px;
+            max-width: 200px;
+        }
+        button {
+            background-color: $light-primary !important;
+            color: $light-text-color;
+            border-radius: 5%;
+            width: 185px;
+            height: 36px;
+        }
     }
     .stacktrace .text {
         overflow-x: auto;
@@ -32,9 +42,17 @@
     .stopGrow {
         flex-grow: 0;
     }
-    button {
-        border-radius: 5%;
-        width: 185px;
-        height: 36px;
+}
+
+.dark {
+    .workflow-details {
+        background-color: $dark-tertiary !important;
+        color: $light-text-color;
+        .workflow-detail {
+            button {
+                background-color: $dark-primary !important;
+                color: $light-text-color;
+            }
+        } 
     }
 }

@@ -154,6 +154,11 @@
         align-items: center;
         .pagination__item {
             background-color: $light-primary !important;
+            color: $light-text-color;
+        }
+        .pagination__navigation {
+            background-color: $light-tertiary !important;
+            color: $dark-text-color;
         }
         .pagin-config {
             align-items: center;
@@ -240,6 +245,11 @@
         .pagination-cont {
             .pagination__item {
                 background-color: $dark-primary !important;
+                color: $light-text-color;
+            }
+            .pagination__navigation {
+                background-color: $dark-tertiary !important;
+                color: $dark-text-color;
             }
             .pagin-config {
                 .per-page-label {

@@ -1,3 +1,5 @@
+@import '../../../variables';
+
 code:after, kbd:after, code:before, kbd:before {
     content: "";
     letter-spacing: 0px;
@@ -147,8 +149,13 @@ code:after, kbd:after, code:before, kbd:before {
 
     .pagination-cont {
         align-items: center;
-        .pagination li span {
-            float: none;
+        .pagination__item {
+            background-color: $light-primary !important;
+            color: $light-text-color;
+        }
+        .pagination__navigation {
+            background-color: $light-tertiary !important;
+            color: $dark-text-color;
         }
         .pagin-config {
             align-items: center;
@@ -157,14 +164,23 @@ code:after, kbd:after, code:before, kbd:before {
                 font-weight: 700;
                 padding-left: 16px;
                 padding-bottom: 8px;
+                color: $dark-text-color;
             }
             .per-page {
                 width: 60px;
+                color: $light-primary !important;
             }
+        }
+        .pagination li span {
+            float: none;
+        }
+        button {
+            background-color: $light-background;
         }
     }
 
     .footer-card {
+        background-color: $light-secondary;
         border-bottom-left-radius: 2px;
         border-bottom-right-radius: 2px;
     }
@@ -248,8 +264,35 @@ code:after, kbd:after, code:before, kbd:before {
         0% {max-height: 0px;
             padding-top: 0px;}
         100% {max-height: 900px;;}
+    } 
+}
+
+.dark {
+    .workflows {
+        .footer-card {
+            background-color: $dark-secondary;
+        }
+        .pagination-cont {
+            .pagination__item {
+                background-color: $dark-primary !important;
+                color: $light-text-color;
+            }
+            .pagination__navigation {
+                background-color: $dark-tertiary !important;
+                color: $dark-text-color;
+            }
+            .pagin-config {
+                .per-page-label {
+                    color: $light-text-color !important;
+                }
+                .per-page {
+                    color: $dark-primary !important;
+                }
+            }
+            button {
+                background-color: $dark-background;
+                color: $light-text-color;
+            }
+        }
     }
-    
-    
-    
 }

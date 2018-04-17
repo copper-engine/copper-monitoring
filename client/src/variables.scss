@@ -8,15 +8,18 @@ $dark-primary: #41a578;
 $dark-secondary: #353B4A;
 $dark-tertiary: #474D5A;
 $dark-background: #2F333D;
-$dark-sidebar: #262A34;
+$dark-sidebar: #262a34;
+$dark-sidebar-icon: #b8c2d8;
 $light-text-color: #f5f5f5;
 
 $light-primary: #0d5494;
 $light-secondary: #e4e2e2;
 $light-tertiary: #cecece;
 $light-background: #F5F5F5;
-$light-sidebar: #cecece;
+$light-sidebar: #bbb9b9;
+$light-sidebar-icon: #303030;
 $dark-text-color: #303030;
+
 
 @mixin sidebar-border-bottom {
     border-bottom: 1px solid $base-border-color;

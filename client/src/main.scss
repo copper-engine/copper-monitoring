@@ -21,3 +21,23 @@ body {
 .application.theme--dark {
     background: #2f333d;
 }
+
+body .list {
+    background-color: $light-background !important;
+}
+.list li {
+    color: $dark-text-color !important;
+}
+body .list__tile--active {
+    color: $light-primary !important;
+}
+
+body .dark .list {
+    background-color: $dark-background !important;
+}
+.dark .list li {
+    color: $light-text-color !important;
+}
+body .dark .list__tile--active {
+    color: $dark-primary !important;
+}

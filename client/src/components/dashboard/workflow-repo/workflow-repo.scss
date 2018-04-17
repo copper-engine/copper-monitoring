@@ -1,7 +1,13 @@
+@import '../../../variables';
+
 .wf-repo {
     width: 100%;
     max-width: 1650px;
     margin: auto;
+
+    h2 {
+        color: $dark-text-color;
+    }
 
     .alert {
         margin: 20px;
@@ -13,7 +19,7 @@
             font-weight: 400;
             padding-top: 8px;
             padding-right: 20px;
-            color: #efefef;
+            color: $dark-text-color;
         }
         .stopGrow {
             flex-grow: 0;
@@ -26,6 +32,8 @@
     }
 
     .header {
+        background-color: $light-primary;
+        color: $light-text-color !important;
         margin-top: 16px;
         padding: 30px 16px 30px 16px;
         align-items: center;
@@ -33,6 +41,13 @@
         font-size: 1.1em;
         border-top-left-radius: 2px;
         border-top-right-radius: 2px;
+    }
+
+    .error {
+        background-color: $light-secondary;
+        .error-message {
+            background-color: $light-primary;
+        }
     }
 
     .workflows-cont {
@@ -45,6 +60,7 @@
     }
 
     .workflow-layout >* {
+        background-color: $light-secondary;
         padding: 8px 16px;
         align-items: center;
         padding: 20px;
@@ -85,6 +101,7 @@
         min-width: 110px;
 
         button {
+            background-color: $light-primary !important;
             margin-left: 12px;
             border-radius: 20%;
         }
@@ -96,10 +113,10 @@
     }
 
     .workflow-info-layout {
-
         padding: 0px;
 
         .details {
+            background-color: $light-tertiary;
             padding-left: 32px;
             padding-right: 32px;
             padding-bottom: 24px;
@@ -135,6 +152,9 @@
 
     .pagination-cont {
         align-items: center;
+        .pagination__item {
+            background-color: $light-primary !important;
+        }
         .pagin-config {
             align-items: center;
             .per-page-label {
@@ -142,19 +162,23 @@
                 font-weight: 700;
                 padding-left: 16px;
                 padding-bottom: 8px;
+                color: $dark-text-color;
             }
             .per-page {
                 width: 60px;
+                color: $light-primary !important;
             }
         }
-
-
         .pagination li span {
             float: none;
+        }
+        button {
+            background-color: $light-background;
         }
     }
 
     .footer-card {
+        background-color: $light-secondary;
         border-bottom-left-radius: 2px;
         border-bottom-right-radius: 2px;
     }
@@ -175,4 +199,58 @@
         100% {max-height: 1000px;}
     }
 
+}
+
+.dark {
+    .wf-repo {
+        h2 {
+            color: $light-text-color;
+        }
+        .summary {
+            .text {
+                color: $light-text-color;
+            }
+        }
+        .header {
+            background-color: $dark-primary;
+        }
+        .error {
+            background-color: $dark-secondary;
+            .error-message {
+                background-color: $dark-primary;
+            }
+        }
+        .workflow-layout >* {
+            background-color: $dark-secondary;
+            .actions {
+                button {
+                    background-color: $dark-primary !important;
+                }
+            }
+        }
+        .workflow-info-layout {
+            .details {
+                background-color: $dark-tertiary; 
+            }
+        }
+        .footer-card {
+            background-color: $dark-secondary;
+        }
+        .pagination-cont {
+            .pagination__item {
+                background-color: $dark-primary !important;
+            }
+            .pagin-config {
+                .per-page-label {
+                    color: $light-text-color !important;
+                }
+                .per-page {
+                    color: $dark-primary !important;
+                }
+            }
+            button {
+                background-color: $dark-background;
+            }
+        }
+    }
 }

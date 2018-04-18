@@ -11,29 +11,19 @@
                 <span>Delete Connection</span>
                 </v-tooltip>
             </v-layout>
-            <v-form v-model="valid" ref="form" lazy-validation>
-                <v-text-field class="config-input"
+            <v-form v-model="valid" ref="form" class="config-input" lazy-validation>
+                <v-text-field
                     label="Host"
                     v-model="host"
                     :rules="hostRules"
                     required
                 ></v-text-field>
-                <v-text-field class="config-input"
+                <v-text-field
                     label="port"
                     v-model="port"
                     :rules="portRules"
                     required
                 ></v-text-field>
-                <!-- <v-text-field class="config-input"
-                    label="Get data every 'x' seconds"
-                    v-model="updatePeriod"
-                    :rules="numberRules"
-                ></v-text-field>
-                <v-text-field class="config-input"
-                    label="not older than 'y' min"
-                    v-model="fetchPeriod"
-                    :rules="numberRules"
-                ></v-text-field> -->
                 <v-layout row class="button-container">
                 <v-btn
                     class="submit-btn"
@@ -43,6 +33,7 @@
                     submit
                 </v-btn>
                 <v-btn
+                    class="cancel"
                     @click="$emit('hideSettings')"
                 >
                     Cancel

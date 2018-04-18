@@ -3,7 +3,7 @@
 .engine-connection-config {
     border-radius: 0px;
     overflow: hidden;
-    background-color: #2f333d !important;
+    background-color: $light-tertiary !important;
     // background-color: $base-dark-color !important;
 
     .header {
@@ -13,6 +13,7 @@
         min-height: 53px;
         h2 {
             font-size: 1.2em;
+            color: $dark-text-color;
         }
     }
 
@@ -24,26 +25,98 @@
         .button-container {
             padding-left: 30px;
             .submit-btn {
-                background: #41a578 !important;
+                background-color: $light-primary !important;
+                color: $light-text-color;
+            }
+            .cancel {
+                background-color: $light-tertiary !important;
+                color: $dark-text-color;
             }
         }
     }
 
     .config-input {
-        label {
-            color: white !important;
-        }
-        .input-group__input {
-            input {
-                color: white !important;
+        .input-group {
+            label {
+                color: $dark-text-color !important;
+            }
+            .input-group__input {
+                input {
+                    color: $dark-text-color !important;
+                    caret-color: $light-primary !important;
+                }
+            }
+            .input-group__details::before {
+                background-color: $light-primary !important;
             }
         }
-        .input-group__details:before  {
-            background-color: white !important;
+        .input-group--focused {
+            color: $light-primary !important;
+            .input-group__details::before {
+                background-color: $light-primary;
+            }
+            .input-group__details::after {
+                background-color: $light-primary;
+            }
         }
-        .input-group__details:after  {
-            color: white;
+        .input-group:hover {
+            .input-group__details::before {
+                background-color: $light-secondary !important;
+            }
         }
     }
+}
+
+.dark {
+    .engine-connection-config {
+        background-color: $dark-tertiary !important;
+        .header {
+            h2 {
+                color: $light-text-color;
+            }
+        }
+        form {
+            .button-container {
+                .submit-btn {
+                    background-color: $dark-primary !important;
+                    color: $light-text-color;
+                }
+                .cancel {
+                    background-color: $dark-tertiary !important;
+                    color: $light-text-color;
+                }
+            }
+        }
     
+        .config-input {
+            .input-group {
+                label {
+                    color: $light-text-color !important;
+                }
+                .input-group__input {
+                    input {
+                        color: $light-text-color !important;
+                        caret-color: $dark-primary !important;
+                    }
+                }
+                .input-group__details::before {
+                    background-color: $dark-primary !important;
+                }
+            }
+            .input-group--focused {
+                color: $dark-primary !important;
+                .input-group__details::before {
+                    background-color: $dark-primary;
+                }
+                .input-group__details::after {
+                    background-color: $dark-primary;
+                }
+            }
+            .input-group:hover {
+                .input-group__details::before {
+                    background-color: $dark-secondary !important;
+                }
+            }
+        }
+    }
 }

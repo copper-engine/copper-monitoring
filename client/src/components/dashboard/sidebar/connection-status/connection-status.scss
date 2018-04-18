@@ -13,11 +13,11 @@
         padding-left: 10px;
         .connection-info {
             overflow: hidden;
-            color: #eaeaea;
             padding-top: 12px;
             font-size: 1.2em;
             font-weight: 400;
             max-width: 200px;
+            color: $dark-text-color;
         }
         .not-connected-icon{
             color: #c53332;
@@ -26,31 +26,14 @@
             color: #69c57e;
         }
     }
+}
 
-    .config-input {
-        label {
-            color: white !important;
-        }
-        .input-group__input {
-            input {
-                color: white !important;
+.dark {
+    .connection-config {
+        .connection-container {
+            .connection-info {
+                color: $light-text-color;
             }
         }
-        .input-group__details:before  {
-            background-color: white !important;
-        }
-        .input-group__details:after  {
-            color: white;
-        }
     }
-
-    .card__title--primary {
-        padding-top: 0px;
-    }
-
-    form {
-        padding-top: 8px;
-        width: 100%;
-    }
-    
 }

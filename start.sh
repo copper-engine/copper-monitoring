@@ -32,7 +32,7 @@ then
     echo ""
     echo "---------------------------------------------------------------------------------------------"
     echo ""
-    cd ""${PATH_TO_SCRIPT}/docker" && docker build -t copper-monitoring .
+    cd "${PATH_TO_SCRIPT}/docker" && docker build -t copper-monitoring .
 else 
     echo ""
     echo "Script usage:"

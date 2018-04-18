@@ -20,7 +20,7 @@
         margin: auto;
         width: 100%;
         height: 100%; 
-        background: $light-secondary !important;
+        background: $light-sidebar !important;
         // background: #0b2732; /* Old browsers */
         // background: -moz-linear-gradient(left, #0b2732 0%, #123643 100%); /* FF3.6-15 */
         // background: -webkit-linear-gradient(left, #0b2732 0%,#123643 100%); /* Chrome10-25,Safari5.1-6 */
@@ -41,46 +41,6 @@
         .engine-card {
             padding-top: 15px; 
         }
-
-        .group {
-            overflow: hidden;
-            .group-header{
-                border-top: 1px solid #323232;
-                padding-left: 10px;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                h2 {
-                    font-size: 1.3em;
-                    word-wrap: break-word;
-                    max-width: 200px;
-                }
-                .summary {
-                    min-width: 75px;
-                    max-width: 75px;
-                    cursor: default;
-                }
-            }
-            .general-link-list {
-                padding-left: 10px;
-                padding-right: 10px;
-            }
-            .linkTile {
-                border-radius: 2px;
-                margin-right: -15px;
-                margin-left: -15px;
-                .link {
-                    padding-top: 20px;
-                    padding-bottom: 20px;
-                    padding-left: 20px;
-                    width: 100%;
-                }
-            }
-            .status-container {
-                padding-left: 10px;
-                padding-right: 10px;
-                padding-bottom: 10px;
-            }
-        }
     }
 
     .scroll-footer {
@@ -96,6 +56,9 @@
         .settings-btn {
             display: none;
         }
+    }
+    .navigation-drawer__border {
+        background-color: $base-border-color !important;
     }
 
     .list {

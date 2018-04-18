@@ -1,5 +1,5 @@
 <div class="login">
-    <v-toolbar style="flex: 0 0 auto;" color="primary">
+    <v-toolbar style="flex: 0 0 auto;" class="login-header">
         <v-icon dark>mdi-login</v-icon>
         <h2>Login</h2>
     </v-toolbar>
@@ -25,7 +25,7 @@
                 required
             ></v-text-field>
             
-            <v-btn color="primary"
+            <v-btn
             @click="submit"
             :disabled="!valid"
             >

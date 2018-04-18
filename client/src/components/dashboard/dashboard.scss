@@ -128,12 +128,11 @@
     nav .user {
         font-size: 1.2em;
     }
-}
-
-footer {
-    border-top: 1px solid #737373;
-    span {
-        padding-right: 24px;
+    footer {
+        border-top: 1px solid $base-border-color;
+        span {
+            padding-right: 24px;
+        }
     }
 }
 

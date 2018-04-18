@@ -63,6 +63,7 @@
 
     .workflow-layout >* {
         background-color: $light-secondary;
+        color: $dark-text-color;
         padding: 8px 16px;
         align-items: center;
         padding: 20px;
@@ -174,6 +175,15 @@
             .per-page {
                 width: 60px;
                 color: $light-primary !important;
+                .input-group__selections__comma {
+                    color: $dark-text-color !important;
+                }
+                .icon {
+                    color: $dark-text-color !important;
+                }
+                .input-group__details::before {
+                    background-color: $dark-text-color !important;
+                }
             }
         }
         .pagination li span {
@@ -236,6 +246,7 @@
         }
         .workflow-layout >* {
             background-color: $dark-secondary;
+            color: $light-text-color;
             .actions {
                 button {
                     background-color: $dark-primary !important;
@@ -246,6 +257,7 @@
         .workflow-info-layout {
             .details {
                 background-color: $dark-tertiary; 
+                color: $light-text-color;
             }
         }
         .footer-card {
@@ -266,6 +278,15 @@
                 }
                 .per-page {
                     color: $dark-primary !important;
+                    .input-group__selections__comma {
+                        color: $light-text-color !important;
+                    }
+                    .icon {
+                        color: $light-text-color !important;
+                    }
+                    .input-group__details::before {
+                        background-color: $light-text-color !important;
+                    }
                 }
             }
             button {

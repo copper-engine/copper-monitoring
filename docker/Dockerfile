@@ -3,7 +3,7 @@ FROM java:8u111-jre
 ARG COPPER_MONITORING_ZIP="copper-monitoring.zip"
 WORKDIR /app
 RUN mkdir -p /app
-RUN /usr/bin/wget --no-verboce -0 /app/copper-monitoring.zip ${COPPER_MONITORING_ZIP} /app
+RUN /usr/bin/wget --no-verbose -O /app/copper-monitoring.zip ${COPPER_MONITORING_ZIP}
 RUN ls
 RUN unzip copper-monitoring.zip
 

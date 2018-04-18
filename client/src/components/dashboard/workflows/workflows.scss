@@ -173,6 +173,10 @@ code:after, kbd:after, code:before, kbd:before {
         .pagination__navigation {
             background-color: $light-tertiary !important;
             color: $dark-text-color;
+            .icon {
+                background-color: $light-tertiary !important;
+                color: $dark-text-color;
+            }
         }
         .pagin-config {
             align-items: center;
@@ -186,6 +190,15 @@ code:after, kbd:after, code:before, kbd:before {
             .per-page {
                 width: 60px;
                 color: $light-primary !important;
+                .input-group__selections__comma {
+                    color: $dark-text-color !important;
+                }
+                .icon {
+                    color: $dark-text-color !important;
+                }
+                .input-group__details::before {
+                    background-color: $dark-text-color !important;
+                }
             }
         }
         .pagination li span {
@@ -296,7 +309,11 @@ code:after, kbd:after, code:before, kbd:before {
             }
             .pagination__navigation {
                 background-color: $dark-tertiary !important;
-                color: $dark-text-color;
+                color: $light-text-color;
+                .icon {
+                    background-color: $dark-tertiary !important;
+                    color: $light-text-color;
+                }
             }
             .pagin-config {
                 .per-page-label {
@@ -304,6 +321,15 @@ code:after, kbd:after, code:before, kbd:before {
                 }
                 .per-page {
                     color: $dark-primary !important;
+                    .input-group__selections__comma {
+                        color: $light-text-color !important;
+                    }
+                    .icon {
+                        color: $light-text-color !important;
+                    }
+                    .input-group__details::before {
+                        background-color: $light-text-color !important;
+                    }
                 }
             }
             button {

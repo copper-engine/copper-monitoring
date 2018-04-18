@@ -12,6 +12,9 @@
         padding: 30px 0 0 40px;
         .input-group {
             color: $light-primary !important;
+            label {
+                color: $dark-text-color;
+            }
         }
     }
 
@@ -45,6 +48,9 @@
     .state-filter {
         .input-group {
             color: $dark-primary !important;
+            label {
+                color: $light-text-color;
+            }
         }
     }
 }

@@ -50,6 +50,7 @@
             .info-summary {
                 overflow: hidden;
                 padding-left: 10px;
+                color: $dark-text-color;
                 .label {
                     padding-left: 16px;
                 }
@@ -121,6 +122,13 @@
             }
             .engine-sub-details {
                 color: $light-shade-text-color !important;
+            }
+        }
+        .tile-interior {
+            .tile-info {
+                .info-summary {
+                    color: $light-text-color;
+                }
             }
         }
         .link-container {

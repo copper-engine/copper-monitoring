@@ -56,6 +56,7 @@ export class WorkflowsComponent extends Vue {
     dialogHighlitedlines: HighlitedLine[] = null;
     dialogWFOpen = false;
     dialogWF: WorkflowInfo = new WorkflowInfo;
+    dialogType: string = 'info';
     sourceCodeAvailable = true;
     filter: WorkflowFilter = new WorkflowFilter();
     clickAllowed: boolean[] = [];
@@ -257,7 +258,9 @@ export class WorkflowsComponent extends Vue {
         });
     }
 
-    deleteBroken(id: string) {
+    deleteBroken(workflow: WorkflowInfo) {
+        this.dialogWFOpen = false;
+        let id = workflow.id;
         this.toggleButtons(id, 'delete');
         this.jmxService.deleteBroken(this.mbean.connectionSettings, this.mbean.name, id, this.$store.state.user)
         .then((done) => {
@@ -363,8 +366,15 @@ export class WorkflowsComponent extends Vue {
         }
     }
 
+    areYouSure(workflow: WorkflowInfo) {
+        this.dialogWF = workflow;
+        this.dialogType = 'verification';
+        this.dialogWFOpen = true;
+    }
+
     openWorkflowDialog(workflow: WorkflowInfo) {
         this.dialogWF = workflow;
+        this.dialogType = 'info';
         this.dialogWFOpen = true;
     }
 }

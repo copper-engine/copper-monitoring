@@ -64,7 +64,7 @@
             {{workflow.workflowClassInfo.majorVersion}}.{{workflow.workflowClassInfo.minorVersion}}.{{workflow.workflowClassInfo.patchLevel}}
         </v-flex>
     </v-layout>
-    <v-layout class="workflow-detail stacktrace" v-if="(wfType === 'broken')">
+    <v-layout class="workflow-detail stacktrace" v-if="(wfType === 'broken' && dialogType === 'info')">
         <v-flex class="detail-label">Last waiting Stack Trace:</v-flex>
         <v-flex class="text">
             <code v-show="workflow.lastWaitStackTrace">
@@ -73,7 +73,7 @@
             <span v-show="!workflow.lastWaitStackTrace">There is no waiting stack trace</span>
         </v-flex>
     </v-layout>
-    <v-layout class="workflow-detail stacktrace" v-if="(wfType === 'broken')">
+    <v-layout class="workflow-detail stacktrace" v-if="(wfType === 'broken' && dialogType === 'info')">
         <v-flex class="detail-label">Error Stack Trace:</v-flex>
         <v-flex class="text">
             <code>

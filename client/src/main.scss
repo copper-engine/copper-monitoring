@@ -74,3 +74,54 @@ body .dark .list__tile:hover {
 .dark .list__tile--active .list__tile__action:first-of-type .icon {
     color: $dark-primary !important;
 }
+
+body {
+    #appCover {
+        .dialog__content {
+            .dialog {
+                .card {
+                    .dialog-title {
+                        background-color: $light-secondary !important;
+                        color: $dark-text-color !important;
+                        button {
+                            background-color: $light-tertiary !important;
+                            color: $dark-text-color !important; 
+                        }
+                    }
+                }
+                .card__text  {
+                    .workflow-details {
+                        background-color: $light-tertiary !important;
+                        color: $dark-text-color !important;
+                    }
+                }
+            }
+        }
+    }
+}
+body {
+    #appCover {
+        .dark {
+            .dialog__content {
+                .dialog {
+                    .card {
+                        .dialog-title {
+                            background-color: $dark-secondary !important;
+                            color: $light-text-color !important;
+                            button {
+                                background-color: $dark-tertiary !important;
+                                color: $light-text-color !important; 
+                            }
+                        }
+                    }
+                    .card__text  {
+                        .workflow-details {
+                            background-color: $dark-tertiary !important;
+                            color: $light-text-color !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

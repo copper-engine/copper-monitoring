@@ -52,6 +52,12 @@ body .list {
 body .list__tile--active {
     color: $light-primary !important;
 }
+body .list__tile:hover {
+    background-color: $light-tertiary !important;
+}
+.list__tile--active .list__tile__action:first-of-type .icon {
+    color: $light-primary !important;
+}
 
 body .dark .list {
     background-color: $dark-background !important;
@@ -60,5 +66,11 @@ body .dark .list {
     color: $light-text-color !important;
 }
 body .dark .list__tile--active {
+    color: $dark-primary !important;
+}
+body .dark .list__tile:hover {
+    background-color: $dark-tertiary !important;
+}
+.dark .list__tile--active .list__tile__action:first-of-type .icon {
     color: $dark-primary !important;
 }

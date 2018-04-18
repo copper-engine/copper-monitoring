@@ -1,10 +1,11 @@
 FROM java:8u111-jre
 
-ARG COPPER_MONITORING_ZIP="copper-monitoring.zip"
-WORKDIR /app
 RUN mkdir -p /app
-RUN /usr/bin/wget --no-verbose -O /app/copper-monitoring.zip ${COPPER_MONITORING_ZIP}
-RUN ls
+WORKDIR /app
+
+ARG COPPER_MONITORING_ZIP="copper-monitoring.zip"
+ADD $COPPER_MONITORING_ZIP /app/copper-monitoring.zip
+
 RUN unzip copper-monitoring.zip
 
 WORKDIR /app/copper-monitoring

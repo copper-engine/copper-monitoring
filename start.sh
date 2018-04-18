@@ -28,7 +28,7 @@ then
 elif [ $1 == '--dockerize' ]
 then
     echo ""
-    echo "Will create docker image copper-monitoring from prepared files"
+    echo "Will create docker image copper-monitoring from prepared files. ATTENTION: Run --prep-dock first to create the artifact!"
     echo ""
     echo "---------------------------------------------------------------------------------------------"
     echo ""

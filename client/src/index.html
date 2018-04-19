@@ -69,7 +69,7 @@
   <body>
     <div class="loadingAnimation" id="loading"></div>
     <div class="initialHide" id="appCover">
-      <v-app :dark="$store.state.darkTheme" :class="{ 'dark' : (this.$store.state.darkTheme === true) }" id="app">
+      <v-app :class="{ 'dark' : (this.$store.state.darkTheme === true) }" id="app">
         <notifications></notifications>
         <router-view>
         </router-view>

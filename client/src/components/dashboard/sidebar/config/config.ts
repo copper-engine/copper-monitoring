@@ -35,9 +35,7 @@ export class ConfigComponent extends Vue {
     deleteSettings() {
         this.dialogDeleteOpen = false;
         this.deleting = true;
-        setTimeout(() => { 
-            this.$emit('deleteSettings');
-        }, 1000);
+        this.$emit('deleteSettings');
     }
 
     submit() {

@@ -147,10 +147,13 @@ export class DashboardComponent extends Vue {
         }
 
         (this.$services.jmxService as JmxService)
-        .getConnectionResults(this.$store.state.connectionSettings, this.$store.state.user)
-        .then((results: ConnectionResult[]) => {
-            let notConnected;
+                .getConnectionResults(this.$store.state.connectionSettings, this.$store.state.user)
+                .then((results: ConnectionResult[]) => {
+            let notConnected: ConnectionResult;
             if (results) {
+                if (this.$store.state.appCriticalError) {
+                    this.$store.commit(Mutations.setAppCriticalError, null);
+                }
                 this.$store.commit(Mutations.updateConnectionResults, results);
                 
                 if (this.interval) {
@@ -172,7 +175,15 @@ export class DashboardComponent extends Vue {
             }
                 
             if (!results || notConnected) {
-                console.error('Got no engine status. Will Schuedule refetching MBeans in three seccond');
+                if (!results) {
+                    console.error('Got no connection results in response. Perhaps issue with connection to server with Jolokia.\n Will schuedule refetching MBeans in three seccond');
+                    this.$store.commit(Mutations.setAppCriticalError, 'Got no connection results in response. Perhaps issue with connection to server with Jolokia.');
+                }
+
+                if (notConnected) {
+                    console.error(`Got no connection to ${notConnected.settings.host}:${notConnected.settings.port}. Will schuedule refetching MBeans in three seccond`);
+                }
+
                 setTimeout(() => {
                     this.sheduleFetchingStatus();
                 }, 3000);

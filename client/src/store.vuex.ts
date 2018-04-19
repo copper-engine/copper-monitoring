@@ -16,6 +16,7 @@ export class StoreState {
   public user: User = null;
   public connectionSettings: ConnectionSettings[] = [];
   public connectionResults: ConnectionResult[] = [];
+  public appCriticalError: string = null;
 
   constructor() {}
 }
@@ -27,7 +28,9 @@ export const Mutations = {
   deleteConnectionSettings: 'deleteConnectionSettings',
   updateConnectionResults: 'updateConnectionResults',
   updateEngineStatus: 'updateEngineStatus',
-  setUser: 'setUser'
+  setUser: 'setUser',
+  setAppCriticalError: 'setAppCriticalError'
+
 };
 
 export const store = new Vuex.Store<StoreState>({
@@ -35,6 +38,10 @@ export const store = new Vuex.Store<StoreState>({
     mutations: {
       [Mutations.updateTheme](state, darkTheme) {
         state.darkTheme = darkTheme;
+      },
+      [Mutations.setAppCriticalError](state, error) {
+        console.log('setting error', error);
+        state.appCriticalError = error;
       },
       [Mutations.setConnectionSettings](state, connectionSettings: ConnectionSettings[]) {
         state.connectionSettings = connectionSettings;

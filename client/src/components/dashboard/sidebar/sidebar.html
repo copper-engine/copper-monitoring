@@ -4,8 +4,13 @@
     v-model="drawer" 
     class="sidebar"
     mobile-break-point="1570" app>
+    
     <scroll class="scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 600}">
-        <div class="connection">
+
+        <div class="criticalIssue" v-show="$store.state.appCriticalError">
+            {{$store.state.appCriticalError}}
+        </div>
+        <div class="connection" v-show="!$store.state.appCriticalError">
             <v-layout row>
                 <v-flex class="connection-title">
                     Connections
@@ -36,7 +41,7 @@
                 @deleteSettings="deleteSettings(index)">
             </connection-status>
         </div>
-        <div class="engine-card">
+        <div class="engine-card" v-show="!$store.state.appCriticalError">
             <v-layout row>
                 <div class="engines-title">
                     Engines

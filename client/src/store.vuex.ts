@@ -40,7 +40,6 @@ export const store = new Vuex.Store<StoreState>({
         state.darkTheme = darkTheme;
       },
       [Mutations.setAppCriticalError](state, error) {
-        console.log('setting error', error);
         state.appCriticalError = error;
       },
       [Mutations.setConnectionSettings](state, connectionSettings: ConnectionSettings[]) {

@@ -110,7 +110,6 @@ export class JmxService {
                 connectionSettingsList.map( connectionSettings => this.createMBeansListRequest(connectionSettings)), 
                 { auth: { username: user.name, password: user.password } })
             .then((response) => {
-                console.log('list responce', response);
                 if (!response || !response.data
                     || response.data.length === 0) {
                     console.log('Invalid responce:', response);          

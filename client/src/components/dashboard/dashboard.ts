@@ -66,7 +66,7 @@ export class DashboardComponent extends Vue {
 
     getPeriodSettings() {
         if (localStorage.getItem('updatePeriod') === null) {
-            this.periods[1] = this.$store.state.connectionSettings[0].updatePeriod;
+            this.periods[1] = this.$store.getters.updatePeriod;
         } else {
             this.periods[1] = parseInt(localStorage.getItem('updatePeriod'));
         }
@@ -149,24 +149,33 @@ export class DashboardComponent extends Vue {
         (this.$services.jmxService as JmxService)
         .getConnectionResults(this.$store.state.connectionSettings, this.$store.state.user)
         .then((results: ConnectionResult[]) => {
-            this.$store.commit(Mutations.updateConnectionResults, results);
-
-            if (this.interval) {
-                clearInterval(this.interval);
-            }
-
-            if (this.$store.getters.engineMBeans && this.$store.getters.engineMBeans.length > 0) {
-                this.getEngineStatus(this.$store.getters.engineMBeans, this.$store.state.user);
-                this.interval = setInterval(() => {
+            let notConnected;
+            if (results) {
+                this.$store.commit(Mutations.updateConnectionResults, results);
+                
+                if (this.interval) {
+                    clearInterval(this.interval);
+                }
+                
+                if (this.$store.getters.engineMBeans && this.$store.getters.engineMBeans.length > 0) {
                     this.getEngineStatus(this.$store.getters.engineMBeans, this.$store.state.user);
-                }, this.$store.state.connectionSettings[0].updatePeriod * 1000);
-            } else {
-                this.$store.commit(Mutations.updateEngineStatus, []);
-
-                console.error('Got no engine status. Will Shuedule refetching MBeans in two seccond');
+                    this.interval = setInterval(() => {
+                        this.getEngineStatus(this.$store.getters.engineMBeans, this.$store.state.user);
+                    }, this.$store.getters.updatePeriod * 1000);
+                }  else {
+                    this.$store.commit(Mutations.updateEngineStatus, []);
+                }
+                
+                notConnected = results.find((conResult: ConnectionResult) => {
+                    return !conResult.mbeans || conResult.mbeans.length === 0;
+                });
+            }
+                
+            if (!results || notConnected) {
+                console.error('Got no engine status. Will Schuedule refetching MBeans in three seccond');
                 setTimeout(() => {
                     this.sheduleFetchingStatus();
-                }, 2000);
+                }, 3000);
             }
         });
     }

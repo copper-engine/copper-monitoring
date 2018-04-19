@@ -63,6 +63,14 @@ export const store = new Vuex.Store<StoreState>({
       }
     },
     getters: {
+      updatePeriod: state => {
+        // return state.user.settings.updatePeriod
+        return 10;
+      },
+      fetchPeriod: state => {
+        // return state.user.settings.fetchPeriod
+        return 5;
+      },
       connectionsAsParams: state => {
         return state.connectionSettings.map((connection: ConnectionSettings) => 'connection=' + connection.host + '|' + connection.port).join('&');
       },

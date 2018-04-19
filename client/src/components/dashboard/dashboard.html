@@ -8,11 +8,11 @@
             User: <span class="username"> {{ user.name }} </span>
         </div> -->
         <v-menu v-model="menuOpen" offset-y class="user-menu" :close-on-content-click="false">
-            <v-btn @click="menuOpen = !menuOpen" slot="activator">  <v-icon>mdi-account</v-icon> User Settings </v-btn>
+            <v-btn @click="menuOpen = !menuOpen" slot="activator">  <v-icon>mdi-account</v-icon> User: {{ user.name }} </v-btn>
             <v-card class="user-menu-card">
                 <v-layout column class="card-content">
                     <div class="user" v-if="!!user">
-                        User: {{ user.name }}
+                        User Settings:
                     </div>
                     <v-layout row class="input-container">
                         <v-flex class="input-label">
@@ -27,7 +27,8 @@
                     </v-layout>
                     <v-layout row class="input-container">
                         <v-flex class="input-label">
-                            Not older than 'y' seconds
+                            <!-- Used for fetching data from engine -->
+                            Not older than 'y' minutes
                         </v-flex>
                         <v-flex class="input">
                             <v-text-field

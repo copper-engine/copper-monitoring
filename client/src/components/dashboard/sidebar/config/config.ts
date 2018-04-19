@@ -46,7 +46,7 @@ export class ConfigComponent extends Vue {
     }
 
     checkDuplicateConnection(newConnection: ConnectionSettings) {
-        if ((newConnection.host === this.connectionSettings.host) && (newConnection.port === this.connectionSettings.port)) {
+        if ((this.type !== 'createNew') && (newConnection.host === this.connectionSettings.host) && (newConnection.port === this.connectionSettings.port)) {
             return false;
         }
         let currentConnections = this.$store.state.connectionSettings;

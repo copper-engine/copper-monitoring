@@ -10,14 +10,142 @@ body {
     min-width: 900px; 
 }
 
-.theme--dark .footer {
-    background: $base-dark-color;
-    border-top: 1px solid $base-border-color;
+body .light .vdatetime-year-picker__item--selected,
+body .light .vdatetime-time-picker__item--selected,
+body .light .vdatetime-popup__actions__button {
+    color: $light-primary;
 }
-.theme--dark .toolbar, .application .theme--dark.toolbar {
-    background-color: $base-dark-color;
+body .light .vdatetime-popup__header,
+body .light .vdatetime-calendar__month__day--selected > span > span,
+body .light .vdatetime-calendar__month__day--selected:hover > span > span {
+    background: $light-primary;
+}
+body .dark .vdatetime-year-picker__item--selected,
+body .dark .vdatetime-time-picker__item--selected,
+body .dark .vdatetime-popup__actions__button {
+    color: $dark-primary;
+}
+body .dark .vdatetime-popup__header,
+body .dark .vdatetime-calendar__month__day--selected > span > span,
+body .dark .vdatetime-calendar__month__day--selected:hover > span > span {
+    background: $dark-primary;
 }
 
-.application.theme--dark {
-    background: #2f333d;
+body .list {
+    background-color: $light-background !important;
+}
+.list li {
+    color: $dark-text-color !important;
+}
+body .list__tile--active {
+    color: $light-primary !important;
+}
+body .list__tile:hover {
+    background-color: $light-tertiary !important;
+}
+.list__tile--active .list__tile__action:first-of-type .icon {
+    color: $light-primary !important;
+}
+
+body .dark .list {
+    background-color: $dark-background !important;
+}
+.dark .list li {
+    color: $light-text-color !important;
+}
+body .dark .list__tile--active {
+    color: $dark-primary !important;
+}
+body .dark .list__tile:hover {
+    background-color: $dark-tertiary !important;
+}
+.dark .list__tile--active .list__tile__action:first-of-type .icon {
+    color: $dark-primary !important;
+}
+
+body {
+    #appCover {
+        .dialog__content {
+            .dialog {
+                .card {
+                    .dialog-title {
+                        background-color: $light-secondary !important;
+                        color: $dark-text-color !important;
+                        button {
+                            background-color: $light-tertiary !important;
+                            color: $dark-text-color !important; 
+                        }
+                    }
+                }
+                .card__text  {
+                    .workflow-details {
+                        background-color: $light-tertiary !important;
+                        color: $dark-text-color !important;
+                    }
+                }
+                .card__actions {
+                    background-color: $light-secondary !important;
+                    color: $dark-text-color;
+                    button {
+                        background-color: $light-tertiary !important;
+                        color: $dark-text-color;
+                    }
+                }
+            }
+        }
+    }
+}
+body {
+    #appCover {
+        .dark {
+            .dialog__content {
+                .dialog {
+                    .card {
+                        .dialog-title {
+                            background-color: $dark-secondary !important;
+                            color: $light-text-color !important;
+                            button {
+                                background-color: $dark-tertiary !important;
+                                color: $light-text-color !important; 
+                            }
+                        }
+                    }
+                    .card__text  {
+                        .workflow-details {
+                            background-color: $dark-tertiary !important;
+                            color: $light-text-color !important;
+                        }
+                    }
+                    .card__actions {
+                        background-color: $dark-secondary !important;
+                        color: $light-text-color;
+                        button {
+                            background-color: $dark-tertiary !important;
+                            color: $light-text-color;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+body .notifications {
+    .success {
+        background-color: #5bc456 !important;
+    }
+}
+body .notifications {
+    .warning {
+        background-color: #b71c1c !important;
+    }
+}
+
+body .footer {
+    background-color: $light-secondary !important;
+    color: $dark-text-color;
+}
+body .dark .footer {
+    background-color: $dark-secondary !important;
+    color: $light-text-color;
 }

@@ -1,44 +1,115 @@
+@import '../../variables';
+
 .login {    
     margin: auto;
 
     h2 {
-        color: #fff !important;
+        color: $light-text-color !important;
     }
 
     .alert {
         margin: 0;
     }
+
+    .login-header {
+        background-color: $light-primary;
+    }
     
     .login-form {
-        background: #fff;
+        background: $light-text-color;
         color: #333;
         width: 400px;
         padding: 20px;
+        label {
+            color: $dark-text-color;
+        }
+        button {
+            background-color: $light-primary !important;
+            color: $light-text-color !important;
+        }
+        .input-group {
+            color: $light-primary !important;
+            .input-group__input {
+                input {
+                    color: $dark-text-color !important;
+                    caret-color: $light-primary !important;
+                }
+            }
+            .input-group__details {
+                .input-group__hint {
+                    color: $dark-text-color !important;
+                }
+            }
+            .input-group__details::before {
+                background-color: $light-primary;
+            }
+        }
+        .input-group--focused {
+            color: $light-primary !important;
+            .input-group__details::before {
+                background-color: $light-primary;
+            }
+            .input-group__details::after {
+                background-color: $light-primary;
+            }
+        }
+        .input-group:hover {
+            .input-group__details::before {
+                background-color: $light-tertiary !important;
+            }
+        }
     }
 }
 
-
-.theme--dark .login .input-group:not(.input-group--error) label {
-    color: rgba(0,0,0,0.54);
-}
-
-.theme--dark .login  .input-group:not(.input-group--error) .input-group__details:before {
-    background-color: rgba(0,0,0,0.42);
-}
-
-.theme--dark .login .input-group:not(.input-group--error):not(.input-group--focused):not(.input-group--disabled):not(.input-group--disabled):not(.input-group--overflow):not(.input-group--segmented):not(.input-group--editable):hover .input-group__details:before {
-    background-color: rgba(0,0,0,0.80);
-}
-
-.theme--dark .login .input-group input, 
-.theme--dark .login .input-group textarea {
-    color: rgba(0,0,0,0.80);
-}
-
-.theme--dark .login .btn.btn--disabled:not(.btn--icon):not(.btn--flat) {
-    background-color: rgba(0,0,0, 0.12) !important;
-}
-
-.theme--dark .login .btn.btn--disabled {
-    color: rgba(0,0,0,0.26) !important;
+.dark {
+    .login {
+        h2 {
+            color: $light-text-color !important;
+        }
+        .login-header {
+            background-color: $dark-primary;
+        }
+        .login-form {
+            background: $light-text-color;
+            color: #333;
+            label {
+                color: $dark-text-color;
+            }
+            button {
+                background-color: $dark-primary !important;
+                color: $light-text-color !important;
+            }
+            .input-group {
+                color: $dark-primary !important;
+                .input-group__input {
+                    input {
+                        color: $dark-text-color !important;
+                        caret-color: $dark-primary !important;
+                    }
+                }
+                .input-group__details {
+                    .input-group__hint {
+                        color: $dark-text-color !important;
+                    }
+                }
+                .input-group__details::before {
+                    background-color: $dark-primary;
+                }
+            }
+            .input-group--focused {
+                color: $dark-primary !important;
+                .input-group__details::before {
+                    background-color: $dark-primary;
+                }
+                .input-group__details::after {
+                    background-color: $dark-primary;
+                }
+            }
+            .input-group:hover {
+                .input-group__details::before {
+                    background-color: $dark-tertiary !important;
+                }
+            }
+        }
+    }
 }

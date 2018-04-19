@@ -62,10 +62,10 @@ export class StatisticsComponent extends Vue {
     @Watch('states', { deep: true })
     @Watch('$route.params')
     initCharts() {
-        this.mbean = this.$store.getters.engineMBeans[this.$route.params.id];
         this.saveStates();
         this.getGroup();
         this.getId();
+        this.mbean = this.$store.getters.engineMBeans[this.id];
         this.getKeySet();
         this.loadStates();
         this.initSecondsChart();
@@ -127,7 +127,6 @@ export class StatisticsComponent extends Vue {
 
     getId() {
         if (this.group != null) {
-            console.log('detecting group');
             this.id = String(this.group.engines[0].id);
         } else {
             this.id = this.$route.params.id;
@@ -149,7 +148,8 @@ export class StatisticsComponent extends Vue {
 
     parseGroupName(rawName: string) {
         if (rawName) {
-            return rawName.substr(15);
+            // return rawName.substr(15);
+            return rawName;            
         } else {
             return 'noname';
         }

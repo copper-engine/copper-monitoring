@@ -1,10 +1,10 @@
 <div class="wf-repo" v-if="!newComponent">
 
     <v-layout class="workflows-cont" column>
-        <h2 class="themeText--text">Workflow Repository</h2>
+        <h2>Workflow Repository</h2>
 
         <v-layout class="summary" column>
-            <v-layout class="text themeText--text stopGrow">
+            <v-layout class="text stopGrow">
                 <v-flex class="sub-heading">
                     Repository Type:
                 </v-flex>
@@ -12,7 +12,7 @@
                     {{ this.wfRepo.description }}
                 </v-flex>
             </v-layout>
-            <v-layout class="text themeText--text">
+            <v-layout class="text">
                 <v-flex class="sub-heading">
                     Source:
                 </v-flex>
@@ -22,7 +22,7 @@
             </v-layout>
         </v-layout>
 
-        <v-layout class="header primary textOnColor--text">
+        <v-layout class="header">
             
             <v-flex class="number">
                 #
@@ -42,9 +42,9 @@
             </v-flex>
         </v-layout>
 
-        <v-card v-show="!this.wfRepo.workFlowInfo || this.wfRepo.workFlowInfo.length === 0" class="secondary">
+        <v-card v-show="!this.wfRepo.workFlowInfo || this.wfRepo.workFlowInfo.length === 0" class="error">
             <v-card-text>
-                <v-alert color="primary" icon="info" value="true" >
+                <v-alert class="error-message" icon="info" value="true" >
                     Cannot Load Workflow Class Information
                 </v-alert>
             </v-card-text>
@@ -52,7 +52,7 @@
 
         <v-layout class="workflow" v-for="(workflow, i) in this.wfRepo.workFlowInfo" :key="workflow.id" column>
 
-            <v-layout class="workflow-layout secondary" column>
+            <v-layout class="workflow-layout" column>
                 <v-layout>
                     <v-flex class="number">
                         {{ i + 1 }}
@@ -71,7 +71,7 @@
                         <v-tooltip top content-class="tooltip-text">
                             <v-btn
                             depressed
-                            color="primary"
+                            dark
                             class="squareButton"
                             @click="toggleOpen(i)"
                             :disabled="workflow.sourceCode === null || (workflow.sourceCode.trim()).toLowerCase() === '1.na'"
@@ -87,7 +87,7 @@
 
             <v-layout class="workflow-info-layout">
             <transition name="extend">
-                <div class="details accent" v-show="workflow.open">
+                <div class="details" v-show="workflow.open">
                     <v-layout class="workflow-detail stacktrace" row>
                         <v-flex class="detail-label">Source Code:</v-flex>
                         <v-flex class="text">
@@ -103,12 +103,12 @@
     </v-layout>
 
     <v-card flat class="footer-card">
-        <v-card-text class="secondary">
+        <v-card-text>
             <v-layout justify-center class="pagination-cont">
                     <v-flex class="text-xs-center">
-                        <v-pagination :length="totalPages" v-model="page" :total-visible="10" color="primary"></v-pagination>      
+                        <v-pagination :length="totalPages" v-model="page" :total-visible="10"></v-pagination>      
                     </v-flex>
-                <v-flex class="" xs3>
+                <v-flex xs3>
                     <v-layout justify-center class="pagin-config">
                         <v-flex>
                             <div class="per-page-label">Per page</div>
@@ -119,7 +119,6 @@
                             class="per-page"
                             :items="perPageItems"
                             v-model="perPage"
-                            color="primary"
                             ></v-select>
                         </v-flex>
                     </v-layout>

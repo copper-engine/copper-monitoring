@@ -1,54 +1,58 @@
 <v-card flat class="engine-connection-config">
-    <transition name="extend-config">
-        <div primary-title v-if="!deleting">
-            <v-layout row class="header">
-                <h2>Configuration</h2>
-                <v-spacer></v-spacer>
-                <v-tooltip top content-class="tooltip-text">
-                <v-btn dark icon v-if="type !== 'createNew'" @click.stop="deleteSettings" slot="activator">
-                    <v-icon class="control-icon" v-html="'delete'"></v-icon>
-                </v-btn>
-                <span>Delete Connection</span>
-                </v-tooltip>
+    <div primary-title >
+        <v-layout row class="header">
+            <h2>Configuration</h2>
+            <v-spacer></v-spacer>
+            <v-tooltip top content-class="tooltip-text">
+            <v-btn dark icon v-if="type !== 'createNew'" @click.stop="dialogDeleteOpen = true" slot="activator">
+                <v-icon class="control-icon" v-html="'delete'"></v-icon>
+            </v-btn>
+            <span>Delete Connection</span>
+            </v-tooltip>
+        </v-layout>
+        <v-form v-model="valid" ref="form" class="config-input" lazy-validation>
+            <v-text-field
+                label="Host"
+                v-model="host"
+                :rules="hostRules"
+                required
+            ></v-text-field>
+            <v-text-field
+                label="port"
+                v-model="port"
+                :rules="portRules"
+                required
+            ></v-text-field>
+            <v-layout row class="button-container">
+            <v-btn
+                class="submit-btn"
+                @click="submit"
+                :disabled="!valid"
+            >
+                submit
+            </v-btn>
+            <v-btn
+                class="cancel"
+                @click="$emit('hideSettings')"
+            >
+                Cancel
+            </v-btn>
             </v-layout>
-            <v-form v-model="valid" ref="form" lazy-validation>
-                <v-text-field class="config-input"
-                    label="Host"
-                    v-model="host"
-                    :rules="hostRules"
-                    required
-                ></v-text-field>
-                <v-text-field class="config-input"
-                    label="port"
-                    v-model="port"
-                    :rules="portRules"
-                    required
-                ></v-text-field>
-                <!-- <v-text-field class="config-input"
-                    label="Get data every 'x' seconds"
-                    v-model="updatePeriod"
-                    :rules="numberRules"
-                ></v-text-field>
-                <v-text-field class="config-input"
-                    label="not older than 'y' min"
-                    v-model="fetchPeriod"
-                    :rules="numberRules"
-                ></v-text-field> -->
-                <v-layout row class="button-container">
-                <v-btn
-                    class="submit-btn"
-                    @click="submit"
-                    :disabled="!valid"
-                >
-                    submit
-                </v-btn>
-                <v-btn
-                    @click="$emit('hideSettings')"
-                >
-                    Cancel
-                </v-btn>
+        </v-form>
+    </div>
+    <v-dialog v-model="dialogDeleteOpen" scrollable max-width="500" position="absolute" persistent>
+        <v-card>
+            <v-card-title position="absolute" class="dialog-title">
+                <h2> Are you sure you want to delete connection: {{ host }}:{{ port }} </h2>               
+            </v-card-title>
+            <v-divider></v-divider>
+            <v-card-actions>
+                <v-layout row>
+                    <v-spacer></v-spacer>
+                    <v-btn depressed @click.stop="deleteSettings">Yes</v-btn>          
+                    <v-btn depressed @click="dialogDeleteOpen = false">No</v-btn>
                 </v-layout>
-            </v-form>
-        </div>
-    </transition>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </v-card>

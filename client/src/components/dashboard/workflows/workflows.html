@@ -13,124 +13,121 @@
     </workflow-heading>
     
     <v-layout class="workflows-cont" column>
-        <v-card v-show="!workflows || workflows.length === 0" class="secondary">
+        <v-card v-show="!workflows || workflows.length === 0">
             <v-card-text>
-                <v-alert color="primary" icon="info" value="true" >
+                <v-alert icon="info" value="true" >
                     There are no available {{ wfType }} workflows
                 </v-alert>
             </v-card-text>
         </v-card>
-            <v-flex class="workflow" v-for="(workflow, i) in workflows" :key="workflow.id"
-            :class="{
-            'highlight-workflow-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting,
-            'highlight-workflow-extended-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting && workflowsContext.get(workflow.id).open,
-            'highlight-workflow-layout': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloading, 
-            'fade': workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton)
-            }">
-                <v-layout class="workflow-layout secondary" column>
-                    <v-layout class="workflow-layout-header" :class="{ 'correct-height' : (wfType === 'waiting') }">
-                        <v-flex class="number">
-                            {{ (page - 1) * perPage + i + 1 }}
-                        </v-flex>  
-                        <v-flex class="data">
-                            {{ workflow.workflowClassInfo.alias }}
-                        </v-flex>  
-                        <v-flex class="engineId">
-                            {{ workflow.engineId }}
-                        </v-flex>
-                        <v-flex class="processorPoolId">
-                            {{ workflow.processorPoolId }}
-                        </v-flex>
-                        <v-flex class="state" v-if="(wfType === 'broken')">
-                            {{ workflow.state }}
-                        </v-flex>
-                        <v-flex class="priority">
-                            {{ workflow.priority }}
-                        </v-flex>
-                        <v-flex class="timeout" v-if="(wfType === 'broken')">
-                            <span v-if="workflow.timeout">
-                                {{ workflow.timeout | moment("HH:mm DD/MM/YYYY") }}
-                            </span>
-                        </v-flex>
-                        <v-flex class="timestamps">
-                            <div class="errorTS" v-if="(wfType === 'broken')">
-                                {{ !workflow.errorData ? '' : workflow.errorData.errorTS | moment("HH:mm DD/MM/YYYY") }}
-                            </div>
-                            <div class="creationTS">
-                                {{ workflow.creationTS | moment("HH:mm DD/MM/YYYY") }}
-                            </div>
-                            <div class="lastModTS">
-                                {{ workflow.lastModTS | moment("HH:mm DD/MM/YYYY") }}
-                            </div>
-                        </v-flex>                  
-                        <v-flex :class="{ 'single-button' : (wfType === 'waiting'), 'actions' : (wfType === 'broken')}">
-                            <v-tooltip top content-class="tooltip-text">
-                                <v-btn dark depressed
-                                    v-if="(wfType === 'broken')"
-                                    color="primary"
-                                    class="squareButton"
-                                    :loading="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloadButton"
-                                    :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"
-                                    @click="restart(workflow.id)"
-                                    slot="activator"
-                                    >
-                                    <v-icon>cached</v-icon>
-                                </v-btn>
-                                <span>Restart Workflow</span>
-                            </v-tooltip>
-                            <v-tooltip top content-class="tooltip-text">
-                                <v-btn dark depressed
-                                    v-if="(wfType === 'broken')"
-                                    color="primary"
-                                    class="squareButton"
-                                    :loading="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleteButton"
-                                    :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"                                
-                                    @click="deleteBroken(workflow.id)"
-                                    slot="activator">
-                                    <v-icon>delete</v-icon>
-                                </v-btn>
-                                <span>Delete Workflow</span>
-                            </v-tooltip>
-                            <v-tooltip top content-class="tooltip-text">
-                                <v-btn dark depressed
-                                    color="primary"
-                                    class="squareButton"
-                                    :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"                                                                
-                                    @click="showDetails(workflow, i)"
-                                    slot="activator">
-                                    <v-icon :class="{ 'close-details-icon': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).open }">details</v-icon>
-                                </v-btn>
-                                <span>View Details</span>
-                            </v-tooltip>
-                        </v-flex>
-                    </v-layout>
-                    <transition name="extend">
-                        <v-layout v-show="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).open" 
-                            class="workflow-info-layout" 
-                            :class="{
-                            'highlight-workflow-details-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting && workflowsContext.get(workflow.id).open, 
-                            'highlight-workflow-layout': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloading, 
-                            'fade': workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton)
-                            }">
-                            <workflow-details
-                            :workflow="workflow"
-                            :wfType="wfType"
-                            :inDialog="false"
-                            @openWorkflowDialog="openWorkflowDialog($event)"
-                            @showSourceCode="showSourceCode($event)">
-                            </workflow-details>
-                        </v-layout>
-                    </transition>
+        <v-flex class="workflow" v-for="(workflow, i) in workflows" :key="workflow.id"
+        :class="{
+        'highlight-workflow-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting,
+        'highlight-workflow-extended-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting && workflowsContext.get(workflow.id).open,
+        'highlight-workflow-layout': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloading, 
+        'fade': workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton)
+        }">
+            <v-layout class="workflow-layout" column>
+                <v-layout class="workflow-layout-header" :class="{ 'correct-height' : (wfType === 'waiting') }">
+                    <v-flex class="number">
+                        {{ (page - 1) * perPage + i + 1 }}
+                    </v-flex>  
+                    <v-flex class="data">
+                        {{ workflow.workflowClassInfo.alias }}
+                    </v-flex>  
+                    <v-flex class="engineId">
+                        {{ workflow.engineId }}
+                    </v-flex>
+                    <v-flex class="processorPoolId">
+                        {{ workflow.processorPoolId }}
+                    </v-flex>
+                    <v-flex class="state" v-if="(wfType === 'broken')">
+                        {{ workflow.state }}
+                    </v-flex>
+                    <v-flex class="priority">
+                        {{ workflow.priority }}
+                    </v-flex>
+                    <v-flex class="timeout" v-if="(wfType === 'broken')">
+                        <span v-if="workflow.timeout">
+                            {{ workflow.timeout | moment("HH:mm DD/MM/YYYY") }}
+                        </span>
+                    </v-flex>
+                    <v-flex class="timestamps">
+                        <div class="errorTS" v-if="(wfType === 'broken')">
+                            {{ !workflow.errorData ? '' : workflow.errorData.errorTS | moment("HH:mm DD/MM/YYYY") }}
+                        </div>
+                        <div class="creationTS">
+                            {{ workflow.creationTS | moment("HH:mm DD/MM/YYYY") }}
+                        </div>
+                        <div class="lastModTS">
+                            {{ workflow.lastModTS | moment("HH:mm DD/MM/YYYY") }}
+                        </div>
+                    </v-flex>                  
+                    <v-flex :class="{ 'single-button' : (wfType === 'waiting'), 'actions' : (wfType === 'broken')}">
+                        <v-tooltip top content-class="tooltip-text">
+                            <v-btn dark depressed
+                                v-if="(wfType === 'broken')"
+                                class="squareButton"
+                                :loading="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloadButton"
+                                :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"
+                                @click="restart(workflow.id)"
+                                slot="activator"
+                                >
+                                <v-icon>cached</v-icon>
+                            </v-btn>
+                            <span>Restart Workflow</span>
+                        </v-tooltip>
+                        <v-tooltip top content-class="tooltip-text">
+                            <v-btn dark depressed
+                                v-if="(wfType === 'broken')"
+                                class="squareButton"
+                                :loading="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleteButton"
+                                :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"                                
+                                @click="areYouSure(workflow)"
+                                slot="activator">
+                                <v-icon>delete</v-icon>
+                            </v-btn>
+                            <span>Delete Workflow</span>
+                        </v-tooltip>
+                        <v-tooltip top content-class="tooltip-text">
+                            <v-btn dark depressed
+                                class="squareButton"
+                                :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"                                                                
+                                @click="showDetails(workflow, i)"
+                                slot="activator">
+                                <v-icon :class="{ 'close-details-icon': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).open }">details</v-icon>
+                            </v-btn>
+                            <span>View Details</span>
+                        </v-tooltip>
+                    </v-flex>
                 </v-layout>
-            </v-flex>
+                <transition name="extend">
+                    <v-layout v-show="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).open" 
+                        class="workflow-info-layout" 
+                        :class="{
+                        'highlight-workflow-details-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting && workflowsContext.get(workflow.id).open, 
+                        'highlight-workflow-layout': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloading, 
+                        'fade': workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton)
+                        }">
+                        <workflow-details
+                        :workflow="workflow"
+                        :wfType="wfType"
+                        :inDialog="false"
+                        @openWorkflowDialog="openWorkflowDialog($event)"
+                        @showSourceCode="showSourceCode($event)">
+                        </workflow-details>
+                    </v-layout>
+                </transition>
+            </v-layout>
+        </v-flex>
     </v-layout>
 
     <v-dialog v-model="dialogSourceOpen" scrollable max-width="800px" position="absolute">
         <v-card>
-            <v-card-title position="absolute">
+            <v-card-title position="absolute" class="dialog-title">
                 <h2>{{ sourceCodeAvailable ? 'Source Code' : 'Source Code - Not Available' }}</h2>
                 <v-spacer></v-spacer>               
-                    <v-btn depressed class="squareButton" color="primary" @click="dialogSourceOpen = false"><v-icon>mdi-close</v-icon></v-btn>      
+                    <v-btn depressed class="squareButton" @click="dialogSourceOpen = false"><v-icon>mdi-close</v-icon></v-btn>      
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>
@@ -143,11 +140,11 @@
 
     <v-dialog v-model="dialogWFOpen" scrollable max-width="1200px" position="absolute">
         <v-card>
-            <v-card-title position="absolute">
+            <v-card-title position="absolute" class="dialog-title">
                 <h2> Workflow: {{ dialogWF.id }}</h2>
                 <v-spacer></v-spacer>        
-                    <v-btn depressed color="primary" @click="showSourceCode(dialogWF)">Source Code</v-btn>          
-                    <v-btn depressed class="squareButton" color="primary" @click="dialogWFOpen = false"><v-icon>mdi-close</v-icon></v-btn>      
+                    <v-btn depressed @click="showSourceCode(dialogWF)">Source Code</v-btn>          
+                    <v-btn depressed class="squareButton" @click="dialogWFOpen = false"><v-icon>mdi-close</v-icon></v-btn>      
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>
@@ -158,6 +155,22 @@
                 @showSourceCode="showSourceCode($event)">
                 </workflow-details>
             </v-card-text>
+        </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialogDeleteOpen" scrollable max-width="500" position="absolute" persistent>
+        <v-card>
+            <v-card-title position="absolute" class="dialog-title">
+                <h2> Are you sure you want to delete workflow: {{ dialogWF.id }} </h2>               
+            </v-card-title>
+            <v-divider></v-divider>
+            <v-card-actions>
+                <v-layout row>
+                    <v-spacer></v-spacer>
+                    <v-btn depressed @click="deleteBroken(dialogWF)">Yes</v-btn>          
+                    <v-btn depressed @click="dialogDeleteOpen = false">No</v-btn>
+                </v-layout>
+            </v-card-actions>
         </v-card>
     </v-dialog>
 

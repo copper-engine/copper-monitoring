@@ -2,7 +2,33 @@
 $darkest: #040d10;
 
 $base-border-color: #444c5f;
-$base-dark-color: #262a34;
+// $base-dark-color: #262a34;
+
+$dark-primary: #41a578;
+$dark-secondary: #353B4A;
+$dark-tertiary: #474D5A;
+$dark-background: #2F333D;
+$dark-sidebar: #262a34;
+$dark-sidebar-icon: #b8c2d8;
+$dark-engine-ingroup: #2f333d;
+$dark-link-active: #353b4a;
+$dark-link-hover: #3e4658;
+
+$light-primary: #0d5494;
+$light-secondary: #e4e2e2;
+$light-tertiary: #cecece;
+$light-background: #F5F5F5;
+$light-sidebar: #ebebeb;
+$light-sidebar-icon: #0d5494;
+$light-engine-ingroup: #d6d3d3;
+$light-link-active: #ccdcea;
+$light-link-hover: #b9cddf;
+
+$dark-text-color: #303030;
+$dark-shade-text-color: #303030;
+$light-text-color: #f5f5f5;
+$light-shade-text-color: #eaeaea99;
+
 
 @mixin sidebar-border-bottom {
     border-bottom: 1px solid $base-border-color;

@@ -21,7 +21,7 @@
         padding: 10px 0px 10px 10px;
         
         h2 {
-            color: #eaeaea;
+            color: $light-sidebar-icon;
             font-size: 1.3em;
             word-wrap: break-word;
             max-width: 200px;
@@ -32,7 +32,7 @@
         }
 
         .engine-sub-details {
-            color: #eaeaea99 !important;
+            color: $dark-shade-text-color !important;
         }
 
         .count-info {
@@ -50,6 +50,7 @@
             .info-summary {
                 overflow: hidden;
                 padding-left: 10px;
+                color: $dark-text-color;
                 .label {
                     padding-left: 16px;
                 }
@@ -71,40 +72,89 @@
         .link-container {
             .activeLink {
                 .link-background {
-                   background: #44bb85; 
+                   background: $light-primary; 
                 }
                 .link-interior {
-                    background: #353b4a;
+                    background: $light-link-active;
                 }
             }
             &:hover {
                 .link-background {
-                    background: #44bb85;
+                    background: $light-primary;
                 }
                 .link-interior {
-                    background: #3e4658;
+                    background: $light-link-hover;
                 }
             }
             .link {
                 .link-background {
-                    padding-left: 10px; 
+                    padding-left: 10px;
                 }
                 .link-interior {
                     padding-top: 10px;
                     padding-bottom: 10px;
                     padding-left: 5px;
-                    color: #eaeaea;
+                    color: $dark-text-color;
                     width: 100%;
                     .link-icon {
                         flex-grow: 0;
                         padding-right: 15px;
                         .icon {
                             display: block;
+                            color: $dark-text-color;
                         }
                     }
                     .link-name {
                         font-size: 1.3em;
                         font-weight: 400;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.dark {
+    .engine-group {
+        .tile-header{
+            h2 {
+                color: $light-text-color;
+            }
+            .engine-sub-details {
+                color: $light-shade-text-color !important;
+            }
+        }
+        .tile-interior {
+            .tile-info {
+                .info-summary {
+                    color: $light-text-color;
+                }
+            }
+        }
+        .link-container {
+            .activeLink {
+                .link-background {
+                   background: $dark-primary; 
+                }
+                .link-interior {
+                    background: $dark-link-active;
+                }
+            }
+            &:hover {
+                .link-background {
+                    background: $dark-primary;
+                }
+                .link-interior {
+                    background: $dark-link-hover;
+                }
+            }
+            .link {
+                .link-interior {
+                    color: $light-text-color;
+                    .link-icon {
+                        .icon {
+                            color: $light-text-color;
+                        }
                     }
                 }
             }

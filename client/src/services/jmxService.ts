@@ -534,7 +534,6 @@ export class JmxService {
     }
 
     private parseChartCountResponse = (response): StatesPrint => {
-        console.log('chart responce', response.data);
         if (!response || !response.data
             || response.data.length < 5
             || !this.isSubResponseValid(response.data[0])

@@ -1,7 +1,7 @@
 <div class="workflow-header">
-    <h2 class="themeText--text">{{ (wfType==='broken') ? 'Broken' : 'Waiting' }} Workflows</h2>
+    <h2>{{ (wfType==='broken') ? 'Broken' : 'Waiting' }} Workflows</h2>
     <v-layout class="summary">
-        <v-flex class="text themeText--text stopGrow">
+        <v-flex class="text stopGrow">
             Total number of {{ filterApplied ? 'filtered ' : '' }}{{ wfType }} workflows: {{ engineStatus ? wfCount : 0}}
         </v-flex>
         <v-spacer></v-spacer>
@@ -9,7 +9,6 @@
             <v-btn dark
                 v-if="(wfType === 'broken')"
                 class="longButton"
-                color="primary"
                 :loading="restartingAll"
                 :disabled="restartingAll || deletingAll"
                 @click="sendRestartAll"
@@ -23,10 +22,9 @@
             <v-btn dark
                 v-if="(wfType === 'broken')"
                 class="longButton"
-                color="primary"
                 :loading="deletingAll"
                 :disabled="deletingAll || restartingAll"
-                @click="sendDeleteAll">
+                @click="dialogDeleteOpen = true">
                 <v-icon left>delete</v-icon>
                 Delete {{ filterApplied ? 'Filtered' : 'All' }}
                 <span slot="loader" class="custom-loader">
@@ -35,7 +33,6 @@
             </v-btn>
             <v-btn dark
                 class="longButton"
-                color="primary"
                 :class="{ 'only-filter' :  (wfType === 'waiting') }"
                 :loading="deletingAll"
                 :disabled="deletingAll || restartingAll"
@@ -50,9 +47,9 @@
     </v-layout>
 
     <transition name="extend-filter">
-    <v-layout v-show="openFilterMenu" class="filter-menu secondary" :class="{ 'overflow-hidden' :  hideOverflow}" column>
+    <v-layout v-show="openFilterMenu" class="filter-menu" :class="{ 'overflow-hidden' :  hideOverflow}" column>
         <v-flex class="filter-label">
-        <h3 class="themeText--text">Filter By:</h3>        
+        <h3>Filter By:</h3>        
         </v-flex>
         <v-layout class="filter-layout" column>
             <v-layout row class="filter-header">
@@ -65,7 +62,7 @@
                 </v-flex>
                 <v-layout class="time-field-container">
                     <v-flex class="stopGrow time-field" >
-                        <v-text-field class="date-time-text"
+                        <v-text-field
                         v-model="createTime.fromType"
                         label="Created - From"
                         mask="####-##-## ##:##"
@@ -89,7 +86,7 @@
                     <div class="date-click-decorator date-time-picker" @click="clickedToDate('createTime', 'createTo')"></div>
                     </v-flex>
                 </v-layout>
-                <v-btn depressed color="primary" @click="clearFilter" class="longButton"><v-icon left>mdi-cancel</v-icon>Clear</v-btn>         
+                <v-btn depressed @click="clearFilter" class="longButton"><v-icon left>mdi-cancel</v-icon>Clear</v-btn>         
             </v-layout>
             <v-layout row class="filter-header">
                 <v-flex class="select-container stopGrow" :class="{ 'hide-state-select' :(wfType === 'waiting')}">
@@ -127,21 +124,21 @@
                         <div class="date-click-decorator date-time-picker" @click="clickedToDate('modTime', 'modTo')"></div>
                     </v-flex>
                 </v-layout>
-                <v-btn depressed color="primary" @click="applyFilter" class="longButton"><v-icon left>mdi-check</v-icon>Apply</v-btn>
+                <v-btn depressed @click="applyFilter" class="longButton"><v-icon left>mdi-check</v-icon>Apply</v-btn>
             </v-layout>
         </v-layout>      
     </v-layout>
     </transition>
 
     <transition name="extend-chip">
-    <v-layout v-show="filterApplied && !openFilterMenu" class="chip-menu secondary" row>
+    <v-layout v-show="filterApplied && !openFilterMenu" class="chip-menu" row>
         <v-layout row class="filter-chip-container">
             <v-flex class="stopGrow">
                 <h3>Filtered By:</h3>
             </v-flex>
             <v-flex v-for="filter in currentFilters" :key="filter.id" class="stopGrow filter-chip-flex">
-                <v-chip color="highlight textOnColor--text" class="filter-chip">
-                    <v-chip color="primary textOnColor--text" class="inner-chip">
+                <v-chip class="filter-chip">
+                    <v-chip class="inner-chip">
                         {{ filter[0] }}
                     </v-chip>
                     {{ filter[1] }}
@@ -161,7 +158,7 @@
     </v-layout>
     </transition>
 
-    <v-layout class="row-info primary textOnColor--text" :class="{ 'correct-height' : (wfType === 'waiting') }">
+    <v-layout class="row-info" :class="{ 'correct-height' : (wfType === 'waiting') }">
         <v-flex class="number">
             #
         </v-flex>  
@@ -198,4 +195,21 @@
                 Actions
         </v-flex>
     </v-layout>
+
+    <v-dialog v-model="dialogDeleteOpen" scrollable max-width="500" position="absolute" persistent>
+        <v-card>
+            <v-card-title position="absolute" class="dialog-title">
+                <h2> Are you sure you want to delete {{ wfCount }} workflow(s) </h2>                
+            </v-card-title>
+            <v-divider></v-divider>
+            <v-card-actions>
+                <v-layout row>
+                    <v-spacer></v-spacer>
+                    <v-btn depressed @click="sendDeleteAll">Yes</v-btn>          
+                    <v-btn depressed @click="dialogDeleteOpen = false">No</v-btn>
+                </v-layout>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+
 </div>

@@ -1,3 +1,5 @@
+@import '../../../variables';
+
 code:after, kbd:after, code:before, kbd:before {
     content: "";
     letter-spacing: 0px;
@@ -16,6 +18,9 @@ code:after, kbd:after, code:before, kbd:before {
 .codeDialog {
     padding: 30px;
     border-radius: 0px;
+}
+.dialog-title {
+    background-color: #2F333D;
 }
 
 .workflows {
@@ -47,17 +52,34 @@ code:after, kbd:after, code:before, kbd:before {
     .workflows-cont {
         border-bottom: 1px solid;
         overflow: hidden;
-
-        .alert {
-            margin: 20px;
-        }
+        border-color: $dark-text-color;
+        .card {
+            background-color: $light-secondary !important;
+            .card__text {
+                background-color: $light-secondary !important;
+                .alert {
+                    margin: 20px;
+                    background-color: $light-tertiary !important;
+                    border-color: $light-tertiary !important;
+                    color: $dark-text-color;
+                }
+            }
+        }       
         .workflow {
             z-index: 0;
             border-top: 1px solid;
-
-            .workflow-info-layout {
-                padding: 0px;
-                overflow: hidden;
+            border-color: $dark-text-color;
+            .workflow-layout {
+                background-color: $light-secondary;
+                color: $dark-text-color;
+                button {
+                    background-color: $light-primary !important;
+                    color: $light-text-color;
+                }
+                .workflow-info-layout {
+                    padding: 0px;
+                    overflow: hidden;
+                }
             }
         }
     } 
@@ -144,8 +166,17 @@ code:after, kbd:after, code:before, kbd:before {
 
     .pagination-cont {
         align-items: center;
-        .pagination li span {
-            float: none;
+        .pagination__item {
+            background-color: $light-primary !important;
+            color: $light-text-color;
+        }
+        .pagination__navigation {
+            background-color: $light-tertiary !important;
+            color: $dark-text-color;
+            .icon {
+                background-color: $light-tertiary !important;
+                color: $dark-text-color;
+            }
         }
         .pagin-config {
             align-items: center;
@@ -154,14 +185,32 @@ code:after, kbd:after, code:before, kbd:before {
                 font-weight: 700;
                 padding-left: 16px;
                 padding-bottom: 8px;
+                color: $dark-text-color;
             }
             .per-page {
                 width: 60px;
+                color: $light-primary !important;
+                .input-group__selections__comma {
+                    color: $dark-text-color !important;
+                }
+                .icon {
+                    color: $dark-text-color !important;
+                }
+                .input-group__details::before {
+                    background-color: $dark-text-color !important;
+                }
             }
+        }
+        .pagination li span {
+            float: none;
+        }
+        button {
+            background-color: $light-background;
         }
     }
 
     .footer-card {
+        background-color: $light-secondary;
         border-bottom-left-radius: 2px;
         border-bottom-right-radius: 2px;
     }
@@ -171,18 +220,15 @@ code:after, kbd:after, code:before, kbd:before {
         margin-right: 10px;
     }
 
-
-    .highlight-workflow-layout >* {
-        background: #27695c !important;
-        opacity: 0.35;
-        animation-name: highlightCurve;
-        animation-duration: 1s;
-        animation-timing-function: ease-out;
-    }
-    @keyframes highlightCurve {
-        0% {opacity: 0.35}
-        50% {opacity: 0.8}
-        100% {opacity: 0.45}
+    .highlight-workflow-layout {
+        .workflow-layout {
+            background-color: #27695c !important;
+            opacity: 0.9;
+        }
+        .workflow-details {
+            background-color: #27695c !important;
+            opacity: 0.9;
+        }
     }
     .highlight-workflow-deleting >* {
         background: #e74615 !important;
@@ -246,8 +292,73 @@ code:after, kbd:after, code:before, kbd:before {
         0% {max-height: 0px;
             padding-top: 0px;}
         100% {max-height: 900px;;}
+    } 
+}
+
+.dark {
+    .workflows {
+        .footer-card {
+            background-color: $dark-secondary;
+        }
+        .pagination-cont {
+            .pagination__item {
+                background-color: $dark-primary !important;
+                color: $light-text-color;
+            }
+            .pagination__navigation {
+                background-color: $dark-tertiary !important;
+                color: $light-text-color;
+                .icon {
+                    background-color: $dark-tertiary !important;
+                    color: $light-text-color;
+                }
+            }
+            .pagin-config {
+                .per-page-label {
+                    color: $light-text-color !important;
+                }
+                .per-page {
+                    color: $dark-primary !important;
+                    .input-group__selections__comma {
+                        color: $light-text-color !important;
+                    }
+                    .icon {
+                        color: $light-text-color !important;
+                    }
+                    .input-group__details::before {
+                        background-color: $light-text-color !important;
+                    }
+                }
+            }
+            button {
+                background-color: $dark-background;
+                color: $light-text-color;
+            }
+        }
+        .workflows-cont {
+            border-color: $light-text-color;
+            .card {
+                background-color: $dark-secondary !important;
+                .card__text {
+                    background-color: $dark-secondary !important;
+                    .alert {
+                        background-color: $dark-tertiary !important;
+                        border-color: $dark-tertiary !important;
+                        color: $light-text-color;
+                    }
+                }
+            }
+            .workflow {
+                border-color: $light-text-color;
+                .workflow-layout {
+                    background-color: $dark-secondary;
+                    color: $light-text-color;
+                    button {
+                        background-color: $dark-primary !important;
+                        color: $light-text-color;
+                    }
+                }
+            }
+        }
     }
-    
-    
-    
 }

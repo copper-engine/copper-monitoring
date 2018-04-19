@@ -17,7 +17,7 @@ export class ConfigComponent extends Vue {
     fetchPeriod: number = 5;
     updatePeriod: number = 10;
     valid = true;
-    deleting = false;
+    dialogDeleteOpen: boolean = false;
 
     // Form Validation Rules
     hostRules = [ (v) => !!v || 'Host is required' ];
@@ -32,7 +32,7 @@ export class ConfigComponent extends Vue {
     }
 
     deleteSettings() {
-        this.deleting = true;
+        this.dialogDeleteOpen = false;
         this.$emit('deleteSettings');
     }
 
@@ -46,6 +46,9 @@ export class ConfigComponent extends Vue {
     }
 
     checkDuplicateConnection(newConnection: ConnectionSettings) {
+        if ((this.type !== 'createNew') && (newConnection.host === this.connectionSettings.host) && (newConnection.port === this.connectionSettings.port)) {
+            return false;
+        }
         let currentConnections = this.$store.state.connectionSettings;
         let duplicate = false;
         for (let i = 0; i < currentConnections.length; i++) {

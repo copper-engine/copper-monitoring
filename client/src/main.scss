@@ -140,3 +140,12 @@ body .notifications {
         background-color: #b71c1c !important;
     }
 }
+
+body .footer {
+    background-color: $light-secondary;
+    color: $dark-text-color;
+}
+body .dark .footer {
+    background-color: $dark-secondary;
+    color: $light-text-color;
+}

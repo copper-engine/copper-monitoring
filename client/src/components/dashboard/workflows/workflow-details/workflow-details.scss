@@ -6,7 +6,7 @@
     padding-left: 32px;
     padding-right: 10px;
     width: 100%;
-    background-color: $light-tertiary !important;
+    background-color: $light-tertiary;
     color: $dark-text-color;
     .workflow-detail {
         padding: 4px;
@@ -46,7 +46,7 @@
 
 .dark {
     .workflow-details {
-        background-color: $dark-tertiary !important;
+        background-color: $dark-tertiary;
         color: $light-text-color;
         .workflow-detail {
             button {

@@ -70,7 +70,7 @@ code:after, kbd:after, code:before, kbd:before {
             border-top: 1px solid;
             border-color: $dark-text-color;
             .workflow-layout {
-                background-color: $light-secondary !important;
+                background-color: $light-secondary;
                 color: $dark-text-color;
                 button {
                     background-color: $light-primary !important;
@@ -220,17 +220,15 @@ code:after, kbd:after, code:before, kbd:before {
         margin-right: 10px;
     }
 
-    .highlight-workflow-layout >* {
-        background: #27695c !important;
-        opacity: 0.35;
-        animation-name: highlightCurve;
-        animation-duration: 1s;
-        animation-timing-function: ease-out;
-    }
-    @keyframes highlightCurve {
-        0% {opacity: 0.35}
-        50% {opacity: 0.8}
-        100% {opacity: 0.45}
+    .highlight-workflow-layout {
+        .workflow-layout {
+            background-color: #27695c !important;
+            opacity: 0.9;
+        }
+        .workflow-details {
+            background-color: #27695c !important;
+            opacity: 0.9;
+        }
     }
     .highlight-workflow-deleting >* {
         background: #e74615 !important;
@@ -353,7 +351,7 @@ code:after, kbd:after, code:before, kbd:before {
             .workflow {
                 border-color: $light-text-color;
                 .workflow-layout {
-                    background-color: $dark-secondary !important;
+                    background-color: $dark-secondary;
                     color: $light-text-color;
                     button {
                         background-color: $dark-primary !important;

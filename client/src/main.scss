@@ -10,18 +10,6 @@ body {
     min-width: 900px; 
 }
 
-// .theme--dark .footer {
-//     background: $base-dark-color;
-//     border-top: 1px solid $base-border-color;
-// }
-// .theme--dark .toolbar, .application .theme--dark.toolbar {
-//     background-color: $base-dark-color;
-// }
-
-// .application.theme--dark {
-//     background: #2f333d;
-// }
-
 body .light .vdatetime-year-picker__item--selected,
 body .light .vdatetime-time-picker__item--selected,
 body .light .vdatetime-popup__actions__button {
@@ -139,5 +127,16 @@ body {
                 }
             }
         }
+    }
+}
+
+body .notifications {
+    .success {
+        background-color: #5bc456 !important;
+    }
+}
+body .notifications {
+    .warning {
+        background-color: #b71c1c !important;
     }
 }

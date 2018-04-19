@@ -5,7 +5,7 @@
                 <h2>Configuration</h2>
                 <v-spacer></v-spacer>
                 <v-tooltip top content-class="tooltip-text">
-                <v-btn dark icon v-if="type !== 'createNew'" @click.stop="deleteSettings" slot="activator">
+                <v-btn dark icon v-if="type !== 'createNew'" @click.stop="dialogDeleteOpen = true" slot="activator">
                     <v-icon class="control-icon" v-html="'delete'"></v-icon>
                 </v-btn>
                 <span>Delete Connection</span>
@@ -42,4 +42,19 @@
             </v-form>
         </div>
     </transition>
+    <v-dialog v-model="dialogDeleteOpen" scrollable max-width="500" position="absolute" persistent>
+        <v-card>
+            <v-card-title position="absolute" class="dialog-title">
+                <h2> Are you sure you want to delete connection: {{ host }}:{{ port }} </h2>               
+            </v-card-title>
+            <v-divider></v-divider>
+            <v-card-actions>
+                <v-layout row>
+                    <v-spacer></v-spacer>
+                    <v-btn depressed @click.stop="deleteSettings">Yes</v-btn>          
+                    <v-btn depressed @click="dialogDeleteOpen = false">No</v-btn>
+                </v-layout>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </v-card>

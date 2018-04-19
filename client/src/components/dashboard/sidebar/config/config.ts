@@ -18,6 +18,7 @@ export class ConfigComponent extends Vue {
     updatePeriod: number = 10;
     valid = true;
     deleting = false;
+    dialogDeleteOpen: boolean = false;
 
     // Form Validation Rules
     hostRules = [ (v) => !!v || 'Host is required' ];
@@ -32,8 +33,11 @@ export class ConfigComponent extends Vue {
     }
 
     deleteSettings() {
+        this.dialogDeleteOpen = false;
         this.deleting = true;
-        this.$emit('deleteSettings');
+        setTimeout(() => { 
+            this.$emit('deleteSettings');
+        }, 1000);
     }
 
     submit() {

@@ -16,3 +16,4 @@ client-old/
 client/package-lock.json
 server/static/
 server/.idea
+docker/copper-monitoring.zip

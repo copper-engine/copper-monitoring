@@ -66,3 +66,5 @@ use ip of host in dockerland. We can get it like thar:
 
 We should use this IP address instead of localhost in our copper monitoring GUI.
 
+
+

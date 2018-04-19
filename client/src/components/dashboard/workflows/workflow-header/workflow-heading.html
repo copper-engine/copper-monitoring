@@ -24,7 +24,7 @@
                 class="longButton"
                 :loading="deletingAll"
                 :disabled="deletingAll || restartingAll"
-                @click="sendDeleteAll">
+                @click="dialogDeleteOpen = true">
                 <v-icon left>delete</v-icon>
                 Delete {{ filterApplied ? 'Filtered' : 'All' }}
                 <span slot="loader" class="custom-loader">
@@ -195,4 +195,21 @@
                 Actions
         </v-flex>
     </v-layout>
+
+    <v-dialog v-model="dialogDeleteOpen" scrollable max-width="500" position="absolute" persistent>
+        <v-card>
+            <v-card-title position="absolute" class="dialog-title">
+                <h2> Are you sure you want to delete {{ wfCount }} workflow(s) </h2>                
+            </v-card-title>
+            <v-divider></v-divider>
+            <v-card-actions>
+                <v-layout row>
+                    <v-spacer></v-spacer>
+                    <v-btn depressed @click="sendDeleteAll">Yes</v-btn>          
+                    <v-btn depressed @click="dialogDeleteOpen = false">No</v-btn>
+                </v-layout>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+
 </div>

@@ -20,6 +20,7 @@ export class WorkflowHeading extends Vue {
     private jmxService: JmxService = this.$services.jmxService;
     clickAllowed = true;
     openFilterMenu: boolean = false;
+    dialogDeleteOpen: boolean = false;
     hideOverflow: boolean = true;
     filterApplied: boolean = false;
     currentFilters: string[][] = [];
@@ -303,6 +304,7 @@ export class WorkflowHeading extends Vue {
     }
 
     sendDeleteAll() {
+        this.dialogDeleteOpen = false;
         this.$emit('triggerDeleteFiltered', this.filterApplied ? this.currentFilterObject : new WorkflowFilter());
     }
 }

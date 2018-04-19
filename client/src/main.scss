@@ -98,23 +98,9 @@ body {
                 .card__actions {
                     background-color: $light-secondary !important;
                     color: $dark-text-color;
-                    padding-right: 0px;
                     button {
                         background-color: $light-tertiary !important;
                         color: $dark-text-color;
-                    }
-                    .actions-container {
-                        padding-right: 16px;
-                        margin-right: 0px;
-                        align-items: center;
-                        .text {
-                            font-size: 1.2em;
-                            margin-right: 10px;
-                        }
-                        button {
-                            margin-left: 8px;
-                            margin-right: 8px;
-                        }
                     }
                 }
             }

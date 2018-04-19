@@ -113,7 +113,6 @@
                         :workflow="workflow"
                         :wfType="wfType"
                         :inDialog="false"
-                        :dialogType="dialogType"
                         @openWorkflowDialog="openWorkflowDialog($event)"
                         @showSourceCode="showSourceCode($event)">
                         </workflow-details>
@@ -139,7 +138,7 @@
         </v-card>
     </v-dialog>
 
-    <v-dialog v-model="dialogWFOpen" scrollable max-width="1200px" position="absolute" :persistent="(dialogType === 'verification')">
+    <v-dialog v-model="dialogWFOpen" scrollable max-width="1200px" position="absolute">
         <v-card>
             <v-card-title position="absolute" class="dialog-title">
                 <h2> Workflow: {{ dialogWF.id }}</h2>
@@ -153,18 +152,25 @@
                 :workflow="dialogWF"
                 :wfType="wfType"
                 :inDialog="true"
-                :dialogType="dialogType"
                 @showSourceCode="showSourceCode($event)">
                 </workflow-details>
             </v-card-text>
-            <v-card-actions v-if="(dialogType === 'verification')">
-                <v-layout row class="actions-container">
+        </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialogDeleteOpen" scrollable max-width="500" position="absolute" persistent>
+        <v-card>
+            <v-card-title position="absolute" class="dialog-title">
+                <h2> Are you sure you want to delete workflow: {{ dialogWF.id }} </h2>               
+            </v-card-title>
+            <v-divider></v-divider>
+            <v-card-actions>
+                <v-layout row>
                     <v-spacer></v-spacer>
-                    <div class="text">Are you sure you want to delete this workflow?</div>
-                    <v-btn depressed @click="deleteBroken(dialogWF)">Yes</v-btn>    
-                    <v-btn depressed @click="dialogWFOpen = false">No</v-btn>
+                    <v-btn depressed @click="deleteBroken(dialogWF)">Yes</v-btn>          
+                    <v-btn depressed @click="dialogDeleteOpen = false">No</v-btn>
                 </v-layout>
-            </v-card-actions>   
+            </v-card-actions>
         </v-card>
     </v-dialog>
 

@@ -1,6 +1,6 @@
 <div class="connection-config">
     <transition name="extend-connection-header">
-        <div class="connection-container" v-if="!showSettings">
+        <div class="connection-container" v-if="(!showSettings && !deleting)">
             <v-layout row>
                 <v-flex class="icon-container">
                     <v-icon 

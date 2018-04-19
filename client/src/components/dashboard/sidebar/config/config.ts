@@ -17,7 +17,6 @@ export class ConfigComponent extends Vue {
     fetchPeriod: number = 5;
     updatePeriod: number = 10;
     valid = true;
-    deleting = false;
     dialogDeleteOpen: boolean = false;
 
     // Form Validation Rules
@@ -34,7 +33,6 @@ export class ConfigComponent extends Vue {
 
     deleteSettings() {
         this.dialogDeleteOpen = false;
-        this.deleting = true;
         this.$emit('deleteSettings');
     }
 

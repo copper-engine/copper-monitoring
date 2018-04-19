@@ -17,6 +17,7 @@ export class ConnectionStatusComponent extends Vue {
     @Prop() closingConnections: number[];
     showSettings = false;
     clickAllowed = true;
+    deleting = false;
 
     @Watch('closingConnections')
     checkClosing() {
@@ -46,6 +47,10 @@ export class ConnectionStatusComponent extends Vue {
     }
 
     deleteSettings() {
-        this.$emit('deleteSettings');
+        this.showSettings = false;
+        this.deleting = true;
+        setTimeout(() => { 
+            this.$emit('deleteSettings');
+        }, 1000);
     }
 }

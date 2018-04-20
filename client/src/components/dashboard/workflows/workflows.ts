@@ -76,6 +76,7 @@ export class WorkflowsComponent extends Vue {
     }
 
     @Watch('$store.state.connectionSettings')
+    @Watch('$store.state.user.settings.updatePeriod')
     sheduleFetchingWF() {
         if (this.fetchWFInterval) {
             clearInterval(this.fetchWFInterval);
@@ -83,7 +84,7 @@ export class WorkflowsComponent extends Vue {
         this.getWorkflows(this.$store.state.user, this.filter);
         this.fetchWFInterval = setInterval(() => {
             this.getWorkflows(this.$store.state.user, this.filter);
-        }, this.mbean.connectionSettings.updatePeriod * 1000);
+        }, this.$store.state.user.settings.updatePeriod * 1000);
     }
 
     @Watch('page')

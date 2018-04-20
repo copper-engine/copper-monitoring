@@ -69,7 +69,7 @@ export class DashboardComponent extends Vue {
             this.update = parseInt(localStorage.getItem('updatePeriod'));
         }
         if (localStorage.getItem('fetchPeriod') === null) {
-            this.fetch = this.$store.state.connectionSettings[0].fetchPeriod;
+            this.fetch = this.$store.getters.fetchPeriod;
         } else {
             this.fetch = parseInt(localStorage.getItem('fetchPeriod'));
         }
@@ -77,19 +77,13 @@ export class DashboardComponent extends Vue {
 
     setFetch() {
         localStorage.setItem('fetchPeriod', String(this.fetch));
-        this.setConnections();
+        this.$store.state.user.settings.fetchPeriod = this.fetch;
     }
 
     setUpdate() {
         localStorage.setItem('updatePeriod', String(this.update));
-        this.setConnections();
+        this.$store.state.user.settings.updatePeriod = this.update;
     }
- 
-    setConnections() {
-        let settings = new ConnectionSettings(this.connectionSettings.host, this.connectionSettings.port, this.forceInt(this.fetch), this.forceInt(this.update));
-        this.$store.commit(Mutations.updateConnectionSettings, {index: 0, connectionSettings: settings});
-    }
- 
 
     forceInt(data: any) {
         if (typeof data === 'number') {

@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 
 export class JmxService {
     getEngineStatus(mbeans: MBean[], user: User) {
-        let requests = _.flatten(mbeans.map((mbean) => this.createEngineStatusRequest(mbean)));
+        let requests = _.flatten(mbeans.map((mbean) => this.createEngineStatusRequest(mbean, user)));
         return Axios.post(process.env.API_NAME, requests, {
                 auth: { username: user.name, password: user.password }
             })
@@ -19,10 +19,10 @@ export class JmxService {
             });
     }
 
-    createEngineStatusRequest(mbean: MBean) {
+    createEngineStatusRequest(mbean: MBean, user: User) {
         return [
             this.createEngineInfoRequest(mbean.connectionSettings, mbean), 
-            this.createEngineActivityRequest(mbean.connectionSettings, mbean.name),
+            this.createEngineActivityRequest(mbean.connectionSettings, mbean.name, user),
             this.createCountWFRequest(mbean.connectionSettings, mbean.name, [ State.ERROR, State.INVALID ])                
         ];
     }
@@ -360,10 +360,10 @@ export class JmxService {
         });
     }
 
-    private createEngineActivityRequest(connectionSettings: ConnectionSettings, mbean: string) {
+    private createEngineActivityRequest(connectionSettings: ConnectionSettings, mbean: string, user: User) {
         return this.createJmxExecRequest(connectionSettings, mbean, {
             operation: 'queryEngineActivity',
-            arguments: [connectionSettings.fetchPeriod], // fetch info for last N minutes
+            arguments: [user.settings.fetchPeriod], // fetch info for last N minutes
         });
     }
 

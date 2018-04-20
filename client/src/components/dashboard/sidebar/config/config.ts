@@ -14,8 +14,6 @@ export class ConfigComponent extends Vue {
 
     host: string = '';
     port: string = '1099';
-    fetchPeriod: number = 5;
-    updatePeriod: number = 10;
     valid = true;
     dialogDeleteOpen: boolean = false;
 
@@ -27,8 +25,6 @@ export class ConfigComponent extends Vue {
     mounted() {
         this.host = this.connectionSettings.host;
         this.port = this.connectionSettings.port;
-        this.fetchPeriod = this.connectionSettings.fetchPeriod;
-        this.updatePeriod = this.connectionSettings.updatePeriod;
     }
 
     deleteSettings() {
@@ -37,9 +33,9 @@ export class ConfigComponent extends Vue {
     }
 
     submit() {
-        let newConncection = new ConnectionSettings(this.host, this.port, this.fetchPeriod, this.updatePeriod);
+        let newConncection = new ConnectionSettings(this.host, this.port);
         if (this.checkDuplicateConnection(newConncection) === false) {
-            this.$emit('updateTarget', new ConnectionSettings(this.host, this.port, this.fetchPeriod, this.updatePeriod));
+            this.$emit('updateTarget', new ConnectionSettings(this.host, this.port));
         } else {
             this.$services.eventHub.$emit('showNotification', new Notification('Connection is a duplicate', 'error'));
         }

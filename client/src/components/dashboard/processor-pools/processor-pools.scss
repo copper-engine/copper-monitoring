@@ -36,7 +36,7 @@
             min-width: 740px;
             margin: 20px;
             border: 1px solid #1a1c21;
-            background-color: #373e47;
+            background-color: $light-wf;
             color: $dark-text-color;
             .card-label {               
                 font-size: 1.1em;
@@ -90,7 +90,7 @@
 
         .pool-card-container {
             .pool-card {
-                background-color: $dark-secondary;
+                background-color: $dark-wf;
                 color: $light-text-color;
             }
             .card-button-container {

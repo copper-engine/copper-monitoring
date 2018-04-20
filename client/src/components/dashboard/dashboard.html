@@ -17,7 +17,9 @@
                         </v-flex>
                         <v-flex class="input">
                             <v-text-field
-                            v-model="periods[1]"
+                            v-on:change="setUpdate()"
+                            v-on:keyup.enter="setUpdate()"
+                            v-model="update"
                             mask="###"
                             ></v-text-field>
                         </v-flex>
@@ -29,7 +31,9 @@
                         </v-flex>
                         <v-flex class="input">
                             <v-text-field
-                            v-model="periods[0]"
+                            v-on:change="setFetch()"
+                            v-on:keyup.enter="setFetch()"
+                            v-model="fetch"
                             mask="###"
                             ></v-text-field>
                         </v-flex>

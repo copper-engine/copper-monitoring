@@ -70,7 +70,7 @@ code:after, kbd:after, code:before, kbd:before {
             border-top: 1px solid;
             border-color: $dark-text-color;
             .workflow-layout {
-                background-color: #373e47;
+                background-color: $light-secondary;
                 color: $dark-text-color;
                 button {
                     background-color: $light-primary !important;

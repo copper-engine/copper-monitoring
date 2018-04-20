@@ -10,6 +10,21 @@ body {
     min-width: 900px; 
 }
 
+.dialog {
+    border-radius: 0px !important;
+    .card__title {
+        border-radius: 0px !important;
+    }
+    .card__text {
+        padding: 0px;
+        width: 100%;
+    }
+    code:after, kbd:after, code:before, kbd:before {
+        content: "";
+        letter-spacing: 0px;
+    }
+}
+
 body .light .vdatetime-year-picker__item--selected,
 body .light .vdatetime-time-picker__item--selected,
 body .light .vdatetime-popup__actions__button {

@@ -26,15 +26,15 @@
             </v-layout>
             <v-layout class="workflow-detail workflow-id">
                 <v-flex class="detail-label"> Error Time:</v-flex>
-                <v-flex class="text"> {{!workflow.errorData ? '' : workflow.errorData.errorTS | moment("HH:mm DD/MM/YYYY")}} </v-flex>                               
+                <v-flex class="text"> {{ workflow.errorData ? (workflow.errorData.errorTS | moment("HH:mm DD/MM/YYYY")) : '' }} </v-flex>                               
             </v-layout>
             <v-layout class="workflow-detail workflow-id">
                 <v-flex class="detail-label"> Creation:</v-flex>
-                <v-flex class="text"> {{ workflow.creationTS | moment("HH:mm DD/MM/YYYY") }} </v-flex>                               
+                <v-flex class="text"> {{ workflow.creationTS ? (workflow.creationTS | moment("HH:mm DD/MM/YYYY")) : '' }} </v-flex>                               
             </v-layout>
             <v-layout class="workflow-detail workflow-id">
                 <v-flex class="detail-label"> Last Modification:</v-flex>
-                <v-flex class="text"> {{ workflow.lastModTS | moment("HH:mm DD/MM/YYYY") }} </v-flex>                               
+                <v-flex class="text"> {{ workflow.lastModTS ? (workflow.lastModTS | moment("HH:mm DD/MM/YYYY")) : '' }} </v-flex>                               
             </v-layout>
     </div>
     <v-layout class="workflow-detail workflow-id">

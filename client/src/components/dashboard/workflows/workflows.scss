@@ -1,5 +1,6 @@
 @import '../../../variables';
 
+
 code:after, kbd:after, code:before, kbd:before {
     content: "";
     letter-spacing: 0px;
@@ -22,7 +23,6 @@ code:after, kbd:after, code:before, kbd:before {
 .dialog-title {
     background-color: #2F333D;
 }
-
 .workflows {
     width: 100%;
     max-width: 1650px;
@@ -50,9 +50,8 @@ code:after, kbd:after, code:before, kbd:before {
     }
 
     .workflows-cont {
-        border-bottom: 1px solid;
+        border-bottom: 1px solid $dark-text-color;
         overflow: hidden;
-        border-color: $dark-text-color;
         .card {
             background-color: $light-secondary !important;
             .card__text {
@@ -336,7 +335,8 @@ code:after, kbd:after, code:before, kbd:before {
             }
         }
         .workflows-cont {
-            border-color: $light-text-color;
+            border-color: #707484;
+            // border-color: $base-border-color;
             .card {
                 background-color: $dark-secondary !important;
                 .card__text {
@@ -349,7 +349,8 @@ code:after, kbd:after, code:before, kbd:before {
                 }
             }
             .workflow {
-                border-color: $light-text-color;
+                border-color: #707484;
+                // border-color: $base-border-color;
                 .workflow-layout {
                     background-color: $dark-secondary;
                     color: $light-text-color;

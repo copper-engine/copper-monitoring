@@ -27,9 +27,8 @@
     }
 
     .workflows-cont {
-        border-bottom: 1px solid;
+        border-bottom: 1px solid $dark-text-color;
         overflow: hidden;
-        border-color: $dark-text-color;
         .card {
             background-color: $light-secondary !important;
             .card__text {
@@ -313,7 +312,8 @@
             }
         }
         .workflows-cont {
-            border-color: $light-text-color;
+            border-color: #707484;
+            // border-color: $base-border-color;
             .card {
                 background-color: $dark-secondary !important;
                 .card__text {
@@ -326,7 +326,8 @@
                 }
             }
             .workflow {
-                border-color: $light-text-color;
+                border-color: #707484;
+                // border-color: $base-border-color;
                 .workflow-layout {
                     background-color: $dark-wf;
                     color: $light-text-color;

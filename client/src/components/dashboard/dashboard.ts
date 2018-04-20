@@ -23,7 +23,7 @@ export class DashboardComponent extends Vue {
     menuOpen: boolean = false;
     update: number;
     fetch: number;
-    themeSwitch: boolean = this.$store.state.darkTheme;
+    themeSwitch: boolean = true;
     
     get user() {
         return this.$store.state.user;
@@ -49,39 +49,37 @@ export class DashboardComponent extends Vue {
         (this.$services.eventHub as Vue).$off('forceStatusFetch', this.forceFetchingStatus);
     }
 
-    getTheme() {
-        this.themeSwitch = this.$store.state.darkTheme;
-    }
-
-    toggleTheme() {
-        this.$store.commit(Mutations.updateTheme, !this.$store.state.darkTheme);
-    }
-
     logout() {
         this.$store.commit(Mutations.setUser, null);
         this.$router.replace('/login'); 
     }
 
+    getTheme() {
+        this.themeSwitch = this.$store.state.user.settings.darkTheme;
+    }
+
     getPeriodSettings() {
-        if (localStorage.getItem('updatePeriod') === null) {
-            this.update = this.$store.getters.updatePeriod;
-        } else {
-            this.update = parseInt(localStorage.getItem('updatePeriod'));
-        }
-        if (localStorage.getItem('fetchPeriod') === null) {
-            this.fetch = this.$store.getters.fetchPeriod;
-        } else {
-            this.fetch = parseInt(localStorage.getItem('fetchPeriod'));
-        }
+        // if (localStorage.getItem('updatePeriod') === null) {
+        //     this.update = this.$store.getters.updatePeriod;
+        // } else {
+        //     this.update = parseInt(localStorage.getItem('updatePeriod'));
+        // }
+        // if (localStorage.getItem('fetchPeriod') === null) {
+        //     this.fetch = this.$store.getters.fetchPeriod;
+        // } else {
+        //     this.fetch = parseInt(localStorage.getItem('fetchPeriod'));
+        // }
+        this.fetch = this.$store.state.user.settings.fetchPeriod;
+        this.update = this.$store.state.user.settings.updatePeriod;
     }
 
     setFetch() {
-        localStorage.setItem('fetchPeriod', String(this.fetch));
+        localStorage.setItem(this.$store.state.user.name + ':fetchPeriod', String(this.fetch));
         this.$store.state.user.settings.fetchPeriod = this.fetch;
     }
 
     setUpdate() {
-        localStorage.setItem('updatePeriod', String(this.update));
+        localStorage.setItem(this.$store.state.user.name + ':updatePeriod', String(this.update));
         this.$store.state.user.settings.updatePeriod = this.update;
     }
 
@@ -123,7 +121,9 @@ export class DashboardComponent extends Vue {
     }
 
     @Watch('themeSwitch')
-    checkToggleTheme() {
+    toggleTheme() {
+        localStorage.setItem('darkTheme', String(this.themeSwitch));
+        localStorage.setItem(this.$store.state.user.name + ':darkTheme', String(this.themeSwitch));
         this.$store.commit(Mutations.updateTheme, this.themeSwitch);
     }
 

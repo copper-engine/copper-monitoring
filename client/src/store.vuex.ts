@@ -10,13 +10,12 @@ import * as _ from 'lodash';
 Vue.use(Vuex);
 
 export class StoreState {
-  // TODO move to user settings
-  public darkTheme = parseBoolean(localStorage.getItem('darkTheme')) && true;
   public engineStatusList: EngineStatus[] = null;
   public user: User = null;
   public connectionSettings: ConnectionSettings[] = [];
   public connectionResults: ConnectionResult[] = [];
   public appCriticalError: string = null;
+  public initialTheme: boolean = parseBoolean(localStorage.getItem('darkTheme'));
 
   constructor() {}
 }
@@ -37,7 +36,7 @@ export const store = new Vuex.Store<StoreState>({
     state: new StoreState(),
     mutations: {
       [Mutations.updateTheme](state, darkTheme) {
-        state.darkTheme = darkTheme;
+        state.user.settings.darkTheme = darkTheme;
       },
       [Mutations.setAppCriticalError](state, error) {
         state.appCriticalError = error;

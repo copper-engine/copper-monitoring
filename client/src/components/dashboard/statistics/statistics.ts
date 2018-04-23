@@ -126,18 +126,14 @@ export class StatisticsComponent extends Vue {
     }
 
     getId() {
-        if (this.group != null) {
-            this.id = String(this.group.engines[0].id);
-        } else {
-            this.id = this.$route.params.id;
-        }
+        this.id = this.$route.params.id;
     }
 
     getGroup() {
-        if (this.$route.params.id.substr(0, 5) === 'group') {
+        if (this.$route.params.type.substr(0, 5) === 'group') {
             for (let i = 0; i < this.$store.getters.groupsOfEngines.length; i++) {
                 let group = this.$store.getters.groupsOfEngines[i];
-                if (this.parseGroupName(group.name) === this.$route.params.id.substr(6)) {
+                if (this.parseGroupName(group.name) === this.$route.params.type.substr(6)) {
                     this.group = group;
                 }
             }

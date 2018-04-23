@@ -70,7 +70,7 @@ export class WorkflowsComponent extends Vue {
     }
 
     init() {
-        this.getWorkflowType();
+        this.getWorkflowSettings();
         this.setFilterStates();
         this.sheduleFetchingWF();
     }
@@ -107,14 +107,9 @@ export class WorkflowsComponent extends Vue {
         this.init();
     }
 
-    getWorkflowType() {
-        if (this.$route.params.id.substr(0, 6) === 'broken') {
-            this.wfType = 'broken';
-            this.engineId = this.$route.params.id.substr(7);
-        } else {
-            this.wfType = 'waiting';
-            this.engineId = this.$route.params.id.substr(8);
-        }
+    getWorkflowSettings() {
+        this.wfType = this.$route.params.wfType;
+        this.engineId = this.$route.params.id;
         this.mbean = this.$store.getters.engineMBeans[this.engineId];
     }
 

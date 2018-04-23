@@ -46,9 +46,9 @@ export class EngineComponent extends Vue {
         let params = this.status.id + '?' + this.$store.getters.connectionsAsParams;
         if (!this.multiEngine) {
             linkArray = linkArray.concat([
-                new Link('Statistics', '/dashboard/statistics/' + params, 'mdi-chart-bar'),
-                new Link('Broken Workflows', '/dashboard/workflows/broken:' + params, 'mdi-image-broken'),
-                new Link('Waiting Workflows', '/dashboard/workflows/waiting:' + params, 'mdi-timer-sand-empty')
+                new Link('Statistics', '/dashboard/statistics/engine/' + params, 'mdi-chart-bar'),
+                new Link('Broken Workflows', '/dashboard/workflows/broken/' + params, 'mdi-image-broken'),
+                new Link('Waiting Workflows', '/dashboard/workflows/waiting/' + params, 'mdi-timer-sand-empty')
             ]);
         }
         

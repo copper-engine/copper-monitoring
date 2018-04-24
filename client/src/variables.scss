@@ -15,23 +15,25 @@ $dark-link-active: #353b4a;
 $dark-link-hover: #3e4658;
 $dark-wf: #353844;
 
-$light-primary: #0d5494;
+$light-primary: #5caeb3;
 $light-secondary: #e4e2e2;
-$light-tertiary: #cecece;
-$light-background: #F5F5F5;
-$light-sidebar: #ebebeb;
-$light-sidebar-icon: #0d5494;
-$light-engine-ingroup: #d6d3d3;
-$light-link-active: #ccdcea;
-$light-link-hover: #b9cddf;
-$light-wf: #e4e2e2;
+$light-tertiary: #e0dede;
+$light-background: #efefef;
+$light-sidebar: #ffffff;
+$light-sidebar-icon: #5caeb3;
+$light-engine-ingroup: #95dfe3;
+$light-link-active: #affbff;
+$light-link-hover: #cfe9eb;
+$light-wf: #ffffff;
 
-$dark-text-color: #303030;
-$dark-shade-text-color: #303030;
+$dark-text-color: #626262;
+$dark-shade-text-color: #626262;
+$dark-border: #43474e;
 $light-text-color: #f5f5f5;
 $light-shade-text-color: #eaeaea99;
+$light-border: #626262;
 
 
 @mixin sidebar-border-bottom {
-    border-bottom: 1px solid $base-border-color;
+    border-bottom: 1px solid $base-border-color !important;
 }

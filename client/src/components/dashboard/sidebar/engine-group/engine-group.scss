@@ -2,14 +2,15 @@
 
 .engine-group {
     overflow: hidden;
-    @include sidebar-border-bottom;
+    border-bottom: 1px solid;
+    border-color: $light-border !important;
     
     .group-icon {
-        color: #7397dc;
+        color: #42b68e;
     }
 
     .engine-icon {
-        color: #69c57e;
+        color: #3CAAF7;
     }
 
     &:last-child {
@@ -21,7 +22,7 @@
         padding: 10px 0px 10px 10px;
         
         h2 {
-            color: $light-sidebar-icon;
+            color: $dark-text-color;
             font-size: 1.3em;
             word-wrap: break-word;
             max-width: 200px;
@@ -116,6 +117,14 @@
 
 .dark {
     .engine-group {
+        border-color: $dark-border;
+        .group-icon {
+            color: #7397dc;
+        }
+    
+        .engine-icon {
+            color: #69c57e;
+        }
         .tile-header{
             h2 {
                 color: $light-text-color;

@@ -1,7 +1,8 @@
 @import '../../../../variables';
 
 .connection-config {
-    @include sidebar-border-bottom;
+    border-bottom: 1px solid;
+    border-color: $light-border !important;
     border-radius: 0px;
     overflow: hidden;
     
@@ -30,6 +31,7 @@
 
 .dark {
     .connection-config {
+        border-color: $dark-border !important;
         .connection-container {
             .connection-info {
                 color: $light-text-color;

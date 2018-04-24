@@ -40,18 +40,29 @@ export class EngineComponent extends Vue {
     get extendTypeOfEngine() {
         if (this.multiEngine === true) {
             return 'extend-engine-limited';
+        } else if (this.status.type === 'persistent') {
+            return 'extend-engine-persistent';
         } else {
-            return 'extend-engine';
+            return 'extend-engine-tranzient';
         }
     }
 
     get links(): Link[] {
+        console.log(this.status.type);
         let linkArray = [];
         let params = this.status.id + '?' + this.$store.getters.connectionsAsParams;
         if (!this.multiEngine) {
             linkArray = linkArray.concat([
-                new Link('Statistics', '/dashboard/statistics/engine/' + params, 'mdi-chart-bar'),
-                new Link('Broken Workflows', '/dashboard/workflows/broken/' + params, 'mdi-image-broken'),
+                new Link('Statistics', '/dashboard/statistics/engine/' + params, 'mdi-chart-bar')
+            ]);
+        }
+        if (!this.multiEngine) {
+            if (this.status.type === 'persistent') {
+                linkArray = linkArray.concat([
+                    new Link('Broken Workflows', '/dashboard/workflows/broken/' + params, 'mdi-image-broken')
+                ]);
+            }
+            linkArray = linkArray.concat([
                 new Link('Waiting Workflows', '/dashboard/workflows/waiting/' + params, 'mdi-timer-sand-empty')
             ]);
         }

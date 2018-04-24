@@ -126,16 +126,28 @@
             padding-bottom: 20px;}
     }
 
-    .extend-engine-enter-active {
-        animation: extend-engine 0.75s;
+    .extend-engine-persistent-enter-active {
+        animation: extend-engine-persistent 0.75s;
     }
-    .extend-engine-leave-active {
-        animation: extend-engine 0.75s reverse;
+    .extend-engine-persistent-leave-active {
+        animation: extend-engine-persistent 0.75s reverse;
     }
 
-    @keyframes extend-engine {
+    @keyframes extend-engine-persistent {
         0% {height: 0px;}
         100% {height: 360px;}
+    }
+
+    .extend-engine-tranzient-enter-active {
+        animation: extend-engine-tranzient 0.75s;
+    }
+    .extend-engine-tranzient-leave-active {
+        animation: extend-engine-tranzient 0.75s reverse;
+    }
+
+    @keyframes extend-engine-tranzient {
+        0% {height: 0px;}
+        100% {height: 313px;}
     }
 
     .extend-engine-limited-enter-active {

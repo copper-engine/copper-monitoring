@@ -33,6 +33,10 @@ export class EngineComponent extends Vue {
         }
     }
 
+    get connection() {
+        return this.$store.getters.engineMBeans[this.status.id].connectionSettings;
+    }
+
     get extendTypeOfEngine() {
         if (this.multiEngine === true) {
             return 'extend-engine-limited';

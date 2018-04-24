@@ -67,7 +67,7 @@
         }
     }
     .navigation-drawer__border {
-        background-color: $base-border-color !important;
+        background-color: $light-border !important;
     }
 
     .list {
@@ -183,6 +183,9 @@
             .connection-title, .engines-title {
                 color: $dark-sidebar-icon;
             }
+        }
+        .navigation-drawer__border {
+            background-color: $dark-border !important;
         }
     }
 }

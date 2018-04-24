@@ -117,7 +117,7 @@
 
 .dark {
     .engine-group {
-        border-color: $dark-border;
+        border-color: $dark-border !important;
         .group-icon {
             color: #7397dc;
         }

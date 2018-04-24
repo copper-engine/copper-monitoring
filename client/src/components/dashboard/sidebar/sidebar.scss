@@ -26,6 +26,15 @@
         // background: -webkit-linear-gradient(left, #0b2732 0%,#123643 100%); /* Chrome10-25,Safari5.1-6 */
         // background: linear-gradient(to right, #0b2732 0%,#123643 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 
+        .criticalIssue {
+            margin: 10px;
+            padding: 10px;
+            border-radius: 2px;
+            font-size: 1.2em;
+            color: $light-text-color;
+            background-color: $error;
+        }
+
         .connection {
             padding-top: 10px;
             padding-bottom: 25px;

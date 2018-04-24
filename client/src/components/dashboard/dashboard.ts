@@ -169,12 +169,12 @@ export class DashboardComponent extends Vue {
                 
             if (!results || notConnected) {
                 if (!results) {
-                    console.error('Got no connection results in response. Perhaps issue with connection to server with Jolokia.\n Will schuedule refetching MBeans in three seccond');
-                    this.$store.commit(Mutations.setAppCriticalError, 'Got no connection results in response. Perhaps issue with connection to server with Jolokia.');
+                    console.error('Received no connection results in response. Perhaps issue with connection to server with Jolokia.\n Will schuedule refetching MBeans in three seccond');
+                    this.$store.commit(Mutations.setAppCriticalError, 'Received no connection results in response. Perhaps issue with connection to server with Jolokia.');
                 }
 
                 if (notConnected) {
-                    console.error(`Got no connection to ${notConnected.settings.host}:${notConnected.settings.port}. Will schuedule refetching MBeans in three seccond`);
+                    console.error(`Received no connection to ${notConnected.settings.host}:${notConnected.settings.port}. Will schuedule refetching MBeans in three seccond`);
                 }
 
                 setTimeout(() => {

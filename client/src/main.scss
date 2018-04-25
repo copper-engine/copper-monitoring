@@ -90,6 +90,11 @@ body {
                             color: $dark-text-color !important; 
                         }
                     }
+                    .delete-dialog-title {
+                        h2 {
+                            font-size: 1.2em;
+                        }
+                    }
                 }
                 .card__text  {
                     .workflow-details {

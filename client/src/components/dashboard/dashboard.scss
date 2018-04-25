@@ -101,15 +101,16 @@
     
     .toolbar {
         min-width: 975px;
-        background-color: $light-sidebar;
-        color: $dark-text-color;
+        background-color: $light-primary;
+        color: $light-text-color;
         .icon {
-            color: $dark-text-color;
+            color: $light-text-color;
         }
         .menu {
             button {
                 background-color: $light-tertiary !important;
                 color: $dark-text-color;
+                margin-right: 32px;
                 .icon {
                     color: $dark-text-color;
                 }
@@ -122,6 +123,8 @@
         background-color: $light-background;
         .container {
             min-width: 975px;
+            padding-left: 32px;
+            padding-right: 32px;
         }
     }
 

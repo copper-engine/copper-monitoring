@@ -1,7 +1,6 @@
 @import 'variables';
 
-html { 
-    color: #eaeaea;
+html {
     min-width: 900px;
     overflow-x: auto 
 }
@@ -84,7 +83,7 @@ body {
             .dialog {
                 .card {
                     .dialog-title {
-                        background-color: $light-primary !important;
+                        background-color: $light-background !important;
                         color: $dark-text-color !important;
                         button {
                             background-color: $light-secondary !important;

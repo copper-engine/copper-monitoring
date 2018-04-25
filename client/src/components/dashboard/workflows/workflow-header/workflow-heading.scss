@@ -40,7 +40,7 @@
     }
     .filter-menu {
         flex-wrap: nowrap;
-        background-color: $light-wf;
+        background-color: $light-tertiary;
         h3 {
             align-items: center;
             padding-left: 35px;
@@ -159,7 +159,7 @@
         padding: 15px;
         overflow: hidden;
         flex-wrap: nowrap;
-        background-color: $light-wf;
+        background-color: $light-tertiary;
         .filter-chip-container {
             align-items: center;
             flex-wrap: wrap;

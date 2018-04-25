@@ -67,7 +67,7 @@
                         <v-tooltip top content-class="tooltip-text">
                             <v-btn dark depressed
                                 v-if="(wfType === 'broken')"
-                                class="squareButton"
+                                class="squareButton restart-button"
                                 :loading="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloadButton"
                                 :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"
                                 @click="restart(workflow.id)"
@@ -80,7 +80,7 @@
                         <v-tooltip top content-class="tooltip-text">
                             <v-btn dark depressed
                                 v-if="(wfType === 'broken')"
-                                class="squareButton"
+                                class="squareButton delete-button"
                                 :loading="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleteButton"
                                 :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"                                
                                 @click="areYouSure(workflow)"
@@ -91,7 +91,7 @@
                         </v-tooltip>
                         <v-tooltip top content-class="tooltip-text">
                             <v-btn dark depressed
-                                class="squareButton"
+                                class="squareButton details-button"
                                 :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"                                                                
                                 @click="showDetails(workflow, i)"
                                 slot="activator">

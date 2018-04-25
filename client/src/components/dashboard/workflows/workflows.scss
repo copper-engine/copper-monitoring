@@ -5,6 +5,19 @@
     max-width: 1650px;
     margin: auto;
 
+    .delete-button {
+        background-color: $red !important;
+        color: $light-text-color;
+    }
+    .restart-button {
+        background-color: $green !important;
+        color: $light-text-color;
+    }
+    .details-button {
+        background-color: $blue !important;
+        color: $light-text-color;
+    }
+
     .stopGrow {
         flex-grow: 0;
     }
@@ -27,7 +40,8 @@
     }
 
     .workflows-cont {
-        border-bottom: 1px solid $dark-text-color;
+        border-bottom: 1px solid;
+        border-color: $light-border;
         overflow: hidden;
         .card {
             background-color: $light-secondary !important;
@@ -48,10 +62,6 @@
             .workflow-layout {
                 background-color: $light-wf;
                 color: $dark-text-color;
-                button {
-                    background-color: $light-primary !important;
-                    color: $light-text-color;
-                }
                 .workflow-info-layout {
                     padding: 0px;
                     overflow: hidden;
@@ -186,7 +196,7 @@
     }
 
     .footer-card {
-        background-color: $light-wf;
+        background-color: $light-tertiary;
         border-bottom-left-radius: 2px;
         border-bottom-right-radius: 2px;
     }
@@ -312,8 +322,7 @@
             }
         }
         .workflows-cont {
-            border-color: #707484;
-            // border-color: $base-border-color;
+            border-color: $dark-border;
             .card {
                 background-color: $dark-secondary !important;
                 .card__text {

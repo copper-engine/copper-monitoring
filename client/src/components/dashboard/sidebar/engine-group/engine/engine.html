@@ -1,7 +1,7 @@
 <div :class="{ 'in-group' : multiEngine }">
     <v-layout row class="tile-header">
         <v-flex class="icon-container">
-                <v-icon class="engine-icon">extension</v-icon>
+                <v-icon :class="{'engine-persistent-icon' : (status.type === 'persistent'), 'engine-tranzient-icon' : (status.type === 'tranzient')}">extension</v-icon>
         </v-flex>
         <v-layout column>
             <h2> {{status.engineId}} </h2>

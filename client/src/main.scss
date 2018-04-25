@@ -161,10 +161,12 @@ body .notifications {
 }
 
 body .footer {
+    border-color: $light-border !important;
     background-color: $light-sidebar !important;
     color: $dark-text-color;
 }
 body .dark .footer {
+    border-color: $dark-border !important;
     background-color: $dark-secondary !important;
     color: $light-text-color;
 }

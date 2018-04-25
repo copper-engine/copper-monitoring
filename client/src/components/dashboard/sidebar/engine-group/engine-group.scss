@@ -6,11 +6,14 @@
     border-color: $light-border !important;
     
     .group-icon {
-        color: #38b86f;
+        color: $blue;
     }
 
-    .engine-icon {
-        color: #38b3ba;
+    .engine-persistent-icon {
+        color: #38b86f;
+    }
+    .engine-tranzient-icon {
+        color: #efa444;
     }
 
     &:last-child {
@@ -57,7 +60,7 @@
                 }
                 .value {
                     padding-left: 8px;
-                    // font-weight: 700;
+                    font-weight: 700;
                 }
             }
         }

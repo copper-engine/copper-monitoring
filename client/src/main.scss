@@ -25,25 +25,25 @@ body {
     }
 }
 
-body .light .vdatetime-year-picker__item--selected,
-body .light .vdatetime-time-picker__item--selected,
-body .light .vdatetime-popup__actions__button {
-    color: $light-primary;
+body .vdatetime-year-picker__item--selected,
+body .vdatetime-time-picker__item--selected,
+body .vdatetime-popup__actions__button {
+    color: $light-primary !important;
 }
-body .light .vdatetime-popup__header,
-body .light .vdatetime-calendar__month__day--selected > span > span,
-body .light .vdatetime-calendar__month__day--selected:hover > span > span {
-    background: $light-primary;
+body .vdatetime-popup__header,
+body .vdatetime-calendar__month__day--selected > span > span,
+body .vdatetime-calendar__month__day--selected:hover > span > span {
+    background: $light-primary !important;
 }
 body .dark .vdatetime-year-picker__item--selected,
 body .dark .vdatetime-time-picker__item--selected,
 body .dark .vdatetime-popup__actions__button {
-    color: $dark-primary;
+    color: $dark-primary !important;
 }
 body .dark .vdatetime-popup__header,
 body .dark .vdatetime-calendar__month__day--selected > span > span,
 body .dark .vdatetime-calendar__month__day--selected:hover > span > span {
-    background: $dark-primary;
+    background: $dark-primary !important;
 }
 
 body .list {
@@ -84,10 +84,10 @@ body {
             .dialog {
                 .card {
                     .dialog-title {
-                        background-color: $light-secondary !important;
+                        background-color: $light-primary !important;
                         color: $dark-text-color !important;
                         button {
-                            background-color: $light-tertiary !important;
+                            background-color: $light-secondary !important;
                             color: $dark-text-color !important; 
                         }
                     }

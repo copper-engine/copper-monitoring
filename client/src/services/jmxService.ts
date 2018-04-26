@@ -127,8 +127,6 @@ export class JmxService {
                         return new ConnectionResult(connectionSettings, []);
                     }
                 });
-
-                console.log('connectionResults', connectionResults);
                 return connectionResults;
             })
             .catch(error => {

@@ -1,7 +1,6 @@
 @import 'variables';
 
-html { 
-    color: #eaeaea;
+html {
     min-width: 900px;
     overflow-x: auto 
 }
@@ -25,25 +24,25 @@ body {
     }
 }
 
-body .light .vdatetime-year-picker__item--selected,
-body .light .vdatetime-time-picker__item--selected,
-body .light .vdatetime-popup__actions__button {
-    color: $light-primary;
+body .vdatetime-year-picker__item--selected,
+body .vdatetime-time-picker__item--selected,
+body .vdatetime-popup__actions__button {
+    color: $light-primary !important;
 }
-body .light .vdatetime-popup__header,
-body .light .vdatetime-calendar__month__day--selected > span > span,
-body .light .vdatetime-calendar__month__day--selected:hover > span > span {
-    background: $light-primary;
+body .vdatetime-popup__header,
+body .vdatetime-calendar__month__day--selected > span > span,
+body .vdatetime-calendar__month__day--selected:hover > span > span {
+    background: $light-primary !important;
 }
 body .dark .vdatetime-year-picker__item--selected,
 body .dark .vdatetime-time-picker__item--selected,
 body .dark .vdatetime-popup__actions__button {
-    color: $dark-primary;
+    color: $dark-primary !important;
 }
 body .dark .vdatetime-popup__header,
 body .dark .vdatetime-calendar__month__day--selected > span > span,
 body .dark .vdatetime-calendar__month__day--selected:hover > span > span {
-    background: $dark-primary;
+    background: $dark-primary !important;
 }
 
 body .list {
@@ -84,11 +83,16 @@ body {
             .dialog {
                 .card {
                     .dialog-title {
-                        background-color: $light-secondary !important;
+                        background-color: $light-background !important;
                         color: $dark-text-color !important;
                         button {
-                            background-color: $light-tertiary !important;
+                            background-color: $light-secondary !important;
                             color: $dark-text-color !important; 
+                        }
+                    }
+                    .delete-dialog-title {
+                        h2 {
+                            font-size: 1.2em;
                         }
                     }
                 }
@@ -157,10 +161,34 @@ body .notifications {
 }
 
 body .footer {
-    background-color: $light-secondary !important;
+    border-color: $light-border !important;
+    background-color: $light-sidebar !important;
     color: $dark-text-color;
 }
 body .dark .footer {
+    border-color: $dark-border !important;
     background-color: $dark-secondary !important;
     color: $light-text-color;
+}
+
+
+body {
+    #appCover {
+        .btn--disabled {
+            .icon {
+                color: #9b9b9b !important;
+            }
+        }
+    }
+}
+body {
+    #appCover {
+        .dark {
+            .btn--disabled {
+                .icon {
+                    color: #333333 !important;
+                }
+            }
+        }
+    }
 }

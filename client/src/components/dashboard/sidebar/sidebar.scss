@@ -26,6 +26,15 @@
         // background: -webkit-linear-gradient(left, #0b2732 0%,#123643 100%); /* Chrome10-25,Safari5.1-6 */
         // background: linear-gradient(to right, #0b2732 0%,#123643 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 
+        .criticalIssue {
+            margin: 10px;
+            padding: 10px;
+            border-radius: 2px;
+            font-size: 1.2em;
+            color: $light-text-color;
+            background-color: $error;
+        }
+
         .connection {
             padding-top: 10px;
             padding-bottom: 25px;
@@ -35,7 +44,7 @@
             font-size: 1.3em;
             font-weight: 700;
             padding: 10px 0px 0px 10px;
-            color: $light-sidebar-icon;
+            color: $dark-text-color;
         }
         
         .engine-card {
@@ -58,7 +67,7 @@
         }
     }
     .navigation-drawer__border {
-        background-color: $base-border-color !important;
+        background-color: $light-border !important;
     }
 
     .list {
@@ -126,16 +135,28 @@
             padding-bottom: 20px;}
     }
 
-    .extend-engine-enter-active {
-        animation: extend-engine 0.75s;
+    .extend-engine-persistent-enter-active {
+        animation: extend-engine-persistent 0.75s;
     }
-    .extend-engine-leave-active {
-        animation: extend-engine 0.75s reverse;
+    .extend-engine-persistent-leave-active {
+        animation: extend-engine-persistent 0.75s reverse;
     }
 
-    @keyframes extend-engine {
+    @keyframes extend-engine-persistent {
         0% {height: 0px;}
-        100% {height: 339px;}
+        100% {height: 360px;}
+    }
+
+    .extend-engine-tranzient-enter-active {
+        animation: extend-engine-tranzient 0.75s;
+    }
+    .extend-engine-tranzient-leave-active {
+        animation: extend-engine-tranzient 0.75s reverse;
+    }
+
+    @keyframes extend-engine-tranzient {
+        0% {height: 0px;}
+        100% {height: 313px;}
     }
 
     .extend-engine-limited-enter-active {
@@ -147,7 +168,7 @@
 
     @keyframes extend-engine-limited {
         0% {height: 0px;}
-        100% {height: 177px;}
+        100% {height: 198px;}
     }
     
 }
@@ -162,6 +183,9 @@
             .connection-title, .engines-title {
                 color: $dark-sidebar-icon;
             }
+        }
+        .navigation-drawer__border {
+            background-color: $dark-border !important;
         }
     }
 }

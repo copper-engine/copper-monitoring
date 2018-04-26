@@ -8,7 +8,7 @@
         <v-flex class="stopGrow heading-buttons">
             <v-btn dark
                 v-if="(wfType === 'broken')"
-                class="longButton"
+                class="longButton restart-button"
                 :loading="restartingAll"
                 :disabled="restartingAll || deletingAll"
                 @click="sendRestartAll"
@@ -21,7 +21,7 @@
             </v-btn>
             <v-btn dark
                 v-if="(wfType === 'broken')"
-                class="longButton"
+                class="longButton delete-button"
                 :loading="deletingAll"
                 :disabled="deletingAll || restartingAll"
                 @click="dialogDeleteOpen = true">
@@ -32,7 +32,7 @@
                 </span>
             </v-btn>
             <v-btn dark
-                class="longButton"
+                class="longButton details-button"
                 :class="{ 'only-filter' :  (wfType === 'waiting') }"
                 :loading="deletingAll"
                 :disabled="deletingAll || restartingAll"

@@ -62,7 +62,7 @@
     }
 
     .workflow-layout >* {
-        background-color: $light-secondary;
+        background-color: $light-wf;
         color: $dark-text-color;
         padding: 8px 16px;
         align-items: center;
@@ -104,7 +104,7 @@
         min-width: 110px;
 
         button {
-            background-color: $light-primary !important;
+            background-color: $blue !important;
             margin-left: 12px;
             border-radius: 20%;
         }
@@ -199,7 +199,7 @@
     }
 
     .footer-card {
-        background-color: $light-secondary;
+        background-color: $light-tertiary;
         border-bottom-left-radius: 2px;
         border-bottom-right-radius: 2px;
     }
@@ -249,7 +249,7 @@
             border-color: $light-text-color;
         }
         .workflow-layout >* {
-            background-color: $dark-secondary;
+            background-color: $dark-wf;
             color: $light-text-color;
             .actions {
                 button {

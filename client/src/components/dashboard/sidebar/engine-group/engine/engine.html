@@ -1,7 +1,7 @@
 <div :class="{ 'in-group' : multiEngine }">
     <v-layout row class="tile-header">
         <v-flex class="icon-container">
-                <v-icon class="engine-icon">extension</v-icon>
+                <v-icon :class="{'engine-persistent-icon' : (status.type === 'persistent'), 'engine-tranzient-icon' : (status.type === 'tranzient')}">extension</v-icon>
         </v-flex>
         <v-layout column>
             <h2> {{status.engineId}} </h2>
@@ -25,7 +25,7 @@
         </v-layout>
         <v-spacer></v-spacer>
         <v-tooltip top content-class="tooltip-text">
-            <v-btn dark icon @click="openEngine" slot="activator">
+            <v-btn dark icon @click="openEngine" slot="activator" :disabled="clickAllowed === false">
                 <v-icon :class="{ 'close-details-icon': open }" class="control-icon">details</v-icon>
             </v-btn>
             <span>Show Details</span>
@@ -35,6 +35,14 @@
     <div class="tile-interior" v-show="open">
     <div v-if="status" class="tile-info">
         <div class="info-summary">
+            <div class="label">
+                <span>
+                    Connection:
+                </span>
+                <span class="value">
+                    {{connection.host}}:{{connection.port}}
+                </span>
+            </div>
             <div class="label">
                 <span>
                     WF instances:

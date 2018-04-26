@@ -1,8 +1,13 @@
 // $test-import-color: red;
 $darkest: #040d10;
 
+$error: #ff6565;
 $base-border-color: #43474e;
 // $base-dark-color: #262a34;
+
+$red: #d24343;
+$green: #3ca94f;
+$blue: #3a67bc;
 
 $dark-primary: #41a578;
 $dark-secondary: #262a34;
@@ -15,23 +20,25 @@ $dark-link-active: #353b4a;
 $dark-link-hover: #3e4658;
 $dark-wf: #353844;
 
-$light-primary: #0d5494;
+$light-primary: #177d83;
 $light-secondary: #e4e2e2;
-$light-tertiary: #cecece;
-$light-background: #F5F5F5;
-$light-sidebar: #ebebeb;
-$light-sidebar-icon: #0d5494;
-$light-engine-ingroup: #d6d3d3;
-$light-link-active: #ccdcea;
-$light-link-hover: #b9cddf;
-$light-wf: #e4e2e2;
+$light-tertiary: #cfdfdf;
+$light-background: #fcfcfc;
+$light-sidebar: #e4eeee;
+$light-sidebar-icon: #5caeb3;
+$light-engine-ingroup: #e0dede;
+$light-link-active: #b2dde0;
+$light-link-hover: #cfe9eb;
+$light-wf: #e4eeee;
 
-$dark-text-color: #303030;
-$dark-shade-text-color: #303030;
+$dark-text-color: #424242;
+$dark-shade-text-color: #626262;
+$dark-border: #43474e;
 $light-text-color: #f5f5f5;
 $light-shade-text-color: #eaeaea99;
+$light-border: #c9d1d2;
 
 
 @mixin sidebar-border-bottom {
-    border-bottom: 1px solid $base-border-color;
+    border-bottom: 1px solid $base-border-color !important;
 }

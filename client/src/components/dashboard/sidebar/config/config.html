@@ -19,6 +19,7 @@
             ></v-text-field>
             <v-text-field
                 label="port"
+                @keyup.enter="submit"
                 v-model="port"
                 :rules="portRules"
                 required
@@ -42,7 +43,7 @@
     </div>
     <v-dialog v-model="dialogDeleteOpen" scrollable max-width="500" position="absolute" persistent>
         <v-card>
-            <v-card-title position="absolute" class="dialog-title">
+            <v-card-title position="absolute" class="dialog-title delete-dialog-title">
                 <h2> Are you sure you want to delete connection: {{ host }}:{{ port }} </h2>               
             </v-card-title>
             <v-divider></v-divider>

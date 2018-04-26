@@ -2,14 +2,18 @@
 
 .engine-group {
     overflow: hidden;
-    @include sidebar-border-bottom;
+    border-bottom: 1px solid;
+    border-color: $light-border !important;
     
     .group-icon {
-        color: #7397dc;
+        color: $blue;
     }
 
-    .engine-icon {
-        color: #69c57e;
+    .engine-persistent-icon {
+        color: #38b86f;
+    }
+    .engine-tranzient-icon {
+        color: #efa444;
     }
 
     &:last-child {
@@ -21,7 +25,7 @@
         padding: 10px 0px 10px 10px;
         
         h2 {
-            color: $light-sidebar-icon;
+            color: $dark-text-color;
             font-size: 1.3em;
             word-wrap: break-word;
             max-width: 200px;
@@ -56,7 +60,7 @@
                 }
                 .value {
                     padding-left: 8px;
-                    // font-weight: 700;
+                    font-weight: 700;
                 }
             }
         }
@@ -116,6 +120,14 @@
 
 .dark {
     .engine-group {
+        border-color: $dark-border !important;
+        .group-icon {
+            color: #7397dc;
+        }
+    
+        .engine-icon {
+            color: #69c57e;
+        }
         .tile-header{
             h2 {
                 color: $light-text-color;

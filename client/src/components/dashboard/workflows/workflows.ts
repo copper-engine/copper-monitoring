@@ -292,7 +292,7 @@ export class WorkflowsComponent extends Vue {
                 wfContext.reloading = false; 
                 this.workflowsContext.set(id, wfContext);
                 this.$forceUpdate();
-            }, 1000);
+            }, 900);
         }
         if (type === 'delete') {
             wfContext.deleting = true;

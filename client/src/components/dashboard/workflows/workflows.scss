@@ -212,14 +212,35 @@
 
     .highlight-workflow-layout {
         .workflow-layout {
-            background-color: #439e8c !important;
-            opacity: 0.9;
+            background-color: $light-wf;
+            opacity: 1;
+            animation-name: hilightAnimation;
+            animation-duration: 1s;
         }
         .workflow-details {
-            background-color: #439e8c !important;
-            opacity: 0.9;
+            background-color: $light-tertiary !important;
+            opacity: 1;
+            animation-name: hilightDetailsAnimation;
+            animation-duration: 1s;
         }
     }
+    @keyframes hilightAnimation {
+        0% {opactiy: 1;
+        background-color: $light-wf;}
+        50% {opacity: 0.8;
+            background-color: #439e8c;}
+        100% {opactiy: 1;
+            background-color: $light-wf;}
+    }
+    @keyframes hilightDetailsAnimation {
+        0% {opactiy: 1;
+        background-color: $light-tertiary;}
+        50% {opacity: 0.8;
+            background-color: #439e8c;}
+        100% {opactiy: 1;
+            background-color: $light-tertiary;}
+    }
+
     .highlight-workflow-deleting >* {
         background: #e74615 !important;
         color: #f5f5f5 !important;
@@ -353,6 +374,36 @@
                         color: $light-text-color;
                     }
                 }
+            }
+            .highlight-workflow-layout {
+                .workflow-layout {
+                    background-color: $dark-wf;
+                    opacity: 1;
+                    animation-name: darkHilightAnimation;
+                    animation-duration: 1s;
+                }
+                .workflow-details {
+                    background-color: $dark-tertiary !important;
+                    opacity: 1;
+                    animation-name: darkHilightDetailsAnimation;
+                    animation-duration: 1s;
+                }
+            }
+            @keyframes darkHilightAnimation {
+                0% {opactiy: 1;
+                background-color: $dark-wf;}
+                50% {opacity: 0.8;
+                    background-color: #439e8c;}
+                100% {opactiy: 1;
+                    background-color: $dark-wf;}
+            }
+            @keyframes darkHilightDetailsAnimation {
+                0% {opactiy: 1;
+                background-color: $dark-tertiary;}
+                50% {opacity: 0.8;
+                    background-color: #439e8c;}
+                100% {opactiy: 1;
+                    background-color: $dark-tertiary;}
             }
         }
     }

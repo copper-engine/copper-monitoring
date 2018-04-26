@@ -52,13 +52,13 @@
 
     .workflows-cont {
         border-bottom: 1px solid;
-        border-color: $dark-text-color;
+        border-color: $light-border;
         overflow: hidden;
     }
 
     .workflow {
         border-top: 1px solid;
-        border-color: $dark-text-color;
+        border-color: $light-border;
     }
 
     .workflow-layout >* {
@@ -242,11 +242,11 @@
             }
         }
         .workflows-cont {
-            border-color: $light-text-color;
+            border-color: $dark-border;
         }
     
         .workflow {
-            border-color: $light-text-color;
+            border-color: $dark-border;
         }
         .workflow-layout >* {
             background-color: $dark-wf;

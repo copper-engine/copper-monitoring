@@ -170,3 +170,25 @@ body .dark .footer {
     background-color: $dark-secondary !important;
     color: $light-text-color;
 }
+
+
+body {
+    #appCover {
+        .btn--disabled {
+            .icon {
+                color: #9b9b9b !important;
+            }
+        }
+    }
+}
+body {
+    #appCover {
+        .dark {
+            .btn--disabled {
+                .icon {
+                    color: #333333 !important;
+                }
+            }
+        }
+    }
+}

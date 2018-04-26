@@ -19,7 +19,7 @@
         </v-layout>
         <v-spacer></v-spacer>
         <v-tooltip top content-class="tooltip-text">
-            <v-btn dark icon @click="openGroup" slot="activator">
+            <v-btn dark icon @click="openGroup" slot="activator" :disabled="clickAllowed === false">
                 <v-icon :class="{ 'close-details-icon': open }" class="control-icon">details</v-icon>
             </v-btn>
             <span>Show Engines</span>

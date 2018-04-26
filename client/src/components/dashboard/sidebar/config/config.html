@@ -19,6 +19,7 @@
             ></v-text-field>
             <v-text-field
                 label="port"
+                @keyup.enter="submit"
                 v-model="port"
                 :rules="portRules"
                 required

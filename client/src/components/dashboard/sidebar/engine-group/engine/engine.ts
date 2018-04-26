@@ -48,7 +48,6 @@ export class EngineComponent extends Vue {
     }
 
     get links(): Link[] {
-        console.log(this.status.type);
         let linkArray = [];
         let params = this.status.id + '?' + this.$store.getters.connectionsAsParams;
         if (!this.multiEngine) {

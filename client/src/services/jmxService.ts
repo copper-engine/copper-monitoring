@@ -106,7 +106,6 @@ export class JmxService {
     }
 
     getConnectionResults(connectionSettingsList: ConnectionSettings[], user: User): Promise<void | ConnectionResult[]> {
-        console.log(connectionSettingsList);
         return Axios.post(process.env.API_NAME, 
                 connectionSettingsList.map( connectionSettings => this.createMBeansListRequest(connectionSettings)), 
                 { auth: { username: user.name, password: user.password } })
@@ -128,8 +127,6 @@ export class JmxService {
                         return new ConnectionResult(connectionSettings, []);
                     }
                 });
-
-                console.log('connectionResults', connectionResults);
                 return connectionResults;
             })
             .catch(error => {

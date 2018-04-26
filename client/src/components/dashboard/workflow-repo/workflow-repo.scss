@@ -156,14 +156,28 @@
     .pagination-cont {
         align-items: center;
         .pagination__item {
+            background-color: $light-wf !important;
+            color: $dark-text-color;
+        }
+        .pagination__item--active {
             background-color: $light-primary !important;
             color: $light-text-color;
         }
+        .pagination__item:hover {
+            background-color: $light-link-active !important;
+            color: $light-text-color;
+        }
         .pagination__navigation {
-            background-color: $light-tertiary !important;
+            background-color: $light-wf !important;
             color: $dark-text-color;
             .icon {
-                background-color: $light-tertiary !important;
+                background-color: $light-wf !important;
+                color: $dark-text-color;
+            }
+        }
+        .pagination__navigation:hover {
+            .icon {
+                background-color: $light-link-active !important;
                 color: $dark-text-color;
             }
         }
@@ -192,6 +206,7 @@
         }
         .pagination li span {
             float: none;
+            color: $dark-text-color;
         }
         button {
             background-color: $light-background;
@@ -269,12 +284,26 @@
         }
         .pagination-cont {
             .pagination__item {
+                background-color: $dark-wf!important;
+                color: $light-text-color;
+            }
+            .pagination__item--active {
                 background-color: $dark-primary !important;
                 color: $light-text-color;
             }
-            .pagination__navigation {
+            .pagination__item:hover{
                 background-color: $dark-tertiary !important;
-                color: $dark-text-color;
+                color: $light-text-color;
+            }
+            .pagination__navigation {
+                background-color: $dark-wf !important;
+                color: $light-text-color;
+                .icon {
+                    background-color: $dark-wf !important;
+                    color: $light-text-color;
+                }
+            }
+            .pagination__navigation:hover {
                 .icon {
                     background-color: $dark-tertiary !important;
                     color: $light-text-color;
@@ -296,6 +325,10 @@
                         background-color: $light-text-color !important;
                     }
                 }
+            }
+            .pagination li span {
+                float: none;
+                color: $light-text-color;
             }
             button {
                 background-color: $dark-background;

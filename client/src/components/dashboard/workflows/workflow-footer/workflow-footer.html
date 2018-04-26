@@ -3,7 +3,7 @@
         <v-card-text>
             <v-layout justify-center class="pagination-cont">
                     <v-flex class="text-xs-center">
-                        <v-pagination :length="totalPages" v-model="page" :total-visible="10"></v-pagination>      
+                        <v-pagination :length="totalPages" v-model="localPage" :total-visible="10"></v-pagination>      
                     </v-flex>
                 <v-flex xs3>
                     <v-layout justify-center class="pagin-config">
@@ -15,7 +15,7 @@
                             <v-select
                             class="per-page"
                             :items="perPageItems"
-                            v-model="perPage"
+                            v-model="localPerPage"
                             ></v-select>
                         </v-flex>
                     </v-layout>

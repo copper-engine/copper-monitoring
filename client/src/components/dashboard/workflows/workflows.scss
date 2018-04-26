@@ -156,6 +156,10 @@
             background-color: $light-primary !important;
             color: $light-text-color;
         }
+        .pagination__item--active {
+            background-color: $blue !important;
+            color: $light-text-color;
+        }
         .pagination__navigation {
             background-color: $light-tertiary !important;
             color: $dark-text-color;
@@ -289,6 +293,10 @@
         .pagination-cont {
             .pagination__item {
                 background-color: $dark-primary !important;
+                color: $light-text-color;
+            }
+            .pagination__item--active {
+                background-color: $blue !important;
                 color: $light-text-color;
             }
             .pagination__navigation {

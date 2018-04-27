@@ -44,9 +44,12 @@
     }
 
     .error {
-        background-color: $light-secondary;
+        background-color: $light-secondary !important;
         .error-message {
-            background-color: $light-primary;
+            border: 2px solid;
+            border-color: $light-border;
+            color: $dark-text-color;
+            background-color: $light-tertiary !important;
         }
     }
 
@@ -58,6 +61,8 @@
 
     .workflow {
         border-top: 1px solid;
+        border-left: 1px solid;
+        border-right: 1px solid;
         border-color: $light-border;
     }
 
@@ -251,9 +256,11 @@
             background-color: $dark-primary;
         }
         .error {
-            background-color: $dark-secondary;
+            background-color: $dark-secondary !important;
             .error-message {
-                background-color: $dark-primary;
+                border-color: $dark-border;
+                color: $light-text-color;
+                background-color: $dark-tertiary !important;
             }
         }
         .workflows-cont {
@@ -261,6 +268,8 @@
         }
     
         .workflow {
+            border-left: 0px solid;
+            border-right: 0px solid;
             border-color: $dark-border;
         }
         .workflow-layout >* {

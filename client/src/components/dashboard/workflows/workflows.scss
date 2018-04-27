@@ -41,6 +41,8 @@
 
     .workflows-cont {
         border-bottom: 1px solid;
+        border-left: 1px solid;
+        border-right: 1px solid;        
         border-color: $light-border;
         overflow: hidden;
         .card {
@@ -48,9 +50,10 @@
             .card__text {
                 background-color: $light-secondary !important;
                 .alert {
+                    border: 2px solid;
                     margin: 20px;
                     background-color: $light-tertiary !important;
-                    border-color: $light-tertiary !important;
+                    border-color: $light-border !important;
                     color: $dark-text-color;
                 }
             }
@@ -376,6 +379,8 @@
             }
         }
         .workflows-cont {
+            border-left: 0px solid;
+            border-right: 0px solid; 
             border-color: $dark-border;
             .card {
                 background-color: $dark-secondary !important;

@@ -160,9 +160,12 @@
 
     <v-dialog v-model="dialogDeleteOpen" scrollable max-width="500" position="absolute" persistent>
         <v-card>
-            <v-card-title position="absolute" class="delete-dialog-title dialog-title">
-                <h2> Are you sure you want to delete workflow: {{ dialogWF.id }} </h2>               
+            <v-card-title position="absolute" class="dialog-title">
+                <h2> Deleting Workflow </h2>               
             </v-card-title>
+            <v-card-text class="delete-dialog-text">
+                <h2> Are you sure you want to delete workflow: {{ dialogWF.id }} </h2>                               
+            </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
                 <v-layout row>

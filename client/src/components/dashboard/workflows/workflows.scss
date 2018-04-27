@@ -41,6 +41,8 @@
 
     .workflows-cont {
         border-bottom: 1px solid;
+        border-left: 1px solid;
+        border-right: 1px solid;        
         border-color: $light-border;
         overflow: hidden;
         .card {
@@ -48,9 +50,10 @@
             .card__text {
                 background-color: $light-secondary !important;
                 .alert {
+                    border: 2px solid;
                     margin: 20px;
                     background-color: $light-tertiary !important;
-                    border-color: $light-tertiary !important;
+                    border-color: $light-border !important;
                     color: $dark-text-color;
                 }
             }
@@ -153,18 +156,28 @@
     .pagination-cont {
         align-items: center;
         .pagination__item {
+            background-color: $light-wf !important;
+            color: $dark-text-color;
+        }
+        .pagination__item--active {
             background-color: $light-primary !important;
             color: $light-text-color;
         }
-        .pagination__item--active {
-            background-color: $blue !important;
+        .pagination__item:hover {
+            background-color: $light-link-active !important;
             color: $light-text-color;
         }
         .pagination__navigation {
-            background-color: $light-tertiary !important;
+            background-color: $light-wf !important;
             color: $dark-text-color;
             .icon {
-                background-color: $light-tertiary !important;
+                background-color: $light-wf !important;
+                color: $dark-text-color;
+            }
+        }
+        .pagination__navigation:hover {
+            .icon {
+                background-color: $light-link-active !important;
                 color: $dark-text-color;
             }
         }
@@ -193,6 +206,7 @@
         }
         .pagination li span {
             float: none;
+            color: $dark-text-color;
         }
         button {
             background-color: $light-background;
@@ -242,7 +256,7 @@
     }
 
     .highlight-workflow-deleting >* {
-        background: #e74615 !important;
+        background: #ec643a !important;
         color: #f5f5f5 !important;
         height: 97px;
         opacity: 1;
@@ -261,7 +275,7 @@
             opactiy: 0;}
     }
     .highlight-workflow-extended-deleting >* {
-        background: #e74615 !important;
+        background: #ec643a !important;
         color: #f5f5f5 !important;
         z-index: -1;
         max-height: 999px;
@@ -280,7 +294,7 @@
             padding-bottom: 0px;}
     }
     .highlight-workflow-details-deleting >* {
-        background: #e74615 !important;
+        background: #ec643a !important;
     }
 
     .fade {
@@ -313,16 +327,26 @@
         }
         .pagination-cont {
             .pagination__item {
-                background-color: $dark-primary !important;
+                background-color: $dark-wf!important;
                 color: $light-text-color;
             }
             .pagination__item--active {
-                background-color: $blue !important;
+                background-color: $dark-primary !important;
+                color: $light-text-color;
+            }
+            .pagination__item:hover{
+                background-color: $dark-tertiary !important;
                 color: $light-text-color;
             }
             .pagination__navigation {
-                background-color: $dark-tertiary !important;
+                background-color: $dark-wf !important;
                 color: $light-text-color;
+                .icon {
+                    background-color: $dark-wf !important;
+                    color: $light-text-color;
+                }
+            }
+            .pagination__navigation:hover {
                 .icon {
                     background-color: $dark-tertiary !important;
                     color: $light-text-color;
@@ -345,12 +369,18 @@
                     }
                 }
             }
+            .pagination li span {
+                float: none;
+                color: $light-text-color;
+            }
             button {
                 background-color: $dark-background;
                 color: $light-text-color;
             }
         }
         .workflows-cont {
+            border-left: 0px solid;
+            border-right: 0px solid; 
             border-color: $dark-border;
             .card {
                 background-color: $dark-secondary !important;

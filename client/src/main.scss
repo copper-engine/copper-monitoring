@@ -83,16 +83,11 @@ body {
             .dialog {
                 .card {
                     .dialog-title {
-                        background-color: $light-background !important;
-                        color: $dark-text-color !important;
+                        background-color: $light-primary !important;
+                        color: $light-text-color !important;
                         button {
                             background-color: $light-secondary !important;
                             color: $dark-text-color !important; 
-                        }
-                    }
-                    .delete-dialog-title {
-                        h2 {
-                            font-size: 1.2em;
                         }
                     }
                 }
@@ -100,6 +95,15 @@ body {
                     .workflow-details {
                         background-color: $light-tertiary !important;
                         color: $dark-text-color !important;
+                    }
+                }
+                .delete-dialog-text {
+                    background-color: $light-background;
+                    padding: 16px;
+                    h2 {
+                        color: $dark-text-color; 
+                        font-size: 1.2em;
+                        font-weight: 400;
                     }
                 }
                 .card__actions {
@@ -121,10 +125,10 @@ body {
                 .dialog {
                     .card {
                         .dialog-title {
-                            background-color: $dark-secondary !important;
+                            background-color: $dark-primary !important;
                             color: $light-text-color !important;
                             button {
-                                background-color: $dark-tertiary !important;
+                                background-color: $dark-wf !important;
                                 color: $light-text-color !important; 
                             }
                         }
@@ -133,6 +137,15 @@ body {
                         .workflow-details {
                             background-color: $dark-tertiary !important;
                             color: $light-text-color !important;
+                        }
+                    }
+                    .delete-dialog-text {
+                        background-color: $dark-tertiary;
+                        padding: 16px;
+                        h2 {
+                            color: $light-text-color; 
+                            font-size: 1.2em;
+                            font-weight: 400;
                         }
                     }
                     .card__actions {
@@ -187,6 +200,37 @@ body {
             .btn--disabled {
                 .icon {
                     color: #333333 !important;
+                }
+            }
+        }
+    }
+}
+
+body {
+    #appCover {
+        .workflow-header {
+            .summary {
+                .heading-buttons {
+                    .btn--disabled {
+                        background-color: $light-tertiary !important;
+                        color: #9B9B9B !important;
+                    }
+                }
+            }
+        }
+    }
+}
+body {
+    #appCover {
+        .dark {
+            .workflow-header {
+                .summary {
+                    .heading-buttons {
+                        .btn--disabled {
+                            background-color: $dark-tertiary !important;
+                            color: #333333 !important;
+                        }
+                    }
                 }
             }
         }

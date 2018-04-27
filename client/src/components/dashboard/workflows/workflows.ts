@@ -134,7 +134,11 @@ export class WorkflowsComponent extends Vue {
             if (this.page > total) {
                 this.page = 1; 
             }
-            return total;
+            if (total > 0) {
+                return total;
+            } else {
+                return 1;
+            }
         }
         this.page = 1;
         return 1;

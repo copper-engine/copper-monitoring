@@ -10,7 +10,7 @@
                 v-if="(wfType === 'broken')"
                 class="longButton restart-button"
                 :loading="restartingAll"
-                :disabled="restartingAll || deletingAll"
+                :disabled="restartingAll || deletingAll || (wfCount < 1) "
                 @click="sendRestartAll"
                 >
                 <v-icon left>cached</v-icon>
@@ -23,7 +23,7 @@
                 v-if="(wfType === 'broken')"
                 class="longButton delete-button"
                 :loading="deletingAll"
-                :disabled="deletingAll || restartingAll"
+                :disabled="deletingAll || restartingAll || (wfCount < 1)"
                 @click="dialogDeleteOpen = true">
                 <v-icon left>delete</v-icon>
                 Delete {{ filterApplied ? 'Filtered' : 'All' }}
@@ -35,7 +35,7 @@
                 class="longButton details-button"
                 :class="{ 'only-filter' :  (wfType === 'waiting') }"
                 :loading="deletingAll"
-                :disabled="deletingAll || restartingAll"
+                :disabled="deletingAll || restartingAll || (wfCount < 1)"
                 @click="triggerFilterMenu">
                 <v-icon left>mdi-filter</v-icon>
                 Filter
@@ -199,8 +199,11 @@
     <v-dialog v-model="dialogDeleteOpen" scrollable max-width="500" position="absolute" persistent>
         <v-card>
             <v-card-title position="absolute" class="dialog-title">
-                <h2> Are you sure you want to delete {{ wfCount }} workflow(s) </h2>                
+                <h2> Deleting Workflow(s) </h2>                
             </v-card-title>
+            <v-card-text class="delete-dialog-text">
+                <h2> Are you sure you want to delete {{ wfCount }} workflow(s) </h2>                              
+            </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
                 <v-layout row>

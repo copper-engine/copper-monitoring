@@ -36,14 +36,14 @@ export class LoginComponent extends Vue {
 
     get update() {
         if (localStorage.getItem(this.username + ':updatePeriod')) {
-            return parseInt(localStorage.getItem(this.username + ':update'));
+            return parseInt(localStorage.getItem(this.username + ':updatePeriod'));
         } else {
             return 10;
         }
     }
     get fetch() {
         if (localStorage.getItem(this.username + ':fetchPeriod')) {
-            return parseInt(localStorage.getItem(this.username + ':fetch'));
+            return parseInt(localStorage.getItem(this.username + ':fetchPeriod'));
         } else {
             return 5;
         }

@@ -205,3 +205,34 @@ body {
         }
     }
 }
+
+body {
+    #appCover {
+        .workflow-header {
+            .summary {
+                .heading-buttons {
+                    .btn--disabled {
+                        background-color: $light-tertiary !important;
+                        color: #9B9B9B !important;
+                    }
+                }
+            }
+        }
+    }
+}
+body {
+    #appCover {
+        .dark {
+            .workflow-header {
+                .summary {
+                    .heading-buttons {
+                        .btn--disabled {
+                            background-color: $dark-tertiary !important;
+                            color: #333333 !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

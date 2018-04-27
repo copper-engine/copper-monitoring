@@ -59,16 +59,6 @@ export class DashboardComponent extends Vue {
     }
 
     getPeriodSettings() {
-        // if (localStorage.getItem('updatePeriod') === null) {
-        //     this.update = this.$store.getters.updatePeriod;
-        // } else {
-        //     this.update = parseInt(localStorage.getItem('updatePeriod'));
-        // }
-        // if (localStorage.getItem('fetchPeriod') === null) {
-        //     this.fetch = this.$store.getters.fetchPeriod;
-        // } else {
-        //     this.fetch = parseInt(localStorage.getItem('fetchPeriod'));
-        // }
         this.fetch = this.$store.state.user.settings.fetchPeriod;
         this.update = this.$store.state.user.settings.updatePeriod;
     }

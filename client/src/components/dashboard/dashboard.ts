@@ -8,6 +8,7 @@ import { User } from '../../models/user';
 import { MBeans, MBean } from '../../models/mbeans';
 import * as _ from 'lodash';
 import { Mutations } from '../../store.vuex';
+import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 
 const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) => SidebarComponent);
 
@@ -16,6 +17,7 @@ const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) =
     services: ['jmxService', 'eventHub'],
     components: {
         'sidebar': sidebarComponent,
+        'scroll': VuePerfectScrollbar
     }
 })
 export class DashboardComponent extends Vue {
@@ -24,6 +26,8 @@ export class DashboardComponent extends Vue {
     update: number;
     fetch: number;
     themeSwitch: boolean = true;
+    dialogConfigOpen: boolean = false;
+    configText: string = '';
     
     get user() {
         return this.$store.state.user;
@@ -47,11 +51,6 @@ export class DashboardComponent extends Vue {
     beforeDestroy() {
         clearInterval(this.interval);
         (this.$services.eventHub as Vue).$off('forceStatusFetch', this.forceFetchingStatus);
-    }
-
-    logout() {
-        this.$store.commit(Mutations.setUser, null);
-        this.$router.replace('/login'); 
     }
 
     getTheme() {
@@ -107,6 +106,58 @@ export class DashboardComponent extends Vue {
                     }
                 }
             }
+        }
+    }
+
+    logout() {
+        this.$store.commit(Mutations.setUser, null);
+        this.$router.replace('/login'); 
+    }
+
+    dialogConfig() {
+        this.generateConfigFile();
+        this.dialogConfigOpen = true;
+    }
+
+    generateConfigFile() {
+        this.configText = '[[inputs.jolokia2_proxy]]\n#url goes from process.env.API_NAME variable like in jmxService. credentials is current user\n' +
+            '  url = "' + process.env.API_NAME + '"\n' +
+            '  username = "' + this.$store.state.user.name + '"\n' +
+            '  password = "' + this.$store.state.user.password + '"\n\n' +
+            '#From connections\n';
+       
+        this.$store.state.connectionResults.map((connection) => {
+            this.configText += '[[inputs.jolokia2_proxy.target]]\n' +
+                '  url = "service:jmx:rmi:///jndi/rmi://' + connection.settings.host + ':' + connection.settings.port + '/jmxrmi"\n';
+        });
+
+        this.configText += '\n#From engines. Name made from connection name and engine name to prevent collisions\n';    
+        this.$store.state.engineStatusList.map((engine) => {
+            let bean = this.$store.getters.engineMBeans[engine.id];
+            let name = this.parseBeanName(bean.name);
+            this.configText += '[[inputs.jolokia2_proxy.metric]]\n' +
+                '  name = "' + bean.connectionSettings.host + '_' + bean.connectionSettings.port + '_' + name + '"\n' +
+                '  mbean = "' + bean.name + '"\n' +
+                '  paths = [ "InvalidCount", "ErrorCount", "WaitingCount", "RunningCount", "FinishedCount", "DequeuedCount" ]\n\n';
+        });          
+    }
+
+    parseBeanName(fullName: string) {
+        return fullName.substr(19);
+    }
+
+    downloadConfig() {
+        let blob = new Blob([this.configText], {type: 'text/csv'});
+        if (window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'telegraf.conf');
+        }
+        else {
+            let elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'telegraf.conf';        
+            document.body.appendChild(elem);
+            elem.click();        
+            document.body.removeChild(elem);
         }
     }
 

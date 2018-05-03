@@ -2,16 +2,34 @@
 
 > Web GUI for Copper Engine
 
-Monitoring GUI for Copper Engine is web application that uses JMX to connect to your copper application and show you current state of it in human friendly mode.
+Monitoring GUI for Copper Engine is web application, that uses JMX to connect to application that use copper-engine to show current state of copper engines. Able to connect to few applications, that are in app cluster, in same time to show information about all engines. Groups engines that have same engineClusterId to engine cluster for better understanding.  
 
-So far provieds you:
-* information about applications current state
+Currently provide user next features:
+* information about enginees current state
     * number of active/broken workflows
     * activity times
-* Show list of broken workflows(with state of ERROR or INVALID)
+    * grouping engines to engine cluster in case they have same engineClusterID
+* Show list of Broken workflows(with state of ERROR or INVALID)
     * Show details(with stacktrace) of broken workflow
-    * Restart broken workflows(one or all)
-    * Delete broken workflows(one or all) 
+    * Show source code of workflow(with highlited last waiting line and error line)
+    * Show error and last wait Strack Traces
+    * Open workflow in pop-up window
+    * Filter workflows by class name, state or created and modification date 
+    * Restart broken workflows(one, filtered or all)
+    * Delete broken workflows(one, filtered or all) 
+* Show list of Waiting workflows(with state of WAITING)
+    * Show details(with stacktrace) of broken workflow
+    * Show source code of workflow(with highlited last waiting line and error line)
+    * Show last wait Strack Traces
+    * Open workflow in pop-up window
+    * Filter workflows by class name or created and modification date
+* Show Workflow Repository info
+    * Show base info about repository
+    * Show list of classes with detail information
+    * Show sourcecode of classe(for Filebased repository)
+* Show Processor Pools
+    * Show information about all processor pools
+    * Alows to do actions: Resume, Suspend, Resume Deque and Suspend Deque
 
 App uses Vue.js with TypeScript and Vuetify as base.
 

@@ -9,6 +9,7 @@ import { MBeans, MBean } from '../../models/mbeans';
 import * as _ from 'lodash';
 import { Mutations } from '../../store.vuex';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
+import { Notification } from '../../models/notification';
 
 const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) => SidebarComponent);
 
@@ -21,6 +22,7 @@ const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) =
     }
 })
 export class DashboardComponent extends Vue {
+    private eventHub: Vue = this.$services.eventHub;
     interval: any;
     menuOpen: boolean = false;
     update: number;
@@ -181,6 +183,7 @@ export class DashboardComponent extends Vue {
         elem.select();
         document.execCommand('copy');
         document.body.removeChild(elem);
+        this.eventHub.$emit('showNotification', new Notification('Copied to Clipboard'));
     }
 
     @Watch('themeSwitch')

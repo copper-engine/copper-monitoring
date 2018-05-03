@@ -4,7 +4,7 @@ import { WorkflowInfo, EngineStatus, WorkflowRepo, WorkflowFilter, State } from 
 import { Notification } from '../../../models/notification';
 import { JmxService } from '../../../services/jmxService';
 import * as utils from '../../../util/utils';
-
+import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import { ConnectionSettings } from '../../../models/connectionSettings';
 import { User } from '../../../models/user';
 import { MBeans, MBean } from '../../../models/mbeans';
@@ -33,6 +33,7 @@ const WorkflowDetails = () => import('./workflow-details').then(({ WorkflowDetai
         'workflow-footer': WorkflowFooter,
         'workflow-details': WorkflowDetails,
         'source-code': sourceCodeomponent,
+        'scroll': VuePerfectScrollbar
     }
 })
 export class WorkflowsComponent extends Vue {

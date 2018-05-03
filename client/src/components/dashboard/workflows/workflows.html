@@ -130,11 +130,13 @@
                     <v-btn depressed class="squareButton" @click="dialogSourceOpen = false"><v-icon>mdi-close</v-icon></v-btn>      
             </v-card-title>
             <v-divider></v-divider>
-            <v-card-text>
-                <div>
-                    <source-code :sourceCode="dialogSourceCode" :highliteLines="dialogHighlitedlines"></source-code>
-                </div>
-            </v-card-text>
+            <scroll class="scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 1}">
+                <v-card-text>
+                    <div>
+                        <source-code :sourceCode="dialogSourceCode" :highliteLines="dialogHighlitedlines"></source-code>
+                    </div>
+                </v-card-text>
+            </scroll>
         </v-card>
     </v-dialog>
 
@@ -147,14 +149,16 @@
                     <v-btn depressed class="squareButton" @click="dialogWFOpen = false"><v-icon>mdi-close</v-icon></v-btn>      
             </v-card-title>
             <v-divider></v-divider>
-            <v-card-text>
-                <workflow-details
-                :workflow="dialogWF"
-                :wfType="wfType"
-                :inDialog="true"
-                @showSourceCode="showSourceCode($event)">
-                </workflow-details>
-            </v-card-text>
+            <scroll class="scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 1}">
+                <v-card-text>
+                    <workflow-details
+                    :workflow="dialogWF"
+                    :wfType="wfType"
+                    :inDialog="true"
+                    @showSourceCode="showSourceCode($event)">
+                    </workflow-details>
+                </v-card-text>
+            </scroll>
         </v-card>
     </v-dialog>
 

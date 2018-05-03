@@ -28,6 +28,7 @@ export class DashboardComponent extends Vue {
     themeSwitch: boolean = true;
     dialogConfigOpen: boolean = false;
     configText: string = '';
+    queryText: string = '';
     
     get user() {
         return this.$store.state.user;
@@ -139,7 +140,13 @@ export class DashboardComponent extends Vue {
                 '  name = "' + bean.connectionSettings.host + '_' + bean.connectionSettings.port + '_' + name + '"\n' +
                 '  mbean = "' + bean.name + '"\n' +
                 '  paths = [ "InvalidCount", "ErrorCount", "WaitingCount", "RunningCount", "FinishedCount", "DequeuedCount" ]\n\n';
-        });          
+        });
+        this.queryText = '#Basic SELECT Query\n' +
+            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +            
+            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +  
+            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +
+            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +            
+            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n';
     }
 
     parseBeanName(fullName: string) {

@@ -79,19 +79,25 @@
         <v-card>
             <v-card-title position="absolute" class="dialog-title">
                 <h2>Generated Telegraf Configuration File</h2>
-                <v-spacer></v-spacer>               
+                <v-spacer></v-spacer> 
+                    <v-btn depressed @click="downloadConfig">Download</v-btn>              
                     <v-btn depressed class="squareButton" @click="dialogConfigOpen = false"><v-icon>mdi-close</v-icon></v-btn>      
             </v-card-title>
             <v-divider></v-divider>
             <scroll class="scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.2}">
                 <v-card-text>
                     <v-layout row>
-                        <v-flex class="about">
-                            <p>The following Configuration is for use with Telegram and InfluxDB. 
-                                The Input section of a Telegraf Configuration file has been generated to fetch data from all current
-                                connections and engines. Copy the Configuration, or download it with the button below. For more 
-                                information, visit <a href='https://www.influxdata.com/'>InfluxDB</a></p>
-                        </v-flex>
+                        <v-layout column class="config-info">
+                            <v-flex class="about">
+                                <p>The following Configuration is for use with Telegram and InfluxDB. 
+                                    The Input section of a Telegraf Configuration file has been generated to fetch data from all current
+                                    connections and engines. Copy the Configuration, or download it with the button below. For more 
+                                    information, visit <a href='https://www.influxdata.com/'>InfluxDB</a></p>
+                            </v-flex>
+                            <v-flex class="query">
+                                <p>{{ queryText }}</p>  
+                            </v-flex>
+                        </v-layout>
                         <v-flex class="config">
                             <p style="white-space: pre;">{{ configText }}</p>  
                         </v-flex>
@@ -99,13 +105,6 @@
                 </v-card-text>
             </scroll>
             <v-divider></v-divider>
-            <v-card-actions>
-                <v-layout row>
-                    <v-spacer></v-spacer>
-                    Copy the above configuration, or download it here        
-                    <v-btn depressed @click="downloadConfig">Download</v-btn>
-                </v-layout>
-            </v-card-actions>
         </v-card>
     </v-dialog>
 

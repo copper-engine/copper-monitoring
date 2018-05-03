@@ -97,7 +97,7 @@
                         <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.7}">
                             <v-flex class="config">
                                 <div class="btn-container">
-                                    <v-btn depressed @click="downloadConfig">Copy</v-btn>
+                                    <v-btn depressed @click="copyConfig">Copy</v-btn>
                                     <v-btn depressed @click="downloadConfig">Download</v-btn>
                                 </div>
                                 <p style="white-space: pre;">{{ configText }}</p>  
@@ -106,6 +106,10 @@
                         <h1>Sample Queries</h1>
                         <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.2}">
                             <v-flex class="config">
+                                    <div class="btn-container">
+                                        <v-btn depressed @click="copyConfig">Copy</v-btn>
+                                        <v-btn depressed @click="downloadConfig">Download</v-btn>
+                                    </div>
                                     <p style="white-space: pre;">{{ queryText }}</p>  
                             </v-flex>
                         </scroll>

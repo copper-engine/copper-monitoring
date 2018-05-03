@@ -174,6 +174,15 @@ export class DashboardComponent extends Vue {
         }
     }
 
+    copyConfig() {
+        let text = window.document.createElement('textarea');
+        text.value = this.configText;
+        document.body.appendChild(text);
+        text.select();
+        document.execCommand('copy');
+        document.body.removeChild(text);
+    }
+
     @Watch('themeSwitch')
     toggleTheme() {
         localStorage.setItem('darkTheme', String(this.themeSwitch));

@@ -109,7 +109,12 @@ body {
                             }
                             .btn-container {
                                 padding-top: 10px;
-                                position: absolute;
+                                position: fixed;
+                                display: none;
+                                button {
+                                    border: 1px solid;
+                                    border-color: $light-border;
+                                }
                             }
                             .btn-container:first-child {
                                 margin-left: 861px;
@@ -142,6 +147,11 @@ body {
                     border-color: $light-border;
                     background-color: $light-background;
                     color: $dark-text-color;
+                }
+                .telegraf-scroll-area:hover {
+                    .btn-container {
+                        display: block !important;
+                    }
                 }
                 .delete-dialog-text {
                     background-color: $light-background;

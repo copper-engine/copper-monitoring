@@ -174,13 +174,13 @@ export class DashboardComponent extends Vue {
         }
     }
 
-    copyConfig() {
-        let text = window.document.createElement('textarea');
-        text.value = this.configText;
-        document.body.appendChild(text);
-        text.select();
+    copy(text) {
+        let elem = window.document.createElement('textarea');
+        elem.value = text;
+        document.body.appendChild(elem);
+        elem.select();
         document.execCommand('copy');
-        document.body.removeChild(text);
+        document.body.removeChild(elem);
     }
 
     @Watch('themeSwitch')

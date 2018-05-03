@@ -79,8 +79,7 @@
         <v-card>
             <v-card-title position="absolute" class="dialog-title">
                 <h2>Generated Telegraf Configuration File</h2>
-                <v-spacer></v-spacer> 
-                    <v-btn depressed @click="downloadConfig">Download</v-btn>              
+                <v-spacer></v-spacer>             
                     <v-btn depressed class="squareButton" @click="dialogConfigOpen = false"><v-icon>mdi-close</v-icon></v-btn>      
             </v-card-title>
             <v-divider></v-divider>
@@ -96,8 +95,8 @@
                         <h1>Input Configuration</h1>
                         <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.7}">
                             <v-flex class="config">
-                                <div class="btn-container">
-                                    <v-btn depressed @click="copyConfig">Copy</v-btn>
+                                <div class="config-btn btn-container">
+                                    <v-btn depressed @click="copy(configText)">Copy</v-btn>
                                     <v-btn depressed @click="downloadConfig">Download</v-btn>
                                 </div>
                                 <p style="white-space: pre;">{{ configText }}</p>  
@@ -106,9 +105,8 @@
                         <h1>Sample Queries</h1>
                         <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.2}">
                             <v-flex class="config">
-                                    <div class="btn-container">
-                                        <v-btn depressed @click="copyConfig">Copy</v-btn>
-                                        <v-btn depressed @click="downloadConfig">Download</v-btn>
+                                    <div class="query-btn btn-container">
+                                        <v-btn depressed @click="copy(queryText)">Copy</v-btn>
                                     </div>
                                     <p style="white-space: pre;">{{ queryText }}</p>  
                             </v-flex>

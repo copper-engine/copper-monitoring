@@ -107,6 +107,14 @@ body {
                             p {
                                 padding: 20px;
                             }
+                            .config-btn:first-child {
+                                margin-left: 856px;
+                                margin-bottom: -65px;
+                            }
+                            .query-btn {
+                                margin-left: 987px;
+                                margin-bottom: -65px;
+                            }
                             .btn-container {
                                 padding-top: 10px;
                                 position: fixed;
@@ -115,10 +123,6 @@ body {
                                     border: 1px solid;
                                     border-color: $light-border;
                                 }
-                            }
-                            .btn-container:first-child {
-                                margin-left: 861px;
-                                margin-bottom: -65px;
                             }
                         }
                         h1 {

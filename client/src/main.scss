@@ -66,7 +66,12 @@ body {
     #appCover {
         .dialog__content {
             .dialog {
+                border-radius: 0px !important;                
                 .card {
+                    max-height: 845px;
+                    .divider {
+                        background-color: $light-border;
+                    }
                     .dialog-title {
                         background-color: $light-primary !important;
                         color: $light-text-color !important;
@@ -76,45 +81,59 @@ body {
                         }
                     }
                 }
-                border-radius: 0px !important;
                 .card__text  {
                     padding: 0px;
                     width: 100%;
+                    color: $dark-text-color;
                     .workflow-details {
                         background-color: $light-tertiary !important;
                         color: $dark-text-color !important;
                     }
-                    .config-info {
-                        max-width: 295px;
+                    .telegraf-container {
+                        background-color: $light-sidebar;
                         .about {
-                            background-color: $light-sidebar;
-                            max-height: 215px;
                             p {
                                 font-size: 1.1em;
-                                padding: 15px;
+                                padding-left: 70px;
+                                padding-right: 70px;
+                                padding-bottom: 0px;
+                                padding-top: 16px;
                             }
                         }
-                        .query {
-                            background-color: $light-tertiary;
+                        .config {
+                            background-color: $light-background;
                             color: $dark-text-color;
+                            position: relative;
                             p {
                                 padding: 20px;
                             }
                         }
-                    }
-                    .config {
-                        background-color: $light-background;
-                        color: $dark-text-color;
-                        p {
-                            padding: 20px;
+                        h1 {
+                            font-size: 1.2em;
+                            padding-left: 70px;
+                            padding-bottom: 5px;
                         }
                     }
+                }
+                .config-text {
+                    overflow: hidden;
                 }
                 .scroll-area {
                     position: relative;
                     margin: auto;
                     width: 100%;
                     height: 100%; 
+                }
+                .telegraf-scroll-area {
+                    margin-top: 0px;
+                    margin-left: 50px;
+                    margin-right: 50px;
+                    margin-bottom: 35px;
+                    max-height: 275px;
+                    border: 1px solid;
+                    border-color: $light-border;
+                    background-color: $light-background;
+                    color: $dark-text-color;
                 }
                 .delete-dialog-text {
                     background-color: $light-background;
@@ -139,6 +158,9 @@ body {
             .dialog__content {
                 .dialog {
                     .card {
+                        .divider {
+                            background-color: $dark-border;
+                        }
                         .dialog-title {
                             background-color: $dark-primary !important;
                             color: $light-text-color !important;
@@ -149,18 +171,28 @@ body {
                         }
                     }
                     .card__text  {
+                        color: $light-text-color;
                         .workflow-details {
                             background-color: $dark-tertiary !important;
                             color: $light-text-color !important;
                         }
+                        .telegraf-container {
+                            background-color: $dark-sidebar;
+                            .config {
+                                background-color: $dark-background;
+                                color: $light-text-color;
+                            }
+                        }
+                    }
+                    .telegraf-scroll-area {
+                        border-color: $dark-border;
+                        background-color: $dark-background;
+                        color: $light-text-color;
                     }
                     .delete-dialog-text {
-                        background-color: $dark-tertiary;
-                        padding: 16px;
+                        background-color: $light-tertiary;
                         h2 {
-                            color: $light-text-color; 
-                            font-size: 1.2em;
-                            font-weight: 400;
+                            color: $dark-text-color;
                         }
                     }
                 }

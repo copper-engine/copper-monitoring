@@ -122,14 +122,14 @@ export class DashboardComponent extends Vue {
 
     generateConfigFile() {
         this.configText = '[[inputs.jolokia2_proxy]]\n#url goes from process.env.API_NAME variable like in jmxService. credentials is current user\n' +
-            '  url = "' + process.env.API_NAME + '"\n' +
-            '  username = "' + this.$store.state.user.name + '"\n' +
-            '  password = "' + this.$store.state.user.password + '"\n\n' +
+            '     url = "' + process.env.API_NAME + '"\n' +
+            '     username = "' + this.$store.state.user.name + '"\n' +
+            '     password = "' + this.$store.state.user.password + '"\n\n' +
             '#From connections\n';
        
         this.$store.state.connectionResults.map((connection) => {
             this.configText += '[[inputs.jolokia2_proxy.target]]\n' +
-                '  url = "service:jmx:rmi:///jndi/rmi://' + connection.settings.host + ':' + connection.settings.port + '/jmxrmi"\n';
+                '     url = "service:jmx:rmi:///jndi/rmi://' + connection.settings.host + ':' + connection.settings.port + '/jmxrmi"\n';
         });
 
         this.configText += '\n#From engines. Name made from connection name and engine name to prevent collisions\n';    
@@ -137,13 +137,19 @@ export class DashboardComponent extends Vue {
             let bean = this.$store.getters.engineMBeans[engine.id];
             let name = this.parseBeanName(bean.name);
             this.configText += '[[inputs.jolokia2_proxy.metric]]\n' +
-                '  name = "' + bean.connectionSettings.host + '_' + bean.connectionSettings.port + '_' + name + '"\n' +
-                '  mbean = "' + bean.name + '"\n' +
-                '  paths = [ "InvalidCount", "ErrorCount", "WaitingCount", "RunningCount", "FinishedCount", "DequeuedCount" ]\n\n';
+                '     name = "' + bean.connectionSettings.host + '_' + bean.connectionSettings.port + '_' + name + '"\n' +
+                '     mbean = "' + bean.name + '"\n' +
+                '     paths = [ "InvalidCount", "ErrorCount", "WaitingCount", "RunningCount", "FinishedCount", "DequeuedCount" ]\n\n';
         });
         this.queryText = '#Basic SELECT Query\n' +
-            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +            
             'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +  
+            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +  
+            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +
+            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +          
+            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +  
+            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +  
+            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +
+            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +
             'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +
             'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +            
             'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n';

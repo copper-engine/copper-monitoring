@@ -75,7 +75,7 @@
         <span>SCOOP Software &copy; 2018</span>
     </v-footer>
 
-    <v-dialog v-model="dialogConfigOpen" scrollable max-width="1000px" position="absolute">
+    <v-dialog v-model="dialogConfigOpen" scrollable max-width="1200px" position="absolute">
         <v-card>
             <v-card-title position="absolute" class="dialog-title">
                 <h2>Generated Telegraf Configuration File</h2>
@@ -84,26 +84,29 @@
                     <v-btn depressed class="squareButton" @click="dialogConfigOpen = false"><v-icon>mdi-close</v-icon></v-btn>      
             </v-card-title>
             <v-divider></v-divider>
-            <scroll class="scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.2}">
-                <v-card-text>
-                    <v-layout row>
-                        <v-layout column class="config-info">
-                            <v-flex class="about">
-                                <p>The following Configuration is for use with Telegram and InfluxDB. 
-                                    The Input section of a Telegraf Configuration file has been generated to fetch data from all current
-                                    connections and engines. Copy the Configuration, or download it with the button below. For more 
-                                    information, visit <a href='https://www.influxdata.com/'>InfluxDB</a></p>
-                            </v-flex>
-                            <v-flex class="query">
-                                <p>{{ queryText }}</p>  
-                            </v-flex>
-                        </v-layout>
-                        <v-flex class="config">
-                            <p style="white-space: pre;">{{ configText }}</p>  
+                <v-card-text class="config-text">
+                    <v-layout column class="telegraf-container">
+                        <v-flex class="about">
+                            <p>The following Configuration is for use with Telegram and InfluxDB. 
+                                The Input section of a Telegraf Configuration file has been generated to fetch data from all current
+                                connections and engines. Copy the Configuration, or download it with the button below. For more 
+                                information, visit <a href='https://www.influxdata.com/'>InfluxDB</a>
+                            </p>
                         </v-flex>
+                        <h1>Input Configuration</h1>
+                        <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.7}">
+                            <v-flex class="config">
+                                    <p style="white-space: pre;">{{ configText }}</p>  
+                            </v-flex>
+                        </scroll>
+                        <h1>Sample Queries</h1>
+                        <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.2}">
+                            <v-flex class="config">
+                                    <p style="white-space: pre;">{{ queryText }}</p>  
+                            </v-flex>
+                        </scroll>
                     </v-layout>
                 </v-card-text>
-            </scroll>
             <v-divider></v-divider>
         </v-card>
     </v-dialog>

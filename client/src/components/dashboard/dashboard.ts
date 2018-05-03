@@ -137,7 +137,7 @@ export class DashboardComponent extends Vue {
             let bean = this.$store.getters.engineMBeans[engine.id];
             let name = this.parseBeanName(bean.name);
             this.configText += '[[inputs.jolokia2_proxy.metric]]\n' +
-                '     name = "' + bean.connectionSettings.host + '_' + bean.connectionSettings.port + '_' + name + '"\n' +
+                '     name = "' + engine.engineId + '@' + bean.connectionSettings.host + ':' + bean.connectionSettings.port + '"\n' +
                 '     mbean = "' + bean.name + '"\n' +
                 '     paths = [ "InvalidCount", "ErrorCount", "WaitingCount", "RunningCount", "FinishedCount", "DequeuedCount" ]\n\n';
         });

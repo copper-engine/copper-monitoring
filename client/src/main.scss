@@ -107,6 +107,14 @@ body {
                             p {
                                 padding: 20px;
                             }
+                            .btn-container {
+                                padding-top: 10px;
+                                position: absolute;
+                            }
+                            .btn-container:first-child {
+                                margin-left: 861px;
+                                margin-bottom: -65px;
+                            }
                         }
                         h1 {
                             font-size: 1.2em;

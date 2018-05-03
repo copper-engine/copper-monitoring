@@ -124,7 +124,7 @@ export class DashboardComponent extends Vue {
 
     generateConfigFile() {
         this.configText = '[[inputs.jolokia2_proxy]]\n#url goes from process.env.API_NAME variable like in jmxService. credentials is current user\n' +
-            '     url = "' + process.env.API_NAME + '"\n' +
+            '     url = "' + this.parseURL() + '"\n' +
             '     username = "' + this.$store.state.user.name + '"\n' +
             '     password = "' + this.$store.state.user.password + '"\n\n' +
             '#From connections\n';
@@ -155,6 +155,16 @@ export class DashboardComponent extends Vue {
             'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +
             'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +            
             'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n';
+    }
+
+    parseURL() {
+        if (process.env.API_NAME.substr(0, 4) !== 'http') {
+            let subUrl = window.location.href.substr(7);
+            let endIndex = subUrl.indexOf('/');
+            return window.location.href.substr(0, (endIndex + 7)) + process.env.API_NAME;
+        } else {
+            return process.env.API_NAME;
+        }
     }
 
     parseBeanName(fullName: string) {

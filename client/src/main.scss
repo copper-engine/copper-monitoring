@@ -166,6 +166,13 @@ body {
                         font-weight: 400;
                     }
                 }
+                .card__actions {
+                    background-color: $light-secondary;
+                    button {
+                        background-color: $light-tertiary;
+                        color: $dark-text-color;
+                    }
+                }
                 code:after, kbd:after, code:before, kbd:before {
                     content: "";
                     letter-spacing: 0px;
@@ -212,9 +219,16 @@ body {
                         color: $light-text-color;
                     }
                     .delete-dialog-text {
-                        background-color: $light-tertiary;
+                        background-color: $dark-tertiary;
                         h2 {
-                            color: $dark-text-color;
+                            color: $light-text-color;
+                        }
+                    }
+                    .card__actions {
+                        background-color: $dark-secondary;
+                        button {
+                            background-color: $dark-tertiary;
+                            color: $light-text-color;
                         }
                     }
                 }

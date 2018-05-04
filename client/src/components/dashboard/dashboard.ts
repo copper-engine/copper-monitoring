@@ -119,6 +119,7 @@ export class DashboardComponent extends Vue {
 
     dialogConfig() {
         this.generateConfigFile();
+        this.generateSampleQueries();
         this.dialogConfigOpen = true;
     }
 
@@ -143,18 +144,18 @@ export class DashboardComponent extends Vue {
                 '     mbean = "' + bean.name + '"\n' +
                 '     paths = [ "InvalidCount", "ErrorCount", "WaitingCount", "RunningCount", "FinishedCount", "DequeuedCount" ]\n\n';
         });
-        this.queryText = '#Basic SELECT Query\n' +
-            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +  
-            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +  
-            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +
-            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +          
-            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +  
-            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +  
-            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +
-            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +
-            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +
-            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n' +            
-            'SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]\n\n';
+    }
+
+    generateSampleQueries() {
+        this.queryText = '#Sample Queries\n\n';
+        this.$store.state.engineStatusList.map((engine) => {
+            let bean = this.$store.getters.engineMBeans[engine.id];
+            this.queryText += '#Select Attributes for ' + engine.engineId + '@' + bean.connectionSettings.host + ':' + bean.connectionSettings.port + '\n' +
+                'SELECT' + '\nsum("ErrorCount") AS "sum_ErrorCount",' + '\nsum("DequeuedCount") AS "sum_DequeuedCount",' + '\nsum("FinishedCount") AS "sum_FinishedCount",' +
+                '\nsum("InvalidCount") AS "sum_InvalidCount",' + '\nsum("RunningCount") AS "sum_RunningCount",' + '\nsum("WaitingCount") AS "sum_WaitingCount"' + 
+                '\nFROM "telegraf"."autogen"."' + engine.engineId + '@' + bean.connectionSettings.host + ':' + bean.connectionSettings.port + '"' +
+                '\nWHERE time > now() - 1h GROUP BY time(10s) FILL(null)\n\n';
+        });
     }
 
     parseURL() {

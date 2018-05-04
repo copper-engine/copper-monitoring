@@ -83,36 +83,40 @@
                     <v-btn depressed class="squareButton" @click="dialogConfigOpen = false"><v-icon>mdi-close</v-icon></v-btn>      
             </v-card-title>
             <v-divider></v-divider>
-                <v-card-text class="config-text">
-                    <v-layout column class="telegraf-container">
-                        <v-flex class="about">
-                            <p>The following Configuration is for use with Telegram and InfluxDB. 
-                                The Input section of a Telegraf Configuration file has been generated to fetch data from all current
-                                connections and engines. Copy the Configuration, or download it with the button below. For more 
-                                information, visit <a href='https://www.influxdata.com/'>InfluxDB</a>
-                            </p>
-                        </v-flex>
-                        <h1>Input Configuration</h1>
-                        <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.7}">
-                            <v-flex class="config">
-                                <div class="config-btn btn-container">
-                                    <v-btn depressed @click="copy(configText)">Copy</v-btn>
-                                    <v-btn depressed @click="downloadConfig">Download</v-btn>
-                                </div>
-                                <p style="white-space: pre;">{{ configText }}</p>  
+                <scroll class="scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 1}">
+                    <v-card-text class="config-text">
+                        <v-layout column class="telegraf-container">
+                            <v-flex class="about">
+                                <p>The following Configuration is for use with Telegram and InfluxDB. 
+                                    The Input section of a Telegraf Configuration file has been generated to fetch data from all current
+                                    connections and engines. Copy the Configuration, or download it with the button below. For more 
+                                    information, visit <a href='https://www.influxdata.com/'>InfluxDB</a>
+                                </p>
                             </v-flex>
-                        </scroll>
-                        <h1>Sample Queries</h1>
-                        <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.2}">
-                            <v-flex class="config">
-                                    <div class="query-btn btn-container">
-                                        <v-btn depressed @click="copy(queryText)">Copy</v-btn>
-                                    </div>
-                                    <p style="white-space: pre;">{{ queryText }}</p>  
-                            </v-flex>
-                        </scroll>
-                    </v-layout>
-                </v-card-text>
+                            <h1 v-if="(conflictText !== '')" class="conflict-text">Warning! You have at least 2 engines with the same mbean name, this can lead to inaccurate statistics</h1>
+                            <scroll v-if="(conflictText !== '')"  class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.7}">
+                                <v-flex class="config">
+                                        <p style="white-space: pre;">{{ conflictText }}</p>   
+                                </v-flex>
+                            </scroll>
+                            <h1>Input Configuration</h1>
+                            <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.7}">
+                                <v-flex class="config">
+                                    <p style="white-space: pre;">{{ configText }}</p> 
+                                </v-flex>
+                            </scroll>
+                            <h1>Sample Queries</h1>
+                            <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.2}">
+                                <v-flex class="config">
+                                        <div class="query-btn btn-container">
+                                            <v-btn depressed @click="copy(queryText)">Copy</v-btn>
+                                        </div>
+                                        <p style="white-space: pre;">{{ queryText }}</p>  
+                                </v-flex>
+                            </scroll>
+                        </v-layout>
+                    </v-card-text>
+                </scroll>
             <v-divider></v-divider>
         </v-card>
     </v-dialog>

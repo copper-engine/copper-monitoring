@@ -31,6 +31,7 @@ export class DashboardComponent extends Vue {
     dialogConfigOpen: boolean = false;
     configText: string = '';
     queryText: string = '';
+    conflictText: string = '';
     
     get user() {
         return this.$store.state.user;
@@ -124,6 +125,9 @@ export class DashboardComponent extends Vue {
     }
 
     generateConfigFile() {
+
+        let beanNames = [];
+
         this.configText = '[[inputs.jolokia2_proxy]]\n#url goes from process.env.API_NAME variable like in jmxService. credentials is current user\n' +
             '     url = "' + this.parseURL() + '"\n' +
             '     username = "' + this.$store.state.user.name + '"\n' +
@@ -136,14 +140,45 @@ export class DashboardComponent extends Vue {
         });
 
         this.configText += '\n#From engines. Name made from connection name and engine name to prevent collisions\n';    
-        this.$store.state.engineStatusList.map((engine) => {
+        this.$store.state.engineStatusList.map((engine, index) => {
             let bean = this.$store.getters.engineMBeans[engine.id];
             let name = this.parseBeanName(bean.name);
+            beanNames[index] = [bean.name, engine.engineId];
             this.configText += '[[inputs.jolokia2_proxy.metric]]\n' +
                 '     name = "' + engine.engineId + '@' + bean.connectionSettings.host + ':' + bean.connectionSettings.port + '"\n' +
                 '     mbean = "' + bean.name + '"\n' +
                 '     paths = [ "InvalidCount", "ErrorCount", "WaitingCount", "RunningCount", "FinishedCount", "DequeuedCount" ]\n\n';
         });
+        this.checkBeanNameConflict(beanNames);
+    }
+
+    checkBeanNameConflict(beans) {
+        this.conflictText = '';
+        let conflicts = [];
+        let indexedConflicts: number[] = [];
+        for (let i = 0; i < beans.length; i++) {
+            for (let j = i + 1; j < beans.length; j++) {            
+                if (beans[i][0] === beans[j][0]) {
+                    if (indexedConflicts.indexOf(j) === -1) {
+                        indexedConflicts.push(j);
+                        if (conflicts[i] === undefined) {
+                            conflicts[i] = [];
+                        }
+                        conflicts[i].push(j);
+                    }
+                }
+            }
+        }
+        if (conflicts.length > 0) {
+            this.conflictText = '#Conflicts\n';
+            conflicts.map((conflict, index) => {
+                this.conflictText += '\nMBean:         ' + beans[index][0] + '\n' +
+                    'Shared By:   ' + beans[index][1];
+                conflict.map((index) => {
+                    this.conflictText += '\n                      ' + beans[index][1] + '\n\n';
+                });
+            });
+        }
     }
 
     generateSampleQueries() {

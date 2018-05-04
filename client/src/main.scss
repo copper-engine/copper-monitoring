@@ -228,6 +228,14 @@ body {
                                 color: $light-text-color;
                             }
                         }
+                        .bean-warning {
+                            background-color: $dark-error;
+                            color: white;
+                            .config {
+                                background-color: $dark-error;
+                                color: white;
+                            }
+                        }
                     }
                     .telegraf-scroll-area {
                         border-color: $dark-border;

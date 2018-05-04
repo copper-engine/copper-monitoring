@@ -96,7 +96,7 @@
                             <h1 v-if="(conflictText !== '')" class="conflict-text">Warning! You have at least 2 engines with the same mbean name, this can lead to inaccurate statistics</h1>
                             <scroll v-if="(conflictText !== '')" class="bean-warning telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.7}">
                                 <v-flex class="config">
-                                        <p style="white-space: pre;">{{ conflictText }}</p>   
+                                        <p style="white-space: pre;">{{ conflictText }}</p>
                                 </v-flex>
                             </scroll>
                             <h1>Input Configuration</h1>

@@ -101,7 +101,7 @@ body {
                             }
                         }
                         .conflict-text {
-                            color: $error;
+                            color: $dark-error;
                         }
                         .config {
                             background-color: $light-background;
@@ -126,6 +126,14 @@ body {
                                     border: 1px solid;
                                     border-color: $light-border;
                                 }
+                            }
+                        }
+                        .bean-warning {
+                            background-color: $dark-error;
+                            color: white;
+                            .config {
+                                background-color: $dark-error;
+                                color: white;
                             }
                         }
                         h1 {

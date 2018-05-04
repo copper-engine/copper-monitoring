@@ -86,30 +86,33 @@ export class DashboardComponent extends Vue {
 
     // @Watch('$route')
     parseRoute() {
-        if (this.$route.fullPath.split('?').length > 1 ) {
-            let params = this.$route.fullPath.split('?');
-            if (params && params[1]) {
-                params = decodeURI(params[1]).split('&');
-                if (params) {
-                    let settings: ConnectionSettings[] = [];
-                    params.forEach(connection => {
-                        let parsed = connection.split('=');
+        if (this.$route.fullPath.split('?').length <= 1 ) 
+            return;
 
-                        if (parsed && parsed[0] === 'connection') {
-                            parsed = parsed[1].split('|');
-                            
-                            if (parsed[0] && parsed[1]) {
-                                settings.push(new ConnectionSettings(parsed[0], parsed[1]));
-                            }
-                        }
-                    });
+        let params = this.$route.fullPath.split('?');
+        if (!params || !params[1]) 
+            return;
+        
+        params = decodeURI(params[1]).split('&');
+        if (!params)
+            return;
+        
+        let settings: ConnectionSettings[] = [];
+        params.forEach(connection => {
+            let parsed = connection.split('=');
 
-                    if (settings.length > 0) {
-                        // this.$store.commit(Mutations.setConnectionSettings, settings);
-                        this.$store.commit(Mutations.setConnectionSettings, settings);
-                    }
+            if (parsed && parsed[0] === 'connection') {
+                parsed = parsed[1].split('|');
+                
+                if (parsed[0] && parsed[1]) {
+                    settings.push(new ConnectionSettings(parsed[0], parsed[1]));
                 }
             }
+        });
+
+        if (settings.length > 0) {
+            // this.$store.commit(Mutations.setConnectionSettings, settings);
+            this.$store.commit(Mutations.setConnectionSettings, settings);
         }
     }
 
@@ -157,15 +160,16 @@ export class DashboardComponent extends Vue {
         let conflicts = [];
         let indexedConflicts: number[] = [];
         for (let i = 0; i < beans.length; i++) {
+            if (indexedConflicts.indexOf(i) !== -1) {
+                continue;
+            }
             for (let j = i + 1; j < beans.length; j++) {            
                 if (beans[i][0] === beans[j][0]) {
-                    if (indexedConflicts.indexOf(j) === -1) {
-                        indexedConflicts.push(j);
-                        if (conflicts[i] === undefined) {
-                            conflicts[i] = [];
-                        }
-                        conflicts[i].push(j);
+                    indexedConflicts.push(j);
+                    if (conflicts[i] === undefined) {
+                        conflicts[i] = [];
                     }
+                    conflicts[i].push(j);
                 }
             }
         }

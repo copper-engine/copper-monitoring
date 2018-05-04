@@ -148,10 +148,18 @@ export class DashboardComponent extends Vue {
 
     generateSampleQueries() {
         this.queryText = '#Sample Queries\n\n';
-        this.$store.state.engineStatusList.map((engine) => {
+        this.$store.getters.groupsOfEngines.map((group) => {
+
+            let engine = group.engines[0];
             let bean = this.$store.getters.engineMBeans[engine.id];
-            this.queryText += '#Select Attributes for ' + engine.engineId + '@' + bean.connectionSettings.host + ':' + bean.connectionSettings.port + '\n' +
-                'SELECT' + '\nsum("ErrorCount") AS "sum_ErrorCount",' + '\nsum("DequeuedCount") AS "sum_DequeuedCount",' + '\nsum("FinishedCount") AS "sum_FinishedCount",' +
+
+            if (group.engines.length > 1) {
+                this.queryText += '#Select Attributes for Group: ' + group.name + '@' + bean.connectionSettings.host + ':' + bean.connectionSettings.port + '\n';
+            } else {
+                this.queryText += '#Select Attributes for Engine: ' + engine.engineId + '@' + bean.connectionSettings.host + ':' + bean.connectionSettings.port + '\n';
+            }
+
+            this.queryText += 'SELECT' + '\nsum("ErrorCount") AS "sum_ErrorCount",' + '\nsum("DequeuedCount") AS "sum_DequeuedCount",' + '\nsum("FinishedCount") AS "sum_FinishedCount",' +
                 '\nsum("InvalidCount") AS "sum_InvalidCount",' + '\nsum("RunningCount") AS "sum_RunningCount",' + '\nsum("WaitingCount") AS "sum_WaitingCount"' + 
                 '\nFROM "telegraf"."autogen"."' + engine.engineId + '@' + bean.connectionSettings.host + ':' + bean.connectionSettings.port + '"' +
                 '\nWHERE time > now() - 1h GROUP BY time(10s) FILL(null)\n\n';

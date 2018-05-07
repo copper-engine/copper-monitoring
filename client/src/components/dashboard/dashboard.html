@@ -102,6 +102,10 @@
                             <h1>Input Configuration</h1>
                             <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.7}">
                                 <v-flex class="config">
+                                    <div class="config-btn btn-container">
+                                        <v-btn depressed @click="copy(configText)">Copy</v-btn>
+                                        <v-btn depressed @click="downloadConfig">Download</v-btn>
+                                    </div>
                                     <p style="white-space: pre;">{{ configText }}</p> 
                                 </v-flex>
                             </scroll>

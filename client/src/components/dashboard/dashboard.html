@@ -98,7 +98,7 @@
                                     <h1>Warning! Bean Collision Detected</h1>
                                 </div>
                                 <div class="menu-info">
-                                    <h1>You have at least 1 MBean name shared between 2 or more engines. This may result in inaccurate statistics.</h1>
+                                    <h1>You have {{ beanCollisions.length }} MBean name{{ (beanCollisions.length > 1 ? 's' : '') }} shared between 2 or more engines. This may result in inaccurate statistics.</h1>
                                 </div>
                                 <div class="menu-details">
                                     <v-layout row v-for="collision in beanCollisions" key="collision.id">

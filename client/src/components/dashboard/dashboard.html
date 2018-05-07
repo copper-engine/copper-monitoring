@@ -92,7 +92,7 @@
                         </v-flex>
                         <v-layout row v-if="(beanCollisions.length > 0)" class='conflict-warning'>
                             <h1>Warning! Bean Collision!</h1>
-                            <v-menu open-on-hover top offset-y>
+                            <v-menu open-on-hover right offset-y :nudge-top="115" :nudge-right="35">
                                 <v-icon slot='activator'>mdi-information</v-icon>
                                 <div class="menu-header">
                                     <h1>Warning! Bean Collision Detected</h1>

@@ -13,6 +13,18 @@ import { Notification } from '../../models/notification';
 
 const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) => SidebarComponent);
 
+export class BeanContext {
+    constructor(
+        public beanName: string,
+        public engineName: string
+    ) {}
+}
+
+export class BeanConflict {
+    public beanName: string;
+    public conflictEngines: string[];
+}
+
 @Component({
     template: require('./dashboard.html'),
     services: ['jmxService', 'eventHub'],
@@ -21,6 +33,7 @@ const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) =
         'scroll': VuePerfectScrollbar
     }
 })
+
 export class DashboardComponent extends Vue {
     private eventHub: Vue = this.$services.eventHub;
     interval: any;
@@ -31,7 +44,7 @@ export class DashboardComponent extends Vue {
     dialogConfigOpen: boolean = false;
     configText: string = '';
     queryText: string = '';
-    conflictText: string = '';
+    beanCollisions: BeanConflict[] = [];
     
     get user() {
         return this.$store.state.user;
@@ -146,7 +159,8 @@ export class DashboardComponent extends Vue {
         this.$store.state.engineStatusList.map((engine, index) => {
             let bean = this.$store.getters.engineMBeans[engine.id];
             let name = this.parseBeanName(bean.name);
-            beanNames[index] = [bean.name, engine.engineId];
+            // beanNames[index] = [bean.name, engine.engineId];
+            beanNames[index] = new BeanContext(bean.name, engine.engineId);
             this.configText += '[[inputs.jolokia2_proxy.metric]]\n' +
                 '     name = "' + engine.engineId + '@' + bean.connectionSettings.host + ':' + bean.connectionSettings.port + '"\n' +
                 '     mbean = "' + bean.name + '"\n' +
@@ -156,33 +170,18 @@ export class DashboardComponent extends Vue {
     }
 
     checkBeanNameConflict(beans) {
-        this.conflictText = '';
-        let conflicts = [];
-        let indexedConflicts: number[] = [];
-        for (let i = 0; i < beans.length; i++) {
-            if (indexedConflicts.indexOf(i) !== -1) {
-                continue;
-            }
-            for (let j = i + 1; j < beans.length; j++) {            
-                if (beans[i][0] === beans[j][0]) {
-                    indexedConflicts.push(j);
-                    if (conflicts[i] === undefined) {
-                        conflicts[i] = [];
-                    }
-                    conflicts[i].push(j);
-                }
-            }
-        }
-        if (conflicts.length > 0) {
-            this.conflictText = '#Conflicts\n';
-            conflicts.map((conflict, index) => {
-                this.conflictText += '\nMBean:         ' + beans[index][0] + '\n' +
-                    'Shared By:   ' + beans[index][1];
-                conflict.map((index) => {
-                    this.conflictText += '\n                      ' + beans[index][1] + '\n\n';
-                });
+        let conflicts: BeanConflict[] = [];
+        _.toPairs(_.groupBy(beans, 'beanName')).map((group) => {
+            let conflict = new BeanConflict;
+            conflict.beanName = group[0];
+            conflict.conflictEngines = group[1].map((beanContext) => {
+                return beanContext.engineName;
             });
-        }
+            if (conflict.conflictEngines.length > 1) {
+                conflicts.push(conflict);
+            }
+        });
+        this.beanCollisions = conflicts;
     }
 
     generateSampleQueries() {

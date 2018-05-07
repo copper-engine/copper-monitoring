@@ -83,44 +83,58 @@
                     <v-btn depressed class="squareButton" @click="dialogConfigOpen = false"><v-icon>mdi-close</v-icon></v-btn>      
             </v-card-title>
             <v-divider></v-divider>
-                <scroll class="scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 1}">
-                    <v-card-text class="config-text">
-                        <v-layout column class="telegraf-container">
-                            <v-flex class="about">
-                                <p>The following Configuration is for use with Telegram and InfluxDB. 
-                                    The Input section of a Telegraf Configuration file has been generated to fetch data from all current
-                                    connections and engines. Copy the Configuration, or download it with the button below. For more 
-                                    information, visit <a href='https://www.influxdata.com/'>InfluxDB</a>
-                                </p>
-                            </v-flex>
-                            <h1 v-if="(conflictText !== '')" class="conflict-text">Warning! You have at least 2 engines with the same mbean name, this can lead to inaccurate statistics</h1>
-                            <scroll v-if="(conflictText !== '')" class="bean-warning telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.7}">
-                                <v-flex class="config">
-                                        <p style="white-space: pre;">{{ conflictText }}</p>
-                                </v-flex>
-                            </scroll>
-                            <h1>Input Configuration</h1>
-                            <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.7}">
-                                <v-flex class="config">
-                                    <div class="config-btn btn-container">
-                                        <v-btn depressed @click="copy(configText)">Copy</v-btn>
-                                        <v-btn depressed @click="downloadConfig">Download</v-btn>
-                                    </div>
-                                    <p style="white-space: pre;">{{ configText }}</p> 
-                                </v-flex>
-                            </scroll>
-                            <h1>Sample Queries</h1>
-                            <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.2}">
-                                <v-flex class="config">
-                                        <div class="query-btn btn-container">
-                                            <v-btn depressed @click="copy(queryText)">Copy</v-btn>
-                                        </div>
-                                        <p style="white-space: pre;">{{ queryText }}</p>  
-                                </v-flex>
-                            </scroll>
+                <v-card-text class="config-text">
+                    <v-layout column class="telegraf-container">
+                        <v-flex class="about">
+                            <p>The following Configuration is for use with Telegram and InfluxDB. For more 
+                                information, visit <a href='https://www.influxdata.com/'>InfluxDB</a>
+                            </p>
+                        </v-flex>
+                        <v-layout row v-if="(beanCollisions.length > 0)" class='conflict-warning'>
+                            <h1>Warning! Bean Collision!</h1>
+                            <v-menu open-on-hover top offset-y>
+                                <v-icon slot='activator'>mdi-information</v-icon>
+                                <div class="menu-header">
+                                    <h1>Warning! Bean Collision Detected</h1>
+                                </div>
+                                <div class="menu-info">
+                                    <h1>You have at least 1 MBean name shared between 2 or more engines. This may result in inaccurate statistics.</h1>
+                                </div>
+                                <div class="menu-details">
+                                    <v-layout row v-for="collision in beanCollisions" key="collision.id">
+                                        <v-layout column class="label">
+                                            <p>MBean: </p>
+                                            <p>Shared by: </p>
+                                        </v-layout>
+                                        <v-layout column class="value">
+                                            <p>{{ collision.beanName }}</p>
+                                            <p v-for="engine in collision.conflictEngines" key="engine.id">{{ engine }}</p>
+                                        </v-layout>
+                                    </v-layout>
+                                </div>
+                            </v-menu>
                         </v-layout>
-                    </v-card-text>
-                </scroll>
+                        <h1>Input Configuration</h1>
+                        <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.7}">
+                            <v-flex class="config">
+                                <div class="config-btn btn-container">
+                                    <v-btn depressed @click="copy(configText)">Copy</v-btn>
+                                    <v-btn depressed @click="downloadConfig">Download</v-btn>
+                                </div>
+                                <p style="white-space: pre;">{{ configText }}</p> 
+                            </v-flex>
+                        </scroll>
+                        <h1>Sample Queries</h1>
+                        <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.2}">
+                            <v-flex class="config">
+                                    <div class="query-btn btn-container">
+                                        <v-btn depressed @click="copy(queryText)">Copy</v-btn>
+                                    </div>
+                                    <p style="white-space: pre;">{{ queryText }}</p>  
+                            </v-flex>
+                        </scroll>
+                    </v-layout>
+                </v-card-text>
             <v-divider></v-divider>
         </v-card>
     </v-dialog>

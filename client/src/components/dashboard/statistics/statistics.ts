@@ -67,9 +67,9 @@ export class StatisticsComponent extends Vue {
 
     mounted() { 
         console.log('statistics mounted');
-        let influx = new InfluxDBService();
+        // let influx = new InfluxDBService();
 
-        influx.testInfluxDB();
+        // influx.testInfluxDB();
         this.initCharts();
     }
  

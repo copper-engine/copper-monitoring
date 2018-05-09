@@ -26,7 +26,11 @@ export class LoginComponent extends Vue {
                     this.error = 'Username & Password combination is incorect.';
                 } else {
                     this.$store.commit(Mutations.setUser, new User(this.username, this.password, new UserSettings(result.data.host, result.data.port, this.update, this.fetch, this.theme)));
-                    this.$router.push((this.$router as CopperRouter).nextPath);
+                    // this.$router.push((this.$router as CopperRouter).nextPath);
+                    console.log('nextPath', (this.$router as CopperRouter).nextPath);
+                    // this.$router.push('/#/dashboard/workflows/waiting/0?connection=localhost%7C1098');
+                    this.$router.push('/dashboard/workflows/waiting/0?connection=localhost%7C1098');
+
                 }
             }).catch(error => {
                 this.error = 'Username & Password combination is incorect.';

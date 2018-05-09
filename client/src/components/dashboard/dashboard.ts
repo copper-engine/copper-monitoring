@@ -124,7 +124,6 @@ export class DashboardComponent extends Vue {
         });
 
         if (settings.length > 0) {
-            // this.$store.commit(Mutations.setConnectionSettings, settings);
             this.$store.commit(Mutations.setConnectionSettings, settings);
         }
     }
@@ -197,8 +196,8 @@ export class DashboardComponent extends Vue {
                 this.queryText += '#Select Attributes for Engine: ' + engine.engineId + '@' + bean.connectionSettings.host + ':' + bean.connectionSettings.port + '\n';
             }
 
-            this.queryText += 'SELECT' + '\nsum("ErrorCount") AS "sum_ErrorCount",' + '\nsum("DequeuedCount") AS "sum_DequeuedCount",' + '\nsum("FinishedCount") AS "sum_FinishedCount",' +
-                '\nsum("InvalidCount") AS "sum_InvalidCount",' + '\nsum("RunningCount") AS "sum_RunningCount",' + '\nsum("WaitingCount") AS "sum_WaitingCount"' + 
+            this.queryText += 'SELECT' + '\nMAX("ErrorCount") AS "MAX_ErrorCount",' + '\nMAX("DequeuedCount") AS "MAX_DequeuedCount",' + '\nMAX("FinishedCount") AS "MAX_FinishedCount",' +
+                '\nMAX("InvalidCount") AS "MAX_InvalidCount",' + '\nMAX("RunningCount") AS "MAX_RunningCount",' + '\nMAX("WaitingCount") AS "MAX_WaitingCount"' + 
                 '\nFROM "telegraf"."autogen"."' + engine.engineId + '@' + bean.connectionSettings.host + ':' + bean.connectionSettings.port + '"' +
                 '\nWHERE time > now() - 1h GROUP BY time(10s) FILL(null)\n\n';
         });

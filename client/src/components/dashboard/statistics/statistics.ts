@@ -3,7 +3,7 @@ import { Vue, Component, Watch} from 'vue-property-decorator';
 import './statistics.scss';
 import { VueCharts, Bar, Line, mixins } from 'vue-chartjs';
 import { JmxService } from '../../../services/jmxService';
-import { InfluxDBService } from '../../../services/influxDBService';
+// import { InfluxDBService } from '../../../services/influxDBService';
 import { StatesPrint, EngineStatus, EngineGroup } from '../../../models/engine';
 import { ConnectionSettings } from '../../../models/connectionSettings';
 import { MBean } from '../../../models/mbeans';

@@ -62,7 +62,7 @@
     <!-- {{ connectionSettings }} -->
 
     <v-content>
-        <v-container fluid fill-height>
+        <v-container fluid fill-height v-if="initComplete && initComplete === true">
             <!-- <h2>Dashboard </h2> -->
             <transition name="router-component" mode="out-in">
                 <router-view>loading...</router-view>
@@ -86,8 +86,8 @@
                 <v-card-text class="config-text">
                     <v-layout column class="telegraf-container">
                         <v-flex class="about">
-                            <p>The following Configuration is for use with Telegram and InfluxDB. For more 
-                                information, visit <a href='https://www.influxdata.com/'>InfluxDB</a>
+                            <p>The following can be used for the Input section of a Telegraf Configuration file for use with InfluxDB. For more 
+                                information, visit the <a href='https://www.influxdata.com/'>InfluxDB website</a>
                             </p>
                         </v-flex>
                         <v-layout row v-if="(beanCollisions.length > 0)" class='conflict-warning'>
@@ -114,7 +114,7 @@
                                 </div>
                             </v-menu>
                         </v-layout>
-                        <h1>Input Configuration</h1>
+                        <h1>Telegraf Input Configuration</h1>
                         <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.7}">
                             <v-flex class="config">
                                 <div class="config-btn btn-container">
@@ -124,7 +124,7 @@
                                 <p style="white-space: pre;">{{ configText }}</p> 
                             </v-flex>
                         </scroll>
-                        <h1>Sample Queries</h1>
+                        <h1>Influx Database Sample Queries</h1>
                         <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.2}">
                             <v-flex class="config">
                                     <div class="query-btn btn-container">

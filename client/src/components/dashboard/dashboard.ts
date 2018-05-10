@@ -221,8 +221,7 @@ export class DashboardComponent extends Vue {
         let blob = new Blob([this.configText], {type: 'text/csv'});
         if (window.navigator.msSaveOrOpenBlob) {
             window.navigator.msSaveBlob(blob, 'telegraf.conf');
-        }
-        else {
+        } else {
             let elem = window.document.createElement('a');
             elem.href = window.URL.createObjectURL(blob);
             elem.download = 'telegraf.conf';        

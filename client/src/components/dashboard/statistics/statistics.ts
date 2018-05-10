@@ -1,12 +1,15 @@
 import { Vue, Component, Watch} from 'vue-property-decorator';
 
 import './statistics.scss';
-import { VueCharts, Bar, Line, mixins } from 'vue-chartjs';
+// import { VueCharts, Bar, Line, mixins } from 'vue-chartjs';
+// import { VueCharts, Bar, Line, mixins } from 'vue-chartkick';
 import { JmxService } from '../../../services/jmxService';
 // import { InfluxDBService } from '../../../services/influxDBService';
 import { StatesPrint, EngineStatus, EngineGroup } from '../../../models/engine';
 import { ConnectionSettings } from '../../../models/connectionSettings';
 import { MBean } from '../../../models/mbeans';
+
+import { GChart } from 'vue-google-charts';
 
 const INT_15_MIN = 15 * 60 * 1000;
 const INT_1_MIN = 60 * 1000;
@@ -15,14 +18,14 @@ const INT_1_MIN = 60 * 1000;
     template: require('./statistics.html'),
     services: ['jmxService'],
     components: {
-        'line-chart': {
-            extends: Line,
-            mixins: [mixins.reactiveProp],
-            props: ['chartData', 'options'],
-            mounted () {
-              this.renderChart(this.chartData, this.options);
-            }
-        },
+        'GChart': GChart
+        // 'line-chart': {
+        //     extends: Line,
+        //     mixins: [mixins.reactiveProp],
+        //     props: ['chartData', 'options'],
+        //     mounted () {
+        //       this.renderChart(this.chartData, this.options);
+        //     }
     }
 })
 export class StatisticsComponent extends Vue {
@@ -31,31 +34,45 @@ export class StatisticsComponent extends Vue {
     group: EngineGroup = null;
     mbean: MBean = null;
 
+    chartDataHeader = [['Year', 'Error', 'Running', 'Waiting']]; 
+    chartDataContent: any[][] = [        
+        [2014, 1000, 400, 200],
+        [2015, 1170, 460, 250],
+        [2016, 660, 1120, 300],
+        [2017, 1030, 540, 350]
+    ];
+    chartData = this.chartDataHeader.concat(this.chartDataContent);        
+
+    year = 2018;
+    chartOptions = {
+        height: 400,
+        animation: {duration: 1000, easing: 'inAndOut'},
+        legend: 'none',
+        backgroundColor: '#353844',
+        color: '#ffffff',
+        colors: ['#de1515', '#41ce00', '#e4c200'],
+        chart: {
+            title: 'Workflow Statistics',
+            subtitle: 'Error, Running and Waiting Workflows',
+        }
+    };
+
+
     secondsKey = this.getKey('seconds');
     secondsStates: StatesPrint[] = this.getDataFromLS(this.secondsKey);
     secondsChartData = null;
-    chartOptions = {
-        animation: {
-            duration: 0, // general animation time
-        },
-        elements: {
-            line: {
-                tension: 0, // disables bezier curves
-            }
-        }
-    };
     secondsInterval = null;
     
     minutesKey = this.getKey('minutes');
     minutesStates: StatesPrint[] = this.getDataFromLS(this.minutesKey);
     minutesChartData = null;
     minutesInterval = null;
-
+    
     quoterKey = this.getKey('quoter');
     quoterMinStates: StatesPrint[] = this.getDataFromLS(this.quoterKey);
     quoterMinChartData = null;
     quoterMinInterval = null;
-
+    
     states = {
         raw: true,
         waiting: true,
@@ -64,13 +81,24 @@ export class StatisticsComponent extends Vue {
         error: true,
         invalid: true
     };
+    
+    testInt = null;
 
     mounted() { 
         console.log('statistics mounted');
         // let influx = new InfluxDBService();
 
         // influx.testInfluxDB();
-        this.initCharts();
+        // this.initCharts();
+
+        this.testInt = setInterval(() => {
+            if (this.chartDataContent.length > 10) {
+                this.chartDataContent.shift();
+            }
+            this.chartDataContent.push([this.year++,  Math.random() * 1000, Math.random() * 1000, Math.random() * 1000]);
+            this.chartData = this.chartDataHeader.concat(this.chartDataContent);
+        }, 2000);
+
     }
  
     @Watch('states', { deep: true })
@@ -88,6 +116,9 @@ export class StatisticsComponent extends Vue {
     }
 
     destroyed() {
+        if (this.secondsInterval) {
+            clearInterval(this.testInt);
+        }
         if (this.secondsInterval) {
             clearInterval(this.secondsInterval);
         }

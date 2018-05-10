@@ -10,9 +10,9 @@
         <v-flex><v-switch :label="'Invalid'" v-model="states.invalid"></v-switch></v-flex>    
     </v-layout>
 
-    <div class="chart">
+    <!-- <h3 class="title">Every {{$store.state.connectionSettings.updatePeriod}} seconds</h3> -->
+    <!-- <div class="chart">
         <h3 class="title">Every 2 seconds</h3>
-        <!-- <h3 class="title">Every {{$store.state.connectionSettings.updatePeriod}} seconds</h3> -->
         <line-chart :chartData="secondsChartData" :width="800" :height="300" :options="chartOptions"></line-chart>
     </div>
     <div class="chart">
@@ -22,6 +22,15 @@
     <div class="chart">
         <h3 class="title">Evey 15 minutes </h3>
         <line-chart :chartData="quoterMinChartData" :width="800" :height="300" :options="chartOptions"></line-chart>
-    </div>
+    </div> -->
 
+    <!-- <GChart type="LineChart" :data="chartData"></GChart> -->
+    <!-- :packages="['corechart', 'table', 'map']" -->
+    <GChart
+    type="LineChart"
+    :data="chartData"
+    :options="chartOptions"
+  />
+    <!-- <area-chart :data="chartData" :curve="false" :library="options" ></area-chart> -->
+    <!-- <area-chart :data="chartData" :curve="false" :library="{backgroundColor: '#eee'}" ></area-chart> -->
 </div>

@@ -1,9 +1,9 @@
 import { Vue, Component, Watch} from 'vue-property-decorator';
-import LineChart from './chart';
 
 import './statistics.scss';
 import { VueCharts, Bar, Line, mixins } from 'vue-chartjs';
 import { JmxService } from '../../../services/jmxService';
+import { InfluxDBService } from '../../../services/influxDBService';
 import { StatesPrint, EngineStatus, EngineGroup } from '../../../models/engine';
 import { ConnectionSettings } from '../../../models/connectionSettings';
 import { MBean } from '../../../models/mbeans';
@@ -34,6 +34,16 @@ export class StatisticsComponent extends Vue {
     secondsKey = this.getKey('seconds');
     secondsStates: StatesPrint[] = this.getDataFromLS(this.secondsKey);
     secondsChartData = null;
+    chartOptions = {
+        animation: {
+            duration: 0, // general animation time
+        },
+        elements: {
+            line: {
+                tension: 0, // disables bezier curves
+            }
+        }
+    };
     secondsInterval = null;
     
     minutesKey = this.getKey('minutes');
@@ -56,6 +66,10 @@ export class StatisticsComponent extends Vue {
     };
 
     mounted() { 
+        console.log('statistics mounted');
+        let influx = new InfluxDBService();
+
+        influx.testInfluxDB();
         this.initCharts();
     }
  

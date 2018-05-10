@@ -327,7 +327,6 @@ export class DashboardComponent extends Vue {
 
             this.$store.commit(Mutations.updateEngineStatus, engineStatusList);
             this.initComplete = true;
-            console.log('initComplete = ' + this.initComplete);
         });
     }
 }

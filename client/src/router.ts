@@ -119,8 +119,6 @@ export const createRouter = () => {
   router.beforeEach((to: Route, from: Route, next) => {
     let requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     
-
-    console.log('router to', to);
     if (requiresAuth && !store.state.user) {
       router.nextPath = to.fullPath.replace(/(\/#)+/g, '');
       next('/login');

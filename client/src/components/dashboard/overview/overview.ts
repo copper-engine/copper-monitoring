@@ -8,17 +8,22 @@ import './overview.scss';
 })
 export class Overview extends Vue {
     groups: EngineGroup[] = [];
-    updatePeriod: number = 10;
-    fetchPeriod: number = 10;
-    numSelect: number[] = [5, 10, 15];
+    timeSelect: string[] = ['5 sec', '15 sec', '30 sec', '1 min', '5 min', '15 min'];
+    layoutSelect: string[]= ['Row', 'Column'];
+    newTime: string = '';
+    newLayout: string = ''; 
     openOptions: boolean = false;
 
     mounted() {
         this.groups = this.$store.getters.groupsOfEngines;
     }
 
-    triggerOpenOptions() {
-        this.openOptions = !this.openOptions;
+    get getRow() {
+        if (this.newLayout === 'Row' || this.newLayout === '') {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
-
 }

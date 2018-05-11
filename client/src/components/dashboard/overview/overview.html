@@ -1,51 +1,27 @@
 <div class="overview">
     <v-layout row>
-            <h2>Statistics Overview</h2>
-            <v-spacer></v-spacer>
-            <v-btn @click="triggerOpenOptions"><v-icon left>mdi-settings</v-icon>Options</v-btn>
+        <h2>Statistics Overview</h2>
+        <v-spacer></v-spacer>
+        <div class="button-container">
+            <v-menu offset-y>
+                <v-btn slot="activator">{{ newTime === '' ? 'Update' : newTime }}</v-btn>
+                <v-list>
+                    <v-list-tile v-for="time in timeSelect" :key="time.id" @click="newTime = time">
+                    <v-list-tile-title>{{ time }}</v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
+            <v-menu offset-y>
+                <v-btn slot="activator">{{ newLayout === '' ? 'Layout' : newLayout }}</v-btn>
+                <v-list>
+                    <v-list-tile v-for="layout in layoutSelect" :key="layout.id" @click="newLayout = layout">
+                    <v-list-tile-title>{{ layout }}</v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
+        </div>
     </v-layout>
-    <div class="options-container">
-        <transition name="extend-options">
-            <div v-if="openOptions">
-                <v-layout class="options" row>
-                    <v-layout row class="options-set">
-                        <div class="label">
-                            <p>Engines</p>
-                        </div>
-                        <div class="selections">
-                            <v-select
-                                multiple
-                                :items="groups">
-                            </v-select>
-                        </div>
-                    </v-layout>
-                    <v-layout row class="options-set">
-                        <div class="label">
-                            <p>Update Period</p>
-                        </div>
-                        <div class="selections">
-                            <v-select
-                                :items="numSelect"
-                                v-model="updatePeriod">
-                            </v-select>
-                        </div>
-                    </v-layout>
-                    <v-layout row class="options-set">
-                        <div class="label">
-                            <p>Fetch Period</p>
-                        </div>
-                        <div class="selections">
-                            <v-select
-                                :items="numSelect"
-                                v-model="fetchPeriod">
-                            </v-select>
-                        </div>
-                    </v-layout>
-                </v-layout>
-            </div>
-        </transition>
-    </div>
-    <v-layout row class="stat-card-container">
+    <v-layout :row='getRow' :column='!getRow' class="stat-card-container">
         <v-layout class="stat-card" v-for="group in this.groups" :key="group.id" row>
             <p>group</p>
         </v-layout>

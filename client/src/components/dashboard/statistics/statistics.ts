@@ -36,25 +36,49 @@ export class StatisticsComponent extends Vue {
 
     chartDataHeader = [['Year', 'Error', 'Running', 'Waiting']]; 
     chartDataContent: any[][] = [        
-        [2014, 1000, 400, 200],
-        [2015, 1170, 460, 250],
-        [2016, 660, 1120, 300],
-        [2017, 1030, 540, 350]
+        ['2008', 1000, 400, 200],
+        ['2009', 1000, 400, 200],
+        ['2010', 1000, 400, 200],
+        ['2011', 1000, 400, 200],
+        ['2012', 1000, 400, 200],
+        ['2013', 1000, 400, 200],
+        ['2014', 1000, 400, 200],
+        ['2015', 1170, 460, 250],
+        ['2016', 660, 1120, 300],
+        ['2017', 1030, 540, 350]
     ];
     chartData = this.chartDataHeader.concat(this.chartDataContent);        
 
     year = 2018;
     chartOptions = {
-        height: 400,
+        // height: 400,
         animation: {duration: 1000, easing: 'inAndOut'},
         legend: 'none',
         backgroundColor: '#353844',
-        color: '#ffffff',
-        colors: ['#de1515', '#41ce00', '#e4c200'],
+        // color: '#ffffff',
+        colors: ['#cc1c1c', '#31b54f', '#e08a00'],
+        // chart: {
+        //     title: 'Workflow Statistics',
+        //     subtitle: 'Error, Running and Waiting Workflows',
+        // }
         chart: {
-            title: 'Workflow Statistics',
-            subtitle: 'Error, Running and Waiting Workflows',
-        }
+            title: 'Workflow Statistics'
+          },
+          width: 900,
+          height: 500,
+          series: {
+            // Gives each series an axis name that matches the Y-axis below.
+            0: {axis: 'Workflows'},
+            1: {axis: 'Time'}
+          },
+          axes: {
+            // Adds labels to each axis; they don't have to match the axis names.
+            y: {
+                Workflows: {label: 'Workflows'},
+              Time: {label: 'Time'}
+            }
+          }
+
     };
 
 
@@ -95,7 +119,7 @@ export class StatisticsComponent extends Vue {
             if (this.chartDataContent.length > 10) {
                 this.chartDataContent.shift();
             }
-            this.chartDataContent.push([this.year++,  Math.random() * 1000, Math.random() * 1000, Math.random() * 1000]);
+            this.chartDataContent.push(['' + this.year++,  Math.random() * 1000, Math.random() * 1000, Math.random() * 1000]);
             this.chartData = this.chartDataHeader.concat(this.chartDataContent);
         }, 2000);
 

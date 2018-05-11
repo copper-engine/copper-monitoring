@@ -111,13 +111,20 @@
         }
         .menu {
             button {
-                background-color: $light-tertiary !important;
-                color: $dark-text-color;
                 margin-right: 32px;
-                .icon {
-                    color: $dark-text-color;
-                }
             }
+        }
+        .toolbar-button {
+            background-color: $light-tertiary !important;
+            color: $dark-text-color;
+            margin-right: 10px;
+            .icon {
+                padding-right: 5px;
+                color: $dark-text-color;
+            }
+        }
+        a {
+            text-decoration: none;
         }
     }
 
@@ -208,6 +215,16 @@
                         color: $light-text-color;
                     }
                 }
+            }
+            .toolbar-button {
+                background-color: $dark-tertiary !important;
+                color: $light-text-color;
+                .icon {
+                    color: $light-text-color;
+                }
+            }
+            a {
+                text-decoration: none;
             }
         }
         .content {

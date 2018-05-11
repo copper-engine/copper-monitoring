@@ -16,8 +16,14 @@ export class LoginComponent extends Vue {
     password: string= '';
     passwordRules = [ (v) => !!v || 'Password is required' ];
     error: string = null;
+    nextPath: string = null;
 
     submit () {
+        if ((this.$router as CopperRouter).nextPath === '/login') {
+            this.nextPath = '/dashboard';
+        } else {
+            this.nextPath = (this.$router as CopperRouter).nextPath;
+        }
         if ((this.$refs.form as any).validate()) {
             Axios.get(process.env.USER_API_NAME, {
                 auth: {username: this.username, password: this.password}

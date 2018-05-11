@@ -4,8 +4,11 @@
         <v-toolbar-side-icon @click.stop="$refs.drawer.drawer = !$refs.drawer.drawer"></v-toolbar-side-icon>
         <v-toolbar-title>Copper Monitoring</v-toolbar-title>
         <v-spacer></v-spacer>
+        <router-link to="/dashboard/overview/">
+                <v-btn class="toolbar-button"> <v-icon>mdi-chart-bar</v-icon> Overview </v-btn>        
+        </router-link>
         <v-menu v-model="menuOpen" offset-y class="user-menu" :close-on-content-click="false">
-            <v-btn @click="menuOpen = !menuOpen" slot="activator">  <v-icon>mdi-account</v-icon> User: {{ user.name }} </v-btn>
+            <v-btn class="toolbar-button" @click="menuOpen = !menuOpen" slot="activator">  <v-icon>mdi-account</v-icon> User: {{ user.name }} </v-btn>
             <v-card class="user-menu-card">
                 <v-layout column class="card-content">
                     <div class="user" v-if="!!user">
@@ -115,24 +118,28 @@
                             </v-menu>
                         </v-layout>
                         <h1>Input Configuration</h1>
-                        <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.7}">
-                            <v-flex class="config">
-                                <div class="config-btn btn-container">
-                                    <v-btn depressed @click="copy(configText)">Copy</v-btn>
-                                    <v-btn depressed @click="downloadConfig">Download</v-btn>
-                                </div>
-                                <p style="white-space: pre;">{{ configText }}</p> 
-                            </v-flex>
-                        </scroll>
+                        <div class="info-section">
+                            <div class="btn-container">
+                                <v-btn depressed @click="copy(configText)">Copy</v-btn>
+                                <v-btn depressed @click="downloadConfig">Download</v-btn>
+                            </div>
+                            <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.7}">
+                                <v-flex class="config">
+                                    <p style="white-space: pre;">{{ configText }}</p> 
+                                </v-flex>
+                            </scroll>
+                        </div>
                         <h1>Sample Queries</h1>
-                        <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.2}">
-                            <v-flex class="config">
-                                    <div class="query-btn btn-container">
-                                        <v-btn depressed @click="copy(queryText)">Copy</v-btn>
-                                    </div>
-                                    <p style="white-space: pre;">{{ queryText }}</p>  
-                            </v-flex>
-                        </scroll>
+                        <div class="info-section">
+                            <div class="btn-container">
+                                <v-btn depressed @click="copy(queryText)">Copy</v-btn>
+                            </div>
+                            <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.2}">
+                                <v-flex class="config">
+                                        <p style="white-space: pre;">{{ queryText }}</p>  
+                                </v-flex>
+                            </scroll>
+                        </div>
                     </v-layout>
                 </v-card-text>
             <v-divider></v-divider>

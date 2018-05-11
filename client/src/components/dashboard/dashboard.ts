@@ -53,6 +53,10 @@ export class DashboardComponent extends Vue {
     get connectionSettings() {
         return this.$store.state.connectionSettings;
     }
+    get getOverviewPath() {
+        let params = '?' + this.$store.getters.connectionsAsParams;
+        return ('/dashboard/overview/' + params);
+    }
 
     created() {
         this.initComplete = false;

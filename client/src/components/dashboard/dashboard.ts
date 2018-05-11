@@ -45,6 +45,7 @@ export class DashboardComponent extends Vue {
     configText: string = '';
     queryText: string = '';
     beanCollisions: BeanConflict[] = [];
+    initComplete: boolean = false;
     
     get user() {
         return this.$store.state.user;
@@ -54,6 +55,7 @@ export class DashboardComponent extends Vue {
     }
 
     created() {
+        this.initComplete = false;
         this.getTheme();
         this.getPeriodSettings();
         this.menuOpen = false;
@@ -324,6 +326,7 @@ export class DashboardComponent extends Vue {
             }
 
             this.$store.commit(Mutations.updateEngineStatus, engineStatusList);
+            this.initComplete = true;
         });
     }
 }

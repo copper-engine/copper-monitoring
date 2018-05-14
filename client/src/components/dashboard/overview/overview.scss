@@ -16,7 +16,8 @@
             background-color: $light-tertiary !important;
             color: $dark-text-color !important;
             .icon {
-                color: $dark-text-color !important;            
+                color: $dark-text-color !important;  
+                margin-right: 10px;          
             }
         }
     }
@@ -41,6 +42,15 @@
     .overview {
         h2 {
             color: $light-text-color;
+        }
+        .button-container {
+            button {
+                background-color: $dark-tertiary !important;
+                color: $light-text-color !important;
+                .icon {
+                    color: $light-text-color !important;
+                }
+            }
         }
         .summary {
             .text {

@@ -5,15 +5,21 @@
         <div class="button-container">
             <v-btn>Connect InfluxDB</v-btn>
             <v-menu offset-y>
-                <v-btn slot="activator">{{ newTime === '' ? 'Update' : newTime }}</v-btn>
+                <v-tooltip top content-class="tooltip-text" slot="activator">
+                    <v-btn slot="activator"><v-icon>mdi-clock</v-icon>{{ newTime }}</v-btn>
+                    <span>Fetch Period</span>
+                </v-tooltip>
                 <v-list>
-                    <v-list-tile v-for="time in timeSelect" :key="time.id" @click="newTime = time">
+                    <v-list-tile v-for="time in timeSelect" :key="time.id" @click="updateTime(time)">
                     <v-list-tile-title>{{ time }}</v-list-tile-title>
                     </v-list-tile>
                 </v-list>
             </v-menu>
             <v-menu offset-y>
-                <v-btn slot="activator">{{ newLayout === '' ? 'Layout' : newLayout }}</v-btn>
+                <v-tooltip top content-class="tooltip-text" slot="activator">
+                    <v-btn slot="activator"><v-icon>mdi-menu</v-icon>{{ newLayout }}</v-btn>
+                    <span>Layout Type</span>
+                </v-tooltip>
                 <v-list>
                     <v-list-tile v-for="layout in layoutSelect" :key="layout.id" @click="newLayout = layout">
                     <v-list-tile-title>{{ layout }}</v-list-tile-title>
@@ -24,7 +30,7 @@
     </v-layout>
     <v-layout :row='getRow' :column='!getRow' class="stat-card-container">
         <v-layout class="stat-card" v-for="group in this.groups" :key="group.id" row>
-            <p>group</p>
+            <p>{{ getName(group) }}</p>
         </v-layout>
     </v-layout>
 </div>

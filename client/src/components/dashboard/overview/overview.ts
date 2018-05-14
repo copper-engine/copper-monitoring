@@ -2,6 +2,15 @@ import { Component, Vue, Watch } from 'vue-property-decorator';
 import { EngineGroup } from '../../../models/engine';
 import './overview.scss';
 
+export class InfluxConnection {
+    constructor(
+        public host: string,
+        public port: string,
+        public username: string,
+        public password: string
+    ) {}
+}
+
 @Component({
     template: require('./overview.html'),
     services: ['jmxService', 'eventHub']
@@ -15,6 +24,12 @@ export class Overview extends Vue {
     openOptions: boolean = false;
     fetchPeriod: number;
     fetchInterval: any;
+    openInfluxDialog: boolean = false;
+    influxConnection: InfluxConnection;
+    port: string = '';
+    host: string = '';
+    username: string = '';
+    password: string = '';
 
     mounted() {
         this.getEngines();
@@ -35,11 +50,11 @@ export class Overview extends Vue {
 
     updateTime(time: string) {
         this.newTime = time;
-        this.fetchPeriod = this.getFetch();
+        this.fetchPeriod = this.getTime();
         this.scheduleFetch();
     }
 
-    getFetch() {
+    getTime() {
         let timeSplit = this.newTime.split(' ');
         let multiplier = 1;
         if (timeSplit[1] === 'min') {
@@ -54,6 +69,12 @@ export class Overview extends Vue {
         } else {
             return group.engines[0].engineId;
         }
+    }
+
+    submit() {
+        this.openInfluxDialog = false;
+        this.influxConnection = new InfluxConnection(this.host, this.port, this.username, this.password);
+        console.log(this.influxConnection);
     }
 
     scheduleFetch() {

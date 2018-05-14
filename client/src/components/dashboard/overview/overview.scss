@@ -13,6 +13,7 @@
     .button-container {
         padding-top: 15px;
         button {
+            min-width: 111px;
             background-color: $light-tertiary !important;
             color: $dark-text-color !important;
             .icon {

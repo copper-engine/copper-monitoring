@@ -16,8 +16,14 @@ export class LoginComponent extends Vue {
     password: string= '';
     passwordRules = [ (v) => !!v || 'Password is required' ];
     error: string = null;
+    nextPath: string = null;
 
     submit () {
+        if ((this.$router as CopperRouter).nextPath === '/login') {
+            this.nextPath = '/dashboard';
+        } else {
+            this.nextPath = (this.$router as CopperRouter).nextPath;
+        }
         if ((this.$refs.form as any).validate()) {
             Axios.get(process.env.USER_API_NAME, {
                 auth: {username: this.username, password: this.password}
@@ -26,7 +32,7 @@ export class LoginComponent extends Vue {
                     this.error = 'Username & Password combination is incorect.';
                 } else {
                     this.$store.commit(Mutations.setUser, new User(this.username, this.password, new UserSettings(result.data.host, result.data.port, this.update, this.fetch, this.theme)));
-                    this.$router.push((this.$router as CopperRouter).nextPath);
+                    this.$router.push(this.nextPath);
                 }
             }).catch(error => {
                 this.error = 'Username & Password combination is incorect.';

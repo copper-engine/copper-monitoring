@@ -2,11 +2,11 @@
 
 html {
     min-width: 900px;
-    overflow-x: auto 
+    overflow-x: auto
 }
 
 body {
-    min-width: 900px; 
+    min-width: 900px;
 }
 
 body .vdatetime-year-picker__item--selected,
@@ -66,9 +66,10 @@ body {
     #appCover {
         .dialog__content {
             .dialog {
-                border-radius: 0px !important;                
+                border-radius: 0px !important;
                 .card {
                     max-height: 845px;
+                    min-width: 950px;
                     .divider {
                         background-color: $light-border;
                     }
@@ -77,7 +78,7 @@ body {
                         color: $light-text-color !important;
                         button {
                             background-color: $light-secondary !important;
-                            color: $dark-text-color !important; 
+                            color: $dark-text-color !important;
                         }
                     }
                 }
@@ -92,10 +93,11 @@ body {
                     .telegraf-container {
                         background-color: $light-sidebar;
                         padding-bottom: 35px;
+                        position: relative;
                         .about {
                             p {
                                 font-size: 1.1em;
-                                padding-left: 70px;
+                                padding-left: 50px;
                                 padding-right: 70px;
                                 padding-bottom: 0px;
                                 padding-top: 16px;
@@ -112,29 +114,44 @@ body {
                                 padding-left: 5px;
                             }
                         }
-                        .config {
-                            background-color: $light-background;
-                            color: $dark-text-color;
+                        .info-section {
                             position: relative;
-                            p {
-                                padding: 20px;
-                            }
-                            .config-btn:first-child {
-                                margin-left: 856px;
-                                margin-bottom: -65px;
-                            }
-                            .query-btn {
-                                margin-left: 987px;
-                                margin-bottom: -65px;
-                            }
                             .btn-container {
-                                padding-top: 10px;
-                                position: fixed;
+                                position: absolute;
+                                right: 60px;
+                                top: 10px;
                                 opacity: 0;
+                                z-index: 2;
                                 button {
                                     border: 1px solid;
                                     border-color: $light-border;
+                                    background-color: $light-secondary;
                                 }
+                            }
+                            .telegraf-scroll-area {
+                                margin-top: 0px;
+                                margin-left: 50px;
+                                margin-right: 50px;
+                                margin-bottom: 20px;
+                                max-height: 275px;
+                                border: 1px solid;
+                                border-color: $light-border;
+                                background-color: $light-background;
+                                color: $dark-text-color;
+                                .config {
+                                    background-color: $light-background;
+                                    color: $dark-text-color;
+                                    position: relative;
+                                    p {
+                                        padding: 20px;
+                                    }
+                                }
+                            }
+                            .scroll-area {
+                                position: relative;
+                                margin: auto;
+                                width: 100%;
+                                height: 100%;
                             }
                         }
                         .bean-warning {
@@ -147,46 +164,29 @@ body {
                         }
                         h1 {
                             font-size: 1.2em;
-                            padding-left: 70px;
+                            padding-left: 50px;
                             padding-bottom: 5px;
                         }
+                    }
+                    .telegraf-container:hover {
+                        .btn-container {
+                            opacity: 1 !important;
+                            animation: reveal 0.7s;
+                        }
+                        @keyframes reveal {
+                            0% {opacity: 0;}
+                            100% {opacity: 1;}
+                          }
                     }
                 }
                 .config-text {
                     overflow: hidden;
                 }
-                .scroll-area {
-                    position: relative;
-                    margin: auto;
-                    width: 100%;
-                    height: 100%; 
-                }
-                .telegraf-scroll-area {
-                    margin-top: 0px;
-                    margin-left: 50px;
-                    margin-right: 50px;
-                    margin-bottom: 20px;
-                    max-height: 275px;
-                    border: 1px solid;
-                    border-color: $light-border;
-                    background-color: $light-background;
-                    color: $dark-text-color;
-                }
-                .telegraf-scroll-area:hover {
-                    .btn-container {
-                        opacity: 1 !important;
-                        animation: reveal 0.7s;
-                    }
-                    @keyframes reveal {
-                        0% {opacity: 0;}
-                        100% {opacity: 1;}
-                      }
-                }
                 .delete-dialog-text {
                     background-color: $light-background;
                     padding: 16px;
                     h2 {
-                        color: $dark-text-color; 
+                        color: $dark-text-color;
                         font-size: 1.2em;
                         font-weight: 400;
                     }
@@ -220,7 +220,7 @@ body {
                             color: $light-text-color !important;
                             button {
                                 background-color: $dark-wf !important;
-                                color: $light-text-color !important; 
+                                color: $light-text-color !important;
                             }
                         }
                     }
@@ -232,6 +232,23 @@ body {
                         }
                         .telegraf-container {
                             background-color: $dark-sidebar;
+                            .info-section {
+                                .btn-container {
+                                    button {
+                                        border-color: $dark-border;
+                                        background-color: $light-secondary;
+                                    }
+                                }
+                                .telegraf-scroll-area {
+                                    border-color: $dark-border;
+                                    background-color: $dark-background;
+                                    color: $light-text-color;
+                                    .config {
+                                        background-color: $dark-background;
+                                        color: $light-text-color;
+                                    }
+                                }
+                            }
                             .config {
                                 background-color: $dark-background;
                                 color: $light-text-color;
@@ -245,11 +262,6 @@ body {
                                 color: white;
                             }
                         }
-                    }
-                    .telegraf-scroll-area {
-                        border-color: $dark-border;
-                        background-color: $dark-background;
-                        color: $light-text-color;
                     }
                     .delete-dialog-text {
                         background-color: $dark-tertiary;
@@ -313,8 +325,8 @@ body {
             }
             .menu-details {
                 padding-left: 15px;
-                padding-top: 10px; 
-                padding-bottom: 15px;               
+                padding-top: 10px;
+                padding-bottom: 15px;
                 background-color: $light-background;
                 color: $dark-text-color;
                 font-size: 1.1em;
@@ -354,8 +366,8 @@ body {
                 }
                 .menu-details {
                     padding-left: 15px;
-                    padding-top: 10px; 
-                    padding-bottom: 15px;               
+                    padding-top: 10px;
+                    padding-bottom: 15px;
                     background-color: $dark-background;
                     color: $light-text-color;
                     font-size: 1.1em;

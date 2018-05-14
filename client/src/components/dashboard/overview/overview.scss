@@ -1,0 +1,69 @@
+@import '../../../variables';
+
+.overview {
+    width: 100%;
+    max-width: 1650px;
+    margin: auto;
+
+    h2 {
+        margin-top: 10px;
+        color: $dark-text-color;
+    }
+
+    .button-container {
+        padding-top: 15px;
+        button {
+            background-color: $light-tertiary !important;
+            color: $dark-text-color !important;
+            .icon {
+                color: $dark-text-color !important;  
+                margin-right: 10px;          
+            }
+        }
+    }
+
+    .stat-card-container {
+        width: 100%;
+        flex-wrap: wrap;
+        .stat-card {
+            border-radius: 2px;
+            max-width: 740px;
+            min-width: 740px;
+            margin: 20px;
+            border: 1px solid;
+            border-color: $light-border;
+            background-color: $light-wf;
+            color: $dark-text-color;
+        }
+    }
+}
+
+.dark {
+    .overview {
+        h2 {
+            color: $light-text-color;
+        }
+        .button-container {
+            button {
+                background-color: $dark-tertiary !important;
+                color: $light-text-color !important;
+                .icon {
+                    color: $light-text-color !important;
+                }
+            }
+        }
+        .summary {
+            .text {
+            color: $light-text-color;                
+            }
+        }
+
+        .stat-card-container {
+            .stat-card {
+                border-color: $dark-border;
+                background-color: $dark-wf;
+                color: $light-text-color;
+            }
+        }
+    }
+}

@@ -12,6 +12,7 @@ const workflowsComponent = () => import('./components/dashboard/workflows').then
 const statisticsComponent = () => import('./components/dashboard/statistics').then(({ StatisticsComponent }) => StatisticsComponent);
 const workflowRepoComponent = () => import('./components/dashboard/workflow-repo').then(({ WorkflowRepository }) => WorkflowRepository);
 const processorPoolsComponent = () => import('./components/dashboard/processor-pools').then(({ ProcessorPools }) => ProcessorPools);
+const overviewComponent = () => import('./components/dashboard/overview').then(({ Overview }) => Overview);
 
 if (process.env.ENV === 'development' && module.hot) {
   // first arguments for `module.hot.accept` and `require` methods have to be static strings
@@ -96,6 +97,14 @@ export const createRoutes: () => RouteConfig[] = () => [
         component: processorPoolsComponent,
         meta: {
           requiresAuth: true
+        },   
+      },
+      {
+        name: 'overview',
+        path: 'overview/',
+        component: overviewComponent,
+        meta: {
+          requiresAuth: true
         }
       }
     ]
@@ -120,7 +129,7 @@ export const createRouter = () => {
     let requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     
     if (requiresAuth && !store.state.user) {
-      router.nextPath = to.fullPath.replace(/(\/#){2,}/g, '\/#');
+      router.nextPath = to.fullPath.replace(/(\/#)+/g, '');
       next('/login');
     } else {
       next();

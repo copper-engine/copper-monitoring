@@ -53,14 +53,17 @@ export class StatisticsComponent extends Vue {
     chartOptions = {
         // height: 400,
         animation: {duration: 1000, easing: 'inAndOut'},
+        theme: 'material', 
         legend: 'none',
-        backgroundColor: '#353844',
+        // backgroundColor: '#353844',
+        backgroundColor: '#f5f5f5',
         // color: '#ffffff',
         colors: ['#cc1c1c', '#31b54f', '#e08a00'],
         // chart: {
         //     title: 'Workflow Statistics',
         //     subtitle: 'Error, Running and Waiting Workflows',
         // }
+        chartArea: {width: '90%', height: '80%'},
         chart: {
             title: 'Workflow Statistics'
           },

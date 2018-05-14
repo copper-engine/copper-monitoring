@@ -341,6 +341,12 @@ body {
                     font-weight: 700;
                 }
             }
+            .list {
+                color: $dark-text-color;
+                .icon {
+                    color: $dark-text-color;
+                }
+            }
         }
     }
 }
@@ -380,6 +386,12 @@ body {
                     }
                     .value {
                         font-weight: 700;
+                    }
+                }
+                .list {
+                    color: $light-text-color;
+                    .icon {
+                        color: $light-text-color;
                     }
                 }
             }

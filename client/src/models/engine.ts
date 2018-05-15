@@ -1,3 +1,5 @@
+import { Vue } from 'vue-property-decorator';
+
 export enum State {
     RAW,        // Workflow was just initialized, nothing happened with it so far
     ENQUEUED,   // Workflow is in queue and waits for execution (Used by transient engines) / waits for engine to take ownership and grep it from database (persistent)
@@ -18,6 +20,10 @@ export class StatesPrint {
         public dequeued: number,
         public error: number,
         public invalid: number) {}
+
+    toArray() {
+        return [ (Vue as any).moment(this.time).format('HH:mm:ss'), this.raw, this.waiting, this.finished, this.dequeued, this.error, this.invalid ];
+    }
 }
 
 export class EngineGroup {

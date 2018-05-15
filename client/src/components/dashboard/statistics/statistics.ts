@@ -4,7 +4,7 @@ import './statistics.scss';
 // import { VueCharts, Bar, Line, mixins } from 'vue-chartjs';
 // import { VueCharts, Bar, Line, mixins } from 'vue-chartkick';
 import { JmxService } from '../../../services/jmxService';
-// import { InfluxDBService } from '../../../services/influxDBService';
+import { InfluxDBService } from '../../../services/influxDBService';
 import { StatesPrint, EngineStatus, EngineGroup } from '../../../models/engine';
 import { ConnectionSettings } from '../../../models/connectionSettings';
 import { MBean } from '../../../models/mbeans';
@@ -34,19 +34,8 @@ export class StatisticsComponent extends Vue {
     group: EngineGroup = null;
     mbean: MBean = null;
 
-    chartDataHeader = [['Year', 'Error', 'Running', 'Waiting']]; 
-    chartDataContent: any[][] = [        
-        ['2008', 1000, 400, 200],
-        ['2009', 1000, 400, 200],
-        ['2010', 1000, 400, 200],
-        ['2011', 1000, 400, 200],
-        ['2012', 1000, 400, 200],
-        ['2013', 1000, 400, 200],
-        ['2014', 1000, 400, 200],
-        ['2015', 1170, 460, 250],
-        ['2016', 660, 1120, 300],
-        ['2017', 1030, 540, 350]
-    ];
+    chartDataHeader = [['Date', 'Raw', 'Waiting', 'Finished', 'Dequeued', 'Error', 'Invalid']]; 
+    chartDataContent: any[][] = [];
     chartData = this.chartDataHeader.concat(this.chartDataContent);        
 
     year = 2018;
@@ -57,13 +46,8 @@ export class StatisticsComponent extends Vue {
         legend: 'none',
         // backgroundColor: '#353844',
         backgroundColor: '#f5f5f5',
-        // color: '#ffffff',
-        colors: ['#cc1c1c', '#31b54f', '#e08a00'],
-        // chart: {
-        //     title: 'Workflow Statistics',
-        //     subtitle: 'Error, Running and Waiting Workflows',
-        // }
-        chartArea: {width: '90%', height: '80%'},
+        colors: [ '#cc1c1c', '#31b54f', '#e08a00' ],
+        chartArea: { width: '90%', height: '80%' },
         chart: {
             title: 'Workflow Statistics'
           },
@@ -71,22 +55,22 @@ export class StatisticsComponent extends Vue {
           height: 500,
           series: {
             // Gives each series an axis name that matches the Y-axis below.
-            0: {axis: 'Workflows'},
-            1: {axis: 'Time'}
+            0: { axis: 'Workflows' },
+            1: { axis: 'Time' }
           },
           axes: {
             // Adds labels to each axis; they don't have to match the axis names.
             y: {
-                Workflows: {label: 'Workflows'},
-              Time: {label: 'Time'}
+              Workflows: { label: 'Workflows' },
+              Time: { label: 'Time' }
             }
           }
-
     };
 
 
     secondsKey = this.getKey('seconds');
-    secondsStates: StatesPrint[] = this.getDataFromLS(this.secondsKey);
+    secondsStates: StatesPrint[] = [];
+    // secondsStates: StatesPrint[] = this.getDataFromLS(this.secondsKey);
     secondsChartData = null;
     secondsInterval = null;
     
@@ -113,10 +97,10 @@ export class StatisticsComponent extends Vue {
 
     mounted() { 
         console.log('statistics mounted');
-        // let influx = new InfluxDBService();
+        let influx = new InfluxDBService();
 
-        // influx.testInfluxDB();
-        // this.initCharts();
+        influx.testInfluxDB();
+        this.initCharts();
 
         this.testInt = setInterval(() => {
             if (this.chartDataContent.length > 10) {
@@ -131,15 +115,15 @@ export class StatisticsComponent extends Vue {
     @Watch('states', { deep: true })
     @Watch('$route.params')
     initCharts() {
-        this.saveStates();
+        // this.saveStates();
         this.getGroup();
         this.getId();
         this.mbean = this.$store.getters.engineMBeans[this.id];
         this.getKeySet();
-        this.loadStates();
+        // this.loadStates();
         this.initSecondsChart();
-        this.initMinutesChart();
-        this.initQuoterMinChart();
+        // this.initMinutesChart();
+        // this.initQuoterMinChart();
     }
 
     destroyed() {
@@ -250,7 +234,7 @@ export class StatisticsComponent extends Vue {
         }
         let updateSecondsState = (states) => {
             localStorage.setItem(this.secondsKey, JSON.stringify(states));
-            this.secondsChartData = this.getChartData(states);
+            this.secondsChartData = this.getGChartData(states);
         };
         this.fetchingData(this.secondsStates, updateSecondsState);
         this.secondsInterval = setInterval(() => {
@@ -264,7 +248,7 @@ export class StatisticsComponent extends Vue {
         }
         let updateMinutesState = (states) => {
             localStorage.setItem(this.minutesKey, JSON.stringify(states));
-            this.minutesChartData = this.getChartData(states);
+            this.minutesChartData = this.getGChartData(states);
         };
         this.fetchingData(this.minutesStates, updateMinutesState);
         this.minutesInterval = setInterval(() => {
@@ -278,7 +262,7 @@ export class StatisticsComponent extends Vue {
         }
         let updateQuoterMinState = (states) => {
             localStorage.setItem(this.quoterKey, JSON.stringify(states));
-            this.quoterMinChartData = this.getChartData(states);
+            this.quoterMinChartData = this.getGChartData(states);
         };
         this.fetchingData(this.quoterMinStates, updateQuoterMinState);
         this.quoterMinInterval = setInterval(() => {
@@ -293,7 +277,9 @@ export class StatisticsComponent extends Vue {
             }
             if (this.group === null) {
                 this.jmxService.getChartCounts(this.mbean, this.$store.state.user).then((newStates: StatesPrint) => {   
+                    console.log('newStates', newStates);
                     states.push(newStates);
+                    console.log('states', states);
                     updateFn(states);
                 });
             } else {
@@ -312,56 +298,60 @@ export class StatisticsComponent extends Vue {
         });
     }
 
-    getChartData(statesPrint: StatesPrint[]) {
+    getGChartData(statesPrint: StatesPrint[]) {
         let dataset = [];
-        if (statesPrint) { 
-            if (this.states.raw) {
-                dataset.push({
-                    label: 'RAW',
-                    backgroundColor: '#41ce00c4', // green
-                    data: statesPrint.map((state) => state ? state.raw : 0)
-                });
-            }
-            if (this.states.waiting) {
-                dataset.push({
-                    label: 'WAITING',
-                    backgroundColor: '#e4c200de', // yellow
-                    data: statesPrint.map((state) => state ? state.waiting : 0)
-                });
-            }
-            if (this.states.finished) {
-                dataset.push({
-                    label: 'FINISHED',
-                    backgroundColor: '#1ad8b9c4',  // grey
-                    data: statesPrint.map((state) => state ? state.finished : 0)
-                });
-            }
-            if (this.states.dequeued) {
-                dataset.push({
-                    label: 'DEQUEUED',
-                    backgroundColor: '#0b7babc4',  // blue
-                    data: statesPrint.map((state) => state ? state.dequeued : 0)
-                });
-            }
-            if (this.states.error) {
-                dataset.push({
-                    label: 'ERROR',
-                    backgroundColor: '#de1515c4',  // red
-                    data: statesPrint.map((state) => state ? state.error : 0)
-                });
-            }
-            if (this.states.invalid) {
-                dataset.push({
-                    label: 'INVALID',
-                    backgroundColor: '#770202c4',  // dark red
-                    data: statesPrint.map((state) => state ? state.invalid : 0)
-                });
-            }
-        }
-
-        return {
-            labels: statesPrint ? statesPrint.map((state) => state ? (Vue as any).moment(state.time).format('HH:mm:ss') : 'NA') : [],
-            datasets: dataset
-        };
+        return this.chartDataHeader.concat(statesPrint.map(state => state.toArray()));
   }
+//     getChartData(statesPrint: StatesPrint[]) {
+//         let dataset = [];
+//         if (statesPrint) { 
+//             if (this.states.raw) {
+//                 dataset.push({
+//                     label: 'RAW',
+//                     backgroundColor: '#41ce00c4', // green
+//                     data: statesPrint.map((state) => state ? state.raw : 0)
+//                 });
+//             }
+//             if (this.states.waiting) {
+//                 dataset.push({
+//                     label: 'WAITING',
+//                     backgroundColor: '#e4c200de', // yellow
+//                     data: statesPrint.map((state) => state ? state.waiting : 0)
+//                 });
+//             }
+//             if (this.states.finished) {
+//                 dataset.push({
+//                     label: 'FINISHED',
+//                     backgroundColor: '#1ad8b9c4',  // grey
+//                     data: statesPrint.map((state) => state ? state.finished : 0)
+//                 });
+//             }
+//             if (this.states.dequeued) {
+//                 dataset.push({
+//                     label: 'DEQUEUED',
+//                     backgroundColor: '#0b7babc4',  // blue
+//                     data: statesPrint.map((state) => state ? state.dequeued : 0)
+//                 });
+//             }
+//             if (this.states.error) {
+//                 dataset.push({
+//                     label: 'ERROR',
+//                     backgroundColor: '#de1515c4',  // red
+//                     data: statesPrint.map((state) => state ? state.error : 0)
+//                 });
+//             }
+//             if (this.states.invalid) {
+//                 dataset.push({
+//                     label: 'INVALID',
+//                     backgroundColor: '#770202c4',  // dark red
+//                     data: statesPrint.map((state) => state ? state.invalid : 0)
+//                 });
+//             }
+//         }
+
+//         return {
+//             labels: statesPrint ? statesPrint.map((state) => state ? (Vue as any).moment(state.time).format('HH:mm:ss') : 'NA') : [],
+//             datasets: dataset
+//         };
+//   }
 }

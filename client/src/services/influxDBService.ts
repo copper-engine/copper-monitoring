@@ -16,11 +16,12 @@ export class InfluxDBService {
 
         
         // TODO authentication to InfluxDB
+        // u=todd & p=influxdb4ever
 
         // let query = 'SELECT mean("ErrorCount") AS "sum_ErrorCount" FROM "telegraf"."autogen"."workflow_statistics" WHERE time > ' + hourAgo + ' GROUP BY time(10m) FILL(null)';
         let query = 'SELECT mean("DequeuedCount") AS "mean_DequeuedCount", mean("ErrorCount") AS "mean_ErrorCount", mean("FinishedCount") AS "mean_FinishedCount", mean("InvalidCount") AS "mean_InvalidCount", mean("RunningCount") AS "mean_RunningCount", mean("WaitingCount") AS "mean_WaitingCount" FROM "telegraf"."autogen"."persistent.engine3_statistics" WHERE time > ' + hourAgo + ' GROUP BY time(10m) FILL(null)';
 
-        Axios.get('http://localhost:8086/query?q=' + query)
+        Axios.get('http://localhost:8086/query?u=copper&p=copper&q=' + query)
         .then((response) => {
             console.log('response.data.results)', response.data.results);
         })

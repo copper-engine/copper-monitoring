@@ -29,6 +29,11 @@ export class SidebarComponent extends Vue {
 
     emptyConnectionSettings = new ConnectionSettings();
 
+    get getOverviewPath() {
+        let params = '?' + this.$store.getters.connectionsAsParams;
+        return ('/dashboard/overview/' + params);
+    }
+
     showSettings() {
         if (this.clickAllowed === true) {
             this.settingsShowed = !this.settingsShowed;

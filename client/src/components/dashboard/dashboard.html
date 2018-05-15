@@ -49,10 +49,10 @@
                     </v-layout>
                 </v-layout>
                 <v-card-actions>
-                    <v-btn @click="dialogConfig" v-if="!!user">
+                    <!-- <v-btn @click="dialogConfig" v-if="!!user">
                         <v-icon>mdi-database</v-icon>
                         InfluxDB
-                    </v-btn>
+                    </v-btn> -->
                     <v-btn @click="logout" v-if="!!user">
                         <v-icon>mdi-logout</v-icon>
                         Logout
@@ -78,7 +78,7 @@
         <span>SCOOP Software &copy; 2018</span>
     </v-footer>
 
-    <v-dialog v-model="dialogConfigOpen" scrollable max-width="1200px" position="absolute">
+    <!-- <v-dialog v-model="dialogConfigOpen" scrollable max-width="1200px" position="absolute">
         <v-card class="telegraf-card">
             <v-card-title position="absolute" class="dialog-title">
                 <h2>Generated Telegraf Configuration File</h2>
@@ -144,6 +144,6 @@
                 </v-card-text>
             <v-divider></v-divider>
         </v-card>
-    </v-dialog>
+    </v-dialog> -->
 
 </div>

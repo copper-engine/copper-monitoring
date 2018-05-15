@@ -283,7 +283,8 @@ body {
                                 .btn-container {
                                     button {
                                         border-color: $dark-border;
-                                        background-color: $light-secondary;
+                                        background-color: $dark-tertiary;
+                                        color: $light-text-color;
                                     }
                                 }
                                 .telegraf-scroll-area {
@@ -294,6 +295,13 @@ body {
                                         background-color: $dark-background;
                                         color: $light-text-color;
                                     }
+                                }
+                            }
+                            .submit-btn-container {
+                                button {
+                                    border-color: $dark-border;
+                                    background-color: $dark-tertiary;
+                                    color: $light-text-color;
                                 }
                             }
                             .config {
@@ -310,43 +318,6 @@ body {
                             }
                         }
                     }
-                    // .db-info-container {
-                    //     background-color: $dark-background;
-                    //     color: $light-text-color;
-                    //     .card__text {
-                    //         .input-group {
-                    //             color: $dark-primary !important;
-                    //             .input-group__input {
-                    //                 input {
-                    //                     color: $light-text-color !important;
-                    //                     caret-color: $dark-primary !important;
-                    //                 }
-                    //             }
-                    //             .input-group__details {
-                    //                 .input-group__hint {
-                    //                     color: $light-text-color !important;
-                    //                 }
-                    //             }
-                    //             .input-group__details::before {
-                    //                 background-color: $dark-primary;
-                    //             }
-                    //         }
-                    //         .input-group--focused {
-                    //             color: $dark-primary !important;
-                    //             .input-group__details::before {
-                    //                 background-color: $dark-primary;
-                    //             }
-                    //             .input-group__details::after {
-                    //                 background-color: $dark-primary;
-                    //             }
-                    //         }
-                    //         .input-group:hover {
-                    //             .input-group__details::before {
-                    //                 background-color: $dark-tertiary !important;
-                    //             }
-                    //         }
-                    //     }
-                    // }
                     .delete-dialog-text {
                         background-color: $dark-tertiary;
                         h2 {

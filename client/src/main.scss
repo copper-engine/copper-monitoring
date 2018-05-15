@@ -156,6 +156,16 @@ body {
                                 height: 100%;
                             }
                         }
+                        .info-section:hover {
+                            .btn-container {
+                                opacity: 1 !important;
+                                animation: reveal 0.7s;
+                            }
+                            @keyframes reveal {
+                                0% {opacity: 0;}
+                                100% {opacity: 1;}
+                              }
+                        }
                         .bean-warning {
                             background-color: $dark-error;
                             color: white;
@@ -169,16 +179,6 @@ body {
                             padding-left: 50px;
                             padding-bottom: 5px;
                         }
-                    }
-                    .telegraf-container:hover {
-                        .btn-container {
-                            opacity: 1 !important;
-                            animation: reveal 0.7s;
-                        }
-                        @keyframes reveal {
-                            0% {opacity: 0;}
-                            100% {opacity: 1;}
-                          }
                     }
                 }
                 .db-info-container {

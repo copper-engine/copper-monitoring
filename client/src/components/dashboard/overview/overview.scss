@@ -72,3 +72,18 @@
         }
     }
 }
+
+.close-details-icon {
+    transform: rotate(180deg);
+}
+
+.extend-information-enter-active {
+    animation: extend-information 0.75s;
+}
+.extend-information-leave-active {
+    animation: extend-information 0.75s reverse;
+}
+@keyframes extend-information {
+    0% {max-height: 0px;}
+    100% {max-height: 375px;}
+} 

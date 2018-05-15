@@ -34,69 +34,63 @@
         </v-layout>
     </v-layout>
 
-    <!-- <v-dialog v-model="openInfluxDialog" max-width="600px" position="absolute">
-        <v-card class='db-info-container'>
-            <v-card-title position="absolute" class="dialog-title">
-                <h2>Connect to Influx DB</h2>
-            </v-card-title>
-            <v-divider></v-divider>
-            <v-card-text>
-                <v-layout row>
-                    <v-layout column>
-                        <v-layout row>
-                            <v-layout column class="labels">
-                                <h2>Host: </h2>
-                                <h2>Port: </h2>
-                            </v-layout>
-                            <v-layout column class="fields">
-                                <v-text-field v-model="host">
-                                </v-text-field>
-                                <v-text-field v-model="port">
-                                </v-text-field>
-                            </v-layout>
-                        </v-layout>
-                    </v-layout>
-                    <v-layout column>
-                        <v-layout row>
-                            <v-layout column class="labels">
-                                <h2>User: </h2>
-                                <h2>Password: </h2>
-                            </v-layout>
-                            <v-layout column class="fields">
-                                <v-text-field v-model="username">
-                                </v-text-field>
-                                <v-text-field v-model="password">
-                                </v-text-field>
-                            </v-layout>
-                        </v-layout>
-                    </v-layout>
-                </v-layout>
-                <v-card-actions>
-                    <v-layout row class="db-buttons">
-                        <v-spacer></v-spacer>
-                        <v-btn>Info</v-btn>          
-                        <v-btn @click="submit">Submit</v-btn>
-                    </v-layout>
-                </v-card-actions>
-            </v-card-text>
-        </v-card>
-    </v-dialog> -->
-
-    <v-dialog v-model="openInfluxDialog" scrollable max-width="1200px" position="absolute">
+    <v-dialog v-model="openInfluxDialog" scrollable max-width="1126px" position="absolute" persistent>
+        <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.7}">
         <v-card class="telegraf-card">
             <v-card-title position="absolute" class="dialog-title">
-                <h2>Generated Telegraf Configuration File</h2>
+                <h2>Conneting to Influx DB</h2>
                 <v-spacer></v-spacer>             
                     <v-btn depressed class="squareButton" @click="openInfluxDialog = false"><v-icon>mdi-close</v-icon></v-btn>      
             </v-card-title>
             <v-divider></v-divider>
                 <v-card-text class="config-text">
                     <v-layout column class="telegraf-container">
-                        <v-flex class="about">
-                            <p>The following can be used for the Input section of a Telegraf Configuration file for use with InfluxDB. For more 
-                                information, visit the <a href='https://www.influxdata.com/'>InfluxDB website</a>
-                            </p>
-                        </v-flex>
+                        <div class='connection-section'>
+                            <v-layout row class="section-header">
+                                <div class="connection-icon-container">
+                                    <v-icon 
+                                        v-show="connectionSuccess === true"
+                                        class="connected-icon">
+                                        fiber_manual_record
+                                    </v-icon> 
+                                    <v-icon 
+                                        v-show="connectionSuccess === false"
+                                        class="not-connected-icon"> 
+                                        fiber_manual_record
+                                    </v-icon> 
+                                </div>
+                                <h1>Connection</h1>
+                            </v-layout>
+                            <div class="info-section">
+                                <div class="submit-btn-container">
+                                    <v-btn depressed @click="submit">Submit</v-btn>
+                                </div>
+                                <div class="telegraf-scroll-area">
+                                    <v-layout row class="config">
+                                        <v-layout class="input-container input-style" column>
+                                            <v-text-field
+                                                v-model="host"
+                                                label="Host">
+                                            </v-text-field>
+                                            <v-text-field
+                                                v-model="port"
+                                                label="Port">
+                                            </v-text-field>
+                                        </v-layout>
+                                        <v-layout class="input-container input-style" column>
+                                            <v-text-field
+                                                v-model="username"
+                                                label="User">
+                                            </v-text-field>
+                                            <v-text-field
+                                                v-model="password"
+                                                label="Password">
+                                            </v-text-field>
+                                        </v-layout>
+                                    </v-layout>
+                                </div>
+                            </div>
+                        </div>
                         <v-layout row v-if="(beanCollisions.length > 0)" class='conflict-warning'>
                             <h1>Warning! Bean Collision!</h1>
                             <v-menu open-on-hover right offset-y :nudge-top="115" :nudge-right="35">
@@ -121,33 +115,57 @@
                                 </div>
                             </v-menu>
                         </v-layout>
-                        <h1>Input Configuration</h1>
-                        <div class="info-section">
-                            <div class="btn-container">
-                                <v-btn depressed @click="copy(configText)">Copy</v-btn>
-                                <v-btn depressed @click="downloadConfig">Download</v-btn>
-                            </div>
-                            <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.7}">
-                                <v-flex class="config">
-                                    <p style="white-space: pre;">{{ configText }}</p> 
+                        <v-layout row class="section-header">
+                            <v-btn dark icon slot="activator" :disabled="clickAllowed === false" @click="triggerTelegrafInput">
+                                <v-icon :class="{ 'close-details-icon': openTelegrafInput }" class="control-icon">details</v-icon>
+                            </v-btn>
+                            <h1>Telegraf Input Configuration</h1>
+                        </v-layout>
+                        <transition name="extend-information">
+                            <div v-if="openTelegrafInput" class='transition-container'>
+                                <v-flex class="about">
+                                    <p>The following can be used for the Input section of a Telegraf Configuration file for use with InfluxDB. For more 
+                                        information, visit the <a href='https://www.influxdata.com/'>InfluxDB website</a>
+                                    </p>
                                 </v-flex>
-                            </scroll>
-                        </div>
-                        <h1>Sample Queries</h1>
-                        <div class="info-section">
-                            <div class="btn-container">
-                                <v-btn depressed @click="copy(queryText)">Copy</v-btn>
+                                <div class="info-section">
+                                    <div class="btn-container">
+                                        <v-btn depressed @click="copy(configText)">Copy</v-btn>
+                                        <v-btn depressed @click="downloadConfig">Download</v-btn>
+                                    </div>
+                                    <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.7}">
+                                        <v-flex class="config">
+                                            <p style="white-space: pre;">{{ configText }}</p> 
+                                        </v-flex>
+                                    </scroll>
+                                </div>
                             </div>
-                            <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.2}">
-                                <v-flex class="config">
-                                        <p style="white-space: pre;">{{ queryText }}</p>  
-                                </v-flex>
-                            </scroll>
-                        </div>
+                        </transition>
+                        <v-layout row class="section-header">
+                            <v-btn dark icon slot="activator" :disabled="clickAllowed === false" @click="triggerSampleQueries">
+                                <v-icon :class="{ 'close-details-icon': openSampleQueries }" class="control-icon">details</v-icon>
+                            </v-btn>
+                            <h1>Sample Queries</h1>
+                        </v-layout>
+                        <transition name="extend-information">
+                            <div v-if="openSampleQueries" class='transition-container'>
+                                <div class="info-section">
+                                    <div class="btn-container">
+                                        <v-btn depressed @click="copy(queryText)">Copy</v-btn>
+                                    </div>
+                                    <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.2}">
+                                        <v-flex class="config">
+                                                <p style="white-space: pre;">{{ queryText }}</p>  
+                                        </v-flex>
+                                    </scroll>
+                                </div>
+                            </div>
+                        </transition>
                     </v-layout>
                 </v-card-text>
             <v-divider></v-divider>
         </v-card>
+        </scroll>
     </v-dialog>
 
 </div>

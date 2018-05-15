@@ -45,6 +45,7 @@ export class Overview extends Vue {
     fetchInterval: any;
     openInfluxDialog: boolean = false;
     influxConnection: InfluxConnection;
+    connectionSuccess: boolean = false;
     port: string = '';
     host: string = '';
     username: string = '';
@@ -52,6 +53,9 @@ export class Overview extends Vue {
     configText: string = '';
     queryText: string = '';
     beanCollisions: BeanConflict[] = [];
+    clickAllowed: boolean = true;
+    openTelegrafInput: boolean = false;
+    openSampleQueries: boolean = false;
 
     mounted() {
         this.getEngines();
@@ -202,9 +206,33 @@ export class Overview extends Vue {
     }
 
     submit() {
-        this.openInfluxDialog = false;
         this.influxConnection = new InfluxConnection(this.host, this.port, this.username, this.password);
-        console.log(this.influxConnection);
+        this.testConnection();
+    }
+
+    testConnection() {
+        this.connectionSuccess = false;
+        this.eventHub.$emit('showNotification', new Notification('Connection Failed', 'error'));
+    }
+
+    triggerTelegrafInput() {
+        if (this.clickAllowed === true) {
+            this.clickAllowed = false;
+            setTimeout(() => {
+                this.clickAllowed = true;
+            }, 750);
+            this.openTelegrafInput = !this.openTelegrafInput;
+        }
+    }
+
+    triggerSampleQueries() {
+        if (this.clickAllowed === true) {
+            this.clickAllowed = false;
+            setTimeout(() => {
+                this.clickAllowed = true;
+            }, 750);
+            this.openSampleQueries = !this.openSampleQueries;
+        }
     }
 
     scheduleFetch() {

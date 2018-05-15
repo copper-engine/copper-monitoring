@@ -1,15 +1,12 @@
 import { Vue, Component, Watch} from 'vue-property-decorator';
 
 import './statistics.scss';
-// import { VueCharts, Bar, Line, mixins } from 'vue-chartjs';
-// import { VueCharts, Bar, Line, mixins } from 'vue-chartkick';
+import { VueCharts, Bar, Line, mixins } from 'vue-chartjs';
 import { JmxService } from '../../../services/jmxService';
 import { InfluxDBService } from '../../../services/influxDBService';
 import { StatesPrint, EngineStatus, EngineGroup } from '../../../models/engine';
 import { ConnectionSettings } from '../../../models/connectionSettings';
 import { MBean } from '../../../models/mbeans';
-
-import { GChart } from 'vue-google-charts';
 
 const INT_15_MIN = 15 * 60 * 1000;
 const INT_1_MIN = 60 * 1000;
@@ -18,14 +15,14 @@ const INT_1_MIN = 60 * 1000;
     template: require('./statistics.html'),
     services: ['jmxService'],
     components: {
-        'GChart': GChart
-        // 'line-chart': {
-        //     extends: Line,
-        //     mixins: [mixins.reactiveProp],
-        //     props: ['chartData', 'options'],
-        //     mounted () {
-        //       this.renderChart(this.chartData, this.options);
-        //     }
+        'line-chart': {
+            extends: Line,
+            mixins: [mixins.reactiveProp],
+            props: ['chartData', 'options'],
+            mounted () {
+              this.renderChart(this.chartData, this.options);
+            }
+        }
     }
 })
 export class StatisticsComponent extends Vue {
@@ -34,43 +31,20 @@ export class StatisticsComponent extends Vue {
     group: EngineGroup = null;
     mbean: MBean = null;
 
-    chartDataHeader = [['Date', 'Raw', 'Waiting', 'Finished', 'Dequeued', 'Error', 'Invalid']]; 
-    chartDataContent: any[][] = [];
-    chartData = this.chartDataHeader.concat(this.chartDataContent);        
-
-    year = 2018;
     chartOptions = {
-        // height: 400,
-        animation: {duration: 1000, easing: 'inAndOut'},
-        theme: 'material', 
-        legend: 'none',
-        // backgroundColor: '#353844',
-        backgroundColor: '#f5f5f5',
-        colors: [ '#cc1c1c', '#31b54f', '#e08a00' ],
-        chartArea: { width: '90%', height: '80%' },
-        chart: {
-            title: 'Workflow Statistics'
-          },
-          width: 900,
-          height: 500,
-          series: {
-            // Gives each series an axis name that matches the Y-axis below.
-            0: { axis: 'Workflows' },
-            1: { axis: 'Time' }
-          },
-          axes: {
-            // Adds labels to each axis; they don't have to match the axis names.
-            y: {
-              Workflows: { label: 'Workflows' },
-              Time: { label: 'Time' }
+        animation: {
+            duration: 0, // general animation time
+            // easing: 'easeInCirc'
+        },
+        elements: {
+            line: {
+                tension: 0, // disables bezier curves
             }
-          }
+        }
     };
 
-
     secondsKey = this.getKey('seconds');
-    secondsStates: StatesPrint[] = [];
-    // secondsStates: StatesPrint[] = this.getDataFromLS(this.secondsKey);
+    secondsStates: StatesPrint[] = this.getDataFromLS(this.secondsKey);
     secondsChartData = null;
     secondsInterval = null;
     
@@ -85,7 +59,7 @@ export class StatisticsComponent extends Vue {
     quoterMinInterval = null;
     
     states = {
-        raw: true,
+        running: true,
         waiting: true,
         finished: true,
         dequeued: true,
@@ -101,15 +75,6 @@ export class StatisticsComponent extends Vue {
 
         influx.testInfluxDB();
         this.initCharts();
-
-        this.testInt = setInterval(() => {
-            if (this.chartDataContent.length > 10) {
-                this.chartDataContent.shift();
-            }
-            this.chartDataContent.push(['' + this.year++,  Math.random() * 1000, Math.random() * 1000, Math.random() * 1000]);
-            this.chartData = this.chartDataHeader.concat(this.chartDataContent);
-        }, 2000);
-
     }
  
     @Watch('states', { deep: true })
@@ -234,7 +199,7 @@ export class StatisticsComponent extends Vue {
         }
         let updateSecondsState = (states) => {
             localStorage.setItem(this.secondsKey, JSON.stringify(states));
-            this.secondsChartData = this.getGChartData(states);
+            this.secondsChartData = this.getChartData(states);
         };
         this.fetchingData(this.secondsStates, updateSecondsState);
         this.secondsInterval = setInterval(() => {
@@ -248,7 +213,7 @@ export class StatisticsComponent extends Vue {
         }
         let updateMinutesState = (states) => {
             localStorage.setItem(this.minutesKey, JSON.stringify(states));
-            this.minutesChartData = this.getGChartData(states);
+            this.minutesChartData = this.getChartData(states);
         };
         this.fetchingData(this.minutesStates, updateMinutesState);
         this.minutesInterval = setInterval(() => {
@@ -262,7 +227,7 @@ export class StatisticsComponent extends Vue {
         }
         let updateQuoterMinState = (states) => {
             localStorage.setItem(this.quoterKey, JSON.stringify(states));
-            this.quoterMinChartData = this.getGChartData(states);
+            this.quoterMinChartData = this.getChartData(states);
         };
         this.fetchingData(this.quoterMinStates, updateQuoterMinState);
         this.quoterMinInterval = setInterval(() => {
@@ -298,60 +263,56 @@ export class StatisticsComponent extends Vue {
         });
     }
 
-    getGChartData(statesPrint: StatesPrint[]) {
+    getChartData(statesPrint: StatesPrint[]) {
         let dataset = [];
-        return this.chartDataHeader.concat(statesPrint.map(state => state.toArray()));
-  }
-//     getChartData(statesPrint: StatesPrint[]) {
-//         let dataset = [];
-//         if (statesPrint) { 
-//             if (this.states.raw) {
-//                 dataset.push({
-//                     label: 'RAW',
-//                     backgroundColor: '#41ce00c4', // green
-//                     data: statesPrint.map((state) => state ? state.raw : 0)
-//                 });
-//             }
-//             if (this.states.waiting) {
-//                 dataset.push({
-//                     label: 'WAITING',
-//                     backgroundColor: '#e4c200de', // yellow
-//                     data: statesPrint.map((state) => state ? state.waiting : 0)
-//                 });
-//             }
-//             if (this.states.finished) {
-//                 dataset.push({
-//                     label: 'FINISHED',
-//                     backgroundColor: '#1ad8b9c4',  // grey
-//                     data: statesPrint.map((state) => state ? state.finished : 0)
-//                 });
-//             }
-//             if (this.states.dequeued) {
-//                 dataset.push({
-//                     label: 'DEQUEUED',
-//                     backgroundColor: '#0b7babc4',  // blue
-//                     data: statesPrint.map((state) => state ? state.dequeued : 0)
-//                 });
-//             }
-//             if (this.states.error) {
-//                 dataset.push({
-//                     label: 'ERROR',
-//                     backgroundColor: '#de1515c4',  // red
-//                     data: statesPrint.map((state) => state ? state.error : 0)
-//                 });
-//             }
-//             if (this.states.invalid) {
-//                 dataset.push({
-//                     label: 'INVALID',
-//                     backgroundColor: '#770202c4',  // dark red
-//                     data: statesPrint.map((state) => state ? state.invalid : 0)
-//                 });
-//             }
-//         }
+        if (statesPrint) { 
+            if (this.states.running) {
+                dataset.push({
+                    label: 'RUNNING',
+                    backgroundColor: '#41ce00c4', // green
+                    data: statesPrint.map((state) => state ? state.running : 0)
+                });
+            }
+            if (this.states.waiting) {
+                dataset.push({
+                    label: 'WAITING',
+                    backgroundColor: '#e4c200de', // yellow
+                    data: statesPrint.map((state) => state ? state.waiting : 0)
+                });
+            }
+            if (this.states.finished) {
+                dataset.push({
+                    label: 'FINISHED',
+                    backgroundColor: '#1ad8b9c4',  // grey
+                    data: statesPrint.map((state) => state ? state.finished : 0)
+                });
+            }
+            if (this.states.dequeued) {
+                dataset.push({
+                    label: 'DEQUEUED',
+                    backgroundColor: '#0b7babc4',  // blue
+                    data: statesPrint.map((state) => state ? state.dequeued : 0)
+                });
+            }
+            if (this.states.error) {
+                dataset.push({
+                    label: 'ERROR',
+                    backgroundColor: '#de1515c4',  // red
+                    data: statesPrint.map((state) => state ? state.error : 0)
+                });
+            }
+            if (this.states.invalid) {
+                dataset.push({
+                    label: 'INVALID',
+                    backgroundColor: '#770202c4',  // dark red
+                    data: statesPrint.map((state) => state ? state.invalid : 0)
+                });
+            }
+        }
 
-//         return {
-//             labels: statesPrint ? statesPrint.map((state) => state ? (Vue as any).moment(state.time).format('HH:mm:ss') : 'NA') : [],
-//             datasets: dataset
-//         };
-//   }
+        return {
+            labels: statesPrint ? statesPrint.map((state) => state ? (Vue as any).moment(state.time).format('HH:mm:ss') : 'NA') : [],
+            datasets: dataset
+        };
+  }
 }

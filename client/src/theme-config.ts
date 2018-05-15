@@ -8,11 +8,5 @@ import 'mdi/css/materialdesignicons.min.css';
 import Datetime from 'vue-datetime';
 import 'vue-datetime/dist/vue-datetime.css';
 
-// import VueChartkick from 'vue-chartkick';
-// Vue.use(VueChartkick);
-
-import VueGoogleCharts from 'vue-google-charts';
-Vue.use(VueGoogleCharts);
-
 Vue.use(require('vue-moment'));
 Vue.use(Vuetify);

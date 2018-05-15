@@ -14,7 +14,7 @@ export enum State {
 export class StatesPrint {
     constructor(
         public time: Date,
-        public raw: number,
+        public running: number,
         public waiting: number,
         public finished: number,
         public dequeued: number,
@@ -22,7 +22,7 @@ export class StatesPrint {
         public invalid: number) {}
 
     toArray() {
-        return [ (Vue as any).moment(this.time).format('HH:mm:ss'), this.raw, this.waiting, this.finished, this.dequeued, this.error, this.invalid ];
+        return [ (Vue as any).moment(this.time).format('HH:mm:ss'), this.running, this.waiting, this.finished, this.dequeued, this.error, this.invalid ];
     }
 }
 

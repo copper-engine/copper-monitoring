@@ -4,7 +4,7 @@ import './statistics.scss';
 import { VueCharts, Bar, Line, mixins } from 'vue-chartjs';
 import { JmxService } from '../../../services/jmxService';
 import { InfluxDBService } from '../../../services/influxDBService';
-import { StatesPrint, EngineStatus, EngineGroup } from '../../../models/engine';
+import { StatesPrint, EngineStatus, EngineGroup, ChartStates } from '../../../models/engine';
 import { ConnectionSettings } from '../../../models/connectionSettings';
 import { MBean } from '../../../models/mbeans';
 
@@ -33,7 +33,7 @@ export class StatisticsComponent extends Vue {
 
     chartOptions = {
         animation: {
-            duration: 0, // general animation time
+            duration: 1000, // general animation time
             // easing: 'easeInCirc'
         },
         elements: {
@@ -58,14 +58,7 @@ export class StatisticsComponent extends Vue {
     quoterMinChartData = null;
     quoterMinInterval = null;
     
-    states = {
-        running: true,
-        waiting: true,
-        finished: true,
-        dequeued: true,
-        error: true,
-        invalid: true
-    };
+    states: ChartStates = new ChartStates();
     
     testInt = null;
 
@@ -92,9 +85,6 @@ export class StatisticsComponent extends Vue {
     }
 
     destroyed() {
-        if (this.secondsInterval) {
-            clearInterval(this.testInt);
-        }
         if (this.secondsInterval) {
             clearInterval(this.secondsInterval);
         }
@@ -258,9 +248,7 @@ export class StatisticsComponent extends Vue {
 
     // TODO Beans from diferent locations
     getBeans(): MBean[] {
-        return this.group.engines.map((engine) => {
-            return this.$store.getters.engineMBeans[engine.id];
-        });
+        return this.group.engines.map((engine) => this.$store.getters.engineMBeans[engine.id]);
     }
 
     getChartData(statesPrint: StatesPrint[]) {

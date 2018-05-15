@@ -1,4 +1,5 @@
 import { Vue } from 'vue-property-decorator';
+import { ConnectionResult } from './connectionSettings';
 
 export enum State {
     RAW,        // Workflow was just initialized, nothing happened with it so far
@@ -9,6 +10,17 @@ export enum State {
     FINISHED,   // Workflow finished execution normally.
     ERROR,      // Workflow stopped execution due to an exception. Might be resubmitted later on.
     INVALID     // Something illegal happened to the workflow. Cannot work with it anymore. In persistent mode, this might be caused by a deserialization error or something similar.
+}
+
+export class ChartStates {
+    constructor(
+        public running: boolean = true,
+        public waiting: boolean = true,
+        public finished: boolean = true,
+        public dequeued: boolean = true,
+        public error: boolean = true,
+        public invalid: boolean = true
+    ) {}
 }
 
 export class StatesPrint {

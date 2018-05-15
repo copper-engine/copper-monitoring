@@ -1,6 +1,7 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { EngineGroup } from '../../../models/engine';
 import './overview.scss';
+import { StatisticsService } from '../../../services/statisticsService';
 
 export class InfluxConnection {
     constructor(
@@ -13,9 +14,10 @@ export class InfluxConnection {
 
 @Component({
     template: require('./overview.html'),
-    services: ['jmxService', 'eventHub']
+    services: ['jmxService', 'eventHub', 'statisticsService']
 })
 export class Overview extends Vue {
+    private statisticsService: StatisticsService = this.$services.statisticsService;
     groups: EngineGroup[] = [];
     timeSelect: string[] = ['5 sec', '15 sec', '30 sec', '1 min', '5 min', '15 min'];
     layoutSelect: string[]= ['Row', 'Column'];
@@ -33,9 +35,12 @@ export class Overview extends Vue {
 
     mounted() {
         this.getEngines();
+        this.statisticsService.start();
+        
     }
-
+    
     beforeDestroy() {
+        this.statisticsService.stop();
         clearInterval(this.fetchInterval);
     }
 

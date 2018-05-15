@@ -14,7 +14,7 @@
                     <div class="user" v-if="!!user">
                         User Settings:
                     </div>
-                    <v-layout row class="input-container">
+                    <v-layout row class="input-container input-style">
                         <v-flex class="input-label">
                             Get data every 'x' seconds
                         </v-flex>
@@ -27,7 +27,7 @@
                             ></v-text-field>
                         </v-flex>
                     </v-layout>
-                    <v-layout row class="input-container">
+                    <v-layout row class="input-container input-style">
                         <v-flex class="input-label">
                             <!-- Used for fetching data from engine -->
                             Not older than 'y' minutes
@@ -49,10 +49,10 @@
                     </v-layout>
                 </v-layout>
                 <v-card-actions>
-                    <v-btn @click="dialogConfig" v-if="!!user">
+                    <!-- <v-btn @click="dialogConfig" v-if="!!user">
                         <v-icon>mdi-database</v-icon>
                         InfluxDB
-                    </v-btn>
+                    </v-btn> -->
                     <v-btn @click="logout" v-if="!!user">
                         <v-icon>mdi-logout</v-icon>
                         Logout
@@ -77,73 +77,5 @@
         <v-spacer></v-spacer>
         <span>SCOOP Software &copy; 2018</span>
     </v-footer>
-
-    <v-dialog v-model="dialogConfigOpen" scrollable max-width="1200px" position="absolute">
-        <v-card class="telegraf-card">
-            <v-card-title position="absolute" class="dialog-title">
-                <h2>Generated Telegraf Configuration File</h2>
-                <v-spacer></v-spacer>             
-                    <v-btn depressed class="squareButton" @click="dialogConfigOpen = false"><v-icon>mdi-close</v-icon></v-btn>      
-            </v-card-title>
-            <v-divider></v-divider>
-                <v-card-text class="config-text">
-                    <v-layout column class="telegraf-container">
-                        <v-flex class="about">
-                            <p>The following can be used for the Input section of a Telegraf Configuration file for use with InfluxDB. For more 
-                                information, visit the <a href='https://www.influxdata.com/'>InfluxDB website</a>
-                            </p>
-                        </v-flex>
-                        <v-layout row v-if="(beanCollisions.length > 0)" class='conflict-warning'>
-                            <h1>Warning! Bean Collision!</h1>
-                            <v-menu open-on-hover right offset-y :nudge-top="115" :nudge-right="35">
-                                <v-icon slot='activator'>mdi-information</v-icon>
-                                <div class="menu-header">
-                                    <h1>Warning! Bean Collision Detected</h1>
-                                </div>
-                                <div class="menu-info">
-                                    <h1>You have {{ beanCollisions.length }} MBean name{{ (beanCollisions.length > 1 ? 's' : '') }} shared between 2 or more engines. This may result in inaccurate statistics.</h1>
-                                </div>
-                                <div class="menu-details">
-                                    <v-layout row v-for="collision in beanCollisions" key="collision.id">
-                                        <v-layout column class="label">
-                                            <p>MBean: </p>
-                                            <p>Shared by: </p>
-                                        </v-layout>
-                                        <v-layout column class="value">
-                                            <p>{{ collision.beanName }}</p>
-                                            <p v-for="engine in collision.conflictEngines" key="engine.id">{{ engine }}</p>
-                                        </v-layout>
-                                    </v-layout>
-                                </div>
-                            </v-menu>
-                        </v-layout>
-                        <h1>Input Configuration</h1>
-                        <div class="info-section">
-                            <div class="btn-container">
-                                <v-btn depressed @click="copy(configText)">Copy</v-btn>
-                                <v-btn depressed @click="downloadConfig">Download</v-btn>
-                            </div>
-                            <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.7}">
-                                <v-flex class="config">
-                                    <p style="white-space: pre;">{{ configText }}</p> 
-                                </v-flex>
-                            </scroll>
-                        </div>
-                        <h1>Sample Queries</h1>
-                        <div class="info-section">
-                            <div class="btn-container">
-                                <v-btn depressed @click="copy(queryText)">Copy</v-btn>
-                            </div>
-                            <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.2}">
-                                <v-flex class="config">
-                                        <p style="white-space: pre;">{{ queryText }}</p>  
-                                </v-flex>
-                            </scroll>
-                        </div>
-                    </v-layout>
-                </v-card-text>
-            <v-divider></v-divider>
-        </v-card>
-    </v-dialog>
 
 </div>

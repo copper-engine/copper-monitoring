@@ -46,6 +46,19 @@
             padding: 10px 0px 0px 10px;
             color: $dark-text-color;
         }
+
+        .overview-link {
+            background-color: $light-tertiary !important;
+            color: $dark-text-color;
+            margin-right: 10px;
+            .icon {
+                padding-right: 5px;
+                color: $dark-text-color;
+            }
+        }
+        a {
+            text-decoration: none;
+        }
         
         .engine-card {
             padding-top: 15px; 

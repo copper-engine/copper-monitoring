@@ -41,6 +41,9 @@
                 @deleteSettings="deleteSettings(index)">
             </connection-status>
         </div>
+        <router-link :to="getOverviewPath">
+            <v-btn class="overview-link"> <v-icon>mdi-chart-bar</v-icon> Overview </v-btn>        
+        </router-link>
         <div class="engine-card" v-show="!$store.state.appCriticalError">
             <v-layout row>
                 <div class="engines-title">
@@ -55,7 +58,7 @@
                 </v-tooltip>
             </v-layout>
             <group class="engine-group"
-                v-for="group in $store.getters.groupsOfEngines" key="group.id"
+                v-for="group in $store.getters.groupsOfEngines" :key='group.id'
                 :group=group
                 :closing="closeAllEngines">
             </group>

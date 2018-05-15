@@ -3,7 +3,6 @@
         <h2>Statistics Overview</h2>
         <v-spacer></v-spacer>
         <div class="button-container">
-            <v-btn @click="triggerOpenInflux">Connect InfluxDB</v-btn>
             <v-menu offset-y>
                 <v-tooltip top content-class="tooltip-text" slot="activator">
                     <v-btn slot="activator"><v-icon>mdi-clock</v-icon>{{ newTime }}</v-btn>
@@ -26,6 +25,7 @@
                     </v-list-tile>
                 </v-list>
             </v-menu>
+            <v-btn class='influx-button' @click="triggerOpenInflux"><v-icon>mdi-database</v-icon>InfluxDB</v-btn>
         </div>
     </v-layout>
     <v-layout :row='getRow' :column='!getRow' class="stat-card-container">

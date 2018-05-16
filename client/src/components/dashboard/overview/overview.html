@@ -47,6 +47,10 @@
                 <v-card-text class="config-text">
                     <v-layout column class="telegraf-container">
                         <div class='connection-section'>
+                            <v-flex class="description">
+                                <p>With a valid connection to Influx DB, this page can display Influx DB's statistics. Fore more information,
+                                     visit <a href="https://www.influxdata.com/">Influx DB</a></p>
+                            </v-flex>
                             <v-layout row class="section-header">
                                 <div class="connection-icon-container">
                                     <v-icon 
@@ -70,22 +74,22 @@
                                     <v-layout row class="config">
                                         <v-layout class="input-container input-style" column>
                                             <v-text-field
-                                                v-model="host"
-                                                label="Host">
-                                            </v-text-field>
-                                            <v-text-field
-                                                v-model="port"
-                                                label="Port">
-                                            </v-text-field>
-                                        </v-layout>
-                                        <v-layout class="input-container input-style" column>
-                                            <v-text-field
                                                 v-model="username"
                                                 label="User">
                                             </v-text-field>
                                             <v-text-field
                                                 v-model="password"
                                                 label="Password">
+                                            </v-text-field>
+                                        </v-layout>
+                                        <v-layout class="input-container input-style" column>
+                                            <v-text-field
+                                                v-model="url"
+                                                label="URL">
+                                            </v-text-field>
+                                            <v-text-field
+                                                class='hideField'
+                                                disabled>
                                             </v-text-field>
                                         </v-layout>
                                     </v-layout>
@@ -117,17 +121,18 @@
                             </v-menu>
                         </v-layout>
                         <v-layout row class="section-header">
-                            <v-btn dark icon slot="activator" :disabled="clickAllowed === false" @click="triggerTelegrafInput">
-                                <v-icon :class="{ 'close-details-icon': openTelegrafInput }" class="control-icon">details</v-icon>
-                            </v-btn>
+                            <v-tooltip top content-class="tooltip-text" slot="activator">
+                                <v-btn dark icon slot="activator" :disabled="clickAllowed === false" @click="triggerTelegrafInput">
+                                    <v-icon :class="{ 'close-details-icon': openTelegrafInput }" class="control-icon">details</v-icon>
+                                </v-btn>
+                                <span>Open Details</span>
+                            </v-tooltip>
                             <h1>Telegraf Input Configuration</h1>
                         </v-layout>
                         <transition name="extend-information">
                             <div v-if="openTelegrafInput" class='transition-container'>
                                 <v-flex class="about">
-                                    <p>This can be used as the Input section of a Telegraf Configuration file for use with InfluxDB. For more 
-                                        information, visit the <a href='https://www.influxdata.com/'>InfluxDB website</a>
-                                    </p>
+                                    <p>This can be used as the Input section of a Telegraf Configuration file for use with InfluxDB.</p>
                                 </v-flex>
                                 <div class="info-section">
                                     <div class="btn-container">
@@ -143,9 +148,12 @@
                             </div>
                         </transition>
                         <v-layout row class="section-header">
-                            <v-btn dark icon slot="activator" :disabled="clickAllowed === false" @click="triggerSampleQueries">
-                                <v-icon :class="{ 'close-details-icon': openSampleQueries }" class="control-icon">details</v-icon>
-                            </v-btn>
+                            <v-tooltip top content-class="tooltip-text" slot="activator">
+                                <v-btn dark icon slot="activator" :disabled="clickAllowed === false" @click="triggerSampleQueries">
+                                    <v-icon :class="{ 'close-details-icon': openSampleQueries }" class="control-icon">details</v-icon>
+                                </v-btn>
+                                <span>Open Details</span>
+                            </v-tooltip>
                             <h1>Sample Queries</h1>
                         </v-layout>
                         <transition name="extend-information">

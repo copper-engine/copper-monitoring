@@ -108,6 +108,15 @@ body {
                         }
                         .connection-section {
                             padding-top: 25px;
+                            .description {
+                                p {
+                                    font-size: 1.1em;
+                                    padding-left: 50px;
+                                    padding-right: 70px;
+                                    padding-bottom: 0px;
+                                    padding-top: 5px;
+                                }
+                            }
                             .connection-icon-container {
                                 margin-left: 18px;
                                 margin-right: 8px;
@@ -121,10 +130,13 @@ body {
                                 }
                             }
                             .input-container {
-                                padding-top: 10px;
+                                padding-top: 0px;
                                 padding-left: 10px;
                                 padding-right: 10px;
-                                padding-bottom: 50px; 
+                                padding-bottom: 10px; 
+                                .hideField {
+                                    z-index: -2;
+                                }
                             }
                             h1 {
                                 padding-bottom: 4px;
@@ -167,7 +179,7 @@ body {
                             .submit-btn-container {
                                 position: absolute;
                                 right: 60px;
-                                top: 150px;
+                                top: 88px;
                                 z-index: 2;
                                 button {
                                     border: 1px solid;

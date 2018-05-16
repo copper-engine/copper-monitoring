@@ -2,13 +2,13 @@ import { Component, Vue, Watch } from 'vue-property-decorator';
 import { EngineGroup } from '../../../models/engine';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import { Notification } from '../../../models/notification';
+import { InfluxDBService } from '../../../services/influxDBService';
 import * as _ from 'lodash';
 import './overview.scss';
 
 export class InfluxConnection {
     constructor(
-        public host: string,
-        public port: string,
+        public url: string,
         public username: string,
         public password: string
     ) {}
@@ -35,6 +35,7 @@ export class BeanConflict {
 })
 export class Overview extends Vue {
     private eventHub: Vue = this.$services.eventHub;
+    influx = new InfluxDBService();
     groups: EngineGroup[] = [];
     timeSelect: string[] = ['5 sec', '15 sec', '30 sec', '1 min', '5 min', '15 min'];
     layoutSelect: string[]= ['Row', 'Column'];
@@ -46,8 +47,7 @@ export class Overview extends Vue {
     openInfluxDialog: boolean = false;
     influxConnection: InfluxConnection;
     connectionSuccess: boolean = false;
-    port: string = '';
-    host: string = '';
+    url: string = '';
     username: string = '';
     password: string = '';
     configText: string = '';
@@ -206,13 +206,23 @@ export class Overview extends Vue {
     }
 
     submit() {
-        this.influxConnection = new InfluxConnection(this.host, this.port, this.username, this.password);
+        this.influxConnection = new InfluxConnection(this.url , this.username, this.password);
         this.testConnection();
     }
 
     testConnection() {
-        this.connectionSuccess = false;
-        this.eventHub.$emit('showNotification', new Notification('Connection Failed', 'error'));
+        this.influx = new InfluxDBService();
+        this.influx.setUrl(this.influxConnection.url);
+        this.influx.testInfluxDB().then((response: any) => {
+            console.log(response);
+            if (response) {
+                this.connectionSuccess = true;
+                this.eventHub.$emit('showNotification', new Notification('Connection Success'));
+            } else {
+                this.connectionSuccess = false;
+                this.eventHub.$emit('showNotification', new Notification('Connection Failed', 'error'));
+            }
+        });
     }
 
     triggerTelegrafInput() {

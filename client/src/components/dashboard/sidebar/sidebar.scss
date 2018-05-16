@@ -46,24 +46,58 @@
             padding: 10px 0px 0px 10px;
             color: $dark-text-color;
         }
-
-        .overview-link {
-            background-color: $light-tertiary !important;
-            color: $dark-text-color;
-            margin-right: 10px;
-            .icon {
-                padding-right: 5px;
-                color: $dark-text-color;
-            }
-        }
-        a {
-            text-decoration: none;
-        }
         
         .engine-card {
             padding-top: 15px; 
         }
     }
+
+    .link-container {
+        a {
+            text-decoration: none;
+        }
+        .activeLink {
+            .link-background {
+                background: $light-primary; 
+            }
+            .link-interior {
+                background: $light-link-active;
+            }
+        }
+        &:hover {
+            .link-background {
+                background: $light-primary;
+            }
+            .link-interior {
+                background: $light-link-hover;
+            }
+        }
+        .link {
+            .link-background {
+                padding-left: 10px;
+            }
+            .link-interior {
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-left: 5px;
+                color: $dark-text-color;
+                width: 100%;
+                .link-icon {
+                    flex-grow: 0;
+                    padding-right: 15px;
+                    .icon {
+                        display: block;
+                        color: $dark-text-color;
+                    }
+                }
+                .link-name {
+                    font-size: 1.3em;
+                    font-weight: 400;
+                }
+            }
+        }
+    }
+
 
     .scroll-footer {
         height: 75px;
@@ -195,6 +229,51 @@
             background: $dark-sidebar !important;
             .connection-title, .engines-title {
                 color: $dark-sidebar-icon;
+            }
+        }
+        .link-container {
+            a {
+                text-decoration: none;
+            }
+            .activeLink {
+                .link-background {
+                   background: $light-primary; 
+                }
+                .link-interior {
+                    background: $light-link-active;
+                }
+            }
+            &:hover {
+                .link-background {
+                    background: $light-primary;
+                }
+                .link-interior {
+                    background: $light-link-hover;
+                }
+            }
+            .link {
+                .link-background {
+                    padding-left: 10px;
+                }
+                .link-interior {
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                    padding-left: 5px;
+                    color: $dark-text-color;
+                    width: 100%;
+                    .link-icon {
+                        flex-grow: 0;
+                        padding-right: 15px;
+                        .icon {
+                            display: block;
+                            color: $dark-text-color;
+                        }
+                    }
+                    .link-name {
+                        font-size: 1.3em;
+                        font-weight: 400;
+                    }
+                }
             }
         }
         .navigation-drawer__border {

@@ -221,6 +221,9 @@ export class Overview extends Vue {
             setTimeout(() => {
                 this.clickAllowed = true;
             }, 750);
+            if (this.openTelegrafInput === true) {
+                this.scrollToTop(100); 
+            }
             this.openTelegrafInput = !this.openTelegrafInput;
         }
     }
@@ -231,7 +234,26 @@ export class Overview extends Vue {
             setTimeout(() => {
                 this.clickAllowed = true;
             }, 750);
+            if (this.openSampleQueries === true) {
+                this.scrollToTop(150); 
+            }
             this.openSampleQueries = !this.openSampleQueries;
+        }
+    }
+
+    // without this function, closing the Sample Queries section of the dialog
+    // while scrolled down created strange behavior and styles. This function
+    // smoothly scrolls up and resets the Scroll component when either Sample Queries
+    // or Telegraf Input sections are closed to avoid this.
+    scrollToTop(tick: number) {
+        if (tick > 0) {
+            setTimeout(() => {
+                let elem = (this as any).$refs['perfectScroll'];
+                elem.$el.scrollBy(0, -7);
+                this.scrollToTop(tick - 1);
+            }, 10);
+        } else {
+            (this as any).$refs.perfectScroll.update();
         }
     }
 

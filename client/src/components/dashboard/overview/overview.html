@@ -35,14 +35,15 @@
     </v-layout>
 
     <v-dialog v-model="openInfluxDialog" scrollable max-width="1126px" position="absolute" persistent>
-        <scroll class="telegraf-scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 0.7}">
+        
         <v-card class="telegraf-card">
             <v-card-title position="absolute" class="dialog-title">
-                <h2>Conneting to Influx DB</h2>
+                <h2 id="topOfPage">Conneting to Influx DB</h2>
                 <v-spacer></v-spacer>             
                     <v-btn depressed class="squareButton" @click="openInfluxDialog = false"><v-icon>mdi-close</v-icon></v-btn>      
             </v-card-title>
             <v-divider></v-divider>
+            <scroll class="telegraf-scroll-area" ref="perfectScroll" :settings="{suppressScrollX: true, maxScrollbarLength: 200, wheelSpeed: 0.4}">
                 <v-card-text class="config-text">
                     <v-layout column class="telegraf-container">
                         <div class='connection-section'>
@@ -163,9 +164,9 @@
                         </transition>
                     </v-layout>
                 </v-card-text>
+            </scroll>
             <v-divider></v-divider>
         </v-card>
-        </scroll>
     </v-dialog>
 
 </div>

@@ -61,8 +61,6 @@ export class Overview extends Vue {
 
     mounted() {
         this.getEngines();
-        this.statisticsService.start();
-        
     }
     
     beforeDestroy() {

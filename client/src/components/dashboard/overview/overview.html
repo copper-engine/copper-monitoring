@@ -26,6 +26,8 @@
                 </v-list>
             </v-menu>
             <v-btn class='influx-button' @click="triggerOpenInflux"><v-icon>mdi-database</v-icon>InfluxDB</v-btn>
+            <v-btn class='influx-button' @click="statisticsService.stop()" v-show="statisticsService.isRunning()"><v-icon>mdi-database</v-icon>Stop Collecting</v-btn>
+            <v-btn class='influx-button' @click="statisticsService.start()" v-show="!statisticsService.isRunning()"><v-icon>mdi-database</v-icon>Start Collecting</v-btn>
         </div>
     </v-layout>
     <v-layout :row='getRow' :column='!getRow' class="stat-card-container">

@@ -31,7 +31,8 @@ export class StatesPrint {
         public finished: number,
         public dequeued: number,
         public error: number,
-        public invalid: number) {}
+        public invalid: number,
+        public engine: string = null) {}
 
     toArray() {
         return [ (Vue as any).moment(this.time).format('HH:mm:ss'), this.running, this.waiting, this.finished, this.dequeued, this.error, this.invalid ];

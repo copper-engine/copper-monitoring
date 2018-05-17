@@ -6,6 +6,10 @@ export class ConnectionSettings {
         public host: string = 'localhost', 
         public port: string = '1099') {
     }
+
+    toString() {
+        return this.host + ':' + this.port;
+    }
 }
 export class ConnectionResult {    
     constructor(public settings: ConnectionSettings, public mbeans: MBean[]) {}

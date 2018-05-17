@@ -33,7 +33,7 @@ export class StatisticsComponent extends Vue {
 
     chartOptions = {
         animation: {
-            duration: 1000, // general animation time
+            duration: 0, // general animation time
             // easing: 'easeInCirc'
         },
         elements: {
@@ -227,7 +227,7 @@ export class StatisticsComponent extends Vue {
 
     fetchingData(states: StatesPrint[], updateFn) {
         if (this.secondsInterval !== null) {
-            if (states.length > 10) {
+            if (states.length > 30) {
                 states.shift();
             }
             if (this.group === null) {

@@ -5,45 +5,68 @@ import { StoreState } from '../store.vuex';
 import { JmxService } from './jmxService';
 import { MBean } from '../models/mbeans';
 
+// const STATISTICS_KEY = 'statitics';
 export class StatisticsService {
     // data: Map<String, StatesPrint[]> = new Map<String, StatesPrint[]>(); 
     // data: Array<Array<StatesPrint>> = [];
-    data: StatesPrint[][] = [];
-    dataArr: StatesPrint[][] = [];
+    // data: StatesPrint[][] = [];
+    // dataArr: StatesPrint[][] = [];
     aggData: StatesPrint[][][] = []; 
     pointNumbers = 30;
-    maxSize; 
+    // maxSize; 
     public intervals = [5, 15, 30, 60, 300, 900]; // 5s, 15s, 30s, 1m, 5m, 15m
     aggLength = [];
     fetchDataInterval = null;
     private running = true;
+    private lsKey;
 
     constructor(private store: Store<StoreState>, private jmxService: JmxService) {
-        this.maxSize = this.pointNumbers * this.intervals[0];
+        // this.maxSize = this.pointNumbers * this.intervals[0];
         this.aggLength = [0];
 
         for (let i = 1; i < this.intervals.length; i++) {
             this.aggLength.push(Math.floor(this.intervals[i] / this.intervals[i - 1]));
         }
+        // console.log('agg length: ', this.aggLength);
         // this.aggLength = this.intervals.map(interval => Math.floor(interval / this.intervals[0]));
         // this.maxSize = Math.floor(this.intervals[this.intervals.length] / this.intervals[0] * this.pointNumbers);
+    }
 
-        this.init();
+    saveToLocalStorage() {
+        // console.log('saving data by key', this.lsKey);
+        localStorage.setItem(this.lsKey, JSON.stringify(this.aggData));
     }
     
     init() {
+        // localStorage.setItem(this.secondsKey, JSON.stringify(this.secondsStates));
+
+        try {
+            this.lsKey = this.store.state.user.name + ':statitics';
+            this.aggData = JSON.parse(localStorage.getItem(this.lsKey));            
+            // console.log('data loaded by key', this.lsKey, this.aggData);
+            if (!this.aggData || this.aggData.length !== this.intervals.length) {
+                this.aggData = this.intervals.map(int => []);   
+            }
+
+            // console.log('data loaded');
+        } catch (err) {
+            console.log('error:', err);
+            console.error('Failed to load statistics for key: ' + this.lsKey + '. Will init empty statistics');
+            this.aggData = this.intervals.map(int => []);   
+        }
+
+        // console.log('start fetching');
         this.fetchDataInterval = setInterval(() => {
             if (this.running) {
                 this.fetchingData().then(result => {
                     // this.data.push(result);
-                    this.addData(result);
-                    console.log('data', this.data);
-                    console.log('aggdata', this.aggData);
+                    this.addAggData(result, 0);
+                    // console.log('aggdata', this.aggData);
                 });                
             } else {
-                this.addData([]);
-                console.log('feeling empty time');
-                console.log('aggdata', this.aggData);
+                this.addAggData([], 0);
+                // console.log('feeling empty time');
+                // console.log('aggdata', this.aggData);
             }
         }, this.intervals[0] * 1000);
     }
@@ -53,25 +76,92 @@ export class StatisticsService {
         clearInterval(this.fetchDataInterval);
     }
 
-    addData(el) {
-        this.data.push(el);
-        if (this.data.length > this.maxSize + this.aggLength[1]) {
-            this.addAggData(this.max(this.data.slice(0, this.aggLength[1])), 1);
-        }
+    start() {
+        console.log('start collecting statistics');
+        this.running = true;
     }
+    
+    stop() {
+        this.running = false;
+        console.log('stoping collecting statistics');
+        // clearInterval(this.fetchDataInterval);
+    }
+
+    isRunning() {
+        return this.running;
+    }
+
+    reset() {
+        // this.data = new Map<String, StatesPrint[]>(); 
+        this.aggData = [];
+    }
+
+    getData(interval: number, engineNames: String): StatesPrint[][] {
+        let index = this.intervals.indexOf(interval);
+        if (index === -1) {
+            console.error(`Illegal interval:  ${interval}. Interval expected to be one of thouse: ${this.intervals}`);
+            return null;
+        }
+        let result: StatesPrint[][] = this.addAggData[index].slice(0, this.pointNumbers);
+
+        if (engineNames && engineNames.length > 0) {
+            result = result.map(element => element.filter(states =>  engineNames.indexOf(states.engine) !== -1));
+        }
+
+        return result;
+    }
+    
+    // getData(interval: number) {
+        // let index = this.intervals.lastIndexOf(interval);
+        // if (index === -1) {
+        //     console.error(`Illegal interval:  ${interval}. Interval expected to be one of thouse: ${this.intervals}`);
+        //     return;
+        // }
+
+        // let chunkSize = this.intervals[index] / this.intervals[0];
+        
+        // let groupsOfEngines: EngineGroup[] = this.store.getters.groupsOfEngines;
+        // groupsOfEngines.forEach(group => {
+        //     if (group.name && group.engines.length > 1) {
+        //         // get data by name then chunk it and get max vals
+        //         group.name
+
+
+        //     } else {
+        //         group.engines.forEach( (engine: EngineStatus) => {
+        //             '' + engine.id
+        //         });
+        //     }
+        // });
+    // }
+
+    // addData(el) {
+    //     this.data.push(el);
+    //     if (this.data.length > this.maxSize + this.aggLength[1]) {
+    //         this.addAggData(this.max(this.data.slice(0, this.aggLength[1])), 1);
+    //     }
+    // }
 
     addAggData(el, aggIndex) {
+        console.log(`add el ${el} by agg index: ${aggIndex}`);
         this.aggData[aggIndex].push(el);
-        if (aggIndex < this.intervals.length) {
-            if (this.aggData[aggIndex].length > this.maxSize + this.aggLength[aggIndex + 1]) {
-                this.addAggData(this.max(this.data.slice(0, this.aggLength[aggIndex + 1])), aggIndex + 1);
+        if (aggIndex < this.intervals.length - 1) {
+            if (this.aggData[aggIndex].length >= this.pointNumbers + this.aggLength[aggIndex + 1]) {
+                console.log('will agregate data to index:', aggIndex + 1, 'agg legth', this.aggLength[aggIndex + 1]);
+                console.log('before this.aggData[aggIndex].length', this.aggData[aggIndex].length);
+                let toAgg = this.aggData[aggIndex].slice(0, this.aggLength[aggIndex + 1]);
+                this.aggData[aggIndex] = this.aggData[aggIndex].slice(this.aggLength[aggIndex + 1]);
+                console.log('after this.aggData[aggIndex].length', this.aggData[aggIndex].length);
+                this.addAggData(this.max(toAgg), aggIndex + 1);
             }
-        } else if (this.aggData[aggIndex].length > this.maxSize) {
+        } else if (this.aggData[aggIndex].length > this.pointNumbers) {
             this.aggData[aggIndex].shift();
         }
+        this.saveToLocalStorage();
     }
-
-    max(enginesStates: StatesPrint[][]) {
+        
+    max(enginesStates: StatesPrint[][]): StatesPrint[] {
+        console.log('counting max of', enginesStates);
         let maxEngineStates: StatesPrint[] = enginesStates[0];
 
         for (let i = 1; i < enginesStates.length; i++) {
@@ -98,56 +188,13 @@ export class StatisticsService {
             });
         }
 
+        console.log('max is', maxEngineStates);
+
         return maxEngineStates;
     }
 
     findEngineStates(enginesStates: StatesPrint[], engineId: string) {
         return enginesStates.find(state => state.engine === engineId);
-    }
-
-    start() {
-        console.log('start collecting statistics');
-        this.running = true;
-    }
-    
-    stop() {
-        this.running = false;
-        console.log('stoping collecting statistics');
-        // clearInterval(this.fetchDataInterval);
-    }
-
-    isRunning() {
-        return this.running;
-    }
-
-    reset() {
-        // this.data = new Map<String, StatesPrint[]>(); 
-        this.data = [];
-    }
-
-    getData(interval: number) {
-        // let index = this.intervals.lastIndexOf(interval);
-        // if (index === -1) {
-        //     console.error(`Illegal interval:  ${interval}. Interval expected to be one of thouse: ${this.intervals}`);
-        //     return;
-        // }
-
-        // let chunkSize = this.intervals[index] / this.intervals[0];
-        
-        // let groupsOfEngines: EngineGroup[] = this.store.getters.groupsOfEngines;
-        // groupsOfEngines.forEach(group => {
-        //     if (group.name && group.engines.length > 1) {
-        //         // get data by name then chunk it and get max vals
-        //         group.name
-
-
-        //     } else {
-        //         group.engines.forEach( (engine: EngineStatus) => {
-        //             '' + engine.id
-        //         });
-        //     }
-        // });
-
     }
 
     async fetchingData() {

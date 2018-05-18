@@ -10,6 +10,7 @@ import * as _ from 'lodash';
 import { Mutations } from '../../store.vuex';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import { Notification } from '../../models/notification';
+import { StatisticsService } from '../../services/statisticsService';
 
 const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) => SidebarComponent);
 
@@ -27,15 +28,15 @@ export class BeanConflict {
 
 @Component({
     template: require('./dashboard.html'),
-    services: ['jmxService', 'eventHub'],
+    services: ['jmxService', 'eventHub', 'statisticsService'],
     components: {
         'sidebar': sidebarComponent,
         'scroll': VuePerfectScrollbar
     }
 })
-
 export class DashboardComponent extends Vue {
     private eventHub: Vue = this.$services.eventHub;
+    private statisticsService: StatisticsService = this.$services.statisticsService;
     interval: any;
     menuOpen: boolean = false;
     update: number;
@@ -69,9 +70,11 @@ export class DashboardComponent extends Vue {
     mounted() {  
         this.parseRoute();
         this.sheduleFetchingStatus();
+        this.statisticsService.init();
     }
-        
+    
     beforeDestroy() {
+        this.statisticsService.destroy();
         clearInterval(this.interval);
         (this.$services.eventHub as Vue).$off('forceStatusFetch', this.forceFetchingStatus);
     }

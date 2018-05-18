@@ -34,9 +34,13 @@ export class StatesPrint {
         public invalid: number,
         public engine: string = null) {}
 
-    toArray() {
-        return [ (Vue as any).moment(this.time).format('HH:mm:ss'), this.running, this.waiting, this.finished, this.dequeued, this.error, this.invalid ];
-    }
+    // toArray() {
+    //     return [ (Vue as any).moment(this.time).format('HH:mm:ss'), this.running, this.waiting, this.finished, this.dequeued, this.error, this.invalid ];
+    // }
+
+    // equals(state: StatesPrint) {
+    //     return this.waiting === state.waiting && this.running === state.running && this.finished === state.finished && this.dequeued === state.dequeued && this.error === state.error && this.invalid === state.invalid;
+    // }
 }
 
 export class EngineGroup {

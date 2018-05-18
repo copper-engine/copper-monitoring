@@ -31,7 +31,7 @@ export class InfluxDBService {
             max("InvalidCount") AS "InvalidCount"
             FROM "telegraf"."autogen"."localhost_1098_persistent.engine" WHERE time > ${hourAgo} GROUP BY time(10m) FILL(null)`;
 
-            
+
         Axios.get('http://localhost:8086/query?u=copper&p=copper&q=' + query)
         .then((response) => {
             console.log('response.data.results[0].series[0].values', response.data.results[0].series[0].values);
@@ -49,8 +49,9 @@ export class InfluxDBService {
 
     testConnection() {
         let query = '/query?q=show+databases';
+        // u=copper&p=copper
 
-        // return Axios.get( this.url + '/query?u=copper&p=copper&q=' + query)
+        // return Axios.get( this.url + '/query?&q=' + query)
         return Axios.get( this.url + query)
             .then(this.parseResponse)
             .catch(error => {

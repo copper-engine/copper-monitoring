@@ -62,6 +62,8 @@ export class Overview extends Vue {
     mounted() {
         this.getInfluxConnection();
         this.getEngines();
+
+        console.log('Data from statistics', this.statisticsService.getData(5, ['In-line@localhost:1098', 'Spark-ignition@localhost:1098']));
     }
     
     beforeDestroy() {

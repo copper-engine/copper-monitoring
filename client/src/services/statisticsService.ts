@@ -96,19 +96,24 @@ export class StatisticsService {
         this.aggData = [];
     }
 
-    getData(interval: number, engineNames: String): StatesPrint[][] {
+    getData(interval: number, engineNames: String[]): Map<String, StatesPrint[]> {
         let index = this.intervals.indexOf(interval);
         if (index === -1) {
             console.error(`Illegal interval:  ${interval}. Interval expected to be one of thouse: ${this.intervals}`);
             return null;
         }
-        let result: StatesPrint[][] = this.addAggData[index].slice(0, this.pointNumbers);
+        let data: StatesPrint[][] = this.aggData[index].slice(0, this.pointNumbers);
 
         if (engineNames && engineNames.length > 0) {
-            result = result.map(element => element.filter(states =>  engineNames.indexOf(states.engine) !== -1));
+            data = data.map(element => element.filter(states =>  engineNames.indexOf(states.engine) !== -1));
         }
 
-        return result;
+        let resultsPerEngine: Map<String, StatesPrint[]> = new Map<String, StatesPrint[]>();
+        engineNames.forEach(engineName => {
+            resultsPerEngine.set(engineName, data.map( enginesTick => enginesTick.find(state => state.engine === engineName) ));
+        });
+
+        return resultsPerEngine;
     }
     
     // getData(interval: number) {

@@ -58,6 +58,7 @@ export class Overview extends Vue {
     openSampleQueries: boolean = false;
 
     mounted() {
+        this.getInfluxConnection();
         this.getEngines();
     }
 
@@ -72,6 +73,26 @@ export class Overview extends Vue {
         else {
             return false;
         }
+    }
+
+    getInfluxConnection() {
+        if (localStorage.getItem('influxURL')) {
+            this.influxConnection = new InfluxConnection(localStorage.getItem('influxURL'), localStorage.getItem('influxUser'), localStorage.getItem('influxPass'));
+            this.url = this.influxConnection.url;
+            this.username = this.influxConnection.username;
+            this.password = this.influxConnection.password;
+            this.testConnection();
+        }
+    }
+
+    storeInfluxConnection() {
+        localStorage.setItem('influxURL', this.influxConnection.url);
+        localStorage.setItem('influxUser', this.influxConnection.username);
+        localStorage.setItem('influxPass', this.influxConnection.password);
+    }
+
+    getEngines() {
+        this.groups = this.$store.getters.groupsOfEngines;
     }
 
     updateTime(time: string) {
@@ -216,6 +237,7 @@ export class Overview extends Vue {
         this.influx.testInfluxDB().then((response: any) => {
             if (this.parseInfluxResposne(response) === true) {
                 this.connectionSuccess = true;
+                this.storeInfluxConnection();
                 this.eventHub.$emit('showNotification', new Notification('Connection Success'));
             } else {
                 this.connectionSuccess = false;
@@ -286,9 +308,5 @@ export class Overview extends Vue {
         this.fetchInterval = setInterval(() => {
             this.getEngines();
         }, this.fetchPeriod * 1000);
-    }
-
-    getEngines() {
-        this.groups = this.$store.getters.groupsOfEngines;
     }
 }

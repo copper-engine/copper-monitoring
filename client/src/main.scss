@@ -307,6 +307,9 @@ body {
                                             background-color: $dark-tertiary;
                                             color: $light-text-color;
                                         }
+                                        .btn--disabled {
+                                            color: $dark-border !important;
+                                        }
                                     }
                                     .telegraf-scroll-area {
                                         border-color: $dark-border;

@@ -105,7 +105,10 @@
                         </v-layout>
                         <div class="info-section">
                             <div class="submit-btn-container">
-                                <v-btn depressed @click="submit">Test & Submit</v-btn>
+                                <v-btn depressed @click="submit"
+                                :disabled="(this.$store.state.user.influx.username === null || this.$store.state.user.influx.username === undefined || this.$store.state.user.influx.username === '')"
+                                >Test & Submit
+                                </v-btn>
                             </div>
                             <div class="telegraf-scroll-area">
                                 <v-layout class="input-container input-style" column>

@@ -10,6 +10,21 @@
         <div class="criticalIssue" v-show="$store.state.appCriticalError">
             {{$store.state.appCriticalError}}
         </div>
+        <div class="link-container">
+            <router-link :to="getOverviewPath" active-class="activeLink" class="link">
+                <!-- <v-btn class="overview-link"> <v-icon>mdi-chart-bar</v-icon> Overview </v-btn>      -->
+                <div class="link-background">
+                    <v-layout row class="link-interior">
+                        <v-flex class="link-icon">
+                            <v-icon dark>mdi-chart-bar</v-icon>
+                        </v-flex>
+                        <div class="link-name">
+                            Overview
+                        </div>
+                    </v-layout> 
+                </div>    
+            </router-link>
+        </div>
         <div class="connection" v-show="!$store.state.appCriticalError">
             <v-layout row>
                 <v-flex class="connection-title">
@@ -41,9 +56,6 @@
                 @deleteSettings="deleteSettings(index)">
             </connection-status>
         </div>
-        <router-link :to="getOverviewPath">
-            <v-btn class="overview-link"> <v-icon>mdi-chart-bar</v-icon> Overview </v-btn>        
-        </router-link>
         <div class="engine-card" v-show="!$store.state.appCriticalError">
             <v-layout row>
                 <div class="engines-title">

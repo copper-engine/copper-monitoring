@@ -2,14 +2,14 @@ import { Component, Vue, Watch } from 'vue-property-decorator';
 import { EngineGroup } from '../../../models/engine';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import { Notification } from '../../../models/notification';
+import { InfluxDBService } from '../../../services/influxDBService';
 import * as _ from 'lodash';
 import './overview.scss';
 import { StatisticsService } from '../../../services/statisticsService';
 
 export class InfluxConnection {
     constructor(
-        public host: string,
-        public port: string,
+        public url: string,
         public username: string,
         public password: string
     ) {}
@@ -37,6 +37,7 @@ export class BeanConflict {
 export class Overview extends Vue {
     private eventHub: Vue = this.$services.eventHub;
     private statisticsService: StatisticsService = this.$services.statisticsService;
+    influx = new InfluxDBService();
     groups: EngineGroup[] = [];
     timeSelect: string[] = ['5 sec', '15 sec', '30 sec', '1 min', '5 min', '15 min'];
     layoutSelect: string[]= ['Row', 'Column'];
@@ -48,8 +49,7 @@ export class Overview extends Vue {
     openInfluxDialog: boolean = false;
     influxConnection: InfluxConnection;
     connectionSuccess: boolean = false;
-    port: string = '';
-    host: string = '';
+    url: string = '';
     username: string = '';
     password: string = '';
     configText: string = '';
@@ -60,6 +60,7 @@ export class Overview extends Vue {
     openSampleQueries: boolean = false;
 
     mounted() {
+        this.getInfluxConnection();
         this.getEngines();
     }
     
@@ -75,6 +76,26 @@ export class Overview extends Vue {
         else {
             return false;
         }
+    }
+
+    getInfluxConnection() {
+        if (localStorage.getItem('influxURL')) {
+            this.influxConnection = new InfluxConnection(localStorage.getItem('influxURL'), localStorage.getItem('influxUser'), localStorage.getItem('influxPass'));
+            this.url = this.influxConnection.url;
+            this.username = this.influxConnection.username;
+            this.password = this.influxConnection.password;
+            this.testConnection();
+        }
+    }
+
+    storeInfluxConnection() {
+        localStorage.setItem('influxURL', this.influxConnection.url);
+        localStorage.setItem('influxUser', this.influxConnection.username);
+        localStorage.setItem('influxPass', this.influxConnection.password);
+    }
+
+    getEngines() {
+        this.groups = this.$store.getters.groupsOfEngines;
     }
 
     updateTime(time: string) {
@@ -209,13 +230,35 @@ export class Overview extends Vue {
     }
 
     submit() {
-        this.influxConnection = new InfluxConnection(this.host, this.port, this.username, this.password);
+        this.influxConnection = new InfluxConnection(this.url , this.username, this.password);
         this.testConnection();
     }
 
     testConnection() {
-        this.connectionSuccess = false;
-        this.eventHub.$emit('showNotification', new Notification('Connection Failed', 'error'));
+        this.influx = new InfluxDBService();
+        this.influx.setUrl(this.influxConnection.url);
+        this.influx.testConnection().then((response: any) => {
+            if (this.parseInfluxResposne(response) === true) {
+                this.connectionSuccess = true;
+                this.storeInfluxConnection();
+                this.eventHub.$emit('showNotification', new Notification('Connection Success'));
+            } else {
+                this.connectionSuccess = false;
+                this.eventHub.$emit('showNotification', new Notification('Connection Failed', 'error'));
+            }
+        });
+    }
+
+    parseInfluxResposne(response) {
+        let telegraf = false;
+        response[0].series[0].values.map((result) => {
+            result.map((db) => {
+                if (db === 'telegraf') {
+                    telegraf = true;
+                }
+            });
+        });
+        return telegraf;
     }
 
     triggerTelegrafInput() {
@@ -224,6 +267,9 @@ export class Overview extends Vue {
             setTimeout(() => {
                 this.clickAllowed = true;
             }, 750);
+            if (this.openTelegrafInput === true) {
+                this.scrollToTop(100); 
+            }
             this.openTelegrafInput = !this.openTelegrafInput;
         }
     }
@@ -234,7 +280,26 @@ export class Overview extends Vue {
             setTimeout(() => {
                 this.clickAllowed = true;
             }, 750);
+            if (this.openSampleQueries === true) {
+                this.scrollToTop(150); 
+            }
             this.openSampleQueries = !this.openSampleQueries;
+        }
+    }
+
+    // without this function, closing the Sample Queries section of the dialog
+    // while scrolled down created strange behavior and styles. This function
+    // smoothly scrolls up and resets the Scroll component when either Sample Queries
+    // or Telegraf Input sections are closed to avoid this.
+    scrollToTop(tick: number) {
+        if (tick > 0) {
+            setTimeout(() => {
+                let elem = (this as any).$refs['perfectScroll'];
+                elem.$el.scrollBy(0, -7);
+                this.scrollToTop(tick - 1);
+            }, 10);
+        } else {
+            (this as any).$refs.perfectScroll.update();
         }
     }
 
@@ -246,9 +311,5 @@ export class Overview extends Vue {
         this.fetchInterval = setInterval(() => {
             this.getEngines();
         }, this.fetchPeriod * 1000);
-    }
-
-    getEngines() {
-        this.groups = this.$store.getters.groupsOfEngines;
     }
 }

@@ -214,8 +214,7 @@ export class Overview extends Vue {
         this.influx = new InfluxDBService();
         this.influx.setUrl(this.influxConnection.url);
         this.influx.testInfluxDB().then((response: any) => {
-            console.log(response);
-            if (response) {
+            if (this.parseInfluxResposne(response) === true) {
                 this.connectionSuccess = true;
                 this.eventHub.$emit('showNotification', new Notification('Connection Success'));
             } else {
@@ -223,6 +222,18 @@ export class Overview extends Vue {
                 this.eventHub.$emit('showNotification', new Notification('Connection Failed', 'error'));
             }
         });
+    }
+
+    parseInfluxResposne(response) {
+        let telegraf = false;
+        response[0].series[0].values.map((result) => {
+            result.map((db) => {
+                if (db === 'telegraf') {
+                    telegraf = true;
+                }
+            });
+        });
+        return telegraf;
     }
 
     triggerTelegrafInput() {

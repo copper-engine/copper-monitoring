@@ -17,7 +17,7 @@
             background-color: $light-tertiary !important;
             color: $dark-text-color !important;
             .icon {
-                color: $dark-text-color !important;  
+                color: $dark-text-color;  
                 margin-right: 10px;          
             }
         }
@@ -25,6 +25,12 @@
             max-width: 150px;
             min-width: 150px;
         }
+        .not-connected-icon{
+            color: #c53332 !important;
+        }
+        .connected-icon{
+            color: #69c57e !important;
+        }  
     }
 
     .stat-card-container {
@@ -53,7 +59,7 @@
                 background-color: $dark-tertiary !important;
                 color: $light-text-color !important;
                 .icon {
-                    color: $light-text-color !important;
+                    color: $light-text-color;
                 }
             }
         }

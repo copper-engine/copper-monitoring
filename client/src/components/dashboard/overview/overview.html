@@ -25,7 +25,19 @@
                     </v-list-tile>
                 </v-list>
             </v-menu>
-            <v-btn class='influx-button' @click="triggerOpenInflux"><v-icon>mdi-database</v-icon>InfluxDB</v-btn>
+            <v-btn class='influx-button' @click="triggerOpenInflux">
+                <v-icon 
+                    v-show="connectionSuccess === true"
+                    class="connected-icon">
+                    fiber_manual_record
+                </v-icon> 
+                <v-icon 
+                    v-show="connectionSuccess === false"
+                    class="not-connected-icon"> 
+                    fiber_manual_record
+                </v-icon>
+                InfluxDB
+            </v-btn>
         </div>
     </v-layout>
     <v-layout :row='getRow' :column='!getRow' class="stat-card-container">

@@ -7,14 +7,6 @@ import * as _ from 'lodash';
 import './overview.scss';
 import { StatisticsService } from '../../../services/statisticsService';
 
-export class InfluxConnection {
-    constructor(
-        public url: string,
-        public username: string,
-        public password: string
-    ) {}
-}
-
 export class BeanContext {
     constructor(
         public beanName: string,
@@ -29,7 +21,7 @@ export class BeanConflict {
 
 @Component({
     template: require('./overview.html'),
-    services: ['jmxService', 'eventHub', 'statisticsService'],
+    services: ['influxService', 'eventHub', 'statisticsService'],
     components: {
         'scroll': VuePerfectScrollbar
     }
@@ -37,7 +29,7 @@ export class BeanConflict {
 export class Overview extends Vue {
     private eventHub: Vue = this.$services.eventHub;
     private statisticsService: StatisticsService = this.$services.statisticsService;
-    influx = new InfluxDBService();
+    private influx = this.$services.influxService;
     groups: EngineGroup[] = [];
     timeSelect: string[] = ['5 sec', '15 sec', '30 sec', '1 min', '5 min', '15 min'];
     layoutSelect: string[]= ['Row', 'Column'];
@@ -47,7 +39,6 @@ export class Overview extends Vue {
     fetchPeriod: number;
     fetchInterval: any;
     openInfluxDialog: boolean = false;
-    influxConnection: InfluxConnection;
     connectionSuccess: boolean = false;
     url: string = '';
     username: string = '';
@@ -79,19 +70,27 @@ export class Overview extends Vue {
     }
 
     getInfluxConnection() {
-        if (localStorage.getItem('influxURL')) {
-            this.influxConnection = new InfluxConnection(localStorage.getItem('influxURL'), localStorage.getItem('influxUser'), localStorage.getItem('influxPass'));
-            this.url = this.influxConnection.url;
-            this.username = this.influxConnection.username;
-            this.password = this.influxConnection.password;
+        if (this.$store.state.user.influx.username !== null && this.$store.state.user.influx.username !== undefined && this.$store.state.user.influx.username !== '')  {
+            this.username = this.$store.state.user.influx.user;
+        }
+        if (this.$store.state.user.influx.password !== null && this.$store.state.user.influx.password !== undefined && this.$store.state.user.influx.password !== '') {
+            this.password = this.$store.state.user.influx.password;
+        }
+        if (this.$store.state.user.influx.url !== null && this.$store.state.user.influx.url !== undefined && this.$store.state.user.influx.url !== '') {
+            this.url = this.$store.state.user.influx.url;
+            this.username = this.$store.state.user.influx.user;
+            this.password = this.$store.state.user.influx.password;
             this.testConnection();
         }
     }
 
     storeInfluxConnection() {
-        localStorage.setItem('influxURL', this.influxConnection.url);
-        localStorage.setItem('influxUser', this.influxConnection.username);
-        localStorage.setItem('influxPass', this.influxConnection.password);
+        localStorage.setItem('influxURL', this.url);
+        localStorage.setItem('influxUser', this.username);
+        localStorage.setItem('influxPass', this.password);
+        this.$store.state.user.influx.url = this.url;
+        this.$store.state.user.influx.username = this.username;
+        this.$store.state.user.influx.password = this.password;
     }
 
     getEngines() {
@@ -230,13 +229,13 @@ export class Overview extends Vue {
     }
 
     submit() {
-        this.influxConnection = new InfluxConnection(this.url , this.username, this.password);
-        this.testConnection();
+        this.storeInfluxConnection();
+        if (this.$store.state.user.influx.url !== null && this.$store.state.user.influx.url !== undefined && this.$store.state.user.influx.url !== '') {
+            this.testConnection();
+        }
     }
 
     testConnection() {
-        this.influx = new InfluxDBService();
-        this.influx.setUrl(this.influxConnection.url);
         this.influx.testConnection().then((response: any) => {
             if (this.parseInfluxResposne(response) === true) {
                 this.connectionSuccess = true;
@@ -251,13 +250,15 @@ export class Overview extends Vue {
 
     parseInfluxResposne(response) {
         let telegraf = false;
-        response[0].series[0].values.map((result) => {
-            result.map((db) => {
-                if (db === 'telegraf') {
-                    telegraf = true;
-                }
+        if (response !== undefined && response !== null) {
+            response[0].series[0].values.map((result) => {
+                result.map((db) => {
+                    if (db === 'telegraf') {
+                        telegraf = true;
+                    }
+                });
             });
-        });
+        }
         return telegraf;
     }
 

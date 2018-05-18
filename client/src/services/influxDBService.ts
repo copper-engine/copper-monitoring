@@ -1,14 +1,22 @@
 import Axios from 'axios';
 import moment from 'moment';
 import { StatesPrint } from '../models/engine';
+import { Store } from 'vuex';
+import { StoreState } from '../store.vuex';
 
 export class InfluxDBService {
 
-    url: string = 'http://localhost:8086';
-
-    public setUrl(newUrl: string) {
-        this.url = newUrl;
+    constructor(private store: Store<StoreState>) {
+        // if (this.store.state.user.influx.url !== null) {
+        //     this.setUrl(this.store.state.user.influx.url);
+        // }
     }
+
+    // url: string = 'http://localhost:8086';
+
+    // public setUrl(newUrl: string) {
+    //     this.url = newUrl;
+    // }
 
     public testInfluxDB() {
 
@@ -48,17 +56,26 @@ export class InfluxDBService {
     }
 
     testConnection() {
-        let query = '/query?q=show+databases';
+        let query = 'q=show+databases';
+        let url = this.store.state.user.influx.url;
+        let creds = '';
+        if (this.store.state.user.influx.username !== null && this.store.state.user.influx.username !== undefined && this.store.state.user.influx.username !== '') {
+            if (this.store.state.user.influx.password !== null && this.store.state.user.influx.password !== undefined && this.store.state.user.influx.password !== '') {
+                creds = 'u=' + this.store.state.user.influx.username + '&p=' + this.store.state.user.influx.password + '&';
+            }
+        }
 
-        // return Axios.get( this.url + '/query?u=copper&p=copper&q=' + query)
-        return Axios.get( this.url + query)
+        return Axios.get(url + '/query?' + creds + query)
             .then(this.parseResponse)
             .catch(error => {
                 console.error('Can\'t connect to InfluxDB. Checkout if it\'s running. Error fetching Engine Status:', error);
             });
     }
 
-    parseResponse = (response) => { 
+    parseResponse = (response) => {
+        if (!response.data || response.data.results.length < 1) {
+            return null;
+        }
         return response.data.results;
     }
 

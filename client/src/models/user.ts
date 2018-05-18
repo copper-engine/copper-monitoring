@@ -7,7 +7,16 @@ export class UserSettings {
         public fetchPeriod: number, 
         public darkTheme: boolean) {}
 }
+
+export class InfluxConnection {
+    constructor(
+        public url: string,
+        public username: string,
+        public password: string
+    ) {}
+}
+
 export class User {
-    constructor(public name: string, public password: string, public settings: UserSettings ) {
+    constructor(public name: string, public password: string, public settings: UserSettings, public influx: InfluxConnection ) {
     }
 }

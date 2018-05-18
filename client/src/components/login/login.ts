@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import * as utils from '../../util/utils';
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { User, UserSettings } from '../../models/user';
+import { User, UserSettings, InfluxConnection } from '../../models/user';
 import { CopperRouter } from '../../router';
 import { Mutations } from '../../store.vuex';
 import './login.scss';
@@ -31,7 +31,8 @@ export class LoginComponent extends Vue {
                 if (result.status === 401) {
                     this.error = 'Username & Password combination is incorect.';
                 } else {
-                    this.$store.commit(Mutations.setUser, new User(this.username, this.password, new UserSettings(result.data.host, result.data.port, this.update, this.fetch, this.theme)));
+                    this.$store.commit(Mutations.setUser, new User(this.username, this.password, new UserSettings(result.data.host, result.data.port, this.update, this.fetch, this.theme),
+                     new InfluxConnection(this.url, this.user, this.pass)));
                     this.$router.push(this.nextPath);
                 }
             }).catch(error => {
@@ -59,6 +60,30 @@ export class LoginComponent extends Vue {
             return utils.parseBoolean(localStorage.getItem(this.username + ':darkTheme'));
         } else {
             return true;
+        }
+    }
+
+    get url() {
+        if (localStorage.getItem('influxURL')) {
+            return localStorage.getItem('influxURL');
+        } else {
+            return null;
+        }
+    }
+
+    get user() {
+        if (localStorage.getItem('influxUser')) {
+            return localStorage.getItem('influxUser');
+        } else {
+            return null;
+        }
+    }
+
+    get pass() {
+        if (localStorage.getItem('influxPass')) {
+            return localStorage.getItem('influxPass');
+        } else {
+            return null;
         }
     }
 }

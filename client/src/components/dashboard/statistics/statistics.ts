@@ -13,7 +13,7 @@ const INT_1_MIN = 60 * 1000;
 
 @Component({
     template: require('./statistics.html'),
-    services: ['jmxService'],
+    services: ['jmxService', 'influxService'],
     components: {
         'line-chart': {
             extends: Line,
@@ -27,6 +27,7 @@ const INT_1_MIN = 60 * 1000;
 })
 export class StatisticsComponent extends Vue {
     private jmxService: JmxService = this.$services.jmxService;
+    private influx = this.$services.influxService;    
     id: string;
     group: EngineGroup = null;
     mbean: MBean = null;
@@ -64,9 +65,8 @@ export class StatisticsComponent extends Vue {
 
     mounted() { 
         console.log('statistics mounted');
-        let influx = new InfluxDBService();
 
-        influx.testInfluxDB();
+        this.influx.testInfluxDB();
         this.initCharts();
     }
  

@@ -36,7 +36,7 @@
                     class="not-connected-icon"> 
                     fiber_manual_record
                 </v-icon>
-                InfluxDB
+                Connect InfluxDB
             </v-btn>
             <v-btn class='influx-button' @click="statisticsService.stop()" v-show="statisticsService.isRunning()"><v-icon>mdi-database</v-icon>Stop Collecting</v-btn>
             <v-btn class='influx-button' @click="statisticsService.start()" v-show="!statisticsService.isRunning()"><v-icon>mdi-database</v-icon>Start Collecting</v-btn>
@@ -105,7 +105,10 @@
                         </v-layout>
                         <div class="info-section">
                             <div class="submit-btn-container">
-                                <v-btn depressed @click="submit">Submit</v-btn>
+                                <v-btn depressed @click="submit"
+                                :disabled="(this.$store.state.user.influx.username === null || this.$store.state.user.influx.username === undefined || this.$store.state.user.influx.username === '')"
+                                >Test & Submit
+                                </v-btn>
                             </div>
                             <div class="telegraf-scroll-area">
                                 <v-layout class="input-container input-style" column>

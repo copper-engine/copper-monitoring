@@ -4,104 +4,73 @@ import Vue from 'vue';
 import { StoreState } from '../store.vuex';
 import { JmxService } from './jmxService';
 import { MBean } from '../models/mbeans';
+import * as moment from 'moment';
 
-// const STATISTICS_KEY = 'statitics';
+// Statistic Service will collect in backgorund data about engine statuses
 export class StatisticsService {
-    // data: Map<String, StatesPrint[]> = new Map<String, StatesPrint[]>(); 
-    // data: Array<Array<StatesPrint>> = [];
-    // data: StatesPrint[][] = [];
-    // dataArr: StatesPrint[][] = [];
     aggData: StatesPrint[][][] = []; 
     pointNumbers = 30;
-    // maxSize; 
     public intervals = [5, 15, 30, 60, 300, 900]; // 5s, 15s, 30s, 1m, 5m, 15m
-    aggLength = [];
-    aggCounters = [];
+    private aggLength = [];
+    private aggCounters = [];
     fetchDataInterval = null;
     private running = true;
     private lsKey;
     private lsAggKey;
 
     constructor(private store: Store<StoreState>, private jmxService: JmxService) {
-        // this.maxSize = this.pointNumbers * this.intervals[0];
         this.aggLength = [0];
-
         for (let i = 1; i < this.intervals.length; i++) {
-            let length = Math.floor(this.intervals[i] / this.intervals[i - 1]);
-            this.aggLength.push(length);
+            this.aggLength.push(Math.floor(this.intervals[i] / this.intervals[i - 1]));
         }
-        // console.log('agg length: ', this.aggLength);
-        // this.aggLength = this.intervals.map(interval => Math.floor(interval / this.intervals[0]));
-        // this.maxSize = Math.floor(this.intervals[this.intervals.length] / this.intervals[0] * this.pointNumbers);
     }
 
-    saveToLocalStorage() {
-        // console.log('saving data by key', this.lsKey);
-        try {
-            
-            localStorage.setItem(this.lsKey, JSON.stringify(this.aggData));
-
-        } catch (err) {
-            console.error('Failed to store agg data with lengths', this.aggData.map(arr => arr.length));
-        }
-
-        localStorage.setItem(this.lsAggKey, JSON.stringify(this.aggCounters));
-    }
-    
     init() {
-        // localStorage.setItem(this.secondsKey, JSON.stringify(this.secondsStates));
-
         try {
             this.lsKey = this.store.state.user.name + ':statitics';
             this.lsAggKey = this.store.state.user.name + ':statitics:aggCounters';
-            this.aggData = JSON.parse(localStorage.getItem(this.lsKey));            
-            console.log('data loaded by key', this.lsKey, this.aggData);
+
+            this.aggData = JSON.parse(localStorage.getItem(this.lsKey));
             if (!this.aggData || this.aggData.length !== this.intervals.length) {
                 this.aggData = this.intervals.map(int => []);   
             }
+
             this.aggCounters = JSON.parse(localStorage.getItem(this.lsAggKey));    
-            
             if (!this.aggCounters) {
                 this.aggCounters = this.aggLength.map(x => x);
             }
-            console.log('data loaded by key', this.lsAggKey, this.aggCounters);
         } catch (err) {
-            console.log('error:', err);
-            console.error('Failed to load statistics for key: ' + this.lsKey + '. Will init empty statistics');
+            console.error('Failed to load statistics for key: ' + this.lsKey + '. Will init empty statistics. Error:' , err);
             this.aggData = this.intervals.map(int => []);   
             this.aggCounters = this.aggLength.map(x => x);
         }
 
-        // console.log('start fetching');
+        this.scheduleInterval();
+    }
+
+    // Interval is allways running. Even when collecting of statistics is stoped(in that case it's stores empty state prints)
+    private scheduleInterval() {
         this.fetchDataInterval = setInterval(() => {
             if (this.running && this.store.getters.groupsOfEngines && this.store.getters.groupsOfEngines.length > 0) {
                 this.fetchingData().then(result => {
-                    // this.data.push(result);
                     this.addAggData(result, 0);
-                    console.log('aggdata', this.aggData);
                 });                
             } else {
                 this.addAggData([ new StatesPrint() ], 0);
-                // console.log('feeling empty time');
-                // console.log('aggdata', this.aggData);
             }
         }, this.intervals[0] * 1000);
     }
-
 
     destroy() {
         clearInterval(this.fetchDataInterval);
     }
 
     start() {
-        console.log('start collecting statistics');
         this.running = true;
     }
     
     stop() {
         this.running = false;
-        console.log('stoping collecting statistics');
-        // clearInterval(this.fetchDataInterval);
     }
 
     isRunning() {
@@ -109,8 +78,8 @@ export class StatisticsService {
     }
 
     reset() {
-        // this.data = new Map<String, StatesPrint[]>(); 
         this.aggData = [];
+        this.aggCounters = this.aggLength.map(x => x);
     }
 
     getData(interval: number, engineNames: String[]): Map<String, StatesPrint[]> {
@@ -126,18 +95,22 @@ export class StatisticsService {
         }
 
         let resultsPerEngine: Map<String, StatesPrint[]> = new Map<String, StatesPrint[]>();
+        let dateNow = moment().subtract(interval, 'seconds').toDate();
+
         engineNames.forEach(engineName => {
             let engineResult = data.map( enginesTick => enginesTick.find(state => state.engine === engineName) );
 
+            // TODO make coment here about what is that
             for (let i = 0; i < engineResult.length; i++) {
                 if (!engineResult[i]) {
                     if (data[i][0]) {
                         engineResult[i] = new StatesPrint(data[i][0].time);
-                        engineResult[i].engine = <string> engineName;
+                    } else {
+                        engineResult[i] = new StatesPrint(dateNow);
                     }
+                    engineResult[i].engine = <string> engineName;
                 }
             }
-            // still need to be fitered;
 
             resultsPerEngine.set(engineName, engineResult);
         });
@@ -146,64 +119,69 @@ export class StatisticsService {
     }
     
 
+    // Recursively fintion that will add and aggregate new incoming data.
+    // called from outside with aggIndex = 0 
+    // will add new data to apropriate array, by indexof fetch interval. 
+    // If there ara enough new data in array to aggregate them to next array, 
+    // then will do aggregation and add max of aggregatable data to next array 
     addAggData(el, aggIndex) {
-        console.log(`add el ${el} by agg index: ${aggIndex}`);
-        console.log('aggCounters:', this.aggCounters);
-
         this.aggData[aggIndex].push(el);
         if (this.aggData[aggIndex].length > this.pointNumbers) {
             this.aggData[aggIndex].shift();
-            // this.aggData[aggIndex] = this.aggData[aggIndex].slice(this.aggLength[aggIndex + 1]);
         }
+
         if (aggIndex < this.intervals.length - 1) {
             this.aggCounters[aggIndex + 1] = this.aggCounters[aggIndex + 1] - 1;
             if (this.aggCounters[aggIndex + 1] <= 0) {
                 this.aggCounters[aggIndex + 1] = this.aggLength[aggIndex + 1];
-                console.log('will agregate data to index:', aggIndex, 'agg legth', this.aggLength[aggIndex + 1]);
-                console.log('before this.aggData[aggIndex].length', this.aggData[aggIndex].length);
-
                 let toAgg = this.aggData[aggIndex].slice(-this.aggLength[aggIndex + 1]);
-
-                console.log('after this.aggData[aggIndex].length', this.aggData[aggIndex].length);
                 this.addAggData(this.max(toAgg), aggIndex + 1);
-
-                
+            } else {
+                this.saveToLocalStorage();
             }
-        } else if (this.aggData[aggIndex].length > this.pointNumbers) {
-            this.aggData[aggIndex].shift();
+        } else {
+            this.saveToLocalStorage();
         }
-        this.saveToLocalStorage();
+    }
+
+    saveToLocalStorage() {
+        try {
+            localStorage.setItem(this.lsKey, JSON.stringify(this.aggData));
+        } catch (err) {
+            console.error('Failed to store agg data with lengths', this.aggData.map(arr => arr.length));
+        }
+
+        localStorage.setItem(this.lsAggKey, JSON.stringify(this.aggCounters));
     }
         
     max(enginesStates: StatesPrint[][]): StatesPrint[] {
-        console.log('counting max of', enginesStates);
         let maxEngineStates: StatesPrint[] = enginesStates[0];
 
         for (let i = 1; i < enginesStates.length; i++) {
             enginesStates[i].forEach(states => {
                 let currentMaxStates = this.findEngineStates(maxEngineStates, states.engine);
-                if (currentMaxStates.dequeued < states.dequeued ) {
+
+                // in case currentMaxStates.dequeued === undefined
+                if (currentMaxStates.dequeued < states.dequeued || !currentMaxStates.dequeued ) {
                     currentMaxStates.dequeued = states.dequeued;
                 }
-                if (currentMaxStates.error < states.error ) {
+                if (currentMaxStates.error < states.error || !currentMaxStates.error ) {
                     currentMaxStates.error = states.error;
                 }
-                if (currentMaxStates.finished < states.finished ) {
+                if (currentMaxStates.finished < states.finished || !currentMaxStates.finished ) {
                     currentMaxStates.finished = states.finished;
                 }
-                if (currentMaxStates.invalid < states.invalid ) {
+                if (currentMaxStates.invalid < states.invalid || !currentMaxStates.invalid ) {
                     currentMaxStates.invalid = states.invalid;
                 }
-                if (currentMaxStates.running < states.running ) {
+                if (currentMaxStates.running < states.running || !currentMaxStates.running ) {
                     currentMaxStates.running = states.running;
                 }
-                if (currentMaxStates.waiting < states.waiting ) {
+                if (currentMaxStates.waiting < states.waiting || !currentMaxStates.waiting ) {
                     currentMaxStates.waiting = states.waiting;
                 }
             });
         }
-
-        console.log('max is', maxEngineStates);
 
         return maxEngineStates;
     }
@@ -216,6 +194,7 @@ export class StatisticsService {
         let result: StatesPrint[] = [];
         let groupsOfEngines: EngineGroup[] = this.store.getters.groupsOfEngines;
         let promises: Promise<void>[] = [];
+
         // can be improved by calling 1 jolokia request
         if (groupsOfEngines) {
             groupsOfEngines.forEach(group => {
@@ -227,6 +206,7 @@ export class StatisticsService {
                         result.push(newStates);
                     }));
                 } else {
+                    // engines without groups grouped to group with undefined name
                     group.engines.forEach( (engine: EngineStatus) => {
                         let mbean: MBean = this.store.getters.engineMBeans[engine.id];
                         promises.push(this.jmxService.getChartCounts(this.store.getters.engineMBeans[engine.id], this.store.state.user).then((newStates: StatesPrint) => {   
@@ -243,68 +223,4 @@ export class StatisticsService {
         await Promise.all(promises);
         return result;
     }
-
-    // addNewState(key: string, newStates: StatesPrint) {
-    //     if (!this.data.get(key)) {
-    //         this.data.set(key, []);
-    //     }
-    //     this.data.get(key).push(newStates);
-    //     if (this.data.get(key).length > this.maxSize) {
-    //         this.data.get(key).shift();
-    //     }
-    // }
-
-    getChartData(states: ChartStates, statesPrint: StatesPrint[]) {
-        let dataset = [];
-        if (statesPrint) { 
-            if (states.running) {
-                dataset.push({
-                    label: 'RUNNING',
-                    backgroundColor: '#41ce00c4', // green
-                    data: statesPrint.map((state) => state ? state.running : 0)
-                });
-            }
-            if (states.waiting) {
-                dataset.push({
-                    label: 'WAITING',
-                    backgroundColor: '#e4c200de', // yellow
-                    data: statesPrint.map((state) => state ? state.waiting : 0)
-                });
-            }
-            if (states.finished) {
-                dataset.push({
-                    label: 'FINISHED',
-                    backgroundColor: '#1ad8b9c4',  // grey
-                    data: statesPrint.map((state) => state ? state.finished : 0)
-                });
-            }
-            if (states.dequeued) {
-                dataset.push({
-                    label: 'DEQUEUED',
-                    backgroundColor: '#0b7babc4',  // blue
-                    data: statesPrint.map((state) => state ? state.dequeued : 0)
-                });
-            }
-            if (states.error) {
-                dataset.push({
-                    label: 'ERROR',
-                    backgroundColor: '#de1515c4',  // red
-                    data: statesPrint.map((state) => state ? state.error : 0)
-                });
-            }
-            if (states.invalid) {
-                dataset.push({
-                    label: 'INVALID',
-                    backgroundColor: '#770202c4',  // dark red
-                    data: statesPrint.map((state) => state ? state.invalid : 0)
-                });
-            }
-        }
-
-        return {
-            labels: statesPrint ? statesPrint.map((state) => state ? (Vue as any).moment(state.time).format('HH:mm:ss') : 'NA') : [],
-            datasets: dataset
-        };
-  }
-
 }

@@ -25,13 +25,13 @@ export class ChartStates {
 
 export class StatesPrint {
     constructor(
-        public time: Date,
-        public running: number,
-        public waiting: number,
-        public finished: number,
-        public dequeued: number,
-        public error: number,
-        public invalid: number,
+        public time: Date = new Date(),
+        public running: number = undefined,
+        public waiting: number = undefined,
+        public finished: number = undefined,
+        public dequeued: number = undefined,
+        public error: number = undefined,
+        public invalid: number = undefined,
         public engine: string = null) {}
 
     // toArray() {

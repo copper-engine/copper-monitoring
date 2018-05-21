@@ -16,16 +16,19 @@ export class StatisticsService {
     // maxSize; 
     public intervals = [5, 15, 30, 60, 300, 900]; // 5s, 15s, 30s, 1m, 5m, 15m
     aggLength = [];
+    aggCounters = [];
     fetchDataInterval = null;
     private running = true;
     private lsKey;
+    private lsAggKey;
 
     constructor(private store: Store<StoreState>, private jmxService: JmxService) {
         // this.maxSize = this.pointNumbers * this.intervals[0];
         this.aggLength = [0];
 
         for (let i = 1; i < this.intervals.length; i++) {
-            this.aggLength.push(Math.floor(this.intervals[i] / this.intervals[i - 1]));
+            let length = Math.floor(this.intervals[i] / this.intervals[i - 1]);
+            this.aggLength.push(length);
         }
         // console.log('agg length: ', this.aggLength);
         // this.aggLength = this.intervals.map(interval => Math.floor(interval / this.intervals[0]));
@@ -34,7 +37,15 @@ export class StatisticsService {
 
     saveToLocalStorage() {
         // console.log('saving data by key', this.lsKey);
-        localStorage.setItem(this.lsKey, JSON.stringify(this.aggData));
+        try {
+            
+            localStorage.setItem(this.lsKey, JSON.stringify(this.aggData));
+
+        } catch (err) {
+            console.error('Failed to store agg data with lengths', this.aggData.map(arr => arr.length));
+        }
+
+        localStorage.setItem(this.lsAggKey, JSON.stringify(this.aggCounters));
     }
     
     init() {
@@ -42,29 +53,35 @@ export class StatisticsService {
 
         try {
             this.lsKey = this.store.state.user.name + ':statitics';
+            this.lsAggKey = this.store.state.user.name + ':statitics:aggCounters';
             this.aggData = JSON.parse(localStorage.getItem(this.lsKey));            
-            // console.log('data loaded by key', this.lsKey, this.aggData);
+            console.log('data loaded by key', this.lsKey, this.aggData);
             if (!this.aggData || this.aggData.length !== this.intervals.length) {
                 this.aggData = this.intervals.map(int => []);   
             }
-
-            // console.log('data loaded');
+            this.aggCounters = JSON.parse(localStorage.getItem(this.lsAggKey));    
+            
+            if (!this.aggCounters) {
+                this.aggCounters = this.aggLength.map(x => x);
+            }
+            console.log('data loaded by key', this.lsAggKey, this.aggCounters);
         } catch (err) {
             console.log('error:', err);
             console.error('Failed to load statistics for key: ' + this.lsKey + '. Will init empty statistics');
             this.aggData = this.intervals.map(int => []);   
+            this.aggCounters = this.aggLength.map(x => x);
         }
 
         // console.log('start fetching');
         this.fetchDataInterval = setInterval(() => {
-            if (this.running) {
+            if (this.running && this.store.getters.groupsOfEngines && this.store.getters.groupsOfEngines.length > 0) {
                 this.fetchingData().then(result => {
                     // this.data.push(result);
                     this.addAggData(result, 0);
-                    // console.log('aggdata', this.aggData);
+                    console.log('aggdata', this.aggData);
                 });                
             } else {
-                this.addAggData([], 0);
+                this.addAggData([ new StatesPrint() ], 0);
                 // console.log('feeling empty time');
                 // console.log('aggdata', this.aggData);
             }
@@ -110,54 +127,47 @@ export class StatisticsService {
 
         let resultsPerEngine: Map<String, StatesPrint[]> = new Map<String, StatesPrint[]>();
         engineNames.forEach(engineName => {
-            resultsPerEngine.set(engineName, data.map( enginesTick => enginesTick.find(state => state.engine === engineName) ));
+            let engineResult = data.map( enginesTick => enginesTick.find(state => state.engine === engineName) );
+
+            for (let i = 0; i < engineResult.length; i++) {
+                if (!engineResult[i]) {
+                    if (data[i][0]) {
+                        engineResult[i] = new StatesPrint(data[i][0].time);
+                        engineResult[i].engine = <string> engineName;
+                    }
+                }
+            }
+            // still need to be fitered;
+
+            resultsPerEngine.set(engineName, engineResult);
         });
 
         return resultsPerEngine;
     }
     
-    // getData(interval: number) {
-        // let index = this.intervals.lastIndexOf(interval);
-        // if (index === -1) {
-        //     console.error(`Illegal interval:  ${interval}. Interval expected to be one of thouse: ${this.intervals}`);
-        //     return;
-        // }
-
-        // let chunkSize = this.intervals[index] / this.intervals[0];
-        
-        // let groupsOfEngines: EngineGroup[] = this.store.getters.groupsOfEngines;
-        // groupsOfEngines.forEach(group => {
-        //     if (group.name && group.engines.length > 1) {
-        //         // get data by name then chunk it and get max vals
-        //         group.name
-
-
-        //     } else {
-        //         group.engines.forEach( (engine: EngineStatus) => {
-        //             '' + engine.id
-        //         });
-        //     }
-        // });
-    // }
-
-    // addData(el) {
-    //     this.data.push(el);
-    //     if (this.data.length > this.maxSize + this.aggLength[1]) {
-    //         this.addAggData(this.max(this.data.slice(0, this.aggLength[1])), 1);
-    //     }
-    // }
 
     addAggData(el, aggIndex) {
         console.log(`add el ${el} by agg index: ${aggIndex}`);
+        console.log('aggCounters:', this.aggCounters);
+
         this.aggData[aggIndex].push(el);
+        if (this.aggData[aggIndex].length > this.pointNumbers) {
+            this.aggData[aggIndex].shift();
+            // this.aggData[aggIndex] = this.aggData[aggIndex].slice(this.aggLength[aggIndex + 1]);
+        }
         if (aggIndex < this.intervals.length - 1) {
-            if (this.aggData[aggIndex].length >= this.pointNumbers + this.aggLength[aggIndex + 1]) {
-                console.log('will agregate data to index:', aggIndex + 1, 'agg legth', this.aggLength[aggIndex + 1]);
+            this.aggCounters[aggIndex + 1] = this.aggCounters[aggIndex + 1] - 1;
+            if (this.aggCounters[aggIndex + 1] <= 0) {
+                this.aggCounters[aggIndex + 1] = this.aggLength[aggIndex + 1];
+                console.log('will agregate data to index:', aggIndex, 'agg legth', this.aggLength[aggIndex + 1]);
                 console.log('before this.aggData[aggIndex].length', this.aggData[aggIndex].length);
-                let toAgg = this.aggData[aggIndex].slice(0, this.aggLength[aggIndex + 1]);
-                this.aggData[aggIndex] = this.aggData[aggIndex].slice(this.aggLength[aggIndex + 1]);
+
+                let toAgg = this.aggData[aggIndex].slice(-this.aggLength[aggIndex + 1]);
+
                 console.log('after this.aggData[aggIndex].length', this.aggData[aggIndex].length);
                 this.addAggData(this.max(toAgg), aggIndex + 1);
+
+                
             }
         } else if (this.aggData[aggIndex].length > this.pointNumbers) {
             this.aggData[aggIndex].shift();

@@ -1,11 +1,14 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import { EngineGroup } from '../../../models/engine';
+import { StatesPrint, ChartStates, EngineGroup, EngineStatus } from '../../../models/engine';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import { Notification } from '../../../models/notification';
 import { InfluxDBService } from '../../../services/influxDBService';
+import { StatisticsService } from '../../../services/statisticsService';
+import { setTimeout } from 'timers';
 import * as _ from 'lodash';
 import './overview.scss';
-import { StatisticsService } from '../../../services/statisticsService';
+
+const Stats = () => import('./stats').then(({ Stats }) => Stats);
 
 export class BeanContext {
     constructor(
@@ -19,11 +22,17 @@ export class BeanConflict {
     public conflictEngines: string[];
 }
 
+export class TimeSelection {
+    public label: string;
+    public time: number;
+}
+
 @Component({
     template: require('./overview.html'),
     services: ['influxService', 'eventHub', 'statisticsService'],
     components: {
-        'scroll': VuePerfectScrollbar
+        'scroll': VuePerfectScrollbar,
+        'stats': Stats
     }
 })
 export class Overview extends Vue {
@@ -31,12 +40,11 @@ export class Overview extends Vue {
     private statisticsService: StatisticsService = this.$services.statisticsService;
     private influx = this.$services.influxService;
     groups: EngineGroup[] = [];
-    timeSelect: string[] = ['5 sec', '15 sec', '30 sec', '1 min', '5 min', '15 min'];
+    timeSelect: TimeSelection[];
+    timeIndex: number = 3;
     layoutSelect: string[]= ['Row', 'Column'];
-    newTime: string = '1 min';
-    newLayout: string = 'Row'; 
+    layoutIndex: number = 0; 
     openOptions: boolean = false;
-    fetchPeriod: number;
     fetchInterval: any;
     openInfluxDialog: boolean = false;
     connectionSuccess: boolean = false;
@@ -50,11 +58,26 @@ export class Overview extends Vue {
     openTelegrafInput: boolean = false;
     openSampleQueries: boolean = false;
 
+    created() {
+        this.timeSelect = this.statisticsService.intervals.map((interval) => {
+            let selection = new TimeSelection;
+            selection.time = interval;
+            selection.label = this.createLabel(interval);
+            return selection;
+        });
+    }
+
+    createLabel(interval: number) {
+        if ((interval / 60) >= 1) {
+            return ((interval / 60) + ' min');
+        } else {
+            return ((interval) + ' sec');
+        }
+    }
+
     mounted() {
         this.getInfluxConnection();
-        this.getEngines();
-
-        console.log('Data from statistics', this.statisticsService.getData(5, ['In-line@localhost:1098', 'Spark-ignition@localhost:1098']));
+        this.getData();
     }
     
     beforeDestroy() {
@@ -63,7 +86,7 @@ export class Overview extends Vue {
     }
 
     get getRow() {
-        if (this.newLayout === 'Row') {
+        if (this.layoutSelect[this.layoutIndex] === 'Row') {
             return true;
         }
         else {
@@ -95,23 +118,14 @@ export class Overview extends Vue {
         this.$store.state.user.influx.password = this.password;
     }
 
-    getEngines() {
+    getData() {
         this.groups = this.$store.getters.groupsOfEngines;
+        this.eventHub.$emit('updateStats');
     }
 
-    updateTime(time: string) {
-        this.newTime = time;
-        this.fetchPeriod = this.getTime();
+    updateFetch(index: number) {
+        this.timeIndex = index;
         this.scheduleFetch();
-    }
-
-    getTime() {
-        let timeSplit = this.newTime.split(' ');
-        let multiplier = 1;
-        if (timeSplit[1] === 'min') {
-            multiplier = 60;
-        }
-        return parseInt(timeSplit[0]) * multiplier;
     }
 
     getName(group: EngineGroup) {
@@ -310,9 +324,9 @@ export class Overview extends Vue {
         if (this.fetchInterval) {
             clearInterval(this.fetchInterval);
         }
-        this.getEngines();
+        this.getData();
         this.fetchInterval = setInterval(() => {
-            this.getEngines();
-        }, this.fetchPeriod * 1000);
+            this.getData();
+        }, this.timeSelect[this.timeIndex].time * 1000);
     }
 }

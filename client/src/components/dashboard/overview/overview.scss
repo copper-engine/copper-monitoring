@@ -14,6 +14,7 @@
         padding-top: 15px;
         button {
             min-width: 111px;
+            max-width: 111px;
             background-color: $light-tertiary !important;
             color: $dark-text-color !important;
             .icon {
@@ -42,9 +43,17 @@
             min-width: 740px;
             margin: 20px;
             border: 1px solid;
+            padding-left: 20px;  
+            padding-right: 20px;          
             border-color: $light-border;
             background-color: $light-wf;
             color: $dark-text-color;
+            h2 {
+                padding-left: 20px;
+            }
+            canvas {
+                width: 700px !important;
+            }
         }
     }
 }

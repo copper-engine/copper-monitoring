@@ -23,8 +23,7 @@ export class BeanConflict {
 }
 
 export class TimeSelection {
-    public label: string;
-    public time: number;
+    constructor(public label: string, public time: number) {}
 }
 
 @Component({
@@ -41,9 +40,9 @@ export class Overview extends Vue {
     private influx = this.$services.influxService;
     groups: EngineGroup[] = [];
     timeSelect: TimeSelection[];
-    timeIndex: number = 3;
+    currentTimeSelection: TimeSelection = null;
     layoutSelect: string[]= ['Row', 'Column'];
-    layoutIndex: number = 0; 
+    currentLayout: string = 'Row';
     openOptions: boolean = false;
     fetchInterval: any;
     openInfluxDialog: boolean = false;
@@ -59,12 +58,9 @@ export class Overview extends Vue {
     openSampleQueries: boolean = false;
 
     created() {
-        this.timeSelect = this.statisticsService.intervals.map((interval) => {
-            let selection = new TimeSelection;
-            selection.time = interval;
-            selection.label = this.createLabel(interval);
-            return selection;
-        });
+        this.timeSelect = this.statisticsService.intervals
+            .map((interval) => new TimeSelection(this.createLabel(interval), interval));
+        this.currentTimeSelection = this.timeSelect[3];
     }
 
     createLabel(interval: number) {
@@ -86,7 +82,7 @@ export class Overview extends Vue {
     }
 
     get getRow() {
-        if (this.layoutSelect[this.layoutIndex] === 'Row') {
+        if (this.currentLayout === 'Row') {
             return true;
         }
         else {
@@ -123,8 +119,8 @@ export class Overview extends Vue {
         this.eventHub.$emit('updateStats');
     }
 
-    updateFetch(index: number) {
-        this.timeIndex = index;
+    updateFetch(selection: TimeSelection) {
+        this.currentTimeSelection =  selection;
         this.scheduleFetch();
     }
 
@@ -327,6 +323,6 @@ export class Overview extends Vue {
         this.getData();
         this.fetchInterval = setInterval(() => {
             this.getData();
-        }, this.timeSelect[this.timeIndex].time * 1000);
+        }, this.currentTimeSelection.time * 1000);
     }
 }

@@ -48,6 +48,7 @@ export class Stats extends Vue {
     getData() {
         // console.log('updating stats');
         // console.log(this.fetchPeriod);
+        // console.log('name: ', this.getName());
         let data =  this.statisticsService.getData(this.fetchPeriod, [this.getName()]);
         // console.log('raw data...', data);
         let filteredData = data.get(this.getName()).filter(val => val);
@@ -58,7 +59,7 @@ export class Stats extends Vue {
 
     getName() {
         if (this.group.engines.length > 1) {
-            return this.group.name + '@' + this.getConnectionName(this.group.engines[0].id);
+            return this.group.name;
         } else {
             return this.group.engines[0].engineId + '@' + this.getConnectionName(this.group.engines[0].id);
         }

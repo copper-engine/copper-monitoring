@@ -5,22 +5,22 @@
         <div class="button-container">
             <v-menu offset-y>
                 <v-tooltip top content-class="tooltip-text" slot="activator">
-                    <v-btn slot="activator"><v-icon>mdi-clock</v-icon>{{ timeSelect[timeIndex].label }}</v-btn>
+                    <v-btn slot="activator"><v-icon>mdi-clock</v-icon>{{ currentTimeSelection.label }}</v-btn>
                     <span>Fetch Period</span>
                 </v-tooltip>
                 <v-list>
-                    <v-list-tile v-for="(selection, index) in timeSelect" :key="selection.id" @click="updateFetch(index)">
+                    <v-list-tile v-for="selection in timeSelect" :key="selection.time" @click="updateFetch(selection)">
                     <v-list-tile-title>{{ selection.label }}</v-list-tile-title>
                     </v-list-tile>
                 </v-list>
             </v-menu>
             <v-menu offset-y>
                 <v-tooltip top content-class="tooltip-text" slot="activator">
-                    <v-btn slot="activator"><v-icon>mdi-menu</v-icon>{{ layoutSelect[layoutIndex] }}</v-btn>
+                    <v-btn slot="activator"><v-icon>mdi-menu</v-icon>{{ currentLayout }}</v-btn>
                     <span>Layout Type</span>
                 </v-tooltip>
                 <v-list>
-                    <v-list-tile v-for="(layout, index) in layoutSelect" :key="layout.id" @click="layoutIndex = index">
+                    <v-list-tile v-for="layout in layoutSelect" :key="layout.id" @click="currentLayout = layout">
                     <v-list-tile-title>{{ layout }}</v-list-tile-title>
                     </v-list-tile>
                 </v-list>
@@ -48,7 +48,7 @@
             <h2>{{ getName(group) }}</h2>
             <stats
             :group = 'group'
-            :fetchPeriod = 'timeSelect[timeIndex].time'>
+            :fetchPeriod = 'currentTimeSelection.time'>
             </stats>
         </v-layout>
     </v-layout>

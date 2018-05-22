@@ -12,7 +12,7 @@ export class InfluxDBService {
 
 
     // interval is in seconds
-    getData(interval: number, engineNames: string[]): Map<String, StatesPrint[]> { 
+    getData(interval: number, engineNames: string[]): Promise<void | Map<String, StatesPrint[]>> { 
 
         let timeUntil = moment().subtract(interval * 30, 'seconds').unix() * 1000000000;
 
@@ -30,9 +30,9 @@ export class InfluxDBService {
             return Axios.get(this.requestBase() + query);
         });
        
-        Promise.all(allRequests).then( responsesArr => {
-            console.log('bulk response', responsesArr);
-            console.log('responsesArr[0].data.results[0].series[0].values', responsesArr[0].data.results[0].series[0].values);
+        return Promise.all(allRequests).then( responsesArr => {
+            // console.log('bulk response', responsesArr);
+            // console.log('responsesArr[0].data.results[0].series[0].values', responsesArr[0].data.results[0].series[0].values);
             let dataMap: Map<String, StatesPrint[]> = new Map<String, StatesPrint[]>();
 
             responsesArr.forEach( (response, index) => {
@@ -42,16 +42,12 @@ export class InfluxDBService {
 
             });
 
-            console.log('dataMap', dataMap);
+            console.log('first dataMap', dataMap);
+            return dataMap;
         })
         .catch(error => {
             console.error('Can\'t connect to InfluxDB. Checkout if it\'s running. Error fetching Engine Status:', error);
         });
-
-        console.log('done');
-
-       
-        return null;
     }
 
     public testInfluxDB() {

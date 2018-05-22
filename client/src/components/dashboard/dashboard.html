@@ -4,9 +4,7 @@
         <v-toolbar-side-icon @click.stop="$refs.drawer.drawer = !$refs.drawer.drawer"></v-toolbar-side-icon>
         <v-toolbar-title>Copper Monitoring</v-toolbar-title>
         <v-spacer></v-spacer>
-        <router-link :to="getOverviewPath">
-                <v-btn class="toolbar-button"> <v-icon>mdi-chart-bar</v-icon> Overview </v-btn>        
-        </router-link>
+
         <v-menu v-model="menuOpen" offset-y class="user-menu" :close-on-content-click="false">
             <v-btn class="toolbar-button" @click="menuOpen = !menuOpen" slot="activator">  <v-icon>mdi-account</v-icon> User: {{ user.name }} </v-btn>
             <v-card class="user-menu-card">

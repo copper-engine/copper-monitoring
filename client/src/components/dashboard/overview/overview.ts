@@ -38,7 +38,7 @@ export class TimeSelection {
 export class Overview extends Vue {
     private eventHub: Vue = this.$services.eventHub;
     private statisticsService: StatisticsService = this.$services.statisticsService;
-    private influx = this.$services.influxService;
+    private influx: InfluxDBService = this.$services.influxService;
     groups: EngineGroup[] = [];
     timeSelect: TimeSelection[];
     timeIndex: number = 3;
@@ -77,7 +77,30 @@ export class Overview extends Vue {
 
     mounted() {
         this.getInfluxConnection();
-        this.getData();
+
+        this.getDataFromInflux();
+        // this.getData();
+    }
+
+    getDataFromInflux() {
+        this.groups = this.$store.getters.groupsOfEngines;
+        let names = [];
+        this.groups.forEach( group => {
+            names = names.concat(group.engines.map( engine => engine.engineId + '@' + this.getConnectionName(engine.id)));
+        });
+        // this.influx.testInfluxDB();
+
+        this.influx.getData(this.timeSelect[this.timeIndex].time, names);
+    }
+    
+    getDataFlomLocal() {
+        this.groups = this.$store.getters.groupsOfEngines;
+        this.eventHub.$emit('updateStats');
+    }
+
+    getConnectionName(id: number) {
+        let connection = this.$store.getters.engineMBeans[id].connectionSettings;
+        return connection.host + ':' + connection.port;
     }
     
     beforeDestroy() {
@@ -96,14 +119,14 @@ export class Overview extends Vue {
 
     getInfluxConnection() {
         if (this.$store.state.user.influx.username !== null && this.$store.state.user.influx.username !== undefined && this.$store.state.user.influx.username !== '')  {
-            this.username = this.$store.state.user.influx.user;
+            this.username = this.$store.state.user.influx.username;
         }
         if (this.$store.state.user.influx.password !== null && this.$store.state.user.influx.password !== undefined && this.$store.state.user.influx.password !== '') {
             this.password = this.$store.state.user.influx.password;
         }
         if (this.$store.state.user.influx.url !== null && this.$store.state.user.influx.url !== undefined && this.$store.state.user.influx.url !== '') {
             this.url = this.$store.state.user.influx.url;
-            this.username = this.$store.state.user.influx.user;
+            this.username = this.$store.state.user.influx.username;
             this.password = this.$store.state.user.influx.password;
             this.testConnection();
         }
@@ -116,11 +139,6 @@ export class Overview extends Vue {
         this.$store.state.user.influx.url = this.url;
         this.$store.state.user.influx.username = this.username;
         this.$store.state.user.influx.password = this.password;
-    }
-
-    getData() {
-        this.groups = this.$store.getters.groupsOfEngines;
-        this.eventHub.$emit('updateStats');
     }
 
     updateFetch(index: number) {
@@ -324,9 +342,9 @@ export class Overview extends Vue {
         if (this.fetchInterval) {
             clearInterval(this.fetchInterval);
         }
-        this.getData();
-        this.fetchInterval = setInterval(() => {
-            this.getData();
-        }, this.timeSelect[this.timeIndex].time * 1000);
+        // this.getData();
+        // this.fetchInterval = setInterval(() => {
+        //     this.getData();
+        // }, this.timeSelect[this.timeIndex].time * 1000);
     }
 }

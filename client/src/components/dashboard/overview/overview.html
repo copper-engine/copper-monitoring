@@ -40,6 +40,7 @@
             </v-btn>
             <v-btn class='influx-button' @click="statisticsService.stop()" v-show="statisticsService.isRunning()"><v-icon>mdi-database</v-icon>Stop Collecting</v-btn>
             <v-btn class='influx-button' @click="statisticsService.start()" v-show="!statisticsService.isRunning()"><v-icon>mdi-database</v-icon>Start Collecting</v-btn>
+            <v-btn class='influx-button' @click="statisticsService.printAggData()"><v-icon>mdi-database</v-icon>Print Stat data</v-btn>
         </div>
     </v-layout>
 
@@ -111,7 +112,7 @@
                         <div class="info-section">
                             <div class="submit-btn-container">
                                 <v-btn depressed @click="submit"
-                                :disabled="(this.$store.state.user.influx.username === null || this.$store.state.user.influx.username === undefined || this.$store.state.user.influx.username === '')"
+                                :disabled="(url === null || url === undefined || url === '')"
                                 >Test & Submit
                                 </v-btn>
                             </div>

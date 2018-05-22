@@ -83,7 +83,7 @@ export class StatisticsService {
         this.aggCounters = this.aggLength.map(x => x);
     }
 
-    getData(interval: number, engineNames: String[]): Map<String, StatesPrint[]> {
+    getData(interval: number, engineNames: String[]): Promise<void | Map<String, StatesPrint[]>> {
         console.log('Getting data for interval ', interval, engineNames);
 
         let index = this.intervals.indexOf(interval);
@@ -122,7 +122,7 @@ export class StatisticsService {
 
         console.log('Getting data result ', resultsPerEngine);
 
-        return resultsPerEngine;
+        return Promise.resolve(resultsPerEngine);
     }
     
 

@@ -41,7 +41,7 @@ export class EngineStatData {
 export class Overview extends Vue {
     private eventHub: Vue = this.$services.eventHub;
     private statisticsService: StatisticsService = this.$services.statisticsService;
-    private influx: InfluxDBService = this.$services.influxService;
+    private influxService: InfluxDBService = this.$services.influxService;
     groups: EngineGroup[] = [];
     timeSelect: TimeSelection[];
     currentTimeSelection: TimeSelection = null;
@@ -93,9 +93,12 @@ export class Overview extends Vue {
         });
         // this.influx.testInfluxDB();
 
-        this.influx.getData(this.currentTimeSelection.time, names).then( result => {
-            console.log('overview result', result);
+        this.influxService.getData(this.currentTimeSelection.time, names).then( result => {
+            console.log('influx overview result', result);
         });
+        // this.statisticsService.getData(this.currentTimeSelection.time, names).then( result => {
+        //     console.log('satistics overview result', result);
+        // });
     }
     
     getDataFlomLocal() {
@@ -296,7 +299,7 @@ export class Overview extends Vue {
     }
 
     testConnection() {
-        this.influx.testConnection().then((response: any) => {
+        this.influxService.testConnection().then((response: any) => {
             if (this.parseInfluxResposne(response) === true) {
                 this.connectionSuccess = true;
                 this.storeInfluxConnection();

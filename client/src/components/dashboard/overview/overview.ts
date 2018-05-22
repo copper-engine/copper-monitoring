@@ -26,6 +26,10 @@ export class TimeSelection {
     constructor(public label: string, public time: number) {}
 }
 
+export class EngineStatData {
+    constructor(public name: string, public data: any[]) {}
+}
+
 @Component({
     template: require('./overview.html'),
     services: ['influxService', 'eventHub', 'statisticsService'],
@@ -56,6 +60,9 @@ export class Overview extends Vue {
     clickAllowed: boolean = true;
     openTelegrafInput: boolean = false;
     openSampleQueries: boolean = false;
+    statMap = null;
+    statData: EngineStatData[] = [];
+    states = new ChartStates(true, true, true, true, true, true);
 
     created() {
         this.timeSelect = this.statisticsService.intervals
@@ -75,7 +82,7 @@ export class Overview extends Vue {
         this.getInfluxConnection();
         this.getData();
     }
-    
+
     beforeDestroy() {
         this.statisticsService.stop();
         clearInterval(this.fetchInterval);
@@ -116,7 +123,28 @@ export class Overview extends Vue {
 
     getData() {
         this.groups = this.$store.getters.groupsOfEngines;
-        this.eventHub.$emit('updateStats');
+        this.statMap =  this.statisticsService.getData(this.currentTimeSelection.time, this.getNames());
+        this.statData = [];
+        this.statMap.forEach((value, key) => {
+            this.statData.push(new EngineStatData(key, value));
+        });
+        this.eventHub.$emit('updateChartData');
+    }
+
+    getNames() {
+        let nameArray = this.groups.map((group) => {
+            if (group.engines.length > 1) {
+                return group.name;
+            } else {
+                return group.engines[0].engineId + '@' + this.getConnectionName(group.engines[0].id);
+            }
+        });
+        return nameArray;
+    }
+
+    getConnectionName(id: number) {
+        let connection = this.$store.getters.engineMBeans[id].connectionSettings;
+        return connection.host + ':' + connection.port;
     }
 
     updateFetch(selection: TimeSelection) {
@@ -147,13 +175,13 @@ export class Overview extends Vue {
             '     username = "' + this.$store.state.user.name + '"\n' +
             '     password = "' + this.$store.state.user.password + '"\n\n' +
             '#From connections\n';
-       
+
         this.$store.state.connectionResults.map((connection) => {
             this.configText += '[[inputs.jolokia2_proxy.target]]\n' +
                 '     url = "service:jmx:rmi:///jndi/rmi://' + connection.settings.host + ':' + connection.settings.port + '/jmxrmi"\n';
         });
 
-        this.configText += '\n#From engines. Name made from connection name and engine name to prevent collisions\n';    
+        this.configText += '\n#From engines. Name made from connection name and engine name to prevent collisions\n';
         this.$store.state.engineStatusList.map((engine, index) => {
             let bean = this.$store.getters.engineMBeans[engine.id];
             let name = this.parseBeanName(bean.name);
@@ -196,7 +224,7 @@ export class Overview extends Vue {
             }
 
             this.queryText += 'SELECT' + '\nMAX("ErrorCount") AS "MAX_ErrorCount",' + '\nMAX("DequeuedCount") AS "MAX_DequeuedCount",' + '\nMAX("FinishedCount") AS "MAX_FinishedCount",' +
-                '\nMAX("InvalidCount") AS "MAX_InvalidCount",' + '\nMAX("RunningCount") AS "MAX_RunningCount",' + '\nMAX("WaitingCount") AS "MAX_WaitingCount"' + 
+                '\nMAX("InvalidCount") AS "MAX_InvalidCount",' + '\nMAX("RunningCount") AS "MAX_RunningCount",' + '\nMAX("WaitingCount") AS "MAX_WaitingCount"' +
                 '\nFROM "telegraf"."autogen"."' + engine.engineId + '@' + bean.connectionSettings.host + ':' + bean.connectionSettings.port + '"' +
                 '\nWHERE time > now() - 1h GROUP BY time(10s) FILL(null)\n\n';
         });
@@ -223,9 +251,9 @@ export class Overview extends Vue {
         } else {
             let elem = window.document.createElement('a');
             elem.href = window.URL.createObjectURL(blob);
-            elem.download = 'telegraf.conf';        
+            elem.download = 'telegraf.conf';
             document.body.appendChild(elem);
-            elem.click();        
+            elem.click();
             document.body.removeChild(elem);
         }
     }
@@ -281,7 +309,7 @@ export class Overview extends Vue {
                 this.clickAllowed = true;
             }, 750);
             if (this.openTelegrafInput === true) {
-                this.scrollToTop(100); 
+                this.scrollToTop(100);
             }
             this.openTelegrafInput = !this.openTelegrafInput;
         }
@@ -294,7 +322,7 @@ export class Overview extends Vue {
                 this.clickAllowed = true;
             }, 750);
             if (this.openSampleQueries === true) {
-                this.scrollToTop(150); 
+                this.scrollToTop(150);
             }
             this.openSampleQueries = !this.openSampleQueries;
         }

@@ -2,6 +2,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { StatesPrint, ChartStates, EngineGroup, EngineStatus } from '../../../../models/engine';
 import { VueCharts, Bar, Line, mixins } from 'vue-chartjs';
 import { StatisticsService } from '../../../../services/statisticsService';
+import { EngineStatData } from '../index';
 
 @Component({
     template: require('./stats.html'),
@@ -19,10 +20,8 @@ import { StatisticsService } from '../../../../services/statisticsService';
 })
 
 export class Stats extends Vue {
-    @Prop() group: EngineGroup;
-    @Prop() fetchPeriod: number;
+    @Prop() dataset: EngineStatData;
     private eventHub: Vue = this.$services.eventHub;
-    private statisticsService: StatisticsService = this.$services.statisticsService;
     chartData = null;
     states = new ChartStates(true, true, true, true, true, true);
     chartOptions = {
@@ -38,41 +37,20 @@ export class Stats extends Vue {
     };
 
     created() {
-        this.eventHub.$on('updateStats', this.getData);
+        this.eventHub.$on('updateChartData', this.update);
     }
 
     mounted() {
-        this.getData();
+        this.update();
     }
 
-    getData() {
-        // console.log('updating stats');
-        // console.log(this.fetchPeriod);
-        // console.log('name: ', this.getName());
-        let data =  this.statisticsService.getData(this.fetchPeriod, [this.getName()]);
-        // console.log('raw data...', data);
-        let filteredData = data.get(this.getName()).filter(val => val);
-        // console.log('filtered data...', filteredData);
-        this.chartData = this.getChartData(this.states, filteredData);
-        // console.log('chart data...', this.chartData);
-    }
-
-    getName() {
-        if (this.group.engines.length > 1) {
-            return this.group.name;
-        } else {
-            return this.group.engines[0].engineId + '@' + this.getConnectionName(this.group.engines[0].id);
-        }
-    }
-
-    getConnectionName(id: number) {
-        let connection = this.$store.getters.engineMBeans[id].connectionSettings;
-        return connection.host + ':' + connection.port;
+    update() {
+        this.chartData = this.getChartData(this.states, this.dataset.data);
     }
 
     getChartData(states: ChartStates, statesPrint: StatesPrint[]) {
         let dataset = [];
-        if (statesPrint) { 
+        if (statesPrint) {
             if (states.running) {
                 dataset.push({
                     label: 'RUNNING',

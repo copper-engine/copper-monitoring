@@ -416,6 +416,12 @@ body {
                     color: $dark-text-color;
                 }
             }
+            .state-filter {
+                width: 150px;
+                padding: 10px;
+                padding-top: 15px;
+                background-color: $light-background;
+            }
         }
     }
 }
@@ -442,6 +448,9 @@ body {
                     .icon {
                         color: $light-text-color;
                     }
+                }
+                .state-filter {
+                    background-color: $dark-background;
                 }
             }
         }

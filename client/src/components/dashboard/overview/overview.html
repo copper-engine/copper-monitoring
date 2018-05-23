@@ -54,6 +54,7 @@
             </v-btn>
             <v-btn class='influx-button' @click="statisticsService.stop()" v-show="statisticsService.isRunning()"><v-icon>mdi-database</v-icon>Stop Collecting</v-btn>
             <v-btn class='influx-button' @click="statisticsService.start()" v-show="!statisticsService.isRunning()"><v-icon>mdi-database</v-icon>Start Collecting</v-btn>
+            <v-btn class='influx-button' @click="statisticsService.printAggData()"><v-icon>mdi-database</v-icon>Print Stat data</v-btn>
         </div>
     </v-layout>
 

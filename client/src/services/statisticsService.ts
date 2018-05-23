@@ -30,6 +30,7 @@ export class StatisticsService {
             this.lsKey = this.store.state.user.name + ':statitics';
             this.lsAggKey = this.store.state.user.name + ':statitics:aggCounters';
 
+            // SIMULATE GUP here
             this.aggData = JSON.parse(localStorage.getItem(this.lsKey));
             if (!this.aggData || this.aggData.length !== this.intervals.length) {
                 this.aggData = this.intervals.map(int => []);   
@@ -82,12 +83,15 @@ export class StatisticsService {
         this.aggCounters = this.aggLength.map(x => x);
     }
 
-    getData(interval: number, engineNames: String[]): Map<String, StatesPrint[]> {
+    getData(interval: number, engineNames: String[]): Promise<void | Map<String, StatesPrint[]>> {
+        console.log('Getting data for interval ', interval, engineNames);
+
         let index = this.intervals.indexOf(interval);
         if (index === -1) {
             console.error(`Illegal interval:  ${interval}. Interval expected to be one of thouse: ${this.intervals}`);
             return null;
         }
+
         let data: StatesPrint[][] = this.aggData[index].slice(0, this.pointNumbers);
 
         if (engineNames && engineNames.length > 0) {
@@ -103,6 +107,7 @@ export class StatisticsService {
             // TODO make coment here about what is that
             for (let i = 0; i < engineResult.length; i++) {
                 if (!engineResult[i]) {
+                    console.log('No data will put empty State Print');
                     if (data[i][0]) {
                         engineResult[i] = new StatesPrint(data[i][0].time);
                     } else {
@@ -115,7 +120,9 @@ export class StatisticsService {
             resultsPerEngine.set(engineName, engineResult);
         });
 
-        return resultsPerEngine;
+        console.log('Getting data result ', resultsPerEngine);
+
+        return Promise.resolve(resultsPerEngine);
     }
     
 
@@ -144,6 +151,11 @@ export class StatisticsService {
         }
     }
 
+    printAggData() {
+        console.log('Statistics Data: ', this.aggData);
+        console.log('Statistics agg counters: ', this.aggCounters);
+    }
+
     saveToLocalStorage() {
         try {
             localStorage.setItem(this.lsKey, JSON.stringify(this.aggData));
@@ -161,24 +173,28 @@ export class StatisticsService {
             enginesStates[i].forEach(states => {
                 let currentMaxStates = this.findEngineStates(maxEngineStates, states.engine);
 
-                // in case currentMaxStates.dequeued === undefined
-                if (currentMaxStates.dequeued < states.dequeued || !currentMaxStates.dequeued ) {
-                    currentMaxStates.dequeued = states.dequeued;
-                }
-                if (currentMaxStates.error < states.error || !currentMaxStates.error ) {
-                    currentMaxStates.error = states.error;
-                }
-                if (currentMaxStates.finished < states.finished || !currentMaxStates.finished ) {
-                    currentMaxStates.finished = states.finished;
-                }
-                if (currentMaxStates.invalid < states.invalid || !currentMaxStates.invalid ) {
-                    currentMaxStates.invalid = states.invalid;
-                }
-                if (currentMaxStates.running < states.running || !currentMaxStates.running ) {
-                    currentMaxStates.running = states.running;
-                }
-                if (currentMaxStates.waiting < states.waiting || !currentMaxStates.waiting ) {
-                    currentMaxStates.waiting = states.waiting;
+                if (!currentMaxStates) {
+                    console.error('currentMaxStates is undefined for: states.engine', states.engine, maxEngineStates);                    
+                } else {
+                    // in case currentMaxStates.dequeued === undefined
+                    if (currentMaxStates.dequeued < states.dequeued || !currentMaxStates.dequeued ) {
+                        currentMaxStates.dequeued = states.dequeued;
+                    }
+                    if (currentMaxStates.error < states.error || !currentMaxStates.error ) {
+                        currentMaxStates.error = states.error;
+                    }
+                    if (currentMaxStates.finished < states.finished || !currentMaxStates.finished ) {
+                        currentMaxStates.finished = states.finished;
+                    }
+                    if (currentMaxStates.invalid < states.invalid || !currentMaxStates.invalid ) {
+                        currentMaxStates.invalid = states.invalid;
+                    }
+                    if (currentMaxStates.running < states.running || !currentMaxStates.running ) {
+                        currentMaxStates.running = states.running;
+                    }
+                    if (currentMaxStates.waiting < states.waiting || !currentMaxStates.waiting ) {
+                        currentMaxStates.waiting = states.waiting;
+                    }
                 }
             });
         }

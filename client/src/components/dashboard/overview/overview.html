@@ -53,7 +53,7 @@
                 Connect InfluxDB
             </v-btn>
             <v-btn class='influx-button' @click="statisticsService.stop()" v-show="statisticsService.isRunning()"><v-icon>mdi-database</v-icon>Stop Collecting</v-btn>
-            <v-btn class='influx-button' @click="statisticsService.start()" v-show="!statisticsService.isRunning()"><v-icon>mdi-database</v-icon>Start Collecting</v-btn>
+            <v-btn class='influx-button' @click="statisticsService.start()" v-show="!statisticsService.isRunning()" :disabled="(useInfluxDB === true)"><v-icon>mdi-database</v-icon>Start Collecting</v-btn>
             <v-btn class='influx-button' @click="statisticsService.printAggData()"><v-icon>mdi-database</v-icon>Print Stat data</v-btn>
         </div>
     </v-layout>
@@ -103,6 +103,10 @@
                                 </div>
                             </v-menu>
                         </v-layout>
+                        <v-layout row class="input-style influx-enable">
+                            <h2>Enable InfluxDB Connection</h2>
+                            <v-switch v-model="useInfluxDB"></v-switch>
+                        </v-layout>
                         <v-flex class="description">
                             <p>With a valid connection to Influx DB, this page can display Influx DB's statistics. Fore more information,
                                     visit <a href="https://www.influxdata.com/">Influx DB</a></p>
@@ -124,12 +128,8 @@
                         </v-layout>
                         <div class="info-section">
                             <v-layout column class="submit-btn-container">
-                                <v-btn depressed @click="clear"
-                                >Clear & Disconnect
-                                </v-btn>
                                 <v-btn depressed @click="submit"
-                                :disabled="(url === null || url === undefined || url === '')"
-                                >Test & Submit
+                                >Submit
                                 </v-btn>
                             </v-layout>
                             <div class="telegraf-scroll-area">

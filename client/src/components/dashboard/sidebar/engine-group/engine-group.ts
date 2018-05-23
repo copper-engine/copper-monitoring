@@ -1,5 +1,5 @@
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
-import { EngineGroup, EngineStatus, WorkflowFilter } from '../../../../models/engine';
+import { EngineGroup, EngineStatus, WorkflowFilter, State } from '../../../../models/engine';
 import { JmxService } from '../../../../services/jmxService';
 import { Link } from '../../../../models/link';
 import './engine-group.scss';
@@ -60,11 +60,12 @@ export class EngineGroupComponent extends Vue {
         });
     }
     getWFCount() {
-        let count = 0;
-        for (let i = 0; i < this.group.engines.length; i++) {
-            count = count + this.group.engines[i].instances;
-        }
-        this.wfCount = count;
+        let filter = new WorkflowFilter;
+        filter.states = [State.RUNNING];
+        this.mbean = this.$store.getters.engineMBeans[this.group.engines[0].id];
+        this.jmxService.countWFRequest(this.mbean.connectionSettings, this.mbean.name, this.$store.state.user, filter).then((response: number) => {
+            this.wfCount = response;
+        });
      }
 
     get links(): Link[] {

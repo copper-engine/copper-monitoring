@@ -25,20 +25,6 @@
                             ></v-text-field>
                         </v-flex>
                     </v-layout>
-                    <v-layout row class="input-container input-style">
-                        <v-flex class="input-label">
-                            <!-- Used for fetching data from engine -->
-                            Not older than 'y' minutes
-                        </v-flex>
-                        <v-flex class="input">
-                            <v-text-field
-                            v-on:change="setFetch()"
-                            v-on:keyup.enter="setFetch()"
-                            v-model="fetch"
-                            mask="###"
-                            ></v-text-field>
-                        </v-flex>
-                    </v-layout>
                     <v-layout row class="switch-container">
                         <v-flex class="switch-label">
                             Dark Theme

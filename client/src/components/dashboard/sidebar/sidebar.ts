@@ -11,6 +11,7 @@ const configComponent = () => import('./config').then(({ ConfigComponent }) => C
 
 @Component({
     template: require('./sidebar.html'),
+    services: ['eventHub'],
     components: {
         'connection-status': connectionStatusComponent,
         'group': engineGroupComponent,
@@ -19,6 +20,7 @@ const configComponent = () => import('./config').then(({ ConfigComponent }) => C
     }
 })
 export class SidebarComponent extends Vue {
+    private eventHub: Vue = this.$services.eventHub;
     drawer = null;
     miniVariant = false;
     settingsShowed = false;
@@ -26,8 +28,16 @@ export class SidebarComponent extends Vue {
     closeAllEngines = false;
     selectConnectionsToClose = [];
     clickAllowed = true;
-
+    collectingData: boolean = false;
     emptyConnectionSettings = new ConnectionSettings();
+
+    created() {
+        this.eventHub.$on('toggleCollectingData', this.toggleCollectingData);
+    }
+
+    toggleCollectingData(input: boolean) {
+        this.collectingData = input;
+    }
 
     get getOverviewPath() {
         let params = '?' + this.$store.getters.connectionsAsParams;

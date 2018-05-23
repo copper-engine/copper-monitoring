@@ -361,7 +361,7 @@ export class JmxService {
     private createEngineActivityRequest(connectionSettings: ConnectionSettings, mbean: string, user: User) {
         return this.createJmxExecRequest(connectionSettings, mbean, {
             operation: 'queryEngineActivity',
-            arguments: [user.settings.fetchPeriod], // fetch info for last N minutes
+            arguments: [5], // fetch info for last N minutes
         });
     }
 

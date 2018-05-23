@@ -301,6 +301,19 @@ export class Overview extends Vue {
         }
     }
 
+    clear() {
+        localStorage.removeItem('influxURL');
+        localStorage.removeItem('influxUser');
+        localStorage.removeItem('influxPass');
+        this.url = null;
+        this.username = null;
+        this.password = null;
+        this.$store.state.user.influx.url = this.url;
+        this.$store.state.user.influx.username = this.username;
+        this.$store.state.user.influx.password = this.password;
+        this.connectionSuccess = false;
+    }
+
     testConnection() {
         this.influxService.testConnection().then((response: any) => {
             if (this.parseInfluxResposne(response) === true) {

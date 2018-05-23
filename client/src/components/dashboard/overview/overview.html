@@ -123,12 +123,15 @@
                             <h1>Connection</h1>
                         </v-layout>
                         <div class="info-section">
-                            <div class="submit-btn-container">
+                            <v-layout column class="submit-btn-container">
+                                <v-btn depressed @click="clear"
+                                >Clear & Disconnect
+                                </v-btn>
                                 <v-btn depressed @click="submit"
                                 :disabled="(url === null || url === undefined || url === '')"
                                 >Test & Submit
                                 </v-btn>
-                            </div>
+                            </v-layout>
                             <div class="telegraf-scroll-area">
                                 <v-layout class="input-container input-style" column>
                                     <v-text-field

@@ -18,8 +18,11 @@
                         <v-flex class="link-icon">
                             <v-icon dark>mdi-chart-bar</v-icon>
                         </v-flex>
-                        <div class="link-name">
+                        <div class="link-name" v-if="!collectingData">
                             Overview
+                        </div>
+                        <div class="link-name" v-if="collectingData">
+                            Overview (collecting data)
                         </div>
                     </v-layout> 
                 </div>    

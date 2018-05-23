@@ -86,14 +86,18 @@ export class Overview extends Vue {
             this.useInfluxDB = true;
             this.testConnection();
         }
+        this.checkStatService();
         // this.getDataFromInflux();
         this.getData();
     }
 
     @Watch('useInfluxDB')
-    stopStatService() {
+    checkStatService() {
         if (this.useInfluxDB === true) {
             this.statisticsService.stop();
+            this.eventHub.$emit('toggleCollectingData', false);
+        } else {
+            this.eventHub.$emit('toggleCollectingData', true);
         }
      }
 

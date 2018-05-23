@@ -208,31 +208,20 @@ export class StatisticsService {
 
     async fetchingData() {
         let result: StatesPrint[] = [];
-        let groupsOfEngines: EngineGroup[] = this.store.getters.groupsOfEngines;
+        let engines: EngineStatus[] = this.store.state.engineStatusList;
         let promises: Promise<void>[] = [];
 
+
         // can be improved by calling 1 jolokia request
-        if (groupsOfEngines) {
-            groupsOfEngines.forEach(group => {
-                if (group.name && group.engines.length > 1) {
-                    let mbeans = group.engines.map((engine) => this.store.getters.engineMBeans[engine.id]); 
-                    promises.push(this.jmxService.getGroupChartCounts(mbeans, group.engines.length, this.store.state.user).then((newStates: StatesPrint) => {
-                        // this.addNewState(group.name, newStates);
-                        newStates.engine = group.name;
-                        result.push(newStates);
-                    }));
-                } else {
-                    // engines without groups grouped to group with undefined name
-                    group.engines.forEach( (engine: EngineStatus) => {
-                        let mbean: MBean = this.store.getters.engineMBeans[engine.id];
-                        promises.push(this.jmxService.getChartCounts(this.store.getters.engineMBeans[engine.id], this.store.state.user).then((newStates: StatesPrint) => {   
-                            // can be improved by getting connection settings & engine ID
-                            // this.addNewState('' + engine.id, newStates);
-                            newStates.engine = engine.engineId + '@' + mbean.connectionSettings.toString();
-                            result.push(newStates);
-                        }));
-                    });
-                }
+        if (engines) {
+            engines.forEach( (engine: EngineStatus) => {
+                let mbean: MBean = this.store.getters.engineMBeans[engine.id];
+                promises.push(this.jmxService.getChartCounts(this.store.getters.engineMBeans[engine.id], this.store.state.user).then((newStates: StatesPrint) => {   
+                    // can be improved by getting connection settings & engine ID
+                    // this.addNewState('' + engine.id, newStates);
+                    newStates.engine = engine.engineId + '@' + mbean.connectionSettings.toString();
+                    result.push(newStates);
+                }));
             });
         }
 

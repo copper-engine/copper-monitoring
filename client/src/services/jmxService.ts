@@ -432,19 +432,19 @@ export class JmxService {
         }
         let pools = response.data.map((pool, index) => {
             let newPool = new ProcessorPool (
-            pool.value.Id,
-            pool.value.ProcessorPoolState,
-            pool.value.ThreadPriority,
-            pool.value.QueueSize,
-            pool.value.MemoryQueueSize,
-            pool.value.DequeBulkSize,
-            pool.value.EmptyQueueWaitMSec,
-            pool.value.UpperThresholdReachedWaitMSec,            
-            pool.value.UpperThreshold,
-            pool.value.LowerThreshold,
-            pool.value.NumberOfThreads,
-            pool.value.NumberOfActiveThreads, 
-            mbeans[index]
+                pool.value.Id,
+                pool.value.ProcessorPoolState,
+                pool.value.ThreadPriority,
+                pool.value.QueueSize,
+                pool.value.MemoryQueueSize,
+                pool.value.DequeBulkSize,
+                pool.value.EmptyQueueWaitMSec,
+                pool.value.UpperThresholdReachedWaitMSec,            
+                pool.value.UpperThreshold,
+                pool.value.LowerThreshold,
+                pool.value.NumberOfThreads,
+                pool.value.NumberOfActiveThreads, 
+                mbeans[index]
             );
             return newPool;
         });

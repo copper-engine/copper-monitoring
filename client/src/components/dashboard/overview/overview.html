@@ -3,6 +3,20 @@
         <h2>Statistics Overview</h2>
         <v-spacer></v-spacer>
         <div class="button-container">
+            <v-menu offset-y :close-on-content-click="false">
+                <v-tooltip top content-class="tooltip-text" slot="activator">
+                    <v-btn slot="activator"><v-icon>mdi-settings</v-icon>States</v-btn>
+                    <span>Select States to Include</span>
+                </v-tooltip>
+                <v-layout column class="state-filter input-style" :close-on-content-click="false">
+                    <v-flex><v-switch :label="'Running'" v-model="states.running"></v-switch></v-flex>            
+                    <v-flex><v-switch :label="'Waiting'" v-model="states.waiting"></v-switch></v-flex>            
+                    <v-flex><v-switch :label="'Finished'" v-model="states.finished"></v-switch></v-flex>            
+                    <v-flex><v-switch :label="'Dequeued'" v-model="states.dequeued"></v-switch></v-flex>            
+                    <v-flex><v-switch :label="'Error'" v-model="states.error"></v-switch></v-flex>            
+                    <v-flex><v-switch :label="'Invalid'" v-model="states.invalid"></v-switch></v-flex>    
+                </v-layout>
+            </v-menu>
             <v-menu offset-y>
                 <v-tooltip top content-class="tooltip-text" slot="activator">
                     <v-btn slot="activator"><v-icon>mdi-clock</v-icon>{{ currentTimeSelection.label }}</v-btn>
@@ -45,8 +59,8 @@
     </v-layout>
 
     <v-layout :row='getRow' :column='!getRow' class="stat-card-container">
-            <v-layout class="stat-card" v-for="group in this.statData" :key="group.id" column>
-            <h2>{{ group.name }}</h2>
+            <v-layout class="stat-card" v-for="(group, index) in this.chartData" :key="group.id" column>
+            <h2>{{ chartName[index] }}</h2>
             <stats
             :dataset = 'group'>
             </stats>
@@ -109,12 +123,15 @@
                             <h1>Connection</h1>
                         </v-layout>
                         <div class="info-section">
-                            <div class="submit-btn-container">
+                            <v-layout column class="submit-btn-container">
+                                <v-btn depressed @click="clear"
+                                >Clear & Disconnect
+                                </v-btn>
                                 <v-btn depressed @click="submit"
                                 :disabled="(url === null || url === undefined || url === '')"
                                 >Test & Submit
                                 </v-btn>
-                            </div>
+                            </v-layout>
                             <div class="telegraf-scroll-area">
                                 <v-layout class="input-container input-style" column>
                                     <v-text-field

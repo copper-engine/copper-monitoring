@@ -61,8 +61,9 @@ export class Overview extends Vue {
     openTelegrafInput: boolean = false;
     openSampleQueries: boolean = false;
     statMap = null;
-    statData: EngineStatData[] = [];
+    chartName: string[] = [];
     states = new ChartStates(true, true, true, true, true, true);
+    chartData: any[] = [];
 
     created() {
         this.timeSelect = this.statisticsService.intervals
@@ -144,17 +145,20 @@ export class Overview extends Vue {
         this.$store.state.user.influx.password = this.password;
     }
 
+    @Watch('states', { deep: true })
     getData() {
         this.groups = this.$store.getters.groupsOfEngines;
+
         // TODO select appropriate service to call get data (influxDB Service or statistics Service)
         // this.statisticsService.getData(this.currentTimeSelection.time, this.getNames()).then( resultMap => {
         this.influxService.getData(this.currentTimeSelection.time, this.getNames()).then( resultMap => {
             this.statMap = resultMap;
-            this.statData = [];
+            this.chartName = [];
+            this.chartData = [];
             this.statMap.forEach((value, key) => {
-                this.statData.push(new EngineStatData(key, value));
+                this.chartName.push(key);
+                this.chartData.push(this.getChartData(this.states, value));
             });
-            this.eventHub.$emit('updateChartData');
         });
     }
 
@@ -302,6 +306,19 @@ export class Overview extends Vue {
         }
     }
 
+    clear() {
+        localStorage.removeItem('influxURL');
+        localStorage.removeItem('influxUser');
+        localStorage.removeItem('influxPass');
+        this.url = null;
+        this.username = null;
+        this.password = null;
+        this.$store.state.user.influx.url = this.url;
+        this.$store.state.user.influx.username = this.username;
+        this.$store.state.user.influx.password = this.password;
+        this.connectionSuccess = false;
+    }
+
     testConnection() {
         this.influxService.testConnection().then((response: any) => {
             if (this.parseInfluxResposne(response) === true) {
@@ -380,4 +397,56 @@ export class Overview extends Vue {
             this.getData();
         }, this.currentTimeSelection.time * 1000);
     }
+
+    getChartData(states: ChartStates, statesPrint: StatesPrint[]) {
+        let dataset = [];
+        if (statesPrint) {
+            if (states.running) {
+                dataset.push({
+                    label: 'RUNNING',
+                    backgroundColor: '#41ce00c4', // green
+                    data: statesPrint.map((state) => state ? state.running : 0)
+                });
+            }
+            if (states.waiting) {
+                dataset.push({
+                    label: 'WAITING',
+                    backgroundColor: '#e4c200de', // yellow
+                    data: statesPrint.map((state) => state ? state.waiting : 0)
+                });
+            }
+            if (states.finished) {
+                dataset.push({
+                    label: 'FINISHED',
+                    backgroundColor: '#1ad8b9c4',  // grey
+                    data: statesPrint.map((state) => state ? state.finished : 0)
+                });
+            }
+            if (states.dequeued) {
+                dataset.push({
+                    label: 'DEQUEUED',
+                    backgroundColor: '#0b7babc4',  // blue
+                    data: statesPrint.map((state) => state ? state.dequeued : 0)
+                });
+            }
+            if (states.error) {
+                dataset.push({
+                    label: 'ERROR',
+                    backgroundColor: '#de1515c4',  // red
+                    data: statesPrint.map((state) => state ? state.error : 0)
+                });
+            }
+            if (states.invalid) {
+                dataset.push({
+                    label: 'INVALID',
+                    backgroundColor: '#770202c4',  // dark red
+                    data: statesPrint.map((state) => state ? state.invalid : 0)
+                });
+            }
+        }
+        return {
+            labels: statesPrint ? statesPrint.map((state) => state ? (Vue as any).moment(state.time).format('HH:mm:ss') : 'NA') : [],
+            datasets: dataset
+        };
+  }
 }

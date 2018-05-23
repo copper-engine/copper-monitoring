@@ -167,10 +167,10 @@ export class StatisticsService {
     }
         
     max(enginesStates: StatesPrint[][]): StatesPrint[] {
-        let maxEngineStates: StatesPrint[] = enginesStates[0];
+        let maxEngineStates: StatesPrint[] = enginesStates[0].filter( engineState => engineState.engine);
 
         for (let i = 1; i < enginesStates.length; i++) {
-            enginesStates[i].forEach(states => {
+            enginesStates[i].filter( engineState => engineState.engine).forEach(states => {
                 let currentMaxStates = this.findEngineStates(maxEngineStates, states.engine);
 
                 if (!currentMaxStates) {

@@ -162,35 +162,20 @@ export class Overview extends Vue {
     }
 
     @Watch('states', { deep: true })
+    @Watch('useInfluxDB')
     getData() {
-        // TODO select appropriate service to call get data (influxDB Service or statistics Service)
-        // this.influxService.getData(this.currentTimeSelection.time, this.getNames()).then( resultMap => {
-        this.statisticsService.getData(this.currentTimeSelection.time, this.getNames()).then( (resultMap: Map<String, StatesPrint[]>) => {
-            this.statMap = new Map<String, StatesPrint[]>();
-            this.$store.getters.groupsOfEngines.map((group: EngineGroup) => {
-                if (group.engines.length > 1) {
-                    let engines: StatesPrint[][] = group.engines.map( engine => resultMap.get(this.getEngineMapKey(engine)));
+        let fetchingDataPromise: Promise<void | Map<String, StatesPrint[]>>;
 
-                    if (engines && engines.length > 0) {
-                        let gropStates: StatesPrint[] = engines[0].map(state => Object.assign({}, state));
+        if (this.useInfluxDB) {
+            console.log('using Influx DB');
+            fetchingDataPromise = this.influxService.getData(this.currentTimeSelection.time, this.getNames());
+        } else {
+            console.log('using Local Storage DB');
+            fetchingDataPromise = this.statisticsService.getData(this.currentTimeSelection.time, this.getNames());
+        }
 
-                        for ( let j = 0; j < engines[0].length; j++ ) {
-                            for (let i = 1; i < engines.length; i++) {
-                                gropStates[j].running += engines[i][j].running; 
-                                gropStates[j].dequeued += engines[i][j].dequeued;
-                            }
-                        }
-
-                        this.statMap.set(group.name, gropStates);
-                    } else {
-                        console.error(`No statistic for group ${group.name} with engines ${group.engines}`);
-                    }
-                } else {
-                    let engineName = this.getEngineMapKey(group.engines[0]);
-                    this.statMap.set(engineName, resultMap.get(engineName));
-                }
-            });
-
+        fetchingDataPromise.then( (resultMap: Map<String, StatesPrint[]>) => {
+            this.statMap = resultMap ? this.groupDataResult(resultMap) : [];
             this.chartName = [];
             this.chartData = [];
             if (this.statMap) {
@@ -200,6 +185,35 @@ export class Overview extends Vue {
                 });
             }
         });
+    }
+
+    groupDataResult(resultMap: Map<String, StatesPrint[]>) {
+        let statMap = new Map<String, StatesPrint[]>();
+        this.$store.getters.groupsOfEngines.forEach((group: EngineGroup) => {
+            if (group.engines.length > 1) {
+                let engines: StatesPrint[][] = group.engines.map( engine => resultMap.get(this.getEngineMapKey(engine)));
+
+                if (engines && engines.length > 0) {
+                    let gropStates: StatesPrint[] = engines[0].map(state => Object.assign({}, state));
+
+                    for ( let j = 0; j < engines[0].length; j++ ) {
+                        for (let i = 1; i < engines.length; i++) {
+                            gropStates[j].running += engines[i][j].running; 
+                            gropStates[j].dequeued += engines[i][j].dequeued;
+                        }
+                    }
+
+                    statMap.set(group.name, gropStates);
+                } else {
+                    console.error(`No statistic for group ${group.name} with engines ${group.engines}`);
+                }
+            } else {
+                let engineName = this.getEngineMapKey(group.engines[0]);
+                statMap.set(engineName, resultMap.get(engineName));
+            }
+        });
+
+        return statMap;
     }
 
     getEngineMapKey(engine: EngineStatus) {

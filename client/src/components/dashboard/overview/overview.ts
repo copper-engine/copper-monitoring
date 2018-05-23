@@ -81,7 +81,9 @@ export class Overview extends Vue {
 
     mounted() {
         this.getInfluxConnection();
-
+        if (this.url !== null && this.url !== '') {
+            this.testConnection();
+        }
         this.getDataFromInflux();
         // this.getData();
     }
@@ -124,15 +126,21 @@ export class Overview extends Vue {
     getInfluxConnection() {
         if (this.$store.state.user.influx.username !== null && this.$store.state.user.influx.username !== undefined && this.$store.state.user.influx.username !== '')  {
             this.username = this.$store.state.user.influx.username;
+        } else {
+            this.username = '';
         }
         if (this.$store.state.user.influx.password !== null && this.$store.state.user.influx.password !== undefined && this.$store.state.user.influx.password !== '') {
             this.password = this.$store.state.user.influx.password;
+        } else {
+            this.password = '';
         }
         if (this.$store.state.user.influx.url !== null && this.$store.state.user.influx.url !== undefined && this.$store.state.user.influx.url !== '') {
             this.url = this.$store.state.user.influx.url;
-            this.username = this.$store.state.user.influx.username;
-            this.password = this.$store.state.user.influx.password;
-            this.testConnection();
+            // this.username = this.$store.state.user.influx.username;
+            // this.password = this.$store.state.user.influx.password;
+            // this.testConnection();
+        } else {
+            this.url = '';
         }
     }
 
@@ -189,6 +197,7 @@ export class Overview extends Vue {
     triggerOpenInflux() {
         this.generateConfigFile();
         this.generateSampleQueries();
+        this.getInfluxConnection();
         this.openInfluxDialog = true;
     }
 
@@ -312,6 +321,7 @@ export class Overview extends Vue {
         this.$store.state.user.influx.username = this.username;
         this.$store.state.user.influx.password = this.password;
         this.connectionSuccess = false;
+        this.eventHub.$emit('showNotification', new Notification('Disconnected from InfluxDB and Connection info cleared'));
     }
 
     testConnection() {

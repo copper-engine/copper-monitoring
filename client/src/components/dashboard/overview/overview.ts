@@ -81,8 +81,8 @@ export class Overview extends Vue {
     mounted() {
         this.getInfluxConnection();
 
-        this.getDataFromInflux();
-        // this.getData();
+        // this.getDataFromInflux();
+        this.getData();
     }
 
     getDataFromInflux() {
@@ -146,12 +146,16 @@ export class Overview extends Vue {
 
     getData() {
         this.groups = this.$store.getters.groupsOfEngines;
-        this.statMap =  this.statisticsService.getData(this.currentTimeSelection.time, this.getNames());
-        this.statData = [];
-        this.statMap.forEach((value, key) => {
-            this.statData.push(new EngineStatData(key, value));
+        // TODO select appropriate service to call get data (influxDB Service or statistics Service)
+        // this.statisticsService.getData(this.currentTimeSelection.time, this.getNames()).then( resultMap => {
+        this.influxService.getData(this.currentTimeSelection.time, this.getNames()).then( resultMap => {
+            this.statMap = resultMap;
+            this.statData = [];
+            this.statMap.forEach((value, key) => {
+                this.statData.push(new EngineStatData(key, value));
+            });
+            this.eventHub.$emit('updateChartData');
         });
-        this.eventHub.$emit('updateChartData');
     }
 
     getNames() {
@@ -371,9 +375,9 @@ export class Overview extends Vue {
         if (this.fetchInterval) {
             clearInterval(this.fetchInterval);
         }
-        // this.getData();
-        // this.fetchInterval = setInterval(() => {
-        //     this.getData();
-        // }, this.currentTimeSelection.time * 1000);
+        this.getData();
+        this.fetchInterval = setInterval(() => {
+            this.getData();
+        }, this.currentTimeSelection.time * 1000);
     }
 }

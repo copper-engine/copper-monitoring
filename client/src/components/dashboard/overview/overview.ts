@@ -64,6 +64,7 @@ export class Overview extends Vue {
     chartName: string[] = [];
     states = new ChartStates(true, true, true, true, true, true);
     chartData: any[] = [];
+    useInfluxDB: boolean = false;
 
     created() {
         this.timeSelect = this.statisticsService.intervals
@@ -82,6 +83,7 @@ export class Overview extends Vue {
     mounted() {
         this.getInfluxConnection();
         if (this.url !== null && this.url !== '') {
+            this.useInfluxDB = true;
             this.testConnection();
         }
         // this.getDataFromInflux();
@@ -158,15 +160,17 @@ export class Overview extends Vue {
         this.groups = this.$store.getters.groupsOfEngines;
 
         // TODO select appropriate service to call get data (influxDB Service or statistics Service)
-        // this.statisticsService.getData(this.currentTimeSelection.time, this.getNames()).then( resultMap => {
-        this.influxService.getData(this.currentTimeSelection.time, this.getNames()).then( resultMap => {
+        this.statisticsService.getData(this.currentTimeSelection.time, this.getNames()).then( resultMap => {
+        // this.influxService.getData(this.currentTimeSelection.time, this.getNames()).then( resultMap => {
             this.statMap = resultMap;
             this.chartName = [];
             this.chartData = [];
-            this.statMap.forEach((value, key) => {
-                this.chartName.push(key);
-                this.chartData.push(this.getChartData(this.states, value));
-            });
+            if (this.statMap) {
+                this.statMap.forEach((value, key) => {
+                    this.chartName.push(key);
+                    this.chartData.push(this.getChartData(this.states, value));
+                });
+            }
         });
     }
 
@@ -310,23 +314,7 @@ export class Overview extends Vue {
 
     submit() {
         this.storeInfluxConnection();
-        if (this.$store.state.user.influx.url !== null && this.$store.state.user.influx.url !== undefined && this.$store.state.user.influx.url !== '') {
-            this.testConnection();
-        }
-    }
-
-    clear() {
-        localStorage.removeItem('influxURL');
-        localStorage.removeItem('influxUser');
-        localStorage.removeItem('influxPass');
-        this.url = null;
-        this.username = null;
-        this.password = null;
-        this.$store.state.user.influx.url = this.url;
-        this.$store.state.user.influx.username = this.username;
-        this.$store.state.user.influx.password = this.password;
-        this.connectionSuccess = false;
-        this.eventHub.$emit('showNotification', new Notification('Disconnected from InfluxDB and Connection info cleared'));
+        this.eventHub.$emit('showNotification', new Notification('Connection settings saved'));
     }
 
     testConnection() {

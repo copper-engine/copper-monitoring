@@ -112,6 +112,14 @@ body {
                                     padding-top: 5px;
                                 }
                             }
+                            .influx-enable {
+                                max-height: 40px;
+                                h2 {
+                                    // font-size: 2em;
+                                    padding-left: 50px;
+                                    margin-right: 20px;
+                                }
+                            }
                             .section-header {
                                 align-items: center;
                                 padding-left: 35px;
@@ -160,7 +168,7 @@ body {
                                 .submit-btn-container {
                                     position: absolute;
                                     right: 60px;
-                                    top: 125px;
+                                    top: 175px;
                                     z-index: 2;
                                     button {
                                         border: 1px solid;

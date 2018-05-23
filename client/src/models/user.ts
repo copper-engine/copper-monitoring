@@ -4,7 +4,6 @@ export class UserSettings {
         public defaultHost: string = 'localhost', 
         public defaultPort: string = '1099', 
         public updatePeriod: number, 
-        public fetchPeriod: number, 
         public darkTheme: boolean) {}
 }
 

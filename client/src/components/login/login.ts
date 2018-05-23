@@ -31,7 +31,7 @@ export class LoginComponent extends Vue {
                 if (result.status === 401) {
                     this.error = 'Username & Password combination is incorect.';
                 } else {
-                    this.$store.commit(Mutations.setUser, new User(this.username, this.password, new UserSettings(result.data.host, result.data.port, this.update, this.fetch, this.theme),
+                    this.$store.commit(Mutations.setUser, new User(this.username, this.password, new UserSettings(result.data.host, result.data.port, this.update, this.theme),
                      new InfluxConnection(this.url, this.user, this.pass)));
                     this.$router.push(this.nextPath);
                 }
@@ -46,13 +46,6 @@ export class LoginComponent extends Vue {
             return parseInt(localStorage.getItem(this.username + ':updatePeriod'));
         } else {
             return 10;
-        }
-    }
-    get fetch() {
-        if (localStorage.getItem(this.username + ':fetchPeriod')) {
-            return parseInt(localStorage.getItem(this.username + ':fetchPeriod'));
-        } else {
-            return 5;
         }
     }
     get theme() {

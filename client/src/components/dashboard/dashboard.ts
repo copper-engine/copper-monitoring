@@ -40,12 +40,7 @@ export class DashboardComponent extends Vue {
     interval: any;
     menuOpen: boolean = false;
     update: number;
-    fetch: number;
     themeSwitch: boolean = true;
-    // dialogConfigOpen: boolean = false;
-    // configText: string = '';
-    // queryText: string = '';
-    // beanCollisions: BeanConflict[] = [];
     initComplete: boolean = false;
     
     get user() {
@@ -84,13 +79,7 @@ export class DashboardComponent extends Vue {
     }
 
     getPeriodSettings() {
-        this.fetch = this.$store.state.user.settings.fetchPeriod;
         this.update = this.$store.state.user.settings.updatePeriod;
-    }
-
-    setFetch() {
-        localStorage.setItem(this.$store.state.user.name + ':fetchPeriod', String(this.fetch));
-        this.$store.state.user.settings.fetchPeriod = this.fetch;
     }
 
     setUpdate() {
@@ -141,114 +130,6 @@ export class DashboardComponent extends Vue {
         this.$store.commit(Mutations.setUser, null);
         this.$router.replace('/login'); 
     }
-
-    // dialogConfig() {
-    //     this.generateConfigFile();
-    //     this.generateSampleQueries();
-    //     this.dialogConfigOpen = true;
-    // }
-
-    // generateConfigFile() {
-
-    //     let beanNames = [];
-
-    //     this.configText = '[[inputs.jolokia2_proxy]]\n#url goes from process.env.API_NAME variable like in jmxService. credentials is current user\n' +
-    //         '     url = "' + this.parseURL() + '"\n' +
-    //         '     username = "' + this.$store.state.user.name + '"\n' +
-    //         '     password = "' + this.$store.state.user.password + '"\n\n' +
-    //         '#From connections\n';
-       
-    //     this.$store.state.connectionResults.map((connection) => {
-    //         this.configText += '[[inputs.jolokia2_proxy.target]]\n' +
-    //             '     url = "service:jmx:rmi:///jndi/rmi://' + connection.settings.host + ':' + connection.settings.port + '/jmxrmi"\n';
-    //     });
-
-    //     this.configText += '\n#From engines. Name made from connection name and engine name to prevent collisions\n';    
-    //     this.$store.state.engineStatusList.map((engine, index) => {
-    //         let bean = this.$store.getters.engineMBeans[engine.id];
-    //         let name = this.parseBeanName(bean.name);
-    //         // beanNames[index] = [bean.name, engine.engineId];
-    //         beanNames[index] = new BeanContext(bean.name, engine.engineId);
-    //         this.configText += '[[inputs.jolokia2_proxy.metric]]\n' +
-    //             '     name = "' + engine.engineId + '@' + bean.connectionSettings.host + ':' + bean.connectionSettings.port + '"\n' +
-    //             '     mbean = "' + bean.name + '"\n' +
-    //             '     paths = [ "InvalidCount", "ErrorCount", "WaitingCount", "RunningCount", "FinishedCount", "DequeuedCount" ]\n\n';
-    //     });
-    //     this.checkBeanNameConflict(beanNames);
-    // }
-
-    // checkBeanNameConflict(beans) {
-    //     let conflicts: BeanConflict[] = [];
-    //     _.toPairs(_.groupBy(beans, 'beanName')).map((group) => {
-    //         let conflict = new BeanConflict;
-    //         conflict.beanName = group[0];
-    //         conflict.conflictEngines = group[1].map((beanContext) => {
-    //             return beanContext.engineName;
-    //         });
-    //         if (conflict.conflictEngines.length > 1) {
-    //             conflicts.push(conflict);
-    //         }
-    //     });
-    //     this.beanCollisions = conflicts;
-    // }
-
-    // generateSampleQueries() {
-    //     this.queryText = '#Sample Queries\n\n';
-    //     this.$store.getters.groupsOfEngines.map((group) => {
-
-    //         let engine = group.engines[0];
-    //         let bean = this.$store.getters.engineMBeans[engine.id];
-
-    //         if (group.engines.length > 1) {
-    //             this.queryText += '#Select Attributes for Group: ' + group.name + '@' + bean.connectionSettings.host + ':' + bean.connectionSettings.port + '\n';
-    //         } else {
-    //             this.queryText += '#Select Attributes for Engine: ' + engine.engineId + '@' + bean.connectionSettings.host + ':' + bean.connectionSettings.port + '\n';
-    //         }
-
-    //         this.queryText += 'SELECT' + '\nMAX("ErrorCount") AS "MAX_ErrorCount",' + '\nMAX("DequeuedCount") AS "MAX_DequeuedCount",' + '\nMAX("FinishedCount") AS "MAX_FinishedCount",' +
-    //             '\nMAX("InvalidCount") AS "MAX_InvalidCount",' + '\nMAX("RunningCount") AS "MAX_RunningCount",' + '\nMAX("WaitingCount") AS "MAX_WaitingCount"' + 
-    //             '\nFROM "telegraf"."autogen"."' + engine.engineId + '@' + bean.connectionSettings.host + ':' + bean.connectionSettings.port + '"' +
-    //             '\nWHERE time > now() - 1h GROUP BY time(10s) FILL(null)\n\n';
-    //     });
-    // }
-
-    // parseURL() {
-    //     if (process.env.API_NAME.substr(0, 4) !== 'http') {
-    //         let subUrl = window.location.href.substr(7);
-    //         let endIndex = subUrl.indexOf('/');
-    //         return window.location.href.substr(0, (endIndex + 7)) + process.env.API_NAME;
-    //     } else {
-    //         return process.env.API_NAME;
-    //     }
-    // }
-
-    // parseBeanName(fullName: string) {
-    //     return fullName.substr(19);
-    // }
-
-    // downloadConfig() {
-    //     let blob = new Blob([this.configText], {type: 'text/csv'});
-    //     if (window.navigator.msSaveOrOpenBlob) {
-    //         window.navigator.msSaveBlob(blob, 'telegraf.conf');
-    //     } else {
-    //         let elem = window.document.createElement('a');
-    //         elem.href = window.URL.createObjectURL(blob);
-    //         elem.download = 'telegraf.conf';        
-    //         document.body.appendChild(elem);
-    //         elem.click();        
-    //         document.body.removeChild(elem);
-    //     }
-    // }
-
-    // copy(text) {
-    //     let elem = window.document.createElement('textarea');
-    //     elem.value = text;
-    //     document.body.appendChild(elem);
-    //     elem.select();
-    //     document.execCommand('copy');
-    //     document.body.removeChild(elem);
-    //     this.eventHub.$emit('showNotification', new Notification('Copied to Clipboard'));
-    // }
 
     @Watch('themeSwitch')
     toggleTheme() {

@@ -90,6 +90,13 @@ export class Overview extends Vue {
         this.getData();
     }
 
+    @Watch('useInfluxDB')
+    stopStatService() {
+        if (this.useInfluxDB === true) {
+            this.statisticsService.stop();
+        }
+     }
+
     getDataFromInflux() {
         this.groups = this.$store.getters.groupsOfEngines;
         let names = [];
@@ -322,7 +329,6 @@ export class Overview extends Vue {
             if (this.parseInfluxResposne(response) === true) {
                 this.connectionSuccess = true;
                 this.storeInfluxConnection();
-                this.statisticsService.stop();
                 this.eventHub.$emit('showNotification', new Notification('Connection Success'));
             } else {
                 this.connectionSuccess = false;

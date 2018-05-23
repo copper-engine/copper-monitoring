@@ -16,11 +16,14 @@
             min-width: 111px;
             max-width: 111px;
             background-color: $light-tertiary !important;
-            color: $dark-text-color !important;
+            color: $dark-text-color;
             .icon {
                 color: $dark-text-color;  
                 margin-right: 10px;          
             }
+        }
+        .btn--disabled {
+            color: #9B9B9B !important;
         }
         .influx-button {
             max-width: 185px;
@@ -66,10 +69,13 @@
         .button-container {
             button {
                 background-color: $dark-tertiary !important;
-                color: $light-text-color !important;
+                color: $light-text-color;
                 .icon {
                     color: $light-text-color;
                 }
+            }
+            .btn--disabled {
+                color: #333333 !important;
             }
         }
         .summary {

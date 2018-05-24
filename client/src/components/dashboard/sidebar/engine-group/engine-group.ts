@@ -33,7 +33,7 @@ export class EngineGroupComponent extends Vue {
             this.multiEngine = true;
         }
         this.getBrokenWFCount();
-        this.getWFCount();
+        this.getGroupWFCount();
     }
     
     @Watch('closing')
@@ -59,13 +59,15 @@ export class EngineGroupComponent extends Vue {
             this.brokenWFCount = response;
         });
     }
-    getWFCount() {
-        let filter = new WorkflowFilter;
-        filter.states = [State.RUNNING];
-        this.mbean = this.$store.getters.engineMBeans[this.group.engines[0].id];
-        this.jmxService.countWFRequest(this.mbean.connectionSettings, this.mbean.name, this.$store.state.user, filter).then((response: number) => {
+    getGroupWFCount() {
+        let state = State.RUNNING;
+        let beans = this.group.engines.map((engine) => {
+            return this.$store.getters.engineMBeans[engine.id];
+        });
+        this.jmxService.countGroupWFRequest(beans, beans.length, this.$store.state.user, state).then((response: any) => {
             this.wfCount = response;
         });
+        
      }
 
     get links(): Link[] {

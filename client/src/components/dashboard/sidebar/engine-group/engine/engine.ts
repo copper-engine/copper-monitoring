@@ -2,19 +2,31 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import { JmxService } from '../../../../../services/jmxService';
 import './engine.scss';
 import { Link } from '../../../../../models/link';
-import { EngineStatus } from '../../../../../models/engine';
+import { EngineStatus, WorkflowFilter, State } from '../../../../../models/engine';
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
+import { MBean } from '../../../../../models/mbeans';
 
 @Component({
     template: require('./engine.html'),
 })
 export class EngineComponent extends Vue {
+    private jmxService: JmxService = this.$services.jmxService;
     @Prop() status: EngineStatus;
     @Prop() multiEngine: boolean;
     @Prop() closing: boolean;
-    @Prop() mbean: string;
     open: boolean = false;
+    wfCount: number = 0;
     clickAllowed = true;
+    filter: WorkflowFilter;
+    mbean: MBean;
+
+    mounted() {
+        this.filter = new WorkflowFilter;
+        this.filter.states = [State.RUNNING];                
+        this.mbean = this.$store.getters.engineMBeans[this.status.id];  
+        this.getWFCount();
+
+    }
 
     @Watch('closing')
     close() {
@@ -22,6 +34,13 @@ export class EngineComponent extends Vue {
             this.open = false;
         }
     }
+
+    @Watch('status')
+    getWFCount() {
+        this.jmxService.countWFRequest(this.mbean.connectionSettings, this.mbean.name, this.$store.state.user, this.filter).then((response: number) => {
+            this.wfCount = response;
+        });
+     }
 
     openEngine() {
         if (this.clickAllowed === true) {

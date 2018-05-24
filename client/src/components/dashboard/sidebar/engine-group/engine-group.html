@@ -67,7 +67,7 @@
         <transition name="extend-group">
             <div v-if="(open) || !multiEngine">
                 <engine
-                    v-for="engineStatus in group.engines" key="engineStatus.id"
+                    v-for="engineStatus in group.engines" :key="engineStatus.id"
                     :multiEngine="multiEngine"
                     :closing="closing"
                     :status="engineStatus">

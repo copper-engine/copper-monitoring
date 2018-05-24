@@ -37,6 +37,21 @@ export class JmxService {
         });
     }
 
+    countGroupWFRequest(mbeans: MBean[], length: number, user: User, state: State) {
+        let requests = [];
+        this.createGroupCountRequest(user, mbeans, [ state ]).map((request) => {
+            requests.push(request);
+        });
+        
+        return Axios.post(process.env.API_NAME, requests, {
+                auth: { username: user.name, password: user.password }
+            })
+            .then((response) => this.parseGroupWFCountResponse(response, length))
+            .catch(error => {
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
+            });
+    }
+
     getChartCounts(mbean: MBean, user: User) {
         return Axios.post(process.env.API_NAME, [
                 this.createCountWFRequest(mbean.connectionSettings, mbean.name, [ State.RUNNING ]),                
@@ -83,6 +98,15 @@ export class JmxService {
             return this.createCountWFRequest(bean.connectionSettings, bean.name, state);
         });
         return requests;
+    }
+
+    parseGroupWFCountResponse = (response, length) => {
+        let counter = length;
+        let count = 0;
+        for (let i = 0; i < counter; i++) {
+            count = count + response.data[i].value;
+        }
+        return count;
     }
 
     parseGroupChartCountResponse = (response, length) => {

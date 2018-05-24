@@ -41,12 +41,17 @@
             </v-menu>
             <v-btn class='influx-button' @click="triggerOpenInflux">
                 <v-icon 
-                    v-show="connectionSuccess === true"
+                    v-show="useInfluxDB === false"
+                    class="not-used-icon">
+                    fiber_manual_record
+                </v-icon>
+                <v-icon 
+                    v-show="useInfluxDB === true && connectionSuccess === true"
                     class="connected-icon">
                     fiber_manual_record
                 </v-icon> 
                 <v-icon 
-                    v-show="connectionSuccess === false"
+                    v-show="useInfluxDB === true && connectionSuccess === false"
                     class="not-connected-icon"> 
                     fiber_manual_record
                 </v-icon>
@@ -59,7 +64,7 @@
     </v-layout>
 
     <v-layout :row='getRow' :column='!getRow' class="stat-card-container">
-            <v-layout class="stat-card" v-for="(group, index) in this.chartData" :key="group.id" column>
+        <v-layout class="stat-card" v-for="(group, index) in this.chartData" :key="group.id" column>
             <h2>{{ chartName[index] }}</h2>
             <stats
             :dataset = 'group'>
@@ -114,12 +119,17 @@
                         <v-layout row class="section-header">
                             <div class="connection-icon-container">
                                 <v-icon 
-                                    v-show="connectionSuccess === true"
+                                    v-show="useInfluxDB === false"
+                                    class="not-used-icon">
+                                    fiber_manual_record
+                                </v-icon>
+                                <v-icon 
+                                    v-show="useInfluxDB === true && connectionSuccess === true"
                                     class="connected-icon">
                                     fiber_manual_record
                                 </v-icon> 
                                 <v-icon 
-                                    v-show="connectionSuccess === false"
+                                    v-show="useInfluxDB === true && connectionSuccess === false"
                                     class="not-connected-icon"> 
                                     fiber_manual_record
                                 </v-icon> 

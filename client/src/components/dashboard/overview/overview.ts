@@ -97,6 +97,7 @@ export class Overview extends Vue {
             this.statisticsService.stop();
             this.eventHub.$emit('toggleCollectingData', false);
         } else {
+            this.statisticsService.start();            
             this.eventHub.$emit('toggleCollectingData', true);
         }
      }

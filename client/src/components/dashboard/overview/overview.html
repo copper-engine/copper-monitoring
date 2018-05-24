@@ -3,7 +3,7 @@
         <h2>Statistics Overview</h2>
         <v-spacer></v-spacer>
         <div class="button-container">
-            <v-menu offset-y :close-on-content-click="false">
+            <v-menu offset-y :nudge-bottom="10" :close-on-content-click="false">
                 <v-tooltip top content-class="tooltip-text" slot="activator">
                     <v-btn slot="activator"><v-icon>mdi-settings</v-icon>States</v-btn>
                     <span>Select States to Include</span>
@@ -17,9 +17,9 @@
                     <v-flex><v-switch :label="'Invalid'" v-model="states.invalid"></v-switch></v-flex>    
                 </v-layout>
             </v-menu>
-            <v-menu offset-y>
-                <v-tooltip top content-class="tooltip-text" slot="activator">
-                    <v-btn slot="activator"><v-icon>mdi-clock</v-icon>{{ currentTimeSelection.label }}</v-btn>
+            <v-menu offset-y :nudge-bottom="10">
+            <v-tooltip top content-class="tooltip-text" slot="activator">
+                <v-btn slot="activator"><v-icon>mdi-clock</v-icon>{{ currentTimeSelection.label }}</v-btn>
                     <span>Fetch Period</span>
                 </v-tooltip>
                 <v-list>
@@ -28,7 +28,7 @@
                     </v-list-tile>
                 </v-list>
             </v-menu>
-            <v-menu offset-y>
+            <v-menu offset-y :nudge-bottom="10">
                 <v-tooltip top content-class="tooltip-text" slot="activator">
                     <v-btn slot="activator"><v-icon>mdi-menu</v-icon>{{ currentLayout }}</v-btn>
                     <span>Layout Type</span>

@@ -93,15 +93,15 @@
                 }
             }
             .btn--disabled {
-                color: #333333 !important;
+                color: #575757 !important;
             }
         }
         .no-connection-card {
-            background-color: $dark-secondary !important;
+            background-color: $dark-background !important;
             .card__text {
-                background-color: $dark-secondary !important;
+                background-color: $dark-background !important;
                 .alert {
-                    background-color: $dark-tertiary !important;
+                    background-color: $dark-wf !important;
                     border-color: $dark-tertiary !important;
                     color: $light-text-color;
                 }

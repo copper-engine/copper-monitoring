@@ -5,7 +5,7 @@
         <div class="button-container">
             <v-menu offset-y :nudge-bottom="10" :close-on-content-click="false">
                 <v-tooltip top content-class="tooltip-text" slot="activator">
-                    <v-btn slot="activator"><v-icon>mdi-settings</v-icon>States</v-btn>
+                    <v-btn slot="activator"><v-icon>mdi-menu</v-icon>States</v-btn>
                     <span>Select States to Include</span>
                 </v-tooltip>
                 <v-layout column class="state-filter input-style" :close-on-content-click="false">
@@ -30,7 +30,7 @@
             </v-menu>
             <v-menu offset-y :nudge-bottom="10">
                 <v-tooltip top content-class="tooltip-text" slot="activator">
-                    <v-btn slot="activator"><v-icon>mdi-menu</v-icon>{{ currentLayout }}</v-btn>
+                    <v-btn slot="activator"><v-icon>mdi-border-all</v-icon>{{ currentLayout }}</v-btn>
                     <span>Layout Type</span>
                 </v-tooltip>
                 <v-list>

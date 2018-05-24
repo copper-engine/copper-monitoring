@@ -18,11 +18,12 @@
                         <v-flex class="link-icon">
                             <v-icon dark>mdi-chart-bar</v-icon>
                         </v-flex>
-                        <div class="link-name" v-if="!collectingData">
-                            Overview
-                        </div>
-                        <div class="link-name" v-if="collectingData">
-                            Overview (collecting data)
+                        <div class="link-name">
+                            Overview 
+                            <v-tooltip top content-class="tooltip-text">
+                                <v-icon slot="activator" v-if="collectingData === true">mdi-arrow-down-bold-circle-outline</v-icon>
+                                <span>Actively Collecting Data</span>
+                            </v-tooltip>
                         </div>
                     </v-layout> 
                 </div>    

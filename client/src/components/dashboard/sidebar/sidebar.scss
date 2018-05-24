@@ -94,6 +94,10 @@
                 .link-name {
                     font-size: 1.3em;
                     font-weight: 400;
+                    .icon {
+                        color: $dark-text-color;
+                        padding-left: 10px;
+                    }
                 }
             }
         }
@@ -255,6 +259,12 @@
                     .link-icon {
                         .icon {
                             color: $light-text-color;
+                        }
+                    }
+                    .link-name {
+                        .icon {
+                            color: $light-text-color;
+                            padding-left: 10px;
                         }
                     }
                 }

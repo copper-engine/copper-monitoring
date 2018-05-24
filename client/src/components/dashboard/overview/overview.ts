@@ -89,6 +89,7 @@ export class Overview extends Vue {
         this.checkStatService();
         // this.getDataFromInflux();
         this.getData();
+        this.checkCollecting();
     }
 
     @Watch('useInfluxDB')
@@ -96,13 +97,18 @@ export class Overview extends Vue {
         if (this.useInfluxDB === true) {
             this.statisticsService.stop();
             // setting icon in Overview router-link in Sidebar
-            this.eventHub.$emit('toggleCollectingData', false);
+            // this.eventHub.$emit('toggleCollectingData', false);
         } else {
             this.statisticsService.start();            
             // setting icon in Overview router-link in Sidebar            
-            this.eventHub.$emit('toggleCollectingData', true);
+            // this.eventHub.$emit('toggleCollectingData', true);
         }
         this.getData();
+     }
+
+     @Watch('statisticsService.running')
+     checkCollecting() {
+        this.eventHub.$emit('toggleCollectingData', this.statisticsService.running);
      }
 
     getDataFromInflux() {

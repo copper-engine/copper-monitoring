@@ -24,6 +24,7 @@ export class LoginComponent extends Vue {
         } else {
             this.nextPath = (this.$router as CopperRouter).nextPath;
         }
+        
         if ((this.$refs.form as any).validate()) {
             Axios.get(process.env.USER_API_NAME, {
                 auth: {username: this.username, password: this.password}

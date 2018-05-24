@@ -42,7 +42,7 @@ export class Overview extends Vue {
     private eventHub: Vue = this.$services.eventHub;
     private statisticsService: StatisticsService = this.$services.statisticsService;
     private influxService: InfluxDBService = this.$services.influxService;
-    groups: EngineGroup[] = [];
+    // groups: EngineGroup[] = [];
     timeSelect: TimeSelection[];
     currentTimeSelection: TimeSelection = null;
     layoutSelect: string[]= ['Row', 'Column'];
@@ -103,9 +103,9 @@ export class Overview extends Vue {
      }
 
     getDataFromInflux() {
-        this.groups = this.$store.getters.groupsOfEngines;
+        // this.groups = this.$store.getters.groupsOfEngines;
         let names = [];
-        this.groups.forEach( group => {
+        this.$store.getters.groupsOfEngines.forEach( group => {
             names = names.concat(group.engines.map( engine => engine.engineId + '@' + this.getConnectionName(engine.id)));
         });
         // this.influx.testInfluxDB();
@@ -116,11 +116,6 @@ export class Overview extends Vue {
         // this.statisticsService.getData(this.currentTimeSelection.time, names).then( result => {
         //     console.log('satistics overview result', result);
         // });
-    }
-    
-    getDataFlomLocal() {
-        this.groups = this.$store.getters.groupsOfEngines;
-        this.eventHub.$emit('updateStats');
     }
 
     beforeDestroy() {
@@ -168,13 +163,20 @@ export class Overview extends Vue {
     }
 
     @Watch('states', { deep: true })
+    @Watch('useInfluxDB')
     getData() {
-        this.groups = this.$store.getters.groupsOfEngines;
+        let fetchingDataPromise: Promise<void | Map<String, StatesPrint[]>>;
 
-        // TODO select appropriate service to call get data (influxDB Service or statistics Service)
-        this.statisticsService.getData(this.currentTimeSelection.time, this.getNames()).then( resultMap => {
-        // this.influxService.getData(this.currentTimeSelection.time, this.getNames()).then( resultMap => {
-            this.statMap = resultMap;
+        if (this.useInfluxDB) {
+            console.log('using Influx DB');
+            fetchingDataPromise = this.influxService.getData(this.currentTimeSelection.time, this.getNames());
+        } else {
+            console.log('using Local Storage DB');
+            fetchingDataPromise = this.statisticsService.getData(this.currentTimeSelection.time, this.getNames());
+        }
+
+        fetchingDataPromise.then( (resultMap: Map<String, StatesPrint[]>) => {
+            this.statMap = resultMap ? this.groupDataResult(resultMap) : [];
             this.chartName = [];
             this.chartData = [];
             if (this.statMap) {
@@ -186,8 +188,50 @@ export class Overview extends Vue {
         });
     }
 
+    groupDataResult(resultMap: Map<String, StatesPrint[]>) {
+        let statMap = new Map<String, StatesPrint[]>();
+        this.$store.getters.groupsOfEngines.forEach((group: EngineGroup) => {
+            if (group.engines.length > 1) {
+                let engines: StatesPrint[][] = group.engines.map( engine => resultMap.get(this.getEngineMapKey(engine)));
+
+                if (engines && engines.length > 0) {
+                    let gropStates: StatesPrint[] = engines[0].map(state => Object.assign({}, state));
+
+                    for ( let j = 0; j < engines[0].length; j++ ) {
+                        for (let i = 1; i < engines.length; i++) {
+                            gropStates[j].running += engines[i][j].running; 
+                            gropStates[j].dequeued += engines[i][j].dequeued;
+                        }
+                    }
+
+                    statMap.set(group.name, gropStates);
+                } else {
+                    console.error(`No statistic for group ${group.name} with engines ${group.engines}`);
+                }
+            } else {
+                let engineName = this.getEngineMapKey(group.engines[0]);
+                statMap.set(engineName, resultMap.get(engineName));
+            }
+        });
+
+        return statMap;
+    }
+
+    getEngineMapKey(engine: EngineStatus) {
+        return engine.engineId + '@' + this.getConnectionName(engine.id);
+    }
+
+    groupMergeStates(to: StatesPrint, from: StatesPrint) {
+        to.running += from.running; 
+        to.dequeued += from.dequeued; 
+    }
+
     getNames() {
-        let nameArray = this.groups.map((group) => {
+        return this.$store.state.engineStatusList.map((engine) => engine.engineId + '@' + this.getConnectionName(engine.id));
+    }
+
+    getGroupNames() {
+        let nameArray = this.$store.getters.groupsOfEngines.map((group) => {
             if (group.engines.length > 1) {
                 return group.name;
             } else {
@@ -223,7 +267,6 @@ export class Overview extends Vue {
     }
 
     generateConfigFile() {
-
         let beanNames = [];
 
         this.configText = '[[inputs.jolokia2_proxy]]\n#url goes from process.env.API_NAME variable like in jmxService. credentials is current user\n' +

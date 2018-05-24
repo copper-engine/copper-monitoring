@@ -55,7 +55,7 @@ public class JmxWebProxyMain {
         log.info("    - jolokia servlet deployed at /api");
         WebappContext userWebappContext = createUserWebappContext("/user");
         userWebappContext.deploy(server);
-        log.info("    - user servlet deployed at /auth");
+        log.info("    - user servlet deployed at /user");
 
         // deploy handler for static resources
         StaticHttpHandler staticResourcesHandler = new StaticHttpHandler(docRoot.getCanonicalPath());

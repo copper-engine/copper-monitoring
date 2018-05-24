@@ -95,11 +95,14 @@ export class Overview extends Vue {
     checkStatService() {
         if (this.useInfluxDB === true) {
             this.statisticsService.stop();
+            // setting icon in Overview router-link in Sidebar
             this.eventHub.$emit('toggleCollectingData', false);
         } else {
             this.statisticsService.start();            
+            // setting icon in Overview router-link in Sidebar            
             this.eventHub.$emit('toggleCollectingData', true);
         }
+        this.getData();
      }
 
     getDataFromInflux() {
@@ -154,16 +157,15 @@ export class Overview extends Vue {
     }
 
     storeInfluxConnection() {
-        localStorage.setItem('influxURL', this.url);
-        localStorage.setItem('influxUser', this.username);
-        localStorage.setItem('influxPass', this.password);
+        localStorage.setItem(this.$store.state.user.name + ':influxURL', this.url);
+        localStorage.setItem(this.$store.state.user.name + ':influxUser', this.username);
+        localStorage.setItem(this.$store.state.user.name + ':influxPass', this.password);
         this.$store.state.user.influx.url = this.url;
         this.$store.state.user.influx.username = this.username;
         this.$store.state.user.influx.password = this.password;
     }
 
     @Watch('states', { deep: true })
-    @Watch('useInfluxDB')
     getData() {
         let fetchingDataPromise: Promise<void | Map<String, StatesPrint[]>>;
 

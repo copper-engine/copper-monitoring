@@ -63,7 +63,7 @@
         </div>
     </v-layout>
 
-    <v-layout :row='getRow' :column='!getRow' class="stat-card-container">
+    <v-layout v-if="this.chartData !== null" :row='getRow' :column='!getRow' class="stat-card-container">
         <v-layout class="stat-card" v-for="(group, index) in this.chartData" :key="group.id" column>
             <h2>{{ chartName[index] }}</h2>
             <stats
@@ -71,6 +71,13 @@
             </stats>
         </v-layout>
     </v-layout>
+    <v-card flat v-show="this.chartData.length === 0" class="no-connection-card">
+        <v-card-text>
+            <v-alert icon="info" value="true">
+                No connection to {{ useInfluxDB === true ? 'Influx DB' : 'Server' }}
+            </v-alert>
+        </v-card-text>
+    </v-card>
 
     <v-dialog v-model="openInfluxDialog" scrollable max-width="1126px" position="absolute" persistent>
         

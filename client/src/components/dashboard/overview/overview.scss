@@ -40,6 +40,21 @@
         }  
     }
 
+    .no-connection-card {
+        margin-top: 30px;
+        background-color: $light-background !important;
+        .card__text {
+            background-color: $light-background !important;
+            .alert {
+                border: 2px solid;
+                margin: 20px;
+                background-color: $light-tertiary !important;
+                border-color: $light-border !important;
+                color: $dark-text-color;
+            }
+        }
+    }  
+
     .stat-card-container {
         width: 100%;
         flex-wrap: wrap;
@@ -79,6 +94,17 @@
             }
             .btn--disabled {
                 color: #333333 !important;
+            }
+        }
+        .no-connection-card {
+            background-color: $dark-secondary !important;
+            .card__text {
+                background-color: $dark-secondary !important;
+                .alert {
+                    background-color: $dark-tertiary !important;
+                    border-color: $dark-tertiary !important;
+                    color: $light-text-color;
+                }
             }
         }
         .summary {

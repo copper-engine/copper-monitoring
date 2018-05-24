@@ -58,7 +58,7 @@ export class LoginComponent extends Vue {
     }
 
     get url() {
-        if (localStorage.getItem('influxURL')) {
+        if (localStorage.getItem(this.username + ':influxURL')) {
             return localStorage.getItem('influxURL');
         } else {
             return null;
@@ -66,7 +66,7 @@ export class LoginComponent extends Vue {
     }
 
     get user() {
-        if (localStorage.getItem('influxUser')) {
+        if (localStorage.getItem(this.username + ':influxUser')) {
             return localStorage.getItem('influxUser');
         } else {
             return null;
@@ -74,7 +74,7 @@ export class LoginComponent extends Vue {
     }
 
     get pass() {
-        if (localStorage.getItem('influxPass')) {
+        if (localStorage.getItem(this.username + ':influxPass')) {
             return localStorage.getItem('influxPass');
         } else {
             return null;

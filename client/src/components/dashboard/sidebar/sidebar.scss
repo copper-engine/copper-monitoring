@@ -80,7 +80,7 @@
             .link-interior {
                 padding-top: 10px;
                 padding-bottom: 10px;
-                padding-left: 5px;
+                padding-left: 15px;
                 color: $dark-text-color;
                 width: 100%;
                 .link-icon {
@@ -92,11 +92,22 @@
                     }
                 }
                 .link-name {
-                    font-size: 1.3em;
-                    font-weight: 400;
+                    font-size: 1.5em;
+                    font-weight: 500;
                     .icon {
                         color: $dark-text-color;
                         padding-left: 10px;
+                    }
+                    .flashing {
+                        animation-name: flashing;
+                        animation-duration: 5s;
+                        animation-iteration-count: infinite;
+                    }
+                    @keyframes flashing {
+                        0% {opacity: 1}
+                        50% {opacity: 1}
+                        75% {opacity: 0.25}
+                        100% {opacity: 1}
                     }
                 }
             }

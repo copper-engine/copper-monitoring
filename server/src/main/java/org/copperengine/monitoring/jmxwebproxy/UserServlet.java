@@ -12,6 +12,7 @@ public class UserServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(UserServlet.class);
     private static String ENGINE_HOST = System.getenv("ENGINE_HOST");
     private static String ENGINE_PORT = System.getenv("ENGINE_PORT");
+    private static String INFLUX_URL = System.getenv("INFLUX_URL");
 
     static {
         if (ENGINE_HOST == null || ENGINE_HOST.trim().length() == 0) {
@@ -20,6 +21,10 @@ public class UserServlet extends HttpServlet {
 
         if (ENGINE_PORT == null || ENGINE_PORT.trim().length() == 0) {
             ENGINE_PORT = "1099";
+        }
+
+        if (INFLUX_URL == null || INFLUX_URL.trim().length() == 0) {
+            INFLUX_URL = "http://localhost:8086";
         }
     }
 
@@ -37,6 +42,9 @@ public class UserServlet extends HttpServlet {
         jsonBuilder.append(", ");
         jsonBuilder.append("\"port\": ");
         jsonBuilder.append("\"" + ENGINE_PORT +"\" ");
+        jsonBuilder.append(", ");
+        jsonBuilder.append("\"influx\": ");
+        jsonBuilder.append("\"" + INFLUX_URL +"\" ");
         jsonBuilder.append(" }");
 
         response.getWriter().println(jsonBuilder.toString());

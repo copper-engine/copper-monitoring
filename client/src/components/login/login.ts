@@ -17,6 +17,7 @@ export class LoginComponent extends Vue {
     passwordRules = [ (v) => !!v || 'Password is required' ];
     error: string = null;
     nextPath: string = null;
+    defaultURL: string = '';
 
     submit () {
         if ((this.$router as CopperRouter).nextPath === '/login') {
@@ -32,6 +33,7 @@ export class LoginComponent extends Vue {
                 if (result.status === 401) {
                     this.error = 'Username & Password combination is incorect.';
                 } else {
+                    this.defaultURL = result.data.influx;
                     this.$store.commit(Mutations.setUser, new User(this.username, this.password, new UserSettings(result.data.host, result.data.port, this.update, this.theme),
                      new InfluxConnection(this.url, this.user, this.pass)));
                     this.$router.push(this.nextPath);
@@ -58,10 +60,11 @@ export class LoginComponent extends Vue {
     }
 
     get url() {
-        if (localStorage.getItem(this.username + ':influxURL')) {
-            return localStorage.getItem('influxURL');
+        let storage = localStorage.getItem(this.username + ':influxURL');
+        if (storage !== null && storage !== '' && storage !== undefined) {
+            return storage;
         } else {
-            return null;
+            return this.defaultURL;
         }
     }
 

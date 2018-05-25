@@ -82,10 +82,10 @@ export class Overview extends Vue {
 
     mounted() {
         this.getInfluxConnection();
-        if (this.url !== null && this.url !== '') {
-            this.useInfluxDB = true;
-            this.testConnection();
-        }
+        // if (this.url !== null && this.url !== '') {
+        //     this.useInfluxDB = true;
+        //     this.testConnection();
+        // }
         this.checkStatService();
         // this.getDataFromInflux();
         this.getData();
@@ -154,12 +154,10 @@ export class Overview extends Vue {
         }
         if (this.$store.state.user.influx.url !== null && this.$store.state.user.influx.url !== undefined && this.$store.state.user.influx.url !== '') {
             this.url = this.$store.state.user.influx.url;
-            // this.username = this.$store.state.user.influx.username;
-            // this.password = this.$store.state.user.influx.password;
-            // this.testConnection();
         } else {
             this.url = '';
         }
+        console.log('URL: ', this.$store.state.user.influx.url);
     }
 
     storeInfluxConnection() {

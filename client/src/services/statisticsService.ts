@@ -46,20 +46,30 @@ export class StatisticsService {
             this.aggCounters = this.aggLength.map(x => x);
         }
 
+        let diff = this.getDiff();
+        console.log('Ticks missed: ', diff);
+        if (diff > 1) {
+            this.fillGaps(diff);
+        }
         this.scheduleInterval();
     }
 
-    // Interval is allways running. Even when collecting of statistics is stoped(in that case it's stores empty state prints)
-    private scheduleInterval() {
-        this.fetchDataInterval = setInterval(() => {
-            if (this.running && this.store.getters.groupsOfEngines && this.store.getters.groupsOfEngines.length > 0) {
-                this.fetchingData().then(result => {
-                    this.addAggData(result, 0);
-                });                
-            } else {
-                this.addAggData([ new StatesPrint() ], 0);
-            }
-        }, this.intervals[0] * 1000);
+    fillGaps(ticks: number) {
+        let print = new StatesPrint;
+        print.time = null;
+        for (let i = 0; i < ticks; i++) {
+            this.addAggData([ print ], 0);
+        }
+    }
+
+    getDiff() {
+        let prev = localStorage.getItem('prevTS');
+        if (prev !== null && prev !== '') {
+            let current = new Date().getTime();
+            return Math.floor((current - parseInt(prev)) / (this.intervals[0] * 1000));
+        } else {
+            return null;
+        }
     }
 
     destroy() {
@@ -124,7 +134,20 @@ export class StatisticsService {
 
         return Promise.resolve(resultsPerEngine);
     }
-    
+
+    // Interval is allways running. Even when collecting of statistics is stoped(in that case it's stores empty state prints)
+    private scheduleInterval() {
+        this.fetchDataInterval = setInterval(() => {
+            if (this.running && this.store.getters.groupsOfEngines && this.store.getters.groupsOfEngines.length > 0) {
+                this.fetchingData().then(result => {
+                    localStorage.setItem('prevTS', String(result[0].time.getTime()));
+                    this.addAggData(result, 0);
+                });                
+            } else {
+                this.addAggData([ new StatesPrint() ], 0);
+            }
+        }, this.intervals[0] * 1000);
+    }
 
     // Recursively fintion that will add and aggregate new incoming data.
     // called from outside with aggIndex = 0 
@@ -220,6 +243,7 @@ export class StatisticsService {
                     // can be improved by getting connection settings & engine ID
                     // this.addNewState('' + engine.id, newStates);
                     newStates.engine = engine.engineId + '@' + mbean.connectionSettings.toString();
+                    // console.log(newStates);
                     result.push(newStates);
                 }));
             });

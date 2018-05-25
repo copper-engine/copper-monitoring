@@ -92,6 +92,11 @@ export class Overview extends Vue {
         this.checkCollecting();
     }
 
+    beforeDestroy() {
+        this.statisticsService.stop();
+        clearInterval(this.fetchInterval);
+    }
+
     @Watch('useInfluxDB')
     checkStatService() {
         if (this.useInfluxDB === true) {
@@ -125,11 +130,6 @@ export class Overview extends Vue {
         // this.statisticsService.getData(this.currentTimeSelection.time, names).then( result => {
         //     console.log('satistics overview result', result);
         // });
-    }
-
-    beforeDestroy() {
-        this.statisticsService.stop();
-        clearInterval(this.fetchInterval);
     }
 
     get getRow() {

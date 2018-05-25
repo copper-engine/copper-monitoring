@@ -63,8 +63,10 @@
         </div>
     </v-layout>
 
-    <v-layout v-if="this.chartData !== null" :row='getRow' :column='!getRow' class="stat-card-container">
-        <v-layout class="stat-card" v-for="(group, index) in this.chartData" :key="group.id" column>
+    <v-layout v-if="this.chartData !== null" :row='getRow' :column='!getRow' 
+        class="stat-card-container">
+        <v-layout class="stat-card" v-for="(group, index) in this.chartData" :key="group.id" column
+            :class="{'row-layout' : currentLayout === 'Row', 'column-layout' : currentLayout === 'Column'}">
             <h2>{{ chartName[index] }}</h2>
             <stats
             :dataset = 'group'>

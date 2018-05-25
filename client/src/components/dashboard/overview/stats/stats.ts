@@ -29,7 +29,10 @@ export class Stats extends Vue {
         elements: {
             line: {
                 tension: 0, // disables bezier curves
-            }
+            
+            },
+        responsive: false,
+        maintainAspectRatio: false
         }
     };
 

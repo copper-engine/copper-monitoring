@@ -13,6 +13,9 @@ public class UserServlet extends HttpServlet {
     private static String ENGINE_HOST = System.getenv("ENGINE_HOST");
     private static String ENGINE_PORT = System.getenv("ENGINE_PORT");
     private static String INFLUX_URL = System.getenv("INFLUX_URL");
+    private static String INFLUX_USERNAME = System.getenv("INFLUX_USERNAME");
+    private static String INFLUX_PASSWORD = System.getenv("INFLUX_PASSWORD");
+
 
     static {
         if (ENGINE_HOST == null || ENGINE_HOST.trim().length() == 0) {
@@ -21,10 +24,6 @@ public class UserServlet extends HttpServlet {
 
         if (ENGINE_PORT == null || ENGINE_PORT.trim().length() == 0) {
             ENGINE_PORT = "1099";
-        }
-
-        if (INFLUX_URL == null || INFLUX_URL.trim().length() == 0) {
-            INFLUX_URL = "http://localhost:8086";
         }
     }
 
@@ -43,8 +42,14 @@ public class UserServlet extends HttpServlet {
         jsonBuilder.append("\"port\": ");
         jsonBuilder.append("\"" + ENGINE_PORT +"\" ");
         jsonBuilder.append(", ");
-        jsonBuilder.append("\"influx\": ");
+        jsonBuilder.append("\"influxURL\": ");
         jsonBuilder.append("\"" + INFLUX_URL +"\" ");
+        jsonBuilder.append(", ");
+        jsonBuilder.append("\"influxUSERNAME\": ");
+        jsonBuilder.append("\"" + INFLUX_USERNAME +"\" ");
+        jsonBuilder.append(", ");
+        jsonBuilder.append("\"influxPASSWORD\": ");
+        jsonBuilder.append("\"" + INFLUX_PASSWORD +"\" ");
         jsonBuilder.append(" }");
 
         response.getWriter().println(jsonBuilder.toString());

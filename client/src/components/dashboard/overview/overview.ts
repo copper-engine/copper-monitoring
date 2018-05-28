@@ -155,10 +155,9 @@ export class Overview extends Vue {
         }
         if (this.$store.state.user.influx.url !== null && this.$store.state.user.influx.url !== undefined && this.$store.state.user.influx.url !== '') {
             this.url = this.$store.state.user.influx.url;
-        } else {
+        } else {           
             this.url = '';
         }
-        console.log('URL: ', this.$store.state.user.influx.url);
     }
 
     storeInfluxConnection() {

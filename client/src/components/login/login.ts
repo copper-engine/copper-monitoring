@@ -18,6 +18,9 @@ export class LoginComponent extends Vue {
     error: string = null;
     nextPath: string = null;
     defaultURL: string = '';
+    defaultUSERNAME: string = '';
+    defaultPASSWORD: string = '';
+    
 
     submit () {
         if ((this.$router as CopperRouter).nextPath === '/login') {
@@ -33,9 +36,11 @@ export class LoginComponent extends Vue {
                 if (result.status === 401) {
                     this.error = 'Username & Password combination is incorect.';
                 } else {
-                    this.defaultURL = result.data.influx;
+                    this.defaultURL = result.data.influxURL;
+                    this.defaultUSERNAME = result.data.influxUSERNAME;
+                    this.defaultPASSWORD = result.data.influxPASSWORD;                    
                     this.$store.commit(Mutations.setUser, new User(this.username, this.password, new UserSettings(result.data.host, result.data.port, this.update, this.theme),
-                     new InfluxConnection(this.url, this.user, this.pass)));
+                        new InfluxConnection(this.url, this.user, this.pass)));
                     this.$router.push(this.nextPath);
                 }
             }).catch(error => {
@@ -60,26 +65,40 @@ export class LoginComponent extends Vue {
     }
 
     get url() {
-        let storage = localStorage.getItem(this.username + ':influxURL');
+        let storage = localStorage.getItem(this.username + ':influxURL');     
         if (storage !== null && storage !== '' && storage !== undefined) {
             return storage;
-        } else {
+        }
+        if (this.defaultURL !== null && this.defaultURL !== '' && this.defaultURL !== undefined) {
             return this.defaultURL;
+        }
+        else {
+            return null;
         }
     }
 
     get user() {
-        if (localStorage.getItem(this.username + ':influxUser')) {
-            return localStorage.getItem('influxUser');
-        } else {
+        let storage = localStorage.getItem(this.username + ':influxUser');
+        if (storage !== null && storage !== '' && storage !== undefined) {
+            return storage;
+        }
+        if (this.defaultUSERNAME !== null && this.defaultUSERNAME !== '' && this.defaultUSERNAME !== undefined) {
+            return this.defaultUSERNAME;
+        }
+        else {
             return null;
         }
     }
 
     get pass() {
-        if (localStorage.getItem(this.username + ':influxPass')) {
-            return localStorage.getItem('influxPass');
-        } else {
+        let storage = localStorage.getItem(this.username + ':influxPass');
+        if (storage !== null && storage !== '' && storage !== undefined) {
+            return storage;
+        }
+        if (this.defaultPASSWORD !== null && this.defaultPASSWORD !== '' && this.defaultPASSWORD !== undefined) {
+            return this.defaultPASSWORD;
+        }
+        else {
             return null;
         }
     }

@@ -18,8 +18,8 @@ export class LoginComponent extends Vue {
     error: string = null;
     nextPath: string = null;
     defaultURL: string = '';
-    defaultUSERNAME: string = '';
-    defaultPASSWORD: string = '';
+    defaultUsername: string = '';
+    defaultPassword: string = '';
     
 
     submit () {
@@ -37,10 +37,10 @@ export class LoginComponent extends Vue {
                     this.error = 'Username & Password combination is incorect.';
                 } else {
                     this.defaultURL = result.data.influxURL;
-                    this.defaultUSERNAME = result.data.influxUSERNAME;
-                    this.defaultPASSWORD = result.data.influxPASSWORD;                    
+                    this.defaultUsername = result.data.influxUsername;
+                    this.defaultPassword = result.data.influxPassword;                    
                     this.$store.commit(Mutations.setUser, new User(this.username, this.password, new UserSettings(result.data.host, result.data.port, this.update, this.theme),
-                        new InfluxConnection(this.url, this.user, this.pass)));
+                        new InfluxConnection(this.url, this.user, this.pass, this.use)));
                     this.$router.push(this.nextPath);
                 }
             }).catch(error => {
@@ -82,8 +82,8 @@ export class LoginComponent extends Vue {
         if (storage !== null && storage !== '' && storage !== undefined) {
             return storage;
         }
-        if (this.defaultUSERNAME !== null && this.defaultUSERNAME !== '' && this.defaultUSERNAME !== undefined) {
-            return this.defaultUSERNAME;
+        if (this.defaultUsername !== null && this.defaultUsername !== '' && this.defaultUsername !== undefined) {
+            return this.defaultUsername;
         }
         else {
             return null;
@@ -95,10 +95,19 @@ export class LoginComponent extends Vue {
         if (storage !== null && storage !== '' && storage !== undefined) {
             return storage;
         }
-        if (this.defaultPASSWORD !== null && this.defaultPASSWORD !== '' && this.defaultPASSWORD !== undefined) {
-            return this.defaultPASSWORD;
+        if (this.defaultPassword !== null && this.defaultPassword !== '' && this.defaultPassword !== undefined) {
+            return this.defaultPassword;
         }
         else {
+            return null;
+        }
+    }
+
+    get use() {
+        let storage = localStorage.getItem(this.username + ':useInfluxDB');
+        if (storage !== null && storage !== '' && storage !== undefined) {
+            return utils.parseBoolean(storage);
+        } else {
             return null;
         }
     }

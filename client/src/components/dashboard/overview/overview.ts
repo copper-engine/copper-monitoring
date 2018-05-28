@@ -198,15 +198,17 @@ export class Overview extends Vue {
         let statMap = new Map<String, StatesPrint[]>();
         this.$store.getters.groupsOfEngines.forEach((group: EngineGroup) => {
             if (group.engines.length > 1) {
-                let engines: StatesPrint[][] = group.engines.map( engine => resultMap.get(this.getEngineMapKey(engine)));
+                let engines: StatesPrint[][] = group.engines.map( engine => resultMap.get(this.getEngineMapKey(engine)) );
 
                 if (engines && engines.length > 0) {
                     let gropStates: StatesPrint[] = engines[0].map(state => Object.assign({}, state));
 
                     for ( let j = 0; j < engines[0].length; j++ ) {
                         for (let i = 1; i < engines.length; i++) {
-                            gropStates[j].running += engines[i][j].running; 
-                            gropStates[j].dequeued += engines[i][j].dequeued;
+                            if (engines[i] && engines[i].length > j) {
+                                gropStates[j].running += engines[i][j].running; 
+                                gropStates[j].dequeued += engines[i][j].dequeued;
+                            }
                         }
                     }
 

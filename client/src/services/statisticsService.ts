@@ -101,8 +101,6 @@ export class StatisticsService {
     }
 
     getData(interval: number, engineNames: String[]): Promise<void | Map<String, StatesPrint[]>> {
-        console.log('Getting data for interval ', interval, engineNames);
-
         let index = this.intervals.indexOf(interval);
         if (index === -1) {
             console.error(`Illegal interval:  ${interval}. Interval expected to be one of thouse: ${this.intervals}`);
@@ -136,8 +134,6 @@ export class StatisticsService {
 
             resultsPerEngine.set(engineName, engineResult);
         });
-
-        console.log('Getting data result ', resultsPerEngine);
 
         return Promise.resolve(resultsPerEngine);
     }

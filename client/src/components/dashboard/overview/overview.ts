@@ -99,8 +99,11 @@ export class Overview extends Vue {
 
     @Watch('useInfluxDB')
     checkStatService() {
+        localStorage.setItem(this.$store.state.user.name + ':useInfluxDB', String(this.useInfluxDB));
+        this.$store.state.user.influx.useInfluxDB = this.useInfluxDB;
         if (this.useInfluxDB === true) {
             this.callStatStop();
+            this.testConnection();
             // setting icon in Overview router-link in Sidebar
             // this.eventHub.$emit('toggleCollectingData', false);
         } else {
@@ -157,6 +160,9 @@ export class Overview extends Vue {
             this.url = this.$store.state.user.influx.url;
         } else {           
             this.url = '';
+        }
+        if (this.$store.state.user.influx.useInfluxDB !== null && this.$store.state.user.influx.useInfluxDB !== undefined && this.$store.state.user.influx.useInfluxDB !== '') {
+            this.useInfluxDB = this.$store.state.user.influx.useInfluxDB;
         }
     }
 
@@ -388,6 +394,9 @@ export class Overview extends Vue {
     submit() {
         this.storeInfluxConnection();
         this.eventHub.$emit('showNotification', new Notification('Connection settings saved'));
+        if (this.useInfluxDB === true) {
+            this.testConnection();
+        }
     }
 
     testConnection() {

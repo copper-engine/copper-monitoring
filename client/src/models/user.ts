@@ -11,7 +11,8 @@ export class InfluxConnection {
     constructor(
         public url: string,
         public username: string,
-        public password: string
+        public password: string,
+        public useInfluxDB: boolean
     ) {}
 }
 

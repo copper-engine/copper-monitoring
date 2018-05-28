@@ -45,10 +45,10 @@ public class UserServlet extends HttpServlet {
         jsonBuilder.append("\"influxURL\": ");
         jsonBuilder.append("\"" + INFLUX_URL +"\" ");
         jsonBuilder.append(", ");
-        jsonBuilder.append("\"influxUSERNAME\": ");
+        jsonBuilder.append("\"influxUsername\": ");
         jsonBuilder.append("\"" + INFLUX_USERNAME +"\" ");
         jsonBuilder.append(", ");
-        jsonBuilder.append("\"influxPASSWORD\": ");
+        jsonBuilder.append("\"influxPassword\": ");
         jsonBuilder.append("\"" + INFLUX_PASSWORD +"\" ");
         jsonBuilder.append(" }");
 

@@ -190,32 +190,41 @@ export class StatisticsService {
     }
         
     max(enginesStates: StatesPrint[][]): StatesPrint[] {
+        let timestamp: Date = enginesStates[0][0] ? enginesStates[0][0].time : null;
         let maxEngineStates: StatesPrint[] = enginesStates[0].filter( engineState => engineState.engine);
 
         for (let i = 1; i < enginesStates.length; i++) {
-            enginesStates[i].filter( engineState => engineState.engine).forEach(states => {
+            enginesStates[i].filter( engineState => engineState.engine)
+            .forEach(states => {
                 let currentMaxStates = this.findEngineStates(maxEngineStates, states.engine);
 
                 if (!currentMaxStates) {
-                    console.error('currentMaxStates is undefined for: states.engine', states.engine, maxEngineStates);                    
+                    let newMaxState = Object.assign(new StatesPrint(), states);
+                    if (timestamp) {
+                        newMaxState.time = timestamp;
+                    } else if (maxEngineStates[0]) {
+                        newMaxState.time = maxEngineStates[0].time;
+                    }
+
+                    maxEngineStates.push(newMaxState);
                 } else {
                     // in case currentMaxStates.dequeued === undefined
-                    if (currentMaxStates.dequeued < states.dequeued || !currentMaxStates.dequeued ) {
+                    if ( currentMaxStates.dequeued < states.dequeued || !currentMaxStates.dequeued ) {
                         currentMaxStates.dequeued = states.dequeued;
                     }
-                    if (currentMaxStates.error < states.error || !currentMaxStates.error ) {
+                    if ( currentMaxStates.error < states.error || !currentMaxStates.error ) {
                         currentMaxStates.error = states.error;
                     }
-                    if (currentMaxStates.finished < states.finished || !currentMaxStates.finished ) {
+                    if ( currentMaxStates.finished < states.finished || !currentMaxStates.finished ) {
                         currentMaxStates.finished = states.finished;
                     }
-                    if (currentMaxStates.invalid < states.invalid || !currentMaxStates.invalid ) {
+                    if ( currentMaxStates.invalid < states.invalid || !currentMaxStates.invalid ) {
                         currentMaxStates.invalid = states.invalid;
                     }
-                    if (currentMaxStates.running < states.running || !currentMaxStates.running ) {
+                    if ( currentMaxStates.running < states.running || !currentMaxStates.running ) {
                         currentMaxStates.running = states.running;
                     }
-                    if (currentMaxStates.waiting < states.waiting || !currentMaxStates.waiting ) {
+                    if ( currentMaxStates.waiting < states.waiting || !currentMaxStates.waiting ) {
                         currentMaxStates.waiting = states.waiting;
                     }
                 }

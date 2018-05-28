@@ -14,7 +14,7 @@ export class StatisticsService {
     private aggLength = [];
     private aggCounters = [];
     fetchDataInterval = null;
-    public running = true;
+    private running = true;
     private lsKey;
     private lsAggKey;
 
@@ -47,14 +47,21 @@ export class StatisticsService {
         }
 
         let diff = this.getDiff();
-        console.log('Ticks missed: ', diff);
+        // console.log('Ticks missed: ', diff);
         if (diff > 1) {
-            this.fillGaps(diff);
+            if ( diff < 30) {
+                // console.log('filling gaps...');
+                this.fillGaps(diff);
+            } else {
+                // console.log('clearing out data that is too old...');                
+                this.aggData = this.intervals.map(int => []); 
+            }
         }
         this.scheduleInterval();
     }
 
     fillGaps(ticks: number) {
+        // console.log('filling gaps');
         let print = new StatesPrint;
         print.time = null;
         for (let i = 0; i < ticks; i++) {

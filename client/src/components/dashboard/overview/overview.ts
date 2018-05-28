@@ -93,7 +93,7 @@ export class Overview extends Vue {
     }
 
     beforeDestroy() {
-        this.statisticsService.stop();
+        // this.statisticsService.stop();
         clearInterval(this.fetchInterval);
     }
 

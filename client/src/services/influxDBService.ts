@@ -16,7 +16,6 @@ export class InfluxDBService {
 
         let timeUntil = moment().subtract(interval * 30, 'seconds').unix() * 1000000000;
 
-        engineNames.push('just@kidding');
         let allRequests = engineNames.map( engineName => {
             let query =  `q=SELECT
                 MAX("RunningCount") AS "MAX_RunningCount",

@@ -14,7 +14,7 @@ export class StatisticsService {
     private aggLength = [];
     private aggCounters = [];
     fetchDataInterval = null;
-    public running = true;
+    private running = true;
     private lsKey;
     private lsAggKey;
 

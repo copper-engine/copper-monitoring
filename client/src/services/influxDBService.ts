@@ -25,24 +25,22 @@ export class InfluxDBService {
                 MAX("ErrorCount") AS "MAX_ErrorCount",
                 MAX("InvalidCount") AS "MAX_InvalidCount"
                 FROM "telegraf"."autogen"."${engineName}"
-                WHERE time > ${timeUntil} GROUP BY time(${interval}s) FILL(null)`;
+                WHERE time > ${timeUntil} GROUP BY time(${interval}s) FILL(previous)`;
 
             return Axios.get(this.requestBase() + query);
         });
        
         return Promise.all(allRequests).then( responsesArr => {
-            // console.log('bulk response', responsesArr);
-            // console.log('responsesArr[0].data.results[0].series[0].values', responsesArr[0].data.results[0].series[0].values);
             let dataMap: Map<String, StatesPrint[]> = new Map<String, StatesPrint[]>();
 
             responsesArr.forEach( (response, index) => {
-                let states: StatesPrint[] = response.data.results[0].series[0].values.map(
-                    result => new StatesPrint(new Date(result[0]), result[1], result[2], result[3], result[4], result[5], result[6], engineNames[index]));
-                    dataMap.set(engineNames[index], states);
-
+                if (response.data.results[0].series) {
+                    let states: StatesPrint[] = response.data.results[0].series[0].values.map(
+                        result => new StatesPrint(new Date(result[0]), result[1], result[2], result[3], result[4], result[5], result[6], engineNames[index]));
+                        dataMap.set(engineNames[index], states);
+                }
             });
 
-            console.log('first dataMap', dataMap);
             return dataMap;
         })
         .catch(error => {

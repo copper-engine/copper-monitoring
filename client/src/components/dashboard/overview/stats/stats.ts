@@ -22,6 +22,9 @@ export class Stats extends Vue {
     @Prop() dataset;
     private eventHub: Vue = this.$services.eventHub;
     chartData = null;
+    // the order of values in chartOptions seems to have an effect
+    // on the rendering of charts, search for official documentation
+    // and examples when adding new options
     chartOptions = {
         responsive: true,
         maintainAspectRatio: false,

@@ -35,7 +35,7 @@
                 </v-tooltip>
                 <v-list>
                     <v-list-tile v-for="layout in layoutSelect" :key="layout.id" @click="currentLayout = layout">
-                    <v-list-tile-title>{{ layout }}</v-list-tile-title>
+                    <v-list-tile-title><v-icon v-if="layout === 'Row'">mdi-view-grid</v-icon><v-icon v-if="layout === 'Column'">mdi-view-agenda</v-icon>{{ layout }}</v-list-tile-title>
                     </v-list-tile>
                 </v-list>
             </v-menu>

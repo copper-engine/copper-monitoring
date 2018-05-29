@@ -59,7 +59,7 @@
             </v-btn>
             <v-btn class='influx-button' @click="callStatStop()" v-show="statisticsService.isRunning()"><v-icon>mdi-database</v-icon>Stop Collecting</v-btn>
             <v-btn class='influx-button' @click="callStatStart()" v-show="!statisticsService.isRunning()" :disabled="(useInfluxDB === true)"><v-icon>mdi-database</v-icon>Start Collecting</v-btn>
-            <v-btn class='influx-button' @click="statisticsService.printAggData()"><v-icon>mdi-database</v-icon>Print Stat data</v-btn>
+            <!-- <v-btn class='influx-button' @click="statisticsService.printAggData()"><v-icon>mdi-database</v-icon>Print Stat data</v-btn> -->
         </div>
     </v-layout>
 
@@ -85,7 +85,7 @@
         
         <v-card class="influx-card">
             <v-card-title position="absolute" class="dialog-title">
-                <h2 id="topOfPage">Conneting to Influx DB</h2>
+                <h2 id="topOfPage">Connection settings to Influx DB</h2>
                 <v-spacer></v-spacer>             
                     <v-btn depressed class="squareButton" @click="openInfluxDialog = false"><v-icon>mdi-close</v-icon></v-btn>      
             </v-card-title>
@@ -94,14 +94,14 @@
                 <v-card-text class="influx-card-text">
                     <v-layout column class="influx-container">
                         <v-layout row v-if="(beanCollisions.length > 0)" class='conflict-warning'>
-                            <h1>Warning! Bean Collision!</h1>
+                            <h1>Warning! MBean name collision found. Statistics may be incorrect! </h1>
                             <v-menu open-on-hover right offset-y :nudge-top="115" :nudge-right="35">
                                 <v-icon slot='activator'>mdi-information</v-icon>
                                 <div class="menu-header">
-                                    <h1>Warning! Bean Collision Detected</h1>
+                                    <h1>Warning! MBean name collision found. Statistics may be incorrect!</h1>
                                 </div>
                                 <div class="menu-info">
-                                    <h1>You have {{ beanCollisions.length }} MBean name{{ (beanCollisions.length > 1 ? 's' : '') }} shared between 2 or more engines. This may result in inaccurate statistics.</h1>
+                                    <h1>You have {{ beanCollisions.length }} MBean name{{ (beanCollisions.length > 1 ? 's' : '') }} shared between 2 or more engines. This may result in inaccurate statistics. Make engine mbean names unique in your copper application, othervice wrong statistics may be shown for engine some engines. </h1>
                                 </div>
                                 <div class="menu-details">
                                     <v-layout row v-for="collision in beanCollisions" key="collision.id">
@@ -122,8 +122,8 @@
                             <v-switch v-model="useInfluxDB"></v-switch>
                         </v-layout>
                         <v-flex class="description">
-                            <p>With a valid connection to Influx DB, this page can display Influx DB's statistics. Fore more information,
-                                    visit <a href="https://www.influxdata.com/">Influx DB</a></p>
+                            <p>With a valid connection to Influx DB, Owerview page will display data collected in Influx DB in a similar way as Chronograf do it. 
+                                It's usefull because telegraf can collect and store statistics from your application to Influx DB all the time. Copper Monitoring UI will collect data(in a limited way) only when it's running in browser and stores data in browsers local storage per each user. Using Influx DB provides you with ability to store your statistics permanently and share data between different users. Fore more information, visit <a href="https://www.influxdata.com/">Influx DB</a></p>
                         </v-flex>
                         <v-layout row class="section-header">
                             <div class="connection-icon-container">
@@ -180,7 +180,8 @@
                         <transition name="extend-information">
                             <div v-if="openTelegrafInput" class='transition-container'>
                                 <v-flex class="description">
-                                    <p>This can be used as the Input section of a Telegraf Configuration file for use with InfluxDB.</p>
+                                    <p>Telegraf collects data and store them to Influx DB. It have Jolokia plugin so you can use it access data from your copper application and store them to create statistics</p>
+                                    <p>Next configuration of Jolokia plugin should be used as the Input section of a Telegraf Configuration file. You can use other configuration(for example with different metric names), but then Copper Monitoring might not be able to access data from Influx DB(You still may be able to observe statistics in Chronograf).</p>
                                 </v-flex>
                                 <div class="info-section">
                                     <div class="option-btn-container">
@@ -202,10 +203,13 @@
                                 </v-btn>
                                 <span>Open Details</span>
                             </v-tooltip>
-                            <h1>Sample Queries</h1>
+                            <h1>Sample Queries to Influx DB</h1>
                         </v-layout>
                         <transition name="extend-information">
                             <div v-if="openSampleQueries" class='transition-container'>
+                                <v-flex class="description">
+                                    <p>This sample queries can be used to get data form Influx DB using comandline or as a base to Chronograf cell configuration</p>
+                                </v-flex>
                                 <div class="info-section">
                                     <div class="option-btn-container">
                                         <v-btn depressed @click="copy(queryText)">Copy</v-btn>

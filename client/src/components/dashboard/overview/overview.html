@@ -184,7 +184,7 @@
                                 </v-btn>
                                 <span>Open Details</span>
                             </v-tooltip>
-                            <h1>Telegraf Input Configuration</h1>
+                            <h1 @click="triggerTelegrafInput">Telegraf Input Configuration</h1>
                         </v-layout>
                         <transition name="extend-information">
                             <div v-if="openTelegrafInput" class='transition-container'>
@@ -212,7 +212,7 @@
                                 </v-btn>
                                 <span>Open Details</span>
                             </v-tooltip>
-                            <h1>Sample Queries to Influx DB</h1>
+                            <h1 @click="triggerSampleQueries">Sample Queries to Influx DB</h1>
                         </v-layout>
                         <transition name="extend-information">
                             <div v-if="openSampleQueries" class='transition-container'>

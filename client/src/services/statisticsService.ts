@@ -14,7 +14,7 @@ export class StatisticsService {
     private aggLength = [];
     private aggCounters = [];
     fetchDataInterval = null;
-    private running = true;
+    public running = true;
     private lsKey;
     private lsAggKey;
 
@@ -89,10 +89,6 @@ export class StatisticsService {
     
     stop() {
         this.running = false;
-    }
-
-    isRunning() {
-        return this.running;
     }
 
     reset() {

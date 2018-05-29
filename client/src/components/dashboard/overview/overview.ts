@@ -89,7 +89,7 @@ export class Overview extends Vue {
         this.checkStatService();
         // this.getDataFromInflux();
         this.getData();
-        this.checkCollecting();
+        // this.checkCollecting();
     }
 
     beforeDestroy() {
@@ -102,22 +102,12 @@ export class Overview extends Vue {
         localStorage.setItem(this.$store.state.user.name + ':useInfluxDB', String(this.useInfluxDB));
         this.$store.state.user.influx.useInfluxDB = this.useInfluxDB;
         if (this.useInfluxDB === true) {
-            this.callStatStop();
+            this.statisticsService.stop();
             this.testConnection();
-            // setting icon in Overview router-link in Sidebar
-            // this.eventHub.$emit('toggleCollectingData', false);
         } else {
-            this.callStatStart();         
-            // setting icon in Overview router-link in Sidebar            
-            // this.eventHub.$emit('toggleCollectingData', true);
+            this.statisticsService.start();       
         }
         this.getData();
-     }
-
-    //  @Watch('statisticsService.running')
-     checkCollecting() {
-         // setting icon in Overview router-link in Sidebar  
-        this.eventHub.$emit('toggleCollectingData', this.statisticsService.isRunning());
      }
 
     getDataFromInflux() {
@@ -280,16 +270,6 @@ export class Overview extends Vue {
         this.openInfluxDialog = true;
     }
 
-    callStatStart() {
-        this.statisticsService.start();
-        this.checkCollecting();
-    }
-
-    callStatStop() {
-        this.statisticsService.stop();
-        this.checkCollecting();
-    }
- 
     generateConfigFile() {
         let beanNames = [];
 

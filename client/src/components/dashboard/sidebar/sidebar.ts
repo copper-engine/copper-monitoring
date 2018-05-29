@@ -2,8 +2,9 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import { ConnectionSettings } from '../../../models/connectionSettings';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import { setTimeout } from 'timers';
-import './sidebar.scss';
+import { StatisticsService } from '../../../services/statisticsService';
 import { Mutations } from '../../../store.vuex';
+import './sidebar.scss';
 
 const connectionStatusComponent = () => import('./connection-status').then(({ ConnectionStatusComponent }) => ConnectionStatusComponent);
 const engineGroupComponent = () => import('./engine-group').then(({EngineGroupComponent}) => EngineGroupComponent);
@@ -11,7 +12,7 @@ const configComponent = () => import('./config').then(({ ConfigComponent }) => C
 
 @Component({
     template: require('./sidebar.html'),
-    services: ['eventHub'],
+    services: ['eventHub', 'statisticsService'],
     components: {
         'connection-status': connectionStatusComponent,
         'group': engineGroupComponent,
@@ -30,14 +31,7 @@ export class SidebarComponent extends Vue {
     clickAllowed = true;
     collectingData: boolean = false;
     emptyConnectionSettings = new ConnectionSettings();
-
-    created() {
-        this.eventHub.$on('toggleCollectingData', this.toggleCollectingData);
-    }
-
-    toggleCollectingData(input: boolean) {
-        this.collectingData = input;
-    }
+    private statisticsService: StatisticsService = this.$services.statisticsService;
 
     get getOverviewPath() {
         let params = '?' + this.$store.getters.connectionsAsParams;

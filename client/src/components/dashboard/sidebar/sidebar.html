@@ -21,7 +21,7 @@
                         <div class="link-name">
                             Overview 
                             <v-tooltip top content-class="tooltip-text">
-                                <v-icon class="flashing" slot="activator" v-if="collectingData === true">mdi-arrow-down-bold-circle-outline</v-icon>
+                                <v-icon class="flashing" slot="activator" v-if="statisticsService.running === true">mdi-arrow-down-bold-circle-outline</v-icon>
                                 <span>Actively Collecting Data</span>
                             </v-tooltip>
                         </div>

@@ -2,6 +2,7 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import { StatesPrint, ChartStates, EngineGroup, EngineStatus } from '../../../../models/engine';
 import { VueCharts, Bar, Line, mixins } from 'vue-chartjs';
 import { EngineStatData } from '../index';
+import './stats.scss';
 
 @Component({
     template: require('./stats.html'),
@@ -21,7 +22,12 @@ export class Stats extends Vue {
     @Prop() dataset;
     private eventHub: Vue = this.$services.eventHub;
     chartData = null;
+    // the order of values in chartOptions seems to have an effect
+    // on the rendering of charts, search for official documentation
+    // and examples when adding new options
     chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
         animation: {
             duration: 0, // general animation time
             // easing: 'easeInCirc'
@@ -31,8 +37,6 @@ export class Stats extends Vue {
                 tension: 0, // disables bezier curves
             
             },
-        responsive: false,
-        maintainAspectRatio: false
         }
     };
 

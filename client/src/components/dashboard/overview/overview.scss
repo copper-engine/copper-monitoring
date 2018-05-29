@@ -18,8 +18,8 @@
             background-color: $light-tertiary !important;
             color: $dark-text-color;
             .icon {
-                color: $dark-text-color;  
-                margin-right: 10px;          
+                color: $dark-text-color;
+                margin-right: 10px;
             }
         }
         .btn--disabled {
@@ -34,10 +34,10 @@
         }
         .connected-icon{
             color: #69c57e !important;
-        }  
+        }
         .not-used-icon{
             color: #9b9b9b !important;
-        }  
+        }
     }
 
     .no-connection-card {
@@ -53,45 +53,44 @@
                 color: $dark-text-color;
             }
         }
-    }  
+    }
 
     .stat-card-container {
-        // width: 100%;
         flex-wrap: wrap;
+        width: 100%;
         .stat-card {
             border-radius: 2px;
             position: relative;
-            // max-width: 740px;
-            // min-width: 740px;
-            // max-height: 400px;
             margin: 20px;
             border: 1px solid;
-            padding-left: 20px;  
-            padding-right: 20px;          
+            padding-left: 20px;
+            padding-right: 20px;
             border-color: $light-border;
             background-color: $light-wf;
             color: $dark-text-color;
             h2 {
                 padding-left: 20px;
             }
-            // canvas {
-            //     width: 700px !important;
-            // }
         }
         .row-layout {
-            max-width: 740px;
-            min-width: 740px;
-            max-height: 440px;
+            width: 45%;
+            // height: 45%;
+            max-height: 460px;
+            min-height: 400px;
+            canvas {
+                min-height: 410px;
+                max-height: 420px;
+            }
         }
         .column-layout {
-            // width: 100%;
-            // height: 25%;
-            max-width: 9999px;
-            // min-width: 740px;
-            // max-height: 500px;
-            // canvas {
-            //     max-height: 500px;  
-            // }
+            width: 95%;
+            // height: 55%;
+            max-height: 600px;
+            min-height: 500px;
+            canvas {
+                min-height: 490px;
+                max-height: 590px;
+            }
         }
     }
 }
@@ -126,7 +125,7 @@
         }
         .summary {
             .text {
-            color: $light-text-color;                
+            color: $light-text-color;
             }
         }
 
@@ -153,4 +152,4 @@
 @keyframes extend-information {
     0% {max-height: 0px;}
     100% {max-height: 375px;}
-} 
+}

@@ -39,26 +39,35 @@
                     </v-list-tile>
                 </v-list>
             </v-menu>
-            <v-btn class='influx-button' @click="triggerOpenInflux">
-                <v-icon 
-                    v-show="useInfluxDB === false"
-                    class="not-used-icon">
-                    fiber_manual_record
-                </v-icon>
-                <v-icon 
-                    v-show="useInfluxDB === true && connectionSuccess === true"
-                    class="connected-icon">
-                    fiber_manual_record
-                </v-icon> 
-                <v-icon 
-                    v-show="useInfluxDB === true && connectionSuccess === false"
-                    class="not-connected-icon"> 
-                    fiber_manual_record
-                </v-icon>
-                Connect InfluxDB
-            </v-btn>
-            <v-btn class='influx-button' @click="callStatStop()" v-show="statisticsService.isRunning()"><v-icon>mdi-database</v-icon>Stop Collecting</v-btn>
-            <v-btn class='influx-button' @click="callStatStart()" v-show="!statisticsService.isRunning()" :disabled="(useInfluxDB === true)"><v-icon>mdi-database</v-icon>Start Collecting</v-btn>
+            <v-tooltip top content-class="tooltip-text" slot="activator">            
+                <v-btn slot="activator" class='influx-button' @click="triggerOpenInflux">
+                    <v-icon 
+                        v-show="useInfluxDB === false"
+                        class="not-used-icon">
+                        fiber_manual_record
+                    </v-icon>
+                    <v-icon 
+                        v-show="useInfluxDB === true && connectionSuccess === true"
+                        class="connected-icon">
+                        fiber_manual_record
+                    </v-icon> 
+                    <v-icon 
+                        v-show="useInfluxDB === true && connectionSuccess === false"
+                        class="not-connected-icon"> 
+                        fiber_manual_record
+                    </v-icon>
+                    Connect InfluxDB
+                </v-btn>
+                <span>Cofigure Influx DB Connection</span> 
+            </v-tooltip>
+            <v-tooltip top content-class="tooltip-text" slot="activator">                        
+                <v-btn slot="activator" class='influx-button' @click="callStatStart()" v-show="!statisticsService.isRunning()" :disabled="(useInfluxDB === true)"><v-icon>mdi-database</v-icon>Start Collecting</v-btn>
+                <span>Start Collecting Data</span>
+            </v-tooltip>
+            <v-tooltip top content-class="tooltip-text" slot="activator">                        
+                <v-btn slot="activator" class='influx-button' @click="callStatStop()" v-show="statisticsService.isRunning()"><v-icon>mdi-database</v-icon>Stop Collecting</v-btn>                
+                <span>Stop Collecting Dataa</span>  
+            </v-tooltip>
             <!-- <v-btn class='influx-button' @click="statisticsService.printAggData()"><v-icon>mdi-database</v-icon>Print Stat data</v-btn> -->
         </div>
     </v-layout>

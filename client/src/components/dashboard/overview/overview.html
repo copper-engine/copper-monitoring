@@ -129,6 +129,7 @@
                         <v-layout row class="input-style influx-enable">
                             <h2>Enable InfluxDB Connection</h2>
                             <v-switch v-model="useInfluxDB" :disabled="promiseStack.length > 0"></v-switch>
+                            <h3 v-show="promiseStack.length > 0">( Resolving request... )</h3>
                         </v-layout>
                         <v-flex class="description">
                             <p>With a valid connection to Influx DB, Owerview page will display data collected in Influx DB in a similar way as Chronograf do it. 

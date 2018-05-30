@@ -277,15 +277,26 @@ export class JmxService {
             });
     }
 
-    deleteBroken(connectionSettings: ConnectionSettings, mbean: string, workflowId: string, user: User) {
-        return Axios.post(process.env.API_NAME, 
-                [ this.createJmxExecRequest(connectionSettings, mbean, { operation: 'deleteBroken', arguments: [ workflowId ] }) ], {
+    deleteWorkflow(connectionSettings: ConnectionSettings, mbean: string, workflowId: string, filter: WorkflowFilter, user: User) {
+        if (filter.states = [State.WAITING]) {
+            return Axios.post(process.env.API_NAME, 
+                [ this.createJmxExecRequest(connectionSettings, mbean, { operation: 'deleteWaiting', arguments: [ workflowId ] }) ], {
                     auth: { username: user.name, password: user.password }
                 })
             .then(this.parseVoidResponse)
             .catch(error => {
                 console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflow:', error);
             });
+        } else {
+            return Axios.post(process.env.API_NAME, 
+                    [ this.createJmxExecRequest(connectionSettings, mbean, { operation: 'deleteBroken', arguments: [ workflowId ] }) ], {
+                        auth: { username: user.name, password: user.password }
+                    })
+                .then(this.parseVoidResponse)
+                .catch(error => {
+                    console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflow:', error);
+                });
+        }
     }
 
     deleteFiltered(connectionSettings: ConnectionSettings, mbean: string, user: User , max: number = 0, offset: number = 0, filter: WorkflowFilter) {

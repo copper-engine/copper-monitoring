@@ -259,11 +259,11 @@ export class WorkflowsComponent extends Vue {
         });
     }
 
-    deleteBroken(workflow: WorkflowInfo) {
+    deleteWorkflow(workflow: WorkflowInfo) {
         this.dialogDeleteOpen = false;
         let id = workflow.id;
         this.toggleButtons(id, 'delete');
-        this.jmxService.deleteBroken(this.mbean.connectionSettings, this.mbean.name, id, this.$store.state.user)
+        this.jmxService.deleteWorkflow(this.mbean.connectionSettings, this.mbean.name, id, this.filter, this.$store.state.user)
         .then((done) => {
             // this.forceStatusFetch();
             this.toggleButtons(id, 'delete');

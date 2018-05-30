@@ -79,7 +79,6 @@
                         </v-tooltip>
                         <v-tooltip top content-class="tooltip-text">
                             <v-btn dark depressed
-                                v-if="(wfType === 'broken')"
                                 class="squareButton delete-button"
                                 :loading="workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleteButton"
                                 :disabled="workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton || disabled)"                                
@@ -174,7 +173,7 @@
             <v-card-actions>
                 <v-layout row>
                     <v-spacer></v-spacer>
-                    <v-btn depressed @click="deleteBroken(dialogWF)">Yes</v-btn>          
+                    <v-btn depressed @click="deleteWorkflow(dialogWF)">Yes</v-btn>          
                     <v-btn depressed @click="dialogDeleteOpen = false">No</v-btn>
                 </v-layout>
             </v-card-actions>

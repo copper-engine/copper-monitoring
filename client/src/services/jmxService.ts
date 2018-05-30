@@ -278,7 +278,7 @@ export class JmxService {
     }
 
     deleteWorkflow(connectionSettings: ConnectionSettings, mbean: string, workflowId: string, filter: WorkflowFilter, user: User) {
-        if (filter.states = [State.WAITING]) {
+        if (filter.states === [State.WAITING]) {
             return Axios.post(process.env.API_NAME, 
                 [ this.createJmxExecRequest(connectionSettings, mbean, { operation: 'deleteWaiting', arguments: [ workflowId ] }) ], {
                     auth: { username: user.name, password: user.password }

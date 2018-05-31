@@ -24,6 +24,7 @@
         :class="{
         'highlight-workflow-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting,
         'highlight-workflow-extended-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting && workflowsContext.get(workflow.id).open,
+        'highlight-workflow-waiting-extended-deleting': wfType === 'waiting' && workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting && workflowsContext.get(workflow.id).open,        
         'highlight-workflow-layout': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloading, 
         'fade': workflowsContext.get(workflow.id) && (workflowsContext.get(workflow.id).reloadButton || workflowsContext.get(workflow.id).deleteButton)
         }">
@@ -63,7 +64,7 @@
                             {{ workflow.lastModTS | moment("HH:mm DD/MM/YYYY") }}
                         </div>
                     </v-flex>                  
-                    <v-flex :class="{ 'single-button' : (wfType === 'waiting'), 'actions' : (wfType === 'broken')}">
+                    <v-flex :class="{ 'actions-limited' : (wfType === 'waiting'), 'actions' : (wfType === 'broken')}">
                         <v-tooltip top content-class="tooltip-text">
                             <v-btn dark depressed
                                 v-if="(wfType === 'broken')"

@@ -219,6 +219,9 @@ export class WorkflowsComponent extends Vue {
 
     deleteFiltered(newFilter: WorkflowFilter) {
         this.page = 1;
+        if (newFilter === null) {
+            newFilter = this.filter;
+        }
         this.jmxService.deleteFiltered(this.mbean.connectionSettings, this.mbean.name, this.$store.state.user, 0, 0, newFilter)
             .then((done) => {
                 this.deletingAll = false;
@@ -263,7 +266,7 @@ export class WorkflowsComponent extends Vue {
         this.dialogDeleteOpen = false;
         let id = workflow.id;
         this.toggleButtons(id, 'delete');
-        this.jmxService.deleteWorkflow(this.mbean.connectionSettings, this.mbean.name, id, this.filter, this.$store.state.user)
+        this.jmxService.deleteWorkflow(this.mbean.connectionSettings, this.mbean.name, id, this.wfType, this.$store.state.user)
         .then((done) => {
             // this.forceStatusFetch();
             this.toggleButtons(id, 'delete');

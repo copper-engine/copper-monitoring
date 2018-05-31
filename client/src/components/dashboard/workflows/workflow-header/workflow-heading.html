@@ -20,8 +20,8 @@
                 </span>
             </v-btn>
             <v-btn dark
-                v-if="(wfType === 'broken')"
                 class="longButton delete-button"
+                :class="{ 'less-heading-buttons' :  (wfType === 'waiting') }"                
                 :loading="deletingAll"
                 :disabled="deletingAll || restartingAll || (wfCount < 1)"
                 @click="dialogDeleteOpen = true">
@@ -33,7 +33,6 @@
             </v-btn>
             <v-btn dark
                 class="longButton details-button"
-                :class="{ 'only-filter' :  (wfType === 'waiting') }"
                 :loading="deletingAll"
                 :disabled="deletingAll || restartingAll || (wfCount < 1)"
                 @click="triggerFilterMenu">
@@ -191,7 +190,7 @@
                 Last Modification
             </div>   
         </v-flex>
-        <v-flex :class="{ 'single-button' : (wfType === 'waiting'), 'actions' : (wfType === 'broken')}">
+        <v-flex :class="{ 'actions-limited' : (wfType === 'waiting'), 'actions' : (wfType === 'broken')}">
                 Actions
         </v-flex>
     </v-layout>

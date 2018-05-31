@@ -65,6 +65,7 @@ export class Overview extends Vue {
     states = new ChartStates(true, true, true, true, true, true);
     chartData: any[] = [];
     useInfluxDB: boolean = false;
+    promiseStack = [];
 
     created() {
         this.timeSelect = this.statisticsService.intervals
@@ -167,6 +168,7 @@ export class Overview extends Vue {
 
     @Watch('states', { deep: true })
     getData() {
+        this.promiseStack.push([]);
         let fetchingDataPromise: Promise<void | Map<String, StatesPrint[]>>;
 
         if (this.useInfluxDB) {
@@ -187,6 +189,7 @@ export class Overview extends Vue {
                     this.chartData.push(this.getChartData(this.states, value));
                 });
             }
+            this.promiseStack.pop();    
         });
     }
 

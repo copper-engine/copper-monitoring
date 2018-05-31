@@ -305,6 +305,6 @@ export class WorkflowHeading extends Vue {
 
     sendDeleteAll() {
         this.dialogDeleteOpen = false;
-        this.$emit('triggerDeleteFiltered', this.filterApplied ? this.currentFilterObject : new WorkflowFilter());
+        this.$emit('triggerDeleteFiltered', this.filterApplied ? this.currentFilterObject : null);
     }
 }

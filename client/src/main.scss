@@ -114,10 +114,20 @@ body {
                             }
                             .influx-enable {
                                 max-height: 40px;
+                                align-items: center;
                                 h2 {
                                     // font-size: 2em;
                                     padding-left: 50px;
                                     margin-right: 20px;
+                                }
+                                h3 {
+                                    margin-bottom: 2px;
+                                    color: #9b9b9b;                                    
+                                }
+                                .switch {
+                                    flex-grow: 0;
+                                    margin-right: 25px;
+                                    margin-top: 27px;
                                 }
                             }
                             .section-header {

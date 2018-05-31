@@ -6,7 +6,7 @@ import { JmxService } from './jmxService';
 import { MBean } from '../models/mbeans';
 import * as moment from 'moment';
 
-const MINUTE = 15 * 1000;
+const MINUTE = 60 * 1000;
 class StatisticsLock {
     constructor(public id: number, public timestamp: Date) {}
 }
@@ -40,53 +40,38 @@ export class StatisticsService {
         try {
             this.lock = JSON.parse(localStorage.getItem(this.lsLockKey));
         } catch (err) {
-            console.error('Failed to load this.lock for key: ' + this.lsLockKey + '. Will init empty statistics. Error:' , err);
-            this.holdingLock = false;
             return false;
         }
-
-        if (this.lock && this.lock.id === this.id) {
-            console.log('Lock owner', this.lock.id, this.id);
-            return true;
-        } else {
-            this.holdingLock = false;
-            console.log('Not Lock owner', (this.lock ? this.lock.id : 'null'), this.id);
-            return false;
-        }
-
+        return this.lock && this.lock.id === this.id;
     }
 
     obtainLock() {
         this.lock = null;
         try {
             this.lock = JSON.parse(localStorage.getItem(this.lsLockKey));
-            // this.lock = localStorage.getItem(this.lsLockKey);
         } catch (err) {
             console.error('Failed to load this.lock for key: ' + this.lsLockKey + '. Will init empty statistics. Error:' , err);
         }
         
-        // TODO better this.lock handling
         if (!this.lock || ((new Date().getTime() - new Date(this.lock.timestamp).getTime()) > MINUTE)) {
-            console.log('will  obtaine lock', this.lock);
-            if (this.lock) {
-                console.log('(new Date().getTime() - new Date(this.lock.timestamp).getTime() > MINUTE)', (new Date().getTime() - new Date(this.lock.timestamp).getTime() > MINUTE), (new Date().getTime() - new Date(this.lock.timestamp).getTime()));
-
-            }
-            this.lock = new StatisticsLock(this.id, new Date());
-            localStorage.setItem(this.lsLockKey, JSON.stringify(this.lock));   
+            this.updateLock();  
+          
             window.onbeforeunload = () => {
-                console.log('Will delete lock');
+                clearInterval(this.fetchDataInterval);
                 localStorage.removeItem(this.lsLockKey);
-            };        
+            };    
+
             this.holdingLock = true;
-            console.log('Lock obtained');
-            return true;
         } else {
             this.holdingLock = false;
-            console.log('Can not obtaine lock... will retry', this.lock, this.id);
-            
-            return false;
         }
+        
+        return this.holdingLock;
+    }
+
+    updateLock() {
+        this.lock = new StatisticsLock(this.id, new Date());
+        localStorage.setItem(this.lsLockKey, JSON.stringify(this.lock)); 
     }
 
     releaveLock() {
@@ -254,17 +239,14 @@ export class StatisticsService {
 
     saveToLocalStorage() {
         if (this.running && ((this.holdingLock && this.isLockOwner()) || this.obtainLock())) {
-            console.log('Have lock... will store data to local storage');
-
             try {
+                this.updateLock(); 
                 localStorage.setItem(this.lsKey, JSON.stringify(this.aggData));
             } catch (err) {
                 console.error('Failed to store agg data with lengths', this.aggData.map(arr => arr.length));
             }
     
             localStorage.setItem(this.lsAggKey, JSON.stringify(this.aggCounters));
-        } else {
-            console.log('Cannot obtain lock to store statistics');
         }
     }
         
@@ -322,7 +304,6 @@ export class StatisticsService {
         let engines: EngineStatus[] = this.store.state.engineStatusList;
         let promises: Promise<void>[] = [];
 
-
         // can be improved by calling 1 jolokia request
         if (engines) {
             engines.forEach( (engine: EngineStatus) => {
@@ -331,7 +312,6 @@ export class StatisticsService {
                     // can be improved by getting connection settings & engine ID
                     // this.addNewState('' + engine.id, newStates);
                     newStates.engine = engine.engineId + '@' + mbean.connectionSettings.toString();
-                    // console.log(newStates);
                     result.push(newStates);
                 }));
             });

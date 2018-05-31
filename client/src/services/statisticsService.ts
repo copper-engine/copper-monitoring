@@ -6,17 +6,28 @@ import { JmxService } from './jmxService';
 import { MBean } from '../models/mbeans';
 import * as moment from 'moment';
 
+const MINUTE = 15 * 1000;
+class StatisticsLock {
+    constructor(public id: number, public timestamp: Date) {}
+}
+
 // Statistic Service will collect in backgorund data about engine statuses
 export class StatisticsService {
+    private id = Math.floor(Math.random() * 100000000000000000);
     aggData: StatesPrint[][][] = []; 
     pointNumbers = 30;
-    public intervals = [5, 15, 30, 60, 300, 900]; // 5s, 15s, 30s, 1m, 5m, 15m
+    public intervals = [ 5, 15, 30, 60, 300, 900 ]; // 5s, 15s, 30s, 1m, 5m, 15m
     private aggLength = [];
     private aggCounters = [];
-    fetchDataInterval = null;
+    private fetchDataInterval = null;
     public running = true;
     private lsKey;
     private lsAggKey;
+    private lsLockKey;
+    private obtainLockInterval = null;
+    public holdingLock = false;
+    private lock: StatisticsLock = null;
+
 
     constructor(private store: Store<StoreState>, private jmxService: JmxService) {
         this.aggLength = [0];
@@ -25,17 +36,77 @@ export class StatisticsService {
         }
     }
 
-    init() {
+    isLockOwner() {
         try {
-            this.lsKey = this.store.state.user.name + ':statitics';
-            this.lsAggKey = this.store.state.user.name + ':statitics:aggCounters';
+            this.lock = JSON.parse(localStorage.getItem(this.lsLockKey));
+        } catch (err) {
+            console.error('Failed to load this.lock for key: ' + this.lsLockKey + '. Will init empty statistics. Error:' , err);
+            this.holdingLock = false;
+            return false;
+        }
 
-            // SIMULATE GUP here
+        if (this.lock && this.lock.id === this.id) {
+            console.log('Lock owner', this.lock.id, this.id);
+            return true;
+        } else {
+            this.holdingLock = false;
+            console.log('Not Lock owner', (this.lock ? this.lock.id : 'null'), this.id);
+            return false;
+        }
+
+    }
+
+    obtainLock() {
+        this.lock = null;
+        try {
+            this.lock = JSON.parse(localStorage.getItem(this.lsLockKey));
+            // this.lock = localStorage.getItem(this.lsLockKey);
+        } catch (err) {
+            console.error('Failed to load this.lock for key: ' + this.lsLockKey + '. Will init empty statistics. Error:' , err);
+        }
+        
+        // TODO better this.lock handling
+        if (!this.lock || ((new Date().getTime() - new Date(this.lock.timestamp).getTime()) > MINUTE)) {
+            console.log('will  obtaine lock', this.lock);
+            if (this.lock) {
+                console.log('(new Date().getTime() - new Date(this.lock.timestamp).getTime() > MINUTE)', (new Date().getTime() - new Date(this.lock.timestamp).getTime() > MINUTE), (new Date().getTime() - new Date(this.lock.timestamp).getTime()));
+
+            }
+            this.lock = new StatisticsLock(this.id, new Date());
+            localStorage.setItem(this.lsLockKey, JSON.stringify(this.lock));   
+            window.onbeforeunload = () => {
+                console.log('Will delete lock');
+                localStorage.removeItem(this.lsLockKey);
+            };        
+            this.holdingLock = true;
+            console.log('Lock obtained');
+            return true;
+        } else {
+            this.holdingLock = false;
+            console.log('Can not obtaine lock... will retry', this.lock, this.id);
+            
+            return false;
+        }
+    }
+
+    releaveLock() {
+        this.holdingLock = false;
+        localStorage.removeItem(this.lsLockKey);
+        window.onbeforeunload = () => {}; 
+    }
+    
+    init() {  
+        this.lsLockKey = this.store.state.user.name + ':statitics:lock';
+        this.lsKey = this.store.state.user.name + ':statitics';
+        this.lsAggKey = this.store.state.user.name + ':statitics:aggCounters';
+
+        this.obtainLock();
+        try {            
             this.aggData = JSON.parse(localStorage.getItem(this.lsKey));
             if (!this.aggData || this.aggData.length !== this.intervals.length) {
                 this.aggData = this.intervals.map(int => []);   
             }
-
+            
             this.aggCounters = JSON.parse(localStorage.getItem(this.lsAggKey));    
             if (!this.aggCounters) {
                 this.aggCounters = this.aggLength.map(x => x);
@@ -45,7 +116,7 @@ export class StatisticsService {
             this.aggData = this.intervals.map(int => []);   
             this.aggCounters = this.aggLength.map(x => x);
         }
-
+        
         let diff = this.getDiff();
         // console.log('Ticks missed: ', diff);
         if (diff > 1) {
@@ -60,6 +131,27 @@ export class StatisticsService {
         this.scheduleInterval();
     }
 
+    
+    destroy() {
+        clearInterval(this.fetchDataInterval);
+        this.releaveLock();
+        window.onbeforeunload = () => {}; 
+    }
+
+    start() {
+        this.running = true;
+    }
+    
+    stop() {
+        this.releaveLock();
+        this.running = false;
+    }
+    
+    reset() {
+        this.aggData = [];
+        this.aggCounters = this.aggLength.map(x => x);
+    }
+    
     fillGaps(ticks: number) {
         // console.log('filling gaps');
         let print = new StatesPrint;
@@ -79,23 +171,6 @@ export class StatisticsService {
         }
     }
 
-    destroy() {
-        clearInterval(this.fetchDataInterval);
-    }
-
-    start() {
-        this.running = true;
-    }
-    
-    stop() {
-        this.running = false;
-    }
-
-    reset() {
-        this.aggData = [];
-        this.aggCounters = this.aggLength.map(x => x);
-    }
-
     getData(interval: number, engineNames: String[]): Promise<void | Map<String, StatesPrint[]>> {
         let index = this.intervals.indexOf(interval);
         if (index === -1) {
@@ -104,7 +179,6 @@ export class StatisticsService {
         }
 
         let data: StatesPrint[][] = this.aggData[index].slice(0, this.pointNumbers);
-
         if (engineNames && engineNames.length > 0) {
             data = data.map(element => element.filter(states =>  engineNames.indexOf(states.engine) !== -1));
         }
@@ -179,13 +253,19 @@ export class StatisticsService {
     }
 
     saveToLocalStorage() {
-        try {
-            localStorage.setItem(this.lsKey, JSON.stringify(this.aggData));
-        } catch (err) {
-            console.error('Failed to store agg data with lengths', this.aggData.map(arr => arr.length));
-        }
+        if (this.running && ((this.holdingLock && this.isLockOwner()) || this.obtainLock())) {
+            console.log('Have lock... will store data to local storage');
 
-        localStorage.setItem(this.lsAggKey, JSON.stringify(this.aggCounters));
+            try {
+                localStorage.setItem(this.lsKey, JSON.stringify(this.aggData));
+            } catch (err) {
+                console.error('Failed to store agg data with lengths', this.aggData.map(arr => arr.length));
+            }
+    
+            localStorage.setItem(this.lsAggKey, JSON.stringify(this.aggCounters));
+        } else {
+            console.log('Cannot obtain lock to store statistics');
+        }
     }
         
     max(enginesStates: StatesPrint[][]): StatesPrint[] {

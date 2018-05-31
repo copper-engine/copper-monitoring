@@ -69,11 +69,11 @@ export class EngineComponent extends Vue {
     get links(): Link[] {
         let linkArray = [];
         let params = this.status.id + '?' + this.$store.getters.connectionsAsParams;
-        if (!this.multiEngine) {
-            linkArray = linkArray.concat([
-                new Link('Statistics', '/dashboard/statistics/engine/' + params, 'mdi-chart-bar')
-            ]);
-        }
+        // if (!this.multiEngine) {
+        //     linkArray = linkArray.concat([
+        //         new Link('Statistics', '/dashboard/statistics/engine/' + params, 'mdi-chart-bar')
+        //     ]);
+        // }
         if (!this.multiEngine) {
             if (this.status.type === 'persistent') {
                 linkArray = linkArray.concat([

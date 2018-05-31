@@ -103,6 +103,9 @@
                         animation-duration: 5s;
                         animation-iteration-count: infinite;
                     }
+                    .warning-icon {
+                        color: #e08a00;
+                    }
                     @keyframes flashing {
                         0% {opacity: 1}
                         50% {opacity: 1}
@@ -274,6 +277,9 @@
                         .icon {
                             color: $light-text-color;
                             padding-left: 10px;
+                        }
+                        .warning-icon {
+                            color: #e08a00;
                         }
                     }
                 }

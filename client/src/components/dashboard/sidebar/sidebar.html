@@ -19,10 +19,14 @@
                             <v-icon dark>mdi-chart-bar</v-icon>
                         </v-flex>
                         <div class="link-name">
-                            Overview 
+                            Overview
                             <v-tooltip top content-class="tooltip-text">
-                                <v-icon class="flashing" slot="activator" v-if="statisticsService.running === true">mdi-arrow-down-bold-circle-outline</v-icon>
+                                <v-icon class="flashing" slot="activator" v-if="statisticsService.running && statisticsService.holdingLock">mdi-arrow-down-bold-circle-outline</v-icon>
                                 <span>Actively Collecting Data</span>
+                            </v-tooltip>
+                            <v-tooltip top content-class="tooltip-text">
+                                <v-icon class="warning-icon" slot="activator" v-if="statisticsService.running && !statisticsService.holdingLock">warning</v-icon>
+                                <span>Warning: Collected data are not stored to Local Storage because another instance of Copper Monitoring with same user storing it's data.<br/> Close another window to store data, but note that you will lose data from another instance.</span>
                             </v-tooltip>
                         </div>
                     </v-layout> 

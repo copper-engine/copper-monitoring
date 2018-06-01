@@ -29,6 +29,7 @@
             font-size: 1.3em;
             word-wrap: break-word;
             max-width: 200px;
+            cursor: pointer;
         }
         .sub-info {
             flex-grow: 0;
@@ -37,6 +38,7 @@
 
         .engine-sub-details {
             color: $dark-shade-text-color !important;
+            cursor: pointer;            
         }
 
         .count-info {

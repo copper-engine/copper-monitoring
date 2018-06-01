@@ -14,7 +14,7 @@
                         fiber_manual_record
                     </v-icon> 
                 </v-flex>
-                <v-flex class="connection-info">
+                <v-flex class="connection-info" @click.stop="openSettings">
                     {{ connection.settings.host }}:{{ connection.settings.port }}
                 </v-flex>
                 <v-spacer></v-spacer>

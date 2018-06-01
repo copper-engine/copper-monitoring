@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import { ConnectionSettings, ConnectionResult } from './models/connectionSettings';
 import { EngineStatus, EngineGroup } from './models/engine';
 import { MBeans } from './models/mbeans';
-import { User } from './models/user';
+import { User, InfluxConnection } from './models/user';
 import { parseBoolean }  from './util/utils';
 import * as _ from 'lodash';
 
@@ -28,8 +28,10 @@ export const Mutations = {
   updateConnectionResults: 'updateConnectionResults',
   updateEngineStatus: 'updateEngineStatus',
   setUser: 'setUser',
-  setAppCriticalError: 'setAppCriticalError'
-
+  setAppCriticalError: 'setAppCriticalError',
+  setUseInfluxDB: 'setUseInfluxDB',
+  setInfluxSettings: 'setInfluxSettings',
+  setChartInterval: 'setChartInterval'
 };
 
 export const store = new Vuex.Store<StoreState>({
@@ -65,6 +67,17 @@ export const store = new Vuex.Store<StoreState>({
         if (user) {
           state.connectionSettings.push(new ConnectionSettings(user.settings.defaultHost, user.settings.defaultPort));
         }
+      },
+      [Mutations.setUseInfluxDB](state, input: boolean) {
+        state.user.influx.useInfluxDB = input;      
+      },
+      [Mutations.setInfluxSettings](state, influxConnection: InfluxConnection) {  
+        state.user.influx.url = influxConnection.url;
+        state.user.influx.username = influxConnection.username;
+        state.user.influx.password = influxConnection.password;
+      },
+      [Mutations.setChartInterval](state, interval: number) {  
+        state.user.chart.interval = interval;
       }
     },
     getters: {

@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import * as utils from '../../util/utils';
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { User, UserSettings, InfluxConnection } from '../../models/user';
+import { User, UserSettings, InfluxConnection, ChartSettings } from '../../models/user';
 import { CopperRouter } from '../../router';
 import { Mutations } from '../../store.vuex';
 import './login.scss';
@@ -40,7 +40,7 @@ export class LoginComponent extends Vue {
                     this.defaultUsername = result.data.influxUsername;
                     this.defaultPassword = result.data.influxPassword;                    
                     this.$store.commit(Mutations.setUser, new User(this.username, this.password, new UserSettings(result.data.host, result.data.port, this.update, this.theme),
-                        new InfluxConnection(this.url, this.user, this.pass, this.use)));
+                        new InfluxConnection(this.url, this.user, this.pass, this.use), new ChartSettings(this.chartInterval, this.chartLayout)));
                     this.$router.push(this.nextPath);
                 }
             }).catch(error => {
@@ -107,6 +107,24 @@ export class LoginComponent extends Vue {
         let storage = localStorage.getItem(this.username + ':useInfluxDB');
         if (storage !== null && storage !== '' && storage !== undefined) {
             return utils.parseBoolean(storage);
+        } else {
+            return null;
+        }
+    }
+
+    get chartInterval() {
+        let storage = localStorage.getItem(this.username + ':chartInterval');
+        if (storage !== null && storage !== undefined) {
+            return parseInt(storage);
+        } else {
+            return null;
+        }
+    }
+
+    get chartLayout() {
+        let storage = localStorage.getItem(this.username + ':chartLayout');
+        if (storage !== null && storage !== undefined) {
+            return storage;
         } else {
             return null;
         }

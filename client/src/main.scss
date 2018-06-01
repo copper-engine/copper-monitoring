@@ -86,8 +86,8 @@ body {
                     width: 100%;
                     color: $dark-text-color;
                     .workflow-details {
-                        background-color: $light-tertiary !important;
-                        color: $dark-text-color !important;
+                        background-color: $light-tertiary;
+                        color: $dark-text-color;
                     }
                 }
                 .influx-card {
@@ -151,7 +151,7 @@ body {
                                         color: #9b9b9b !important;
                                     } 
                                 }
-                                h1:hover {
+                                .clickable-label:hover {
                                     cursor: pointer;
                                     color: #9b9b9b !important;
                                 }
@@ -294,10 +294,10 @@ body {
                         }
                     }
                     .card__text  {
-                        color: $dark-text-color;
+                        color: $light-text-color;
                         .workflow-details {
-                            background-color: $light-tertiary !important;
-                            color: $dark-text-color !important;
+                            background-color: $dark-tertiary;
+                            color: $light-text-color;
                         }
                     }
                     .influx-card {

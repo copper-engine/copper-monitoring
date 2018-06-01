@@ -41,7 +41,7 @@
                     <span>Layout Type</span>
                 </v-tooltip>
                 <v-list>
-                    <v-list-tile v-for="layout in layoutSelect" :key="layout.id" @click="currentLayout = layout">
+                    <v-list-tile v-for="layout in layoutSelect" :key="layout.id" @click="updateLayout(layout)">
                     <v-list-tile-title><v-icon v-if="layout === 'Row'">mdi-view-grid</v-icon><v-icon v-if="layout === 'Column'">mdi-view-agenda</v-icon>{{ layout }}</v-list-tile-title>
                     </v-list-tile>
                 </v-list>
@@ -193,7 +193,7 @@
                                 </v-btn>
                                 <span>Open Details</span>
                             </v-tooltip>
-                            <h1 @click="triggerTelegrafInput">Telegraf Input Configuration</h1>
+                            <h1 @click="triggerTelegrafInput" class='clickable-label'>Telegraf Input Configuration</h1>
                         </v-layout>
                         <transition name="extend-information">
                             <div v-if="openTelegrafInput" class='transition-container'>
@@ -221,7 +221,7 @@
                                 </v-btn>
                                 <span>Open Details</span>
                             </v-tooltip>
-                            <h1 @click="triggerSampleQueries">Sample Queries to Influx DB</h1>
+                            <h1 @click="triggerSampleQueries" class='clickable-label'>Sample Queries to Influx DB</h1>
                         </v-layout>
                         <transition name="extend-information">
                             <div v-if="openSampleQueries" class='transition-container'>

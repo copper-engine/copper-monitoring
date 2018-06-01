@@ -3,8 +3,10 @@ import { StatesPrint, ChartStates, EngineGroup, EngineStatus } from '../../../mo
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import { Notification } from '../../../models/notification';
 import { InfluxDBService } from '../../../services/influxDBService';
+import { InfluxConnection, ChartSettings } from '../../../models/user';
 import { StatisticsService } from '../../../services/statisticsService';
 import { setTimeout } from 'timers';
+import { Mutations } from '../../../store.vuex';
 import * as _ from 'lodash';
 import './overview.scss';
 
@@ -68,17 +70,10 @@ export class Overview extends Vue {
     promiseStack = [];
 
     created() {
-        this.timeSelect = this.statisticsService.intervals
-            .map((interval) => new TimeSelection(this.createLabel(interval), interval));
+        this.timeSelect = this.statisticsService.intervals.map((interval) => {
+            return this.parseIntoTimeSelection(interval);
+        });
         this.currentTimeSelection = this.timeSelect[3];
-    }
-
-    createLabel(interval: number) {
-        if ((interval / 60) >= 1) {
-            return ((interval / 60) + ' min');
-        } else {
-            return ((interval) + ' sec');
-        }
     }
 
     mounted() {
@@ -87,6 +82,7 @@ export class Overview extends Vue {
         //     this.useInfluxDB = true;
         //     this.testConnection();
         // }
+        this.getChartSettings();
         this.checkStatService();
         // this.getDataFromInflux();
         this.scheduleFetch();
@@ -101,8 +97,8 @@ export class Overview extends Vue {
     @Watch('useInfluxDB')
     checkStatService() {
         localStorage.setItem(this.$store.state.user.name + ':useInfluxDB', String(this.useInfluxDB));
-        //  this.$store.state.user.influx.useInfluxDB THAT IS TERRIBLE
-        this.$store.state.user.influx.useInfluxDB = this.useInfluxDB;
+        // this.$store.state.user.influx.useInfluxDB = this.useInfluxDB;
+        this.$store.commit(Mutations.setUseInfluxDB, this.useInfluxDB);
         if (this.useInfluxDB) {
             this.statisticsService.stop();
             this.testConnection();
@@ -129,17 +125,11 @@ export class Overview extends Vue {
     }
 
     get getRow() {
-        if (this.currentLayout === 'Row') {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return (this.currentLayout === 'Row');
     }
 
     getInfluxConnection() {
         let influxSettings = this.$store.state.user.influx;
-
         this.username = influxSettings.username ? influxSettings.username : '';
         this.password = influxSettings.password ? influxSettings.password : '';
         this.url = influxSettings.url ? influxSettings.url : '';
@@ -150,10 +140,31 @@ export class Overview extends Vue {
         localStorage.setItem(this.$store.state.user.name + ':influxURL', this.url);
         localStorage.setItem(this.$store.state.user.name + ':influxUser', this.username);
         localStorage.setItem(this.$store.state.user.name + ':influxPass', this.password);
-        // NO NO, GOD PLEASE, NO!!!!
-        this.$store.state.user.influx.url = this.url;
-        this.$store.state.user.influx.username = this.username;
-        this.$store.state.user.influx.password = this.password;
+        this.$store.commit(Mutations.setInfluxSettings, new InfluxConnection(this.url, this.username, this.password, null));        
+        // let connection = new InfluxConnection(this.url, this.username, this.password, null);
+        // this.$store.state.user.influx.url = this.url;
+        // this.$store.state.user.influx.username = this.username;
+        // this.$store.state.user.influx.password = this.password;
+    }
+
+    getChartSettings() {
+        let chartSettings = this.$store.state.user.chart;
+        // if (chartSettings !== null && chartSettings !== undefined) {
+            this.currentTimeSelection = chartSettings.interval ? this.parseIntoTimeSelection(chartSettings.interval) : this.timeSelect[3];
+            this.currentLayout = chartSettings.layout ? chartSettings.layout : 'Row';
+        // }
+    }
+
+    parseIntoTimeSelection(interval: number) {
+        return new TimeSelection(this.createLabel(interval), interval);
+    }
+
+    createLabel(interval: number) {
+        if ((interval / 60) >= 1) {
+            return ((interval / 60) + ' min');
+        } else {
+            return ((interval) + ' sec');
+        }
     }
 
     @Watch('states', { deep: true })
@@ -243,7 +254,15 @@ export class Overview extends Vue {
 
     updateFetch(selection: TimeSelection) {
         this.currentTimeSelection =  selection;
+        localStorage.setItem(this.$store.state.user.name + ':chartInterval', String(selection.time));      
+        this.$store.commit(Mutations.setChartInterval, selection.time);          
         this.scheduleFetch();
+    }
+
+    updateLayout(layout: string) {
+        this.currentLayout = layout;
+        localStorage.setItem(this.$store.state.user.name + ':chartLayout', layout);      
+        this.$store.commit(Mutations.setChartInterval, layout);      
     }
 
     getName(group: EngineGroup) {

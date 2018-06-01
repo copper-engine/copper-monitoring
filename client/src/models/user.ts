@@ -16,7 +16,14 @@ export class InfluxConnection {
     ) {}
 }
 
+export class ChartSettings {
+    constructor(
+        public interval: number,
+        public layout: string,
+    ) {}
+}
+
 export class User {
-    constructor(public name: string, public password: string, public settings: UserSettings, public influx: InfluxConnection ) {
+    constructor(public name: string, public password: string, public settings: UserSettings, public influx: InfluxConnection, public chart: ChartSettings ) {
     }
 }

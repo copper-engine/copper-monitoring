@@ -89,7 +89,7 @@ export class Overview extends Vue {
         // }
         this.checkStatService();
         // this.getDataFromInflux();
-        this.getData();
+        this.scheduleFetch();
         // this.checkCollecting();
     }
 
@@ -101,8 +101,9 @@ export class Overview extends Vue {
     @Watch('useInfluxDB')
     checkStatService() {
         localStorage.setItem(this.$store.state.user.name + ':useInfluxDB', String(this.useInfluxDB));
+        //  this.$store.state.user.influx.useInfluxDB THAT IS TERRIBLE
         this.$store.state.user.influx.useInfluxDB = this.useInfluxDB;
-        if (this.useInfluxDB === true) {
+        if (this.useInfluxDB) {
             this.statisticsService.stop();
             this.testConnection();
         } else {
@@ -137,30 +138,19 @@ export class Overview extends Vue {
     }
 
     getInfluxConnection() {
-        if (this.$store.state.user.influx.username !== null && this.$store.state.user.influx.username !== undefined && this.$store.state.user.influx.username !== '')  {
-            this.username = this.$store.state.user.influx.username;
-        } else {
-            this.username = '';
-        }
-        if (this.$store.state.user.influx.password !== null && this.$store.state.user.influx.password !== undefined && this.$store.state.user.influx.password !== '') {
-            this.password = this.$store.state.user.influx.password;
-        } else {
-            this.password = '';
-        }
-        if (this.$store.state.user.influx.url !== null && this.$store.state.user.influx.url !== undefined && this.$store.state.user.influx.url !== '') {
-            this.url = this.$store.state.user.influx.url;
-        } else {           
-            this.url = '';
-        }
-        if (this.$store.state.user.influx.useInfluxDB !== null && this.$store.state.user.influx.useInfluxDB !== undefined && this.$store.state.user.influx.useInfluxDB !== '') {
-            this.useInfluxDB = this.$store.state.user.influx.useInfluxDB;
-        }
+        let influxSettings = this.$store.state.user.influx;
+
+        this.username = influxSettings.username ? influxSettings.username : '';
+        this.password = influxSettings.password ? influxSettings.password : '';
+        this.url = influxSettings.url ? influxSettings.url : '';
+        this.useInfluxDB = influxSettings.useInfluxDB ? influxSettings.useInfluxDB : '';
     }
 
     storeInfluxConnection() {
         localStorage.setItem(this.$store.state.user.name + ':influxURL', this.url);
         localStorage.setItem(this.$store.state.user.name + ':influxUser', this.username);
         localStorage.setItem(this.$store.state.user.name + ':influxPass', this.password);
+        // NO NO, GOD PLEASE, NO!!!!
         this.$store.state.user.influx.url = this.url;
         this.$store.state.user.influx.username = this.username;
         this.$store.state.user.influx.password = this.password;
@@ -172,10 +162,8 @@ export class Overview extends Vue {
         let fetchingDataPromise: Promise<void | Map<String, StatesPrint[]>>;
 
         if (this.useInfluxDB) {
-            console.log('using Influx DB');
             fetchingDataPromise = this.influxService.getData(this.currentTimeSelection.time, this.getNames());
         } else {
-            console.log('using Local Storage DB');
             fetchingDataPromise = this.statisticsService.getData(this.currentTimeSelection.time, this.getNames());
         }
 

@@ -1,6 +1,13 @@
 <div class="overview">
     <v-layout row>
-        <h2>Statistics Overview</h2>
+        <h2>
+            Statistics Overview 
+
+            <v-tooltip top content-class="tooltip-text">
+                <v-icon class="warning-icon" slot="activator" v-if="statisticsService.running && !statisticsService.holdingLock">warning</v-icon>
+                <span>Warning: Collected data are not stored to Local Storage because another instance of Copper Monitoring with same user storing it's data.<br/> Close another window to store data, but note that you will lose data from another instance.</span>
+            </v-tooltip>
+        </h2>
         <v-spacer></v-spacer>
         <div class="button-container">
             <v-menu offset-y :nudge-bottom="10" :close-on-content-click="false">
@@ -134,6 +141,7 @@
                         <v-flex class="description">
                             <p>With a valid connection to Influx DB, Owerview page will display data collected in Influx DB in a similar way as Chronograf do it. 
                                 It's usefull because telegraf can collect and store statistics from your application to Influx DB all the time. Copper Monitoring UI will collect data(in a limited way) only when it's running in browser and stores data in browsers local storage per each user. Using Influx DB provides you with ability to store your statistics permanently and share data between different users. Fore more information, visit <a href="https://www.influxdata.com/">Influx DB</a></p>
+                            <p>P.S: While you are connected to Influx DB, Copper Monitoring will not collect any data for statistics.</p>
                         </v-flex>
                         <v-layout row class="section-header">
                             <div class="connection-icon-container">

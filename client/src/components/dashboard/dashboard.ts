@@ -128,6 +128,7 @@ export class DashboardComponent extends Vue {
 
     logout() {
         this.$store.commit(Mutations.setUser, null);
+        this.$store.commit(Mutations.setConnectionSettings, []);
         this.$router.replace('/login'); 
     }
 

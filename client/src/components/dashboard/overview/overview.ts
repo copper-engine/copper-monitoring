@@ -449,54 +449,70 @@ export class Overview extends Vue {
         }, this.currentTimeSelection.time * 1000);
     }
 
+    getConcreateState(dataElements, statesPrint, stateName) {
+        return dataElements.concat(statesPrint.map((state) => state ? state[stateName] : 0));
+    }
+
     getChartData(states: ChartStates, statesPrint: StatesPrint[]) {
         let dataset = [];
+        let emptySize = statesPrint ? 0 : this.statisticsService.pointNumbers;
+        if (statesPrint && statesPrint.length < this.statisticsService.pointNumbers) { 
+            emptySize = this.statisticsService.pointNumbers - statesPrint.length;
+        }
+        let dataElements = Array(emptySize).fill(undefined);
+
         if (statesPrint) {
             if (states.running) {
                 dataset.push({
                     label: 'RUNNING',
                     backgroundColor: '#41ce00c4', // green
-                    data: statesPrint.map((state) => state ? state.running : 0)
+                    data: this.getConcreateState(dataElements, statesPrint, 'running')
                 });
             }
             if (states.waiting) {
                 dataset.push({
                     label: 'WAITING',
                     backgroundColor: '#e4c200de', // yellow
-                    data: statesPrint.map((state) => state ? state.waiting : 0)
+                    data: this.getConcreateState(dataElements, statesPrint, 'waiting')
                 });
             }
             if (states.finished) {
                 dataset.push({
                     label: 'FINISHED',
                     backgroundColor: '#1ad8b9c4',  // grey
-                    data: statesPrint.map((state) => state ? state.finished : 0)
+                    data: this.getConcreateState(dataElements, statesPrint, 'finished')
                 });
             }
             if (states.dequeued) {
                 dataset.push({
                     label: 'DEQUEUED',
                     backgroundColor: '#0b7babc4',  // blue
-                    data: statesPrint.map((state) => state ? state.dequeued : 0)
+                    data: this.getConcreateState(dataElements, statesPrint, 'dequeued')
                 });
             }
             if (states.error) {
                 dataset.push({
                     label: 'ERROR',
                     backgroundColor: '#de1515c4',  // red
-                    data: statesPrint.map((state) => state ? state.error : 0)
+                    data: this.getConcreateState(dataElements, statesPrint, 'error')
                 });
             }
             if (states.invalid) {
                 dataset.push({
                     label: 'INVALID',
                     backgroundColor: '#770202c4',  // dark red
-                    data: statesPrint.map((state) => state ? state.invalid : 0)
+                    data: this.getConcreateState(dataElements, statesPrint, 'invalid')
                 });
             }
         }
+
+        let lableElements = Array(emptySize).fill('');
+        if (statesPrint) {
+            lableElements = lableElements.concat( statesPrint.map((state) => state ? (Vue as any).moment(state.time).format('HH:mm:ss') : ''));
+        }
+
         return {
-            labels: statesPrint ? statesPrint.map((state) => state ? (Vue as any).moment(state.time).format('HH:mm:ss') : 'NA') : [],
+            labels: lableElements,
             datasets: dataset
         };
   }

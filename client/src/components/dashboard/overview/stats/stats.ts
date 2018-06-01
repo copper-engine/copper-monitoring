@@ -28,6 +28,20 @@ export class Stats extends Vue {
     chartOptions = {
         responsive: true,
         maintainAspectRatio: false,
+        scales: {
+            xAxes: [{
+                stacked: false,
+                beginAtZero: true,
+                scaleLabel: {
+                    labelString: 'Time'
+                },
+                ticks: {
+                    stepSize: 1,
+                    min: 0,
+                    autoSkip: false
+                }
+            }]
+        },
         animation: {
             duration: 0, // general animation time
             // easing: 'easeInCirc'

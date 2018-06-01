@@ -83,12 +83,7 @@ export class StatisticsService {
             // TODO make coment here about what is that
             for (let i = 0; i < engineResult.length; i++) {
                 if (!engineResult[i]) {
-                    console.log('No data will put empty State Print');
-                    if (data[i][0]) {
-                        engineResult[i] = new StatesPrint(data[i][0].time);
-                    } else {
-                        engineResult[i] = new StatesPrint(dateNow);
-                    }
+                    engineResult[i] = new StatesPrint(data[i][0] ? data[i][0].time : dateNow);
                     engineResult[i].engine = <string> engineName;
                 }
             }
@@ -140,7 +135,7 @@ export class StatisticsService {
 
     private getDiff() {
         let prev = localStorage.getItem('prevTS');
-        if (prev !== null && prev !== '') {
+        if (prev) {
             let current = new Date().getTime();
             return Math.floor((current - parseInt(prev)) / (this.intervals[0] * 1000));
         } else {

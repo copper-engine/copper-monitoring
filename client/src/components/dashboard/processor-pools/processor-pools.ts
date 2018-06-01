@@ -17,11 +17,15 @@ import { MBean } from '../../../models/mbeans';
 export class ProcessorPools extends Vue {
     private jmxService: JmxService = this.$services.jmxService;
     private eventHub: Vue = this.$services.eventHub;
+    private engine: EngineStatus = null;
     newComponent = false;
     fetchPoolInterval: any;
     processorPools: ProcessorPool[] = [];
-    private engine: EngineStatus = null;
     engineMbean: MBean;
+    dialogDeleteOpen: Boolean = false;
+    selectedFunction: Function = null;
+    selectedFunctionText: String = null;
+    selectedBean: MBean = null;
     
     mounted() {
         this.init();
@@ -35,6 +39,18 @@ export class ProcessorPools extends Vue {
         this.jmxService.getProcessorPools(this.engineMbean.connectionSettings, this.engine.ppoolsMXBeans, this.engine.type, this.$store.state.user).then((response: any) => {
             this.processorPools = response;
         });
+    }
+
+    areYouSure(fx: Function, bean: MBean, text: String) {
+        this.selectedFunction = fx;
+        this.selectedBean = bean;
+        this.selectedFunctionText = text;    
+        this.dialogDeleteOpen = true;
+    }   
+
+    triggerSelectedFunction() {
+        this.selectedFunction(this.selectedBean);
+        this.dialogDeleteOpen = false;
     }
 
     resume(mbean: string) {

@@ -1,3 +1,4 @@
+<div>
 <transition name="component-fade" mode="in-out" v-if="!newComponent">
 <div class="processor-pools">
     <h2>Processor Pools</h2>
@@ -145,22 +146,22 @@
             <v-layout column class="card-button-container">
                 <v-btn depressed 
                     slot="activator"
-                    @click="resume(pool.mbean)">
+                    @click="areYouSure(resume, pool.mbean, 'resume')">                    
                     Resume
                 </v-btn>
                 <v-btn depressed 
                     slot="activator"
-                    @click="suspend(pool.mbean)">
+                    @click="areYouSure(suspend, pool.mbean, 'suspend')">                    
                     Suspend
                 </v-btn>
                 <v-btn depressed 
                     slot="activator"
-                    @click="resumeDeque(pool.mbean)">
+                    @click="areYouSure(resumeDeque, pool.mbean, 'resume deque')">                    
                     Resume Deque
                 </v-btn>
                 <v-btn depressed 
                     slot="activator"
-                    @click="suspendDeque(pool.mbean)">
+                    @click="areYouSure(suspendDeque, pool.mbean, 'suspend deque')">                    
                     Suspend Deque
                 </v-btn>
             </v-layout>
@@ -168,3 +169,22 @@
     </v-layout>
 </div>
 </transition>
+<v-dialog v-model="dialogDeleteOpen" scrollable max-width="500" position="absolute" persistent>
+    <v-card>
+        <v-card-title position="absolute" class="dialog-title">
+            <h2> Processor Pool Functions </h2>                
+        </v-card-title>
+        <v-card-text class="delete-dialog-text">
+            <h2> Are you sure you want to {{ selectedFunctionText }}?</h2>                              
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+            <v-layout row>
+                <v-spacer></v-spacer>
+                <v-btn depressed @click="triggerSelectedFunction">Yes</v-btn>          
+                <v-btn depressed @click="dialogDeleteOpen = false">No</v-btn>
+            </v-layout>
+        </v-card-actions>
+    </v-card>
+</v-dialog>
+</div>

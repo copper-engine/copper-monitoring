@@ -104,6 +104,7 @@ export class StatisticsService {
         try {            
             this.aggData = JSON.parse(localStorage.getItem(this.lsKey));
             if (!this.aggData || this.aggData.length !== this.intervals.length) {
+                // console.log('creating new aggData object. (aggData, intervals)', this.aggData, this.intervals);
                 this.aggData = this.intervals.map(int => []);   
             }
             

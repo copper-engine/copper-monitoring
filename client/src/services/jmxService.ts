@@ -13,10 +13,7 @@ export class JmxService {
         return Axios.post(process.env.API_NAME, requests, {
                 auth: { username: user.name, password: user.password }
             })
-            .then((response) => this.parseEngineStatusResponse(response, mbeans.length))
-            .catch(error => {
-                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
-            });
+            .then((response) => this.parseEngineStatusResponse(response, mbeans.length));
     }
 
     createEngineStatusRequest(mbean: MBean, user: User) {
@@ -526,7 +523,7 @@ export class JmxService {
     private parseEngineStatusResponse = (response, enginesCount: number): EngineStatus[] => {
         if (!response || !response.data || response.data.length < 3) {
             console.log('Invalid responce:', response);          
-            throw new Error('invalid response!');
+            throw new Error('invalid response from JMX!');
         }
 
         return _.chunk(response.data, 3).map((data, index) => this.parseEngineStatusData(data, index));
@@ -537,7 +534,9 @@ export class JmxService {
             || !this.isSubResponseValid(data[1])
             || !this.isSubResponseValid(data[2])
         ) {
-            throw new Error('invalid engine data:!' + data);
+            console.error('Invalid engine status Data', data);
+            let errorInstance = data.find(el => el.error);
+            throw new Error(errorInstance ? errorInstance.error : 'Engine Status data is Invalid');
         }
 
         return new EngineStatus(
@@ -561,7 +560,7 @@ export class JmxService {
             || response.data.length < 1
             || response.data[0].error) {
             console.log('Invalid responce:', response); 
-            throw new Error('invalid response!');
+            throw new Error('invalid response from JMX!');
         }
         return response.data[0].value.sourceCode;
     }

@@ -209,12 +209,24 @@ export class DashboardComponent extends Vue {
                 if (this.interval) {
                     clearInterval(this.interval);
                 }
-
+                
                 this.sheduleFetchingStatus();
             }
-
+            
+            if (this.$store.state.appCriticalError) {
+                this.$store.commit(Mutations.setAppCriticalError, null);
+            }
             this.$store.commit(Mutations.updateEngineStatus, engineStatusList);
             this.initComplete = true;
+        }).catch((error: Error) => {
+            let errorMessage;
+            if (error.message && error.message.indexOf('DBStorage') >= 0) {
+                errorMessage = 'You probably haven\'t set DBStorage MBean correctly in JMXExporter of your application. JMX error: ' + error.message;
+            } else {
+                errorMessage = 'Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error.message;
+            }
+            this.$store.commit(Mutations.setAppCriticalError, errorMessage);
+            console.error(errorMessage);
         });
     }
 }

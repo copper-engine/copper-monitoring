@@ -3,6 +3,7 @@ import { WorkflowRepo, EngineStatus } from '../../../models/engine';
 import { JmxService } from '../../../services/jmxService';
 import { parseSourceCode } from '../../../util/utils';
 import './workflow-repo.scss';
+import { setTimeout } from 'timers';
 
 const sourceCodeComponent = () => import('./../../core/source-code').then(({ SourceCodeComponent }) => SourceCodeComponent);
 @Component({
@@ -20,6 +21,7 @@ export class WorkflowRepository extends Vue {
     page: number = 1;
     perPage: number = 10;
     perPageItems: number[] = [10, 15, 25, 50];
+    clickAllowed: boolean = true;
 
     created() {
         this.loadRepo();
@@ -42,8 +44,14 @@ export class WorkflowRepository extends Vue {
     }
     
     toggleOpen(index) {
-        this.wfRepo.workFlowInfo[index].open = !this.wfRepo.workFlowInfo[index].open;
-        this.$forceUpdate();
+        if (this.clickAllowed === true) {
+            this.clickAllowed = false;
+            this.wfRepo.workFlowInfo[index].open = !this.wfRepo.workFlowInfo[index].open;
+            this.$forceUpdate();
+            setTimeout(() => {
+                this.clickAllowed = true;
+            }, 750);
+        } 
     }
 
     get totalPages() {

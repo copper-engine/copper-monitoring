@@ -193,6 +193,14 @@ export class DashboardComponent extends Vue {
                     this.sheduleFetchingStatus();
                 }, 3000);
             }
+
+            if (this.$store.state.appCriticalError) {
+                this.$store.commit(Mutations.setAppCriticalError, null);
+            }
+        }).catch((error: Error) => {
+            let errorMessage = 'Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error makink JMX connection:' + error.message;
+            console.error(errorMessage);
+            this.$store.commit(Mutations.setAppCriticalError, errorMessage);
         });
     }
 

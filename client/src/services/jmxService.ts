@@ -149,9 +149,6 @@ export class JmxService {
                     }
                 });
                 return connectionResults;
-            })
-            .catch(error => {
-                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error makink JMX connection:', error);
             });
     }
 

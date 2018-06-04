@@ -6,11 +6,7 @@
     mobile-break-point="1650" app>
     
     <scroll class="scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 600}">
-
-        <div class="criticalIssue" v-show="$store.state.appCriticalError">
-            {{$store.state.appCriticalError}}
-        </div>
-        <div class="link-container">
+        <div class="link-container" v-show="!$store.state.appCriticalError">
             <router-link :to="getOverviewPath" active-class="activeLink" class="link">
                 <!-- <v-btn class="overview-link"> <v-icon>mdi-chart-bar</v-icon> Overview </v-btn>      -->
                 <div class="link-background">

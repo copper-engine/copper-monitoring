@@ -73,6 +73,15 @@
 .dashboard {
     padding-bottom: 50px;
     
+    .criticalIssue {
+        margin: 10px;
+        padding: 10px;
+        border-radius: 2px;
+        font-size: 1.2em;
+        color: $light-text-color;
+        background-color: $error;
+    }
+    
     .toolbar {
         min-width: 975px;
         background-color: $light-primary;

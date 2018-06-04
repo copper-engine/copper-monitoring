@@ -46,6 +46,9 @@
     <!-- {{ connectionSettings }} -->
 
     <v-content>
+        <div class="criticalIssue" v-show="$store.state.appCriticalError">
+            Critical Error: {{$store.state.appCriticalError}}
+        </div>
         <v-container fluid fill-height v-if="initComplete && initComplete === true">
             <!-- <h2>Dashboard </h2> -->
             <transition name="router-component" mode="out-in">

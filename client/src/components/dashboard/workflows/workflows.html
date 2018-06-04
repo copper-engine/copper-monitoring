@@ -132,8 +132,9 @@
             <v-divider></v-divider>
             <scroll class="scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 1}">
                 <v-card-text>
-                    <div>
-                        <source-code :sourceCode="dialogSourceCode" :highliteLines="dialogHighlitedlines"></source-code>
+                    <div class='source-code-card-text'>
+                        <source-code v-if="dialogSourceCode !== null" :sourceCode="dialogSourceCode" :highliteLines="dialogHighlitedlines"></source-code>
+                        <h3 v-if="dialogSourceCode === null">No Source Code is available to show</h3>
                     </div>
                 </v-card-text>
             </scroll>

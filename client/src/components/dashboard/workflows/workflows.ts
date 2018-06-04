@@ -347,7 +347,7 @@ export class WorkflowsComponent extends Vue {
                     this.dialogHighlitedlines.push(new HighlitedLine(errorPos, 'Error position', 'error'));
                 } 
             } else {
-                this.dialogSourceCode = 'No Source Code Available';
+                this.dialogSourceCode = null;
                 this.sourceCodeAvailable = false;
             }
             this.dialogSourceOpen = true;

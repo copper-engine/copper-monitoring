@@ -9,7 +9,7 @@
                     Repository Type:
                 </v-flex>
                 <v-flex>
-                    {{ this.wfRepo.description }}
+                    {{ this.repoType }}                    
                 </v-flex>
             </v-layout>
             <v-layout class="text">
@@ -74,12 +74,13 @@
                             dark
                             class="squareButton"
                             @click="toggleOpen(i)"
-                            :disabled="workflow.sourceCode === undefined || workflow.sourceCode === null || (workflow.sourceCode.trim()).toLowerCase() === '1.na'"
+                            :disabled="workflow.sourceCode === undefined || workflow.sourceCode === null || 
+                                (workflow.sourceCode.trim()).toLowerCase() === 'na' || wfType === 'ClasspathWorkflowRepository'"
                             slot="activator">
                                 <v-icon :class="{ 'close-details-icon': workflow.open }" >details</v-icon>
                             </v-btn>
-                            <span v-show="workflow.sourceCode != null && (workflow.sourceCode.trim()).toLowerCase() !== 'na'">Show Source Code</span>
-                            <span v-show="workflow.sourceCode === null || (workflow.sourceCode.trim()).toLowerCase() === 'na'">No Source Code</span>
+                            <span v-show="workflow.sourceCode != null && (workflow.sourceCode.trim()).toLowerCase() !== 'na' && wfType !== 'ClasspathWorkflowRepository'">Show Source Code</span>
+                            <span v-show="workflow.sourceCode === null || (workflow.sourceCode.trim()).toLowerCase() === 'na' || wfType === 'ClasspathWorkflowRepository'">No Source Code</span>
                         </v-tooltip>
                     </v-flex>
                 </v-layout>

@@ -1,12 +1,10 @@
 import { ConnectionSettings } from './connectionSettings';
 
-
 export class MBean {
     constructor(public name: string, public atts: string[], public connectionSettings: ConnectionSettings) {
 
     } 
 }
-
 
 export class MBeans {
     // Values will be fetched by first call to JMX
@@ -22,4 +20,16 @@ export class MBeans {
         bean.name = 'copper.engine:' + bean.name;
         this.engineMBeans.push(bean); 
     }
+}
+
+export class BeanContext {
+    constructor(
+        public beanName: string,
+        public engineName: string
+    ) {}
+}
+
+export class BeanConflict {
+    public beanName: string;
+    public conflictEngines: string[];
 }

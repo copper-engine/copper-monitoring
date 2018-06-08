@@ -1,5 +1,5 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import { StatesPrint, ChartStates, EngineGroup, EngineStatus } from '../../../models/engine';
+import { StatesPrint, ChartStates, EngineGroup, EngineStatus, EngineStatData } from '../../../models/engine';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import { Notification } from '../../../models/notification';
 import { InfluxDBService } from '../../../services/influxDBService';
@@ -7,30 +7,12 @@ import { InfluxConnection, ChartSettings } from '../../../models/user';
 import { StatisticsService } from '../../../services/statisticsService';
 import { setTimeout } from 'timers';
 import { Mutations } from '../../../store.vuex';
+import { BeanConflict, BeanContext } from '../../../models/mbeans';
+import { TimeSelection } from '../../../models/timeSelection';
 import * as _ from 'lodash';
 import './overview.scss';
 
 const Stats = () => import('./stats').then(({ Stats }) => Stats);
-
-export class BeanContext {
-    constructor(
-        public beanName: string,
-        public engineName: string
-    ) {}
-}
-
-export class BeanConflict {
-    public beanName: string;
-    public conflictEngines: string[];
-}
-
-export class TimeSelection {
-    constructor(public label: string, public time: number) {}
-}
-
-export class EngineStatData {
-    constructor(public name: string, public data: any[]) {}
-}
 
 @Component({
     template: require('./overview.html'),

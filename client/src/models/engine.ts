@@ -43,6 +43,10 @@ export class StatesPrint {
     // }
 }
 
+export class EngineStatData {
+    constructor(public name: string, public data: any[]) {}
+}
+
 export class EngineGroup {
     constructor(public name: string, public engines: EngineStatus[]) {}
 }
@@ -99,6 +103,14 @@ export class WorkflowRepo {
         public sourceDir: string = '',
         public workFlowInfo: Array<WorkflowClassInfo> = []
     ) {}
+}
+
+export class WorkflowContext {
+    public open: boolean = false;
+    public reloading: boolean = false;
+    public deleting: boolean = false;
+    public reloadButton: boolean = false;
+    public deleteButton: boolean = false;
 }
 
 export class WorkflowInfo {

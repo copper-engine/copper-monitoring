@@ -1,7 +1,7 @@
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import { StatesPrint, ChartStates, EngineGroup, EngineStatus } from '../../../../models/engine';
 import { VueCharts, Bar, Line, mixins } from 'vue-chartjs';
-import { EngineStatData } from '../index';
+import { EngineStatData } from '../../../../models/engine';
 import './stats.scss';
 
 @Component({

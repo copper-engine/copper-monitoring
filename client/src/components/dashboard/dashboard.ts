@@ -11,20 +11,9 @@ import { Mutations } from '../../store.vuex';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import { Notification } from '../../models/notification';
 import { StatisticsService } from '../../services/statisticsService';
+import { BeanConflict, BeanContext } from '../../models/mbeans';
 
 const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) => SidebarComponent);
-
-export class BeanContext {
-    constructor(
-        public beanName: string,
-        public engineName: string
-    ) {}
-}
-
-export class BeanConflict {
-    public beanName: string;
-    public conflictEngines: string[];
-}
 
 @Component({
     template: require('./dashboard.html'),

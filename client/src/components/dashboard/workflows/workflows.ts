@@ -1,6 +1,6 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { setTimeout } from 'timers';
-import { WorkflowInfo, EngineStatus, WorkflowRepo, WorkflowFilter, State } from '../../../models/engine';
+import { WorkflowInfo, EngineStatus, WorkflowRepo, WorkflowFilter, State, WorkflowContext } from '../../../models/engine';
 import { Notification } from '../../../models/notification';
 import { JmxService } from '../../../services/jmxService';
 import * as utils from '../../../util/utils';
@@ -11,14 +11,6 @@ import { MBeans, MBean } from '../../../models/mbeans';
 import { HighlitedLine } from '../../../models/highlited-line';
 
 import './workflows.scss';
-
-export class WorkflowContext {
-    public open: boolean = false;
-    public reloading: boolean = false;
-    public deleting: boolean = false;
-    public reloadButton: boolean = false;
-    public deleteButton: boolean = false;
-}
 
 const sourceCodeomponent = () => import('./../../core/source-code').then(({ SourceCodeComponent }) => SourceCodeComponent);
 const WorkflowHeading = () => import('./workflow-header').then(({ WorkflowHeading }) => WorkflowHeading);

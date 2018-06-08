@@ -368,16 +368,16 @@ body {
                         }              
                     }
                     .delete-dialog-text {
-                        background-color: $light-background;
+                        background-color: $dark-tertiary;
                         h2 {
-                            color: $dark-text-color;
+                            color: $light-text-color;
                         }
                     }
                     .card__actions {
-                        background-color: $light-tertiary;
+                        background-color: $dark-background;
                         button {
-                            background-color: $light-background;
-                            color: $dark-text-color;
+                            background-color: $dark-tertiary;
+                            color: $light-text-color;
                         }
                     }
                 }

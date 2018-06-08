@@ -5,7 +5,8 @@
             Total number of {{ filterApplied ? 'filtered ' : '' }}{{ wfType }} workflows: {{ engineStatus ? wfCount : 0}}
         </v-flex>
         <v-spacer></v-spacer>
-        <v-flex class="stopGrow heading-buttons">
+        <v-flex class="stopGrow heading-buttons" 
+                :class="{ 'less-heading-buttons' :  (wfType === 'waiting') }">
             <v-btn dark
                 v-if="(wfType === 'broken')"
                 class="longButton restart-button"
@@ -21,7 +22,7 @@
             </v-btn>
             <v-btn dark
                 class="longButton delete-button"
-                :class="{ 'less-heading-buttons' :  (wfType === 'waiting') }"                
+                :class="{ 'less-buttons' :  (wfType === 'waiting') }"                
                 :loading="deletingAll"
                 :disabled="deletingAll || restartingAll || (wfCount < 1)"
                 @click="dialogDeleteOpen = true">

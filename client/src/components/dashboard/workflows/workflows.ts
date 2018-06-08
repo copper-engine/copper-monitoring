@@ -108,28 +108,28 @@ export class WorkflowsComponent extends Vue {
         this.init();
     }
 
-    getWorkflowSettings() {
+    private getWorkflowSettings() {
         this.wfType = this.$route.params.wfType;
         this.engineId = this.$route.params.id;
         this.mbean = this.$store.getters.engineMBeans[this.engineId];
     }
 
-    setFilterStates() {
+    private setFilterStates() {
         this.filter = new WorkflowFilter();
         if (this.wfType === 'waiting') {
             this.filter.states = [State.WAITING];
         }
     }
 
-    get status() {
+    private get status() {
         return this.$store.state.engineStatusList[this.engineId];
     }
 
-    get disabled() {
+    private get disabled() {
         return this.restartingAll || this.deletingAll;
     }
 
-    get totalPages() {
+    private get totalPages() {
         if (this.$store.state.engineStatusList[this.engineId]) {
             let total = Math.ceil(Number(this.wfCount) / this.perPage);
             if (this.page > total) {
@@ -155,7 +155,7 @@ export class WorkflowsComponent extends Vue {
         });
     }
 
-    getClickAllowedList(amount: number) {
+    private getClickAllowedList(amount: number) {
         for (let i = 0; i < amount; i++) {
             this.clickAllowed.push(true);
         }
@@ -169,12 +169,12 @@ export class WorkflowsComponent extends Vue {
         this.eventHub.$emit('showNotification', new Notification(message));
     }
 
-    applyFilter(newFilter: WorkflowFilter) {
+    private applyFilter(newFilter: WorkflowFilter) {
         this.filter = newFilter;
         this.sheduleFetchingWF();
     }
 
-    restartAll() {
+    private restartAll() {
         this.jmxService.restartAll(this.mbean.connectionSettings, this.mbean.name, this.$store.state.user)
             .then((done) => {
                 this.restartingAll = false;
@@ -196,7 +196,7 @@ export class WorkflowsComponent extends Vue {
             });
     }
 
-    restartFiltered(newFilter: WorkflowFilter) {
+    private restartFiltered(newFilter: WorkflowFilter) {
         this.jmxService.restartFiltered(this.mbean.connectionSettings, this.mbean.name, this.$store.state.user, 0, 0, newFilter)
             .then((done) => {
                 this.restartingAll = false;
@@ -217,7 +217,7 @@ export class WorkflowsComponent extends Vue {
             });
     }
 
-    deleteFiltered(newFilter: WorkflowFilter) {
+    private deleteFiltered(newFilter: WorkflowFilter) {
         this.page = 1;
         if (newFilter === null) {
             newFilter = this.filter;
@@ -243,7 +243,7 @@ export class WorkflowsComponent extends Vue {
             });
     }
 
-    restart(id: string) {
+    private restart(id: string) {
         this.toggleButtons(id, 'restart');
         this.jmxService.restart(this.mbean.connectionSettings, this.mbean.name, id, this.$store.state.user)
         .then((done) => {
@@ -262,7 +262,7 @@ export class WorkflowsComponent extends Vue {
         });
     }
 
-    deleteWorkflow(workflow: WorkflowInfo) {
+    private deleteWorkflow(workflow: WorkflowInfo) {
         this.dialogDeleteOpen = false;
         let id = workflow.id;
         this.toggleButtons(id, 'delete');
@@ -286,7 +286,7 @@ export class WorkflowsComponent extends Vue {
         });
     }
 
-    highlight(id: String, type: String) {
+    private highlight(id: String, type: String) {
         let wfContext = this.workflowsContext.get(id);
 
         if (!wfContext) {
@@ -314,7 +314,7 @@ export class WorkflowsComponent extends Vue {
         }
     }
 
-    toggleButtons(id: String, type: String) {
+    private toggleButtons(id: String, type: String) {
         let wfContext = this.workflowsContext.get(id);
         if (!wfContext) {
             wfContext = new WorkflowContext();
@@ -329,7 +329,7 @@ export class WorkflowsComponent extends Vue {
         this.$forceUpdate();
     }
 
-    showSourceCode(workflow: WorkflowInfo) {
+    private showSourceCode(workflow: WorkflowInfo) {
         this.jmxService.getSourceCode(this.$store.getters.engineMBeans[this.status.id].connectionSettings,  this.$store.state.user, this.status.wfRepoMXBean, workflow.workflowClassInfo.classname)
         .then((sourceCode) => {
             if (sourceCode && (sourceCode as string).trim().toLowerCase() !== 'na') {  
@@ -354,7 +354,7 @@ export class WorkflowsComponent extends Vue {
         });
     }
 
-    showDetails(workflow: WorkflowInfo, index: number) {
+    private showDetails(workflow: WorkflowInfo, index: number) {
         if (this.clickAllowed[index] === true) {
             let wfContext = this.workflowsContext.get(workflow.id);
             if (!wfContext) {
@@ -370,12 +370,12 @@ export class WorkflowsComponent extends Vue {
         }
     }
 
-    areYouSure(workflow: WorkflowInfo) {
+    private areYouSure(workflow: WorkflowInfo) {
         this.dialogWF = workflow;
         this.dialogDeleteOpen = true;
     }
 
-    openWorkflowDialog(workflow: WorkflowInfo) {
+    private openWorkflowDialog(workflow: WorkflowInfo) {
         this.dialogWF = workflow;
         this.dialogWFOpen = true;
     }

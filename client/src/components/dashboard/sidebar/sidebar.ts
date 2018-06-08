@@ -33,12 +33,12 @@ export class SidebarComponent extends Vue {
     emptyConnectionSettings = new ConnectionSettings();
     private statisticsService: StatisticsService = this.$services.statisticsService;
 
-    get getOverviewPath() {
+    private get getOverviewPath() {
         let params = '?' + this.$store.getters.connectionsAsParams;
         return ('/dashboard/overview/' + params);
     }
 
-    showSettings() {
+    private showSettings() {
         if (this.clickAllowed === true) {
             this.settingsShowed = !this.settingsShowed;
             if (this.settingsShowed === true) {
@@ -52,14 +52,14 @@ export class SidebarComponent extends Vue {
         }
     }
 
-    triggerCloseAllEngines() {
+    private triggerCloseAllEngines() {
         this.closeAllEngines = true;
         setTimeout(() => { 
             this.closeAllEngines = false;
         }, 1000);
     }
 
-    closeSelectConnections(opened: number) {
+    private closeSelectConnections(opened: number) {
         if (opened !== -1) {
             this.settingsShowed = false;
         } 
@@ -72,13 +72,13 @@ export class SidebarComponent extends Vue {
         });
     }
       
-    updateTarget(index: number, connectionSettings: ConnectionSettings) {
+    private updateTarget(index: number, connectionSettings: ConnectionSettings) {
         this.settingsShowed = false;
         this.$store.commit(Mutations.updateConnectionSettings, {index: index, connectionSettings: connectionSettings});
         this.$router.push('/dashboard?' + this.$store.getters.connectionsAsParams);
     }
 
-    deleteSettings(index: number) {
+    private deleteSettings(index: number) {
         this.$store.commit(Mutations.deleteConnectionSettings, index);
         this.$router.push('/dashboard?' + this.$store.getters.connectionsAsParams);
     }

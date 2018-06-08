@@ -43,7 +43,7 @@ export class EngineGroupComponent extends Vue {
         }
     }
 
-    openGroup() {
+    private openGroup() {
         if (this.clickAllowed === true) {
             this.open = !this.open;
             this.clickAllowed = false;
@@ -53,13 +53,13 @@ export class EngineGroupComponent extends Vue {
         }
     }
     
-    getBrokenWFCount() {
+    private getBrokenWFCount() {
         this.mbean = this.$store.getters.engineMBeans[this.group.engines[0].id];
         this.jmxService.countWFRequest(this.mbean.connectionSettings, this.mbean.name, this.$store.state.user, new WorkflowFilter).then((response: number) => {
             this.brokenWFCount = response;
         });
     }
-    getGroupWFCount() {
+    private getGroupWFCount() {
         let state = State.RUNNING;
         let beans = this.group.engines.map((engine) => {
             return this.$store.getters.engineMBeans[engine.id];
@@ -70,7 +70,7 @@ export class EngineGroupComponent extends Vue {
         
      }
 
-    get links(): Link[] {
+     private get links(): Link[] {
         let params = '?' + this.$store.getters.connectionsAsParams;
         
         return [

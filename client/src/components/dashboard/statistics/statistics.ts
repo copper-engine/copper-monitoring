@@ -84,7 +84,7 @@ export class StatisticsComponent extends Vue {
         // this.initQuoterMinChart();
     }
 
-    destroyed() {
+    private destroyed() {
         if (this.secondsInterval) {
             clearInterval(this.secondsInterval);
         }
@@ -96,7 +96,7 @@ export class StatisticsComponent extends Vue {
         }
     }
 
-    saveStates() {
+    private saveStates() {
         localStorage.setItem(this.secondsKey, JSON.stringify(this.secondsStates));
         localStorage.setItem(this.minutesKey, JSON.stringify(this.minutesStates));
         localStorage.setItem(this.quoterKey, JSON.stringify(this.quoterMinStates));
@@ -105,19 +105,19 @@ export class StatisticsComponent extends Vue {
         this.quoterMinStates = [];
     }
 
-    loadStates() {
+    private loadStates() {
         this.secondsStates = this.getDataFromLS(this.secondsKey);
         this.minutesStates = this.getDataFromLS(this.minutesKey);
         this.quoterMinStates = this.getDataFromLS(this.quoterKey);  
     }
 
-    getKeySet() {
+    private getKeySet() {
         this.secondsKey = this.getKey('seconds');
         this.minutesKey = this.getKey('minutes');
         this.quoterKey = this.getKey('quoter');
     }
 
-    getKey(base: string) {
+    private getKey(base: string) {
         if (this.id && this.mbean) {
             if (this.group) {
                 return this.mbean.connectionSettings.host + ':' 
@@ -136,11 +136,11 @@ export class StatisticsComponent extends Vue {
         }
     }
 
-    getId() {
+    private getId() {
         this.id = this.$route.params.id;
     }
 
-    getGroup() {
+    private getGroup() {
         if (this.$route.params.type.substr(0, 5) === 'group') {
             for (let i = 0; i < this.$store.getters.groupsOfEngines.length; i++) {
                 let group = this.$store.getters.groupsOfEngines[i];
@@ -153,7 +153,7 @@ export class StatisticsComponent extends Vue {
         }
     }
 
-    parseGroupName(rawName: string) {
+    private parseGroupName(rawName: string) {
         if (rawName) {
             // return rawName.substr(15);
             return rawName;            
@@ -162,7 +162,7 @@ export class StatisticsComponent extends Vue {
         }
     }
 
-    getDataFromLS(key: string) {
+    private getDataFromLS(key: string) {
         try {
             let chartData = JSON.parse(localStorage.getItem(key)) || [];
             if (chartData.length < 1) {
@@ -175,7 +175,7 @@ export class StatisticsComponent extends Vue {
         }
     }
 
-    getEmptySet() {
+    private getEmptySet() {
         let emptySet = [];
         for (let i = 0; i < 10; i++) {
             emptySet.push({});
@@ -183,7 +183,7 @@ export class StatisticsComponent extends Vue {
         return emptySet;
     }
 
-    initSecondsChart() {
+    private initSecondsChart() {
         if (this.secondsInterval) {
             clearInterval(this.secondsInterval);
         }
@@ -197,7 +197,7 @@ export class StatisticsComponent extends Vue {
         }, 2000);        
     }
 
-    initMinutesChart() {
+    private initMinutesChart() {
         if (this.minutesInterval) {
             clearInterval(this.minutesInterval);
         }
@@ -211,7 +211,7 @@ export class StatisticsComponent extends Vue {
         }, INT_1_MIN);
     }
 
-    initQuoterMinChart() {
+    private initQuoterMinChart() {
         if (this.quoterMinInterval) {
             clearInterval(this.quoterMinInterval);
         }
@@ -225,7 +225,7 @@ export class StatisticsComponent extends Vue {
         }, INT_15_MIN);
     }
 
-    fetchingData(states: StatesPrint[], updateFn) {
+    private fetchingData(states: StatesPrint[], updateFn) {
         if (this.secondsInterval !== null) {
             if (states.length > 30) {
                 states.shift();
@@ -247,11 +247,11 @@ export class StatisticsComponent extends Vue {
     }
 
     // TODO Beans from diferent locations
-    getBeans(): MBean[] {
+    private getBeans(): MBean[] {
         return this.group.engines.map((engine) => this.$store.getters.engineMBeans[engine.id]);
     }
 
-    getChartData(statesPrint: StatesPrint[]) {
+    private getChartData(statesPrint: StatesPrint[]) {
         let dataset = [];
         if (statesPrint) { 
             if (this.states.running) {

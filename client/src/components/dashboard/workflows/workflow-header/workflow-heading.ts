@@ -35,20 +35,20 @@ export class WorkflowHeading extends Vue {
         'Invalid'
     ];
 
-    clickedFromDate(dateTimeName, dateTimeRef) {
+    private clickedFromDate(dateTimeName, dateTimeRef) {
         if (this[dateTimeName]['fromSelect'] === null || this[dateTimeName]['fromSelect'] === '') {
             this[dateTimeName]['fromSelect'] = this.formatTimeForSelectAuto(this.getNow('0000'));
         }
         this.emitClick(dateTimeRef);
     }
-    clickedToDate(dateTimeName, dateTimeRef) {
+    private clickedToDate(dateTimeName, dateTimeRef) {
         if (this[dateTimeName]['toSelect'] === null || this[dateTimeName]['toSelect'] === '') {
             this[dateTimeName]['toSelect'] = this.formatTimeForSelectAuto(this.getNow('2359'));
         }
         this.emitClick(dateTimeRef);
     }
 
-    emitClick(dateTimeRef) {
+    private emitClick(dateTimeRef) {
         let elem = (this as any).$refs[dateTimeRef];
         let event = new Event('click');
         elem.$el.dispatchEvent(event);
@@ -123,21 +123,21 @@ export class WorkflowHeading extends Vue {
         }
     }
 
-    formatTimeForMain(time) {
+    private formatTimeForMain(time) {
         return time.substr(0, 4) + '/' + time.substr(5, 2) + '/' + time.substr(8, 2) + ' ' + time.substr(11, 2) + ':' + time.substr(14, 2);
     }
-    formatTimeForType(time) {
+    private formatTimeForType(time) {
         return time.substr(0, 4) + time.substr(5, 2) + time.substr(8, 2) + time.substr(11, 2) + time.substr(14, 2);
     }
-    formatTimeForSelect(time) {
+    private formatTimeForSelect(time) {
         return time.substr(0, 4) + '-' + time.substr(4, 2) + '-' + time.substr(6, 2) + 'T' + time.substr(8, 2) + ':' + time.substr(10, 2);
     }
 
-    formatTimeForSelectAuto(time) {
+    private formatTimeForSelectAuto(time) {
         return time.substr(0, 4) + '-' + time.substr(4, 2) + '-' + time.substr(6, 2) + 'T' + time.substr(8, 2) + ':' + time.substr(10, 2) + ':00.000' + this.getOffset();
     }
 
-    getOffset() {
+    private getOffset() {
         let sign = '';
         let offset = new Date().getTimezoneOffset();
         if (offset > 0) {
@@ -152,7 +152,7 @@ export class WorkflowHeading extends Vue {
         return (sign + hours + ':00');
     }
 
-    getNow(addition: string) {
+    private getNow(addition: string) {
         let date = new Date();
         let now = String(date.getFullYear());
         if (date.getMonth() > 8) {
@@ -168,7 +168,7 @@ export class WorkflowHeading extends Vue {
         return now;
     }
 
-    dateCheck(date) {
+    private dateCheck(date) {
         if (date !== null && date !== '' && date.length > 5) {
             if (Number(date.substr(4, 2)) > 12) {
                 return 'Invalid Month';
@@ -192,7 +192,7 @@ export class WorkflowHeading extends Vue {
         return true;
     }
 
-    triggerFilterMenu() {
+    private triggerFilterMenu() {
         if (this.clickAllowed === true) {
             if (this.possibleClassnames.length < 1) {
                 this.getPossibleClassNames();
@@ -208,17 +208,17 @@ export class WorkflowHeading extends Vue {
             setTimeout(() => { this.clickAllowed = true; }, 750);
         }
     }
-    clearChips() {
+    private clearChips() {
         this.filterApplied = false;
         setTimeout(() => { this.clearFilter(); this.applyFilter(); }, 750);
     }
-    clearFilter() {
+    private clearFilter() {
         this.states = [];
         this.classNames = null;
         this.createTime.clear();
         this.modTime.clear();
     }
-    applyFilter() {
+    private applyFilter() {
         this.currentFilterObject = new WorkflowFilter (
             this.parseStates(),
             this.classNames,
@@ -232,7 +232,7 @@ export class WorkflowHeading extends Vue {
         this.filterApplied = this.isFiltered(this.currentFilterObject);
         this.$emit('triggerApplyFilter', this.currentFilterObject);
     }
-    isFiltered(newFilter: WorkflowFilter) {
+    private isFiltered(newFilter: WorkflowFilter) {
         this.currentFilters = [];
         if (newFilter.classname !== null) {
             this.currentFilters.push(['Classname', newFilter.classname]);
@@ -257,7 +257,7 @@ export class WorkflowHeading extends Vue {
         return this.currentFilters.length > 0;
     }
 
-    parseStates() {
+    private parseStates() {
         if (this.wfType === 'broken') {
             let stateArray: State[] = [];
             this.states.forEach((state) => {
@@ -278,7 +278,7 @@ export class WorkflowHeading extends Vue {
         
     }
     
-    getPossibleClassNames() {
+    private getPossibleClassNames() {
         this.jmxService.getWfRepo(this.$store.getters.engineMBeans[this.engineStatus.id].connectionSettings, this.engineStatus.wfRepoMXBean, this.$store.state.user).then((response: WorkflowRepo) => {
             this.possibleClassnames = response.workFlowInfo.map((workflow, index) => {
                 return response.workFlowInfo[index].classname;
@@ -286,7 +286,7 @@ export class WorkflowHeading extends Vue {
         });
     }
 
-    getEpochTime(time) {
+    private getEpochTime(time) {
         if (time !== null && time !== NaN) {
             let date = new Date(time);
             return date.getTime();
@@ -295,7 +295,7 @@ export class WorkflowHeading extends Vue {
         }
     }
 
-    sendRestartAll() {
+    private sendRestartAll() {
         if (this.filterApplied === false) {
             this.$emit('triggerRestartAll');
         } else {
@@ -303,7 +303,7 @@ export class WorkflowHeading extends Vue {
         }
     }
 
-    sendDeleteAll() {
+    private sendDeleteAll() {
         this.dialogDeleteOpen = false;
         this.$emit('triggerDeleteFiltered', this.filterApplied ? this.currentFilterObject : null);
     }

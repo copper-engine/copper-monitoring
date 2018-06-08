@@ -108,7 +108,7 @@ export class Overview extends Vue {
         this.getData();
      }
 
-    getDataFromInflux() {
+    private getDataFromInflux() {
         // this.groups = this.$store.getters.groupsOfEngines;
         let names = [];
         this.$store.getters.groupsOfEngines.forEach( group => {
@@ -128,7 +128,7 @@ export class Overview extends Vue {
         return (this.currentLayout === 'Row');
     }
 
-    getInfluxConnection() {
+    private getInfluxConnection() {
         let influxSettings = this.$store.state.user.influx;
         this.username = influxSettings.username ? influxSettings.username : '';
         this.password = influxSettings.password ? influxSettings.password : '';
@@ -136,7 +136,7 @@ export class Overview extends Vue {
         this.useInfluxDB = influxSettings.useInfluxDB ? influxSettings.useInfluxDB : '';
     }
 
-    storeInfluxConnection() {
+    private storeInfluxConnection() {
         localStorage.setItem(this.$store.state.user.name + ':influxURL', this.url);
         localStorage.setItem(this.$store.state.user.name + ':influxUser', this.username);
         localStorage.setItem(this.$store.state.user.name + ':influxPass', this.password);
@@ -147,7 +147,7 @@ export class Overview extends Vue {
         // this.$store.state.user.influx.password = this.password;
     }
 
-    getChartSettings() {
+    private getChartSettings() {
         let chartSettings = this.$store.state.user.chart;
         // if (chartSettings !== null && chartSettings !== undefined) {
             this.currentTimeSelection = chartSettings.interval ? this.parseIntoTimeSelection(chartSettings.interval) : this.timeSelect[3];
@@ -155,11 +155,11 @@ export class Overview extends Vue {
         // }
     }
 
-    parseIntoTimeSelection(interval: number) {
+    private parseIntoTimeSelection(interval: number) {
         return new TimeSelection(this.createLabel(interval), interval);
     }
 
-    createLabel(interval: number) {
+    private createLabel(interval: number) {
         if ((interval / 60) >= 1) {
             return ((interval / 60) + ' min');
         } else {
@@ -192,7 +192,7 @@ export class Overview extends Vue {
         });
     }
 
-    groupDataResult(resultMap: Map<String, StatesPrint[]>) {
+    private groupDataResult(resultMap: Map<String, StatesPrint[]>) {
         let statMap = new Map<String, StatesPrint[]>();
         this.$store.getters.groupsOfEngines.forEach((group: EngineGroup) => {
             if (group.engines.length > 1) {
@@ -223,20 +223,20 @@ export class Overview extends Vue {
         return statMap;
     }
 
-    getEngineMapKey(engine: EngineStatus) {
+    private getEngineMapKey(engine: EngineStatus) {
         return engine.engineId + '@' + this.getConnectionName(engine.id);
     }
 
-    groupMergeStates(to: StatesPrint, from: StatesPrint) {
+    private groupMergeStates(to: StatesPrint, from: StatesPrint) {
         to.running += from.running; 
         to.dequeued += from.dequeued; 
     }
 
-    getNames() {
+    private getNames() {
         return this.$store.state.engineStatusList.map((engine) => engine.engineId + '@' + this.getConnectionName(engine.id));
     }
 
-    getGroupNames() {
+    private getGroupNames() {
         let nameArray = this.$store.getters.groupsOfEngines.map((group) => {
             if (group.engines.length > 1) {
                 return group.name;
@@ -247,25 +247,25 @@ export class Overview extends Vue {
         return nameArray;
     }
 
-    getConnectionName(id: number) {
+    private getConnectionName(id: number) {
         let connection = this.$store.getters.engineMBeans[id].connectionSettings;
         return connection.host + ':' + connection.port;
     }
 
-    updateFetch(selection: TimeSelection) {
+    private updateFetch(selection: TimeSelection) {
         this.currentTimeSelection =  selection;
         localStorage.setItem(this.$store.state.user.name + ':chartInterval', String(selection.time));      
         this.$store.commit(Mutations.setChartInterval, selection.time);          
         this.scheduleFetch();
     }
 
-    updateLayout(layout: string) {
+    private updateLayout(layout: string) {
         this.currentLayout = layout;
         localStorage.setItem(this.$store.state.user.name + ':chartLayout', layout);      
         this.$store.commit(Mutations.setChartInterval, layout);      
     }
 
-    getName(group: EngineGroup) {
+    private getName(group: EngineGroup) {
         if (group.engines.length > 1) {
             return group.name;
         } else {
@@ -273,14 +273,14 @@ export class Overview extends Vue {
         }
     }
 
-    triggerOpenInflux() {
+    private triggerOpenInflux() {
         this.generateConfigFile();
         this.generateSampleQueries();
         this.getInfluxConnection();
         this.openInfluxDialog = true;
     }
 
-    generateConfigFile() {
+    private generateConfigFile() {
         let beanNames = [];
 
         this.configText = '[[inputs.jolokia2_proxy]]\n#url goes from process.env.API_NAME variable like in jmxService. credentials is current user\n' +
@@ -308,7 +308,7 @@ export class Overview extends Vue {
         this.checkBeanNameConflict(beanNames);
     }
 
-    checkBeanNameConflict(beans) {
+    private checkBeanNameConflict(beans) {
         let conflicts: BeanConflict[] = [];
         _.toPairs(_.groupBy(beans, 'beanName')).map((group) => {
             let conflict = new BeanConflict;
@@ -323,7 +323,7 @@ export class Overview extends Vue {
         this.beanCollisions = conflicts;
     }
 
-    generateSampleQueries() {
+    private generateSampleQueries() {
         this.queryText = '#Sample Queries\n\n';
         this.$store.getters.groupsOfEngines.map((group) => {
 
@@ -343,7 +343,7 @@ export class Overview extends Vue {
         });
     }
 
-    parseURL() {
+    private parseURL() {
         if (process.env.API_NAME.substr(0, 4) !== 'http') {
             let subUrl = window.location.href.substr(7);
             let endIndex = subUrl.indexOf('/');
@@ -353,11 +353,11 @@ export class Overview extends Vue {
         }
     }
 
-    parseBeanName(fullName: string) {
+    private parseBeanName(fullName: string) {
         return fullName.substr(19);
     }
 
-    downloadConfig() {
+    private downloadConfig() {
         let blob = new Blob([this.configText], {type: 'text/csv'});
         if (window.navigator.msSaveOrOpenBlob) {
             window.navigator.msSaveBlob(blob, 'telegraf.conf');
@@ -371,7 +371,7 @@ export class Overview extends Vue {
         }
     }
 
-    copy(text) {
+    private copy(text) {
         let elem = window.document.createElement('textarea');
         elem.value = text;
         document.body.appendChild(elem);
@@ -381,7 +381,7 @@ export class Overview extends Vue {
         this.eventHub.$emit('showNotification', new Notification('Copied to Clipboard'));
     }
 
-    submit() {
+    private submit() {
         this.storeInfluxConnection();
         this.eventHub.$emit('showNotification', new Notification('Connection settings saved'));
         if (this.useInfluxDB === true) {
@@ -389,7 +389,7 @@ export class Overview extends Vue {
         }
     }
 
-    testConnection() {
+    private testConnection() {
         this.influxService.testConnection().then((response: any) => {
             if (this.parseInfluxResposne(response) === true) {
                 this.connectionSuccess = true;
@@ -402,7 +402,7 @@ export class Overview extends Vue {
         });
     }
 
-    parseInfluxResposne(response) {
+    private parseInfluxResposne(response) {
         let telegraf = false;
         if (response !== undefined && response !== null) {
             response[0].series[0].values.map((result) => {
@@ -416,7 +416,7 @@ export class Overview extends Vue {
         return telegraf;
     }
 
-    triggerTelegrafInput() {
+    private triggerTelegrafInput() {
         if (this.clickAllowed === true) {
             this.clickAllowed = false;
             setTimeout(() => {
@@ -429,7 +429,7 @@ export class Overview extends Vue {
         }
     }
 
-    triggerSampleQueries() {
+    private triggerSampleQueries() {
         if (this.clickAllowed === true) {
             this.clickAllowed = false;
             setTimeout(() => {
@@ -446,7 +446,7 @@ export class Overview extends Vue {
     // while scrolled down created strange behavior and styles. This function
     // smoothly scrolls up and resets the Scroll component when either Sample Queries
     // or Telegraf Input sections are closed to avoid this.
-    scrollToTop(tick: number) {
+    private scrollToTop(tick: number) {
         if (tick > 0) {
             setTimeout(() => {
                 let elem = (this as any).$refs['perfectScroll'];
@@ -458,7 +458,7 @@ export class Overview extends Vue {
         }
     }
 
-    scheduleFetch() {
+    private scheduleFetch() {
         if (this.fetchInterval) {
             clearInterval(this.fetchInterval);
         }
@@ -468,11 +468,11 @@ export class Overview extends Vue {
         }, this.currentTimeSelection.time * 1000);
     }
 
-    getConcreateState(dataElements, statesPrint, stateName) {
+    private getConcreateState(dataElements, statesPrint, stateName) {
         return dataElements.concat(statesPrint.map((state) => state ? state[stateName] : 0));
     }
 
-    getChartData(states: ChartStates, statesPrint: StatesPrint[]) {
+    private getChartData(states: ChartStates, statesPrint: StatesPrint[]) {
         let dataset = [];
         let emptySize = statesPrint ? 0 : this.statisticsService.pointNumbers;
         if (statesPrint && statesPrint.length < this.statisticsService.pointNumbers) { 

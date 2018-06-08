@@ -43,7 +43,7 @@ export class WorkflowRepository extends Vue {
         });
     }
     
-    toggleOpen(index) {
+    private toggleOpen(index) {
         if (this.clickAllowed === true) {
             this.clickAllowed = false;
             this.wfRepo.workFlowInfo[index].open = !this.wfRepo.workFlowInfo[index].open;
@@ -54,7 +54,7 @@ export class WorkflowRepository extends Vue {
         } 
     }
 
-    get totalPages() {
+    private get totalPages() {
         if (this.wfRepo.workFlowInfo.length > 0) {
              let total = Math.ceil(this.wfRepo.workFlowInfo.length / this.perPage);
              if (this.page > total) {

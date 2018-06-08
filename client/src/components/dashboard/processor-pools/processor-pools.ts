@@ -35,25 +35,25 @@ export class ProcessorPools extends Vue {
         clearInterval(this.fetchPoolInterval);
     }
 
-    getProcessorPools() {
+    private getProcessorPools() {
         this.jmxService.getProcessorPools(this.engineMbean.connectionSettings, this.engine.ppoolsMXBeans, this.engine.type, this.$store.state.user).then((response: any) => {
             this.processorPools = response;
         });
     }
 
-    areYouSure(fx: Function, bean: MBean, text: String) {
+    private areYouSure(fx: Function, bean: MBean, text: String) {
         this.selectedFunction = fx;
         this.selectedBean = bean;
         this.selectedFunctionText = text;    
         this.dialogDeleteOpen = true;
     }   
 
-    triggerSelectedFunction() {
+    private triggerSelectedFunction() {
         this.selectedFunction(this.selectedBean);
         this.dialogDeleteOpen = false;
     }
 
-    resume(mbean: string) {
+    private resume(mbean: string) {
         this.jmxService.resume(this.engineMbean.connectionSettings, this.$store.state.user, mbean).then((done) => {
             if (done) {
                 this.showSuccess('Workflows Resumed');
@@ -64,7 +64,7 @@ export class ProcessorPools extends Vue {
         });
     }
 
-    suspend(mbean: string) {
+    private  suspend(mbean: string) {
         this.jmxService.suspend(this.engineMbean.connectionSettings, this.$store.state.user, mbean).then((done) => {
             if (done) {
                 this.showSuccess('Workflows Suspended');
@@ -75,7 +75,7 @@ export class ProcessorPools extends Vue {
         });
     }
 
-    resumeDeque(mbean: string) {
+    private resumeDeque(mbean: string) {
         this.jmxService.resumeDeque(this.engineMbean.connectionSettings, this.$store.state.user, mbean).then((done) => {
             if (done) {
                 this.showSuccess('Deque Resumed');
@@ -86,7 +86,7 @@ export class ProcessorPools extends Vue {
         });
     }
 
-    suspendDeque(mbean: string) {
+    private suspendDeque(mbean: string) {
         this.jmxService.suspendDeque(this.engineMbean.connectionSettings, this.$store.state.user, mbean).then((done) => {
             if (done) {
                 this.showSuccess('Deque Suspended');

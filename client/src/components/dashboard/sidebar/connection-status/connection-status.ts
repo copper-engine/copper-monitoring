@@ -28,7 +28,7 @@ export class ConnectionStatusComponent extends Vue {
         }
     }
 
-    openSettings() {
+    private openSettings() {
         if (this.clickAllowed === true) {
             this.showSettings = !this.showSettings;
             if (this.showSettings === true) {
@@ -41,12 +41,12 @@ export class ConnectionStatusComponent extends Vue {
         }
     }
 
-    updateTarget(connectionSettings: ConnectionSettings) {
+    private updateTarget(connectionSettings: ConnectionSettings) {
         this.showSettings = false;
         this.$emit('updateTarget', connectionSettings);
     }
 
-    deleteSettings() {
+    private deleteSettings() {
         this.showSettings = false;
         this.deleting = true;
         setTimeout(() => { 

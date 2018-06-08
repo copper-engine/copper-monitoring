@@ -17,9 +17,12 @@
         .heading-buttons {
             padding-right: 10px;
             min-width: 620px;
-            .less-heading-buttons {
+            .less-buttons {
                 margin-left: 400px;
             }
+        }
+        .less-heading-buttons {
+            min-width: 810px;
         }
     }
     .overflow-hidden {

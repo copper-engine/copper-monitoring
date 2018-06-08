@@ -42,7 +42,7 @@ export class EngineComponent extends Vue {
         });
      }
 
-    openEngine() {
+     private openEngine() {
         if (this.clickAllowed === true) {
             this.open = !this.open;
             this.clickAllowed = false;
@@ -52,11 +52,11 @@ export class EngineComponent extends Vue {
         }
     }
 
-    get connection() {
+    private get connection() {
         return this.$store.getters.engineMBeans[this.status.id].connectionSettings;
     }
 
-    get extendTypeOfEngine() {
+    private get extendTypeOfEngine() {
         if (this.multiEngine === true) {
             return 'extend-engine-limited';
         } else if (this.status.type === 'persistent') {
@@ -66,7 +66,7 @@ export class EngineComponent extends Vue {
         }
     }
 
-    get links(): Link[] {
+    private get links(): Link[] {
         let linkArray = [];
         let params = this.status.id + '?' + this.$store.getters.connectionsAsParams;
         // if (!this.multiEngine) {

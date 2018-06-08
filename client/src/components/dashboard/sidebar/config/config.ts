@@ -27,12 +27,12 @@ export class ConfigComponent extends Vue {
         this.port = this.connectionSettings.port;
     }
 
-    deleteSettings() {
+    private deleteSettings() {
         this.dialogDeleteOpen = false;
         this.$emit('deleteSettings');
     }
 
-    submit() {
+    private submit() {
         let newConncection = new ConnectionSettings(this.host, this.port);
         if (this.checkDuplicateConnection(newConncection) === false) {
             this.$emit('updateTarget', new ConnectionSettings(this.host, this.port));
@@ -41,7 +41,7 @@ export class ConfigComponent extends Vue {
         }
     }
 
-    checkDuplicateConnection(newConnection: ConnectionSettings) {
+    private checkDuplicateConnection(newConnection: ConnectionSettings) {
         if ((this.type !== 'createNew') && (newConnection.host === this.connectionSettings.host) && (newConnection.port === this.connectionSettings.port)) {
             return false;
         }

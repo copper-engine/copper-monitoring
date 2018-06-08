@@ -43,18 +43,18 @@ export class DashboardComponent extends Vue {
     themeSwitch: boolean = true;
     initComplete: boolean = false;
     
-    get user() {
+    private get user() {
         return this.$store.state.user;
     }
-    get connectionSettings() {
+    private get connectionSettings() {
         return this.$store.state.connectionSettings;
     }
-    get getOverviewPath() {
+    private get getOverviewPath() {
         let params = '?' + this.$store.getters.connectionsAsParams;
         return ('/dashboard/overview/' + params);
     }
 
-    created() {
+    private created() {
         this.initComplete = false;
         this.getTheme();
         this.getPeriodSettings();
@@ -62,32 +62,32 @@ export class DashboardComponent extends Vue {
         (this.$services.eventHub as Vue).$on('forceStatusFetch', this.forceFetchingStatus);
     }
 
-    mounted() {  
+    private mounted() {  
         this.parseRoute();
         this.sheduleFetchingStatus();
         this.statisticsService.init();
     }
     
-    beforeDestroy() {
+    private beforeDestroy() {
         this.statisticsService.destroy();
         clearInterval(this.interval);
         (this.$services.eventHub as Vue).$off('forceStatusFetch', this.forceFetchingStatus);
     }
 
-    getTheme() {
+    private getTheme() {
         this.themeSwitch = this.$store.state.user.settings.darkTheme;
     }
 
-    getPeriodSettings() {
+    private getPeriodSettings() {
         this.update = this.$store.state.user.settings.updatePeriod;
     }
 
-    setUpdate() {
+    private setUpdate() {
         localStorage.setItem(this.$store.state.user.name + ':updatePeriod', String(this.update));
         this.$store.state.user.settings.updatePeriod = this.update;
     }
 
-    forceInt(data: any) {
+    private forceInt(data: any) {
         if (typeof data === 'number') {
             return data;
         } else {
@@ -96,7 +96,7 @@ export class DashboardComponent extends Vue {
     }
 
     // @Watch('$route')
-    parseRoute() {
+    private parseRoute() {
         if (this.$route.fullPath.split('?').length <= 1 ) 
             return;
 
@@ -126,7 +126,7 @@ export class DashboardComponent extends Vue {
         }
     }
 
-    logout() {
+    private logout() {
         this.$store.commit(Mutations.setUser, null);
         this.$store.commit(Mutations.setConnectionSettings, []);
         this.$router.replace('/login'); 
@@ -196,7 +196,7 @@ export class DashboardComponent extends Vue {
         });
     }
 
-    forceFetchingStatus(delay: number = 0) {
+    private forceFetchingStatus(delay: number = 0) {
         setTimeout(() => {
             this.getEngineStatus(this.$store.getters.engineMBeans, this.$store.state.user);
         }, delay);

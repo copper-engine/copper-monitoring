@@ -22,7 +22,7 @@ export class LoginComponent extends Vue {
     defaultPassword: string = '';
     
 
-    submit () {
+    private submit () {
         if ((this.$router as CopperRouter).nextPath === '/login') {
             this.nextPath = '/dashboard';
         } else {
@@ -49,14 +49,14 @@ export class LoginComponent extends Vue {
         }
     }
 
-    get update() {
+    private get update() {
         if (localStorage.getItem(this.username + ':updatePeriod')) {
             return parseInt(localStorage.getItem(this.username + ':updatePeriod'));
         } else {
             return 10;
         }
     }
-    get theme() {
+    private get theme() {
         if (localStorage.getItem(this.username + ':darkTheme')) {
             return utils.parseBoolean(localStorage.getItem(this.username + ':darkTheme'));
         } else {
@@ -64,7 +64,7 @@ export class LoginComponent extends Vue {
         }
     }
 
-    get url() {
+    private get url() {
         let storage = localStorage.getItem(this.username + ':influxURL');     
         if (storage !== null && storage !== '' && storage !== undefined) {
             return storage;
@@ -77,7 +77,7 @@ export class LoginComponent extends Vue {
         }
     }
 
-    get user() {
+    private get user() {
         let storage = localStorage.getItem(this.username + ':influxUser');
         if (storage !== null && storage !== '' && storage !== undefined) {
             return storage;
@@ -90,7 +90,7 @@ export class LoginComponent extends Vue {
         }
     }
 
-    get pass() {
+    private get pass() {
         let storage = localStorage.getItem(this.username + ':influxPass');
         if (storage !== null && storage !== '' && storage !== undefined) {
             return storage;
@@ -103,7 +103,7 @@ export class LoginComponent extends Vue {
         }
     }
 
-    get use() {
+    private get use() {
         let storage = localStorage.getItem(this.username + ':useInfluxDB');
         if (storage !== null && storage !== '' && storage !== undefined) {
             return utils.parseBoolean(storage);
@@ -112,7 +112,7 @@ export class LoginComponent extends Vue {
         }
     }
 
-    get chartInterval() {
+    private get chartInterval() {
         let storage = localStorage.getItem(this.username + ':chartInterval');
         if (storage !== null && storage !== undefined) {
             return parseInt(storage);
@@ -121,7 +121,7 @@ export class LoginComponent extends Vue {
         }
     }
 
-    get chartLayout() {
+    private get chartLayout() {
         let storage = localStorage.getItem(this.username + ':chartLayout');
         if (storage !== null && storage !== undefined) {
             return storage;

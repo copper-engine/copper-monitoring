@@ -163,7 +163,6 @@ export class JmxService {
                     return connectionResult;
                 });
 
-                console.log(connectionResults);
                 return connectionResults;
             });
     }

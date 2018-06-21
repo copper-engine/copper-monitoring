@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { ConnectionSettings, ConnectionResult } from './models/connectionSettings';
 import { EngineStatus, EngineGroup } from './models/engine';
-// import { MBeans } from './models/mbeans';
 import { User, InfluxConnection } from './models/user';
 import { parseBoolean }  from './util/utils';
 import * as _ from 'lodash';

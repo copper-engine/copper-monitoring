@@ -1,0 +1,118 @@
+<div class="audit-trail">
+    <v-layout class="workflows-cont" column>
+        <h2>Audit Trail</h2>
+
+        <v-layout class="header">
+            <v-flex class="id">
+                ID
+            </v-flex>  
+            <v-flex class="logLevel">
+                Log Level
+            </v-flex>  
+            <v-flex class="occurence">
+                Occurence
+            </v-flex>
+            <v-flex class="conversationId">
+                Conversation Id          
+            </v-flex>
+            <v-flex class="wfInstanceId">
+                WF Instance Id
+            </v-flex>
+            <v-flex class="correlationId">
+                Correlation Id
+            </v-flex>
+            <v-flex class="transactionId">
+                Transaction Id
+            </v-flex>
+            <v-flex class="messageType">
+                Message Type
+            </v-flex>
+            <v-flex class="actions">
+                Show Message
+            </v-flex>
+        </v-layout>
+
+        <!-- <v-card v-show="!wfRepo.workFlowInfo || wfRepo.workFlowInfo.length === 0" class="error" v-if="wfRepo">
+            <v-card-text>
+                <v-alert class="error-message" icon="info" value="true" >
+                    Cannot Load Workflow Class Information
+                </v-alert>
+            </v-card-text>
+        </v-card> -->
+
+        <!-- <v-layout class="workflow" v-for="(workflow, i) in wfRepo.workFlowInfo" :key="workflow.id" column v-if="wfRepo">
+
+            <v-layout class="workflow-layout" column>
+                <v-layout>
+                    <v-flex class="number">
+                        {{ i + 1 }}
+                    </v-flex>  
+                    <v-flex class="alias">
+                        {{ workflow.alias }}
+                    </v-flex>  
+                    <v-flex class="classname">
+                        {{ workflow.classname }}
+                    </v-flex>
+                    <v-flex class="version">
+                        Version: {{ workflow.majorVersion }}.{{ workflow.minorVersion }}.{{ workflow.patchLevel }}
+                    </v-flex>                  
+                    <v-flex class="actions">
+                        <v-tooltip top content-class="tooltip-text">
+                            <v-btn
+                            depressed
+                            dark
+                            class="squareButton"
+                            @click="toggleOpen(i)"
+                            :disabled="workflow.sourceCode === undefined || workflow.sourceCode === null || (workflow.sourceCode.trim()).toLowerCase() === '1.na'"
+                            slot="activator">
+                                <v-icon :class="{ 'close-details-icon': workflow.open }" >details</v-icon>
+                            </v-btn>
+                            <span v-show="workflow.sourceCode != null && (workflow.sourceCode.trim()).toLowerCase() !== 'na'">Show Source Code</span>
+                            <span v-show="workflow.sourceCode === null || (workflow.sourceCode.trim()).toLowerCase() === 'na'">No Source Code</span>
+                        </v-tooltip>
+                    </v-flex>
+                </v-layout>
+            </v-layout>
+
+            <v-layout class="workflow-info-layout">
+            <transition name="extend">
+                <div class="details" v-show="workflow.open">
+                    <v-layout class="workflow-detail stacktrace" row>
+                        <v-flex class="detail-label">Source Code:</v-flex>
+                        <v-flex class="text">
+                            <source-code :sourceCode="workflow.sourceCode" ></source-code>
+                        </v-flex>
+                    </v-layout>
+                </div>
+            </transition>
+            </v-layout>
+
+        </v-layout> -->
+        
+    </v-layout>
+
+    <!-- <v-card flat class="footer-card">
+        <v-card-text>
+            <v-layout justify-center class="pagination-cont">
+                    <v-flex class="text-xs-center">
+                        <v-pagination :length="totalPages" v-model="page" :total-visible="10"></v-pagination>      
+                    </v-flex>
+                <v-flex xs3>
+                    <v-layout justify-center class="pagin-config">
+                        <v-flex>
+                            <div class="per-page-label">Per page</div>
+                        </v-flex>
+                        
+                        <v-flex>
+                            <v-select
+                            class="per-page"
+                            :items="perPageItems"
+                            v-model="perPage"
+                            ></v-select>
+                        </v-flex>
+                    </v-layout>
+                </v-flex>
+            </v-layout>
+        </v-card-text>
+    </v-card> -->
+</div>

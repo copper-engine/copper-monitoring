@@ -37,6 +37,10 @@ export class SidebarComponent extends Vue {
         let params = '?' + this.$store.getters.connectionsAsParams;
         return ('/dashboard/overview/' + params);
     }
+    get getAuditTrailPath() {
+        let params = '?' + this.$store.getters.connectionsAsParams;
+        return ('/dashboard/audit-trail/' + params);
+    }
 
     showSettings() {
         if (this.clickAllowed === true) {

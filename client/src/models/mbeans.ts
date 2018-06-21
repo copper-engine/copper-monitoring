@@ -8,18 +8,27 @@ export class MBean {
 }
 
 
-export class MBeans {
-    // Values will be fetched by first call to JMX
-    constructor(public engineMBeans: MBean[] = [new MBean('', [], null)]) {
-        this.setEngineMBeans(engineMBeans);
-    }
+// export class MBeans {
+//     // Values will be fetched by first call to JMX
+//     constructor(public engineMBeans: MBean[] = [new MBean('', [], null)]) {
+//         this.setEngineMBeans(engineMBeans);
+//     }
 
-    setEngineMBeans(beans: MBean[]) {
-        beans.forEach(bean => bean.name = 'copper.engine:' + bean.name);
-        this.engineMBeans = beans;
-    }
-    addEngineMBean(bean: MBean) {
-        bean.name = 'copper.engine:' + bean.name;
-        this.engineMBeans.push(bean); 
-    }
-}
+//     setEngineMBeans(beans: MBean[]) {
+//         beans.forEach(bean => bean.name = 'copper.engine:' + bean.name);
+//         this.engineMBeans = beans;
+//     }
+//     addEngineMBean(bean: MBean) {
+//         bean.name = 'copper.engine:' + bean.name;
+//         this.engineMBeans.push(bean); 
+//     }
+
+//     setAuditTrailMBeans(beans: MBean[]) {
+//         beans.forEach(bean => bean.name = 'copper.audittrail:' + bean.name);
+//         this.engineMBeans = beans;
+//     }
+//     addAuditTrailMBean(bean: MBean) {
+//         bean.name = 'copper.audittrail:' + bean.name;
+//         this.engineMBeans.push(bean); 
+//     }
+// }

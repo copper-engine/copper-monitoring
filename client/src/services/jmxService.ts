@@ -4,8 +4,9 @@ import { State, EngineStatus, WorkflowInfo, WorkflowClassInfo, WorkflowRepo, Sta
 import { ConnectionSettings, ConnectionResult } from '../models/connectionSettings';
 import moment from 'moment';
 import { User } from '../models/user';
-import { MBeans, MBean } from '../models/mbeans';
+import { MBean } from '../models/mbeans';
 import * as _ from 'lodash';
+import { AuditTrailInstanceFilter } from '../models/auditTrail';
 
 export class JmxService {
     getEngineStatus(mbeans: MBean[], user: User) {
@@ -98,10 +99,9 @@ export class JmxService {
     }
 
     parseGroupWFCountResponse = (response, length) => {
-        let counter = length;
         let count = 0;
-        for (let i = 0; i < counter; i++) {
-            count = count + response.data[i].value;
+        for (let i = 0; i < length; i++) {
+            count += response.data[i].value;
         }
         return count;
     }
@@ -138,16 +138,32 @@ export class JmxService {
                 }
 
                 let connectionResults: ConnectionResult[] = connectionSettingsList.map((connectionSettings, i) => {
+                    let connectionResult: ConnectionResult; 
+
                     if (this.isSubResponseValid(response.data[i]) && response.data[i].value['copper.engine']) {
                         let engines = response.data[i].value['copper.engine'];
                         let mbeanNames = Object.keys(engines);
                         let mbeans = mbeanNames.map((mbean) => new MBean(mbean, Object.keys(engines[mbean].attr), connectionSettings));
 
-                        return new ConnectionResult(connectionSettings, mbeans);
+                        connectionResult = new ConnectionResult(connectionSettings, mbeans);
                     } else {
-                        return new ConnectionResult(connectionSettings, []);
+                        connectionResult = new ConnectionResult(connectionSettings, []);
                     }
+
+                    if (this.isSubResponseValid(response.data[i]) && response.data[i].value['copper.audittrail']) {
+                        let auditTrails = response.data[i].value['copper.audittrail'];
+                        let mbeanNames = Object.keys(auditTrails);
+                        if (mbeanNames.length > 1) {
+                            console.log('more audit trails than we expected: ', mbeanNames.length);
+                        }
+                        
+                        connectionResult.auditTrailsMBean = new MBean('copper.audittrail:' + mbeanNames[0], [], connectionSettings);
+                    }
+
+                    return connectionResult;
                 });
+
+                console.log(connectionResults);
                 return connectionResults;
             });
     }
@@ -314,6 +330,61 @@ export class JmxService {
         .catch(error => {
             console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting filtered workflows:', error);
         });
+    }
+
+    getAuditTrails(auditTrailMBean: MBean, user: User, auditTrailFilter: AuditTrailInstanceFilter) { 
+        console.log('auditTrailFilter', auditTrailFilter);
+        return Axios.post(process.env.API_NAME, [
+            {
+                type: 'EXEC',
+                mbean: auditTrailMBean.name,
+                operation: 'getAuditTrails(javax.management.openmbean.CompositeData)',
+                arguments: [ auditTrailFilter ],
+                target: { url: `service:jmx:rmi:///jndi/rmi://${auditTrailMBean.connectionSettings.host}:${auditTrailMBean.connectionSettings.port}/jmxrmi` },
+            }
+            ], {
+                auth: { username: user.name, password: user.password }
+            })
+            .then(this.parseAuditTrailResponse)
+            .catch(error => {
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
+            });
+    }
+
+    countAuditTrails(auditTrailMBean: MBean, user: User, auditTrailFilter: AuditTrailInstanceFilter) { 
+        return Axios.post(process.env.API_NAME, [
+            {
+                type: 'EXEC',
+                mbean: auditTrailMBean.name,
+                operation: 'countAuditTrails(javax.management.openmbean.CompositeData)',
+                arguments: [ auditTrailFilter ],
+                target: { url: `service:jmx:rmi:///jndi/rmi://${auditTrailMBean.connectionSettings.host}:${auditTrailMBean.connectionSettings.port}/jmxrmi` },
+            }
+            ], {
+                auth: { username: user.name, password: user.password }
+            })
+            .then(this.parseAuditTrailResponse)
+            .catch(error => {
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
+            });
+    }
+
+    getAuditTrailMessage(auditTrailMBean: MBean, user: User, id: number) { 
+        return Axios.post(process.env.API_NAME, [
+            {
+                type: 'EXEC',
+                mbean: auditTrailMBean.name,
+                operation: 'getMessageString',
+                arguments: [ id ],
+                target: { url: `service:jmx:rmi:///jndi/rmi://${auditTrailMBean.connectionSettings.host}:${auditTrailMBean.connectionSettings.port}/jmxrmi` },
+            }
+            ], {
+                auth: { username: user.name, password: user.password }
+            });
+            // .then(this.parseAuditTrailResponse)
+            // .catch(error => {
+            //     console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
+            // });
     }
 
     private buildRestartAllRequest = (connectionSettings: ConnectionSettings, mbean: string) => [
@@ -504,6 +575,17 @@ export class JmxService {
             wfArray
         );
         return wfRepo;
+    }
+
+    private parseAuditTrailResponse = (response) => {
+        if (!response || !response.data 
+            || response.data.length < 1
+            || response.data[0].error) {
+            console.log('Invalid responce for Audit Trail:', response); 
+            throw new Error('invalid response for Audit Trail!');
+        }
+        console.log('parsing responce for trail:', response);
+        return response.data[0].value;
     }
 
     private parseVoidResponse = (response): boolean => {

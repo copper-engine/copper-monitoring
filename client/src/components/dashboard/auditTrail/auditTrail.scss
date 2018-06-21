@@ -1,0 +1,348 @@
+@import '../../../variables';
+
+.audit-trail {
+    width: 100%;
+    max-width: 1650px;
+    margin: auto;
+
+    h2 {
+        color: $dark-text-color;
+    }
+
+    .alert {
+        margin: 20px;
+    }
+
+    .summary {
+        .text {
+            font-size: 1.2em;
+            font-weight: 400;
+            padding-top: 8px;
+            padding-right: 20px;
+            color: $dark-text-color;
+        }
+        .stopGrow {
+            flex-grow: 0;
+        }
+        .sub-heading {
+            width: 150px;
+            min-width: 150px;
+            max-width: 150px;
+        }
+    }
+
+    .header {
+        background-color: $light-primary;
+        color: $light-text-color !important;
+        margin-top: 16px;
+        padding: 30px 16px 30px 16px;
+        align-items: center;
+        font-weight: 700;
+        font-size: 1.1em;
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px;
+    }
+
+    .error {
+        background-color: $light-secondary !important;
+        .error-message {
+            border: 2px solid;
+            border-color: $light-border;
+            color: $dark-text-color;
+            background-color: $light-tertiary !important;
+        }
+    }
+
+    .workflows-cont {
+        border-bottom: 1px solid;
+        border-color: $light-border;
+        overflow: hidden;
+    }
+
+    .workflow {
+        border-top: 1px solid;
+        border-left: 1px solid;
+        border-right: 1px solid;
+        border-color: $light-border;
+    }
+
+    .workflow-layout >* {
+        background-color: $light-wf;
+        color: $dark-text-color;
+        padding: 8px 16px;
+        align-items: center;
+        padding: 20px;
+    }
+    
+    .number,
+    .alias,
+    .classname,
+    .version,
+    .actions {
+        word-wrap: break-word;
+        padding: 0 10px;
+    }
+    .number {
+        width: 35px;
+        min-width: 35px;
+        max-width: 35px;
+    }
+    .version {
+        width: 350px;
+        min-width: 125px;
+        max-width: 350px;
+    }
+
+    .classname {
+        width: 550px;
+        min-width: 240px;
+        max-width: 550px;
+    }
+    .alias {
+        width: 550px;
+        min-width: 240px;
+        max-width: 550px;
+    }
+    .actions {
+        width: 110px;
+        max-width: 110px;
+        min-width: 110px;
+
+        button {
+            background-color: $blue !important;
+            margin-left: 12px;
+            border-radius: 20%;
+        }
+
+        .close-details-icon {
+            transform: rotate(180deg);
+        }
+
+    }
+
+    .workflow-info-layout {
+        padding: 0px;
+
+        .details {
+            background-color: $light-tertiary;
+            padding-left: 32px;
+            padding-right: 32px;
+            padding-bottom: 24px;
+            padding-top: 0px;
+            width: 100%;
+
+            .workflow-detail {
+                padding: 4px;
+            }
+
+            .detail-label {
+                font-weight: 700;
+                padding-top: 20px;
+                padding-bottom: 20px;
+                padding-right: 10px;
+                min-width: 100px;
+                max-width: 100px;
+                margin-right: 75px;
+            }
+
+            .stacktrace .text {
+                overflow-x: auto;
+                padding-top: 20px;
+                padding-left: 5px;
+            }
+        }
+    }
+
+    .custom-loader {
+        animation: loader 1s infinite;
+        display: flex;
+    }
+
+    .pagination-cont {
+        align-items: center;
+        .pagination__item {
+            background-color: $light-wf !important;
+            color: $dark-text-color;
+        }
+        .pagination__item--active {
+            background-color: $light-primary !important;
+            color: $light-text-color;
+        }
+        .pagination__item:hover {
+            background-color: $light-link-active !important;
+            color: $light-text-color;
+        }
+        .pagination__navigation {
+            background-color: $light-wf !important;
+            color: $dark-text-color;
+            .icon {
+                background-color: $light-wf !important;
+                color: $dark-text-color;
+            }
+        }
+        .pagination__navigation:hover {
+            .icon {
+                background-color: $light-link-active !important;
+                color: $dark-text-color;
+            }
+        }
+        .pagin-config {
+            align-items: center;
+            .per-page-label {
+                font-size: 1.1em;
+                font-weight: 700;
+                padding-left: 16px;
+                padding-bottom: 8px;
+                color: $dark-text-color;
+            }
+            .per-page {
+                width: 60px;
+                color: $light-primary !important;
+                .input-group__selections__comma {
+                    color: $dark-text-color !important;
+                }
+                .icon {
+                    color: $dark-text-color !important;
+                }
+                .input-group__details::before {
+                    background-color: $dark-text-color !important;
+                }
+            }
+        }
+        .pagination li span {
+            float: none;
+            color: $dark-text-color;
+        }
+        button {
+            background-color: $light-background;
+        }
+    }
+
+    .footer-card {
+        background-color: $light-tertiary;
+        border-bottom-left-radius: 2px;
+        border-bottom-right-radius: 2px;
+    }
+
+    .list-item {
+        display: inline-block;
+        margin-right: 10px;
+    }
+    
+    .extend-enter-active {
+        animation: extend 0.75s;
+    }
+    .extend-leave-active {
+        animation: extend 0.75s reverse;
+    }
+    @keyframes extend {
+        0% {max-height: 0px;}
+        100% {max-height: 1000px;}
+    }
+
+}
+
+.dark {
+    .audit-trail {
+        h2 {
+            color: $light-text-color;
+        }
+        .summary {
+            .text {
+                color: $light-text-color;
+            }
+        }
+        .header {
+            background-color: $dark-primary;
+        }
+        .error {
+            background-color: $dark-secondary !important;
+            .error-message {
+                border-color: $dark-border;
+                color: $light-text-color;
+                background-color: $dark-tertiary !important;
+            }
+        }
+        .workflows-cont {
+            border-color: $dark-border;
+        }
+    
+        .workflow {
+            border-left: 0px solid;
+            border-right: 0px solid;
+            border-color: $dark-border;
+        }
+        .workflow-layout >* {
+            background-color: $dark-wf;
+            color: $light-text-color;
+            .actions {
+                button {
+                    background-color: $dark-primary !important;
+                    color: $light-text-color;
+                }
+            }
+        }
+        .workflow-info-layout {
+            .details {
+                background-color: $dark-tertiary; 
+                color: $light-text-color;
+            }
+        }
+        .footer-card {
+            background-color: $dark-secondary;
+        }
+        .pagination-cont {
+            .pagination__item {
+                background-color: $dark-wf!important;
+                color: $light-text-color;
+            }
+            .pagination__item--active {
+                background-color: $dark-primary !important;
+                color: $light-text-color;
+            }
+            .pagination__item:hover{
+                background-color: $dark-tertiary !important;
+                color: $light-text-color;
+            }
+            .pagination__navigation {
+                background-color: $dark-wf !important;
+                color: $light-text-color;
+                .icon {
+                    background-color: $dark-wf !important;
+                    color: $light-text-color;
+                }
+            }
+            .pagination__navigation:hover {
+                .icon {
+                    background-color: $dark-tertiary !important;
+                    color: $light-text-color;
+                }
+            }
+            .pagin-config {
+                .per-page-label {
+                    color: $light-text-color !important;
+                }
+                .per-page {
+                    color: $dark-primary !important;
+                    .input-group__selections__comma {
+                        color: $light-text-color !important;
+                    }
+                    .icon {
+                        color: $light-text-color !important;
+                    }
+                    .input-group__details::before {
+                        background-color: $light-text-color !important;
+                    }
+                }
+            }
+            .pagination li span {
+                float: none;
+                color: $light-text-color;
+            }
+            button {
+                background-color: $dark-background;
+                color: $light-text-color;
+            }
+        }
+    }
+}

@@ -5,7 +5,7 @@ import * as utils from '../../util/utils';
 import './dashboard.scss';
 import { EngineStatus } from '../../models/engine';
 import { User } from '../../models/user';
-import { MBeans, MBean } from '../../models/mbeans';
+import { MBean } from '../../models/mbeans';
 import * as _ from 'lodash';
 import { Mutations } from '../../store.vuex';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
@@ -198,7 +198,7 @@ export class DashboardComponent extends Vue {
                 this.$store.commit(Mutations.setAppCriticalError, null);
             }
         }).catch((error: Error) => {
-            let errorMessage = 'Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error makink JMX connection:' + error.message;
+            let errorMessage = 'Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error making JMX connection:' + error.message;
             console.error(errorMessage);
             this.$store.commit(Mutations.setAppCriticalError, errorMessage);
         });

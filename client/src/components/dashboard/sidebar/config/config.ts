@@ -14,6 +14,8 @@ export class ConfigComponent extends Vue {
 
     host: string = '';
     port: string = '1099';
+    username: string = null;
+    password: string = null;
     valid = true;
     dialogDeleteOpen: boolean = false;
 
@@ -25,6 +27,8 @@ export class ConfigComponent extends Vue {
     mounted() {
         this.host = this.connectionSettings.host;
         this.port = this.connectionSettings.port;
+        this.username = this.connectionSettings.username;
+        this.password = this.connectionSettings.password;
     }
 
     deleteSettings() {
@@ -33,26 +37,20 @@ export class ConfigComponent extends Vue {
     }
 
     submit() {
-        let newConncection = new ConnectionSettings(this.host, this.port);
-        if (this.checkDuplicateConnection(newConncection) === false) {
-            this.$emit('updateTarget', new ConnectionSettings(this.host, this.port));
-        } else {
+        let newConnection = new ConnectionSettings(this.host, this.port, this.username, this.password);
+        if (this.connectionExists(newConnection)) {
             this.$services.eventHub.$emit('showNotification', new Notification('Connection is a duplicate', 'error'));
+        } else {
+            this.$emit('updateTarget', newConnection);
         }
     }
 
-    checkDuplicateConnection(newConnection: ConnectionSettings) {
+    connectionExists(newConnection: ConnectionSettings) {
         if ((this.type !== 'createNew') && (newConnection.host === this.connectionSettings.host) && (newConnection.port === this.connectionSettings.port)) {
             return false;
         }
-        let currentConnections = this.$store.state.connectionSettings;
-        let duplicate = false;
-        for (let i = 0; i < currentConnections.length; i++) {
-            if ((newConnection.host === currentConnections[i].host) && (newConnection.port === currentConnections[i].port)) {
-                duplicate = true;
-            }
-        }
-        return duplicate;
+
+        return this.$store.state.connectionSettings.find(currentConnections => (newConnection.host === currentConnections.host) && (newConnection.port === currentConnections.port));
     }
 
 }

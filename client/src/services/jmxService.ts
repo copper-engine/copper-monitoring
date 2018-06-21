@@ -148,6 +148,11 @@ export class JmxService {
                         connectionResult = new ConnectionResult(connectionSettings, mbeans);
                     } else {
                         connectionResult = new ConnectionResult(connectionSettings, []);
+                        if (response.data[i].status === 403) {
+                            connectionResult.error = 'Authentication failed! Credentials required.';
+                        } else {
+                            connectionResult.error = response.data[i].error ? response.data[i].error : 'Unnable to connect';
+                        }
                     }
 
                     if (this.isSubResponseValid(response.data[i]) && response.data[i].value['copper.audittrail']) {
@@ -332,14 +337,14 @@ export class JmxService {
     }
 
     getAuditTrails(auditTrailMBean: MBean, user: User, auditTrailFilter: AuditTrailInstanceFilter) { 
-        console.log('auditTrailFilter', auditTrailFilter);
+        // console.log('auditTrailFilter', auditTrailFilter);
         return Axios.post(process.env.API_NAME, [
             {
                 type: 'EXEC',
                 mbean: auditTrailMBean.name,
                 operation: 'getAuditTrails(javax.management.openmbean.CompositeData)',
                 arguments: [ auditTrailFilter ],
-                target: { url: `service:jmx:rmi:///jndi/rmi://${auditTrailMBean.connectionSettings.host}:${auditTrailMBean.connectionSettings.port}/jmxrmi` },
+                target: this.getTarget(auditTrailMBean.connectionSettings),
             }
             ], {
                 auth: { username: user.name, password: user.password }
@@ -350,6 +355,7 @@ export class JmxService {
             });
     }
 
+    // TODO consider merge  base with getAuditTrails to have less code duplication
     countAuditTrails(auditTrailMBean: MBean, user: User, auditTrailFilter: AuditTrailInstanceFilter) { 
         return Axios.post(process.env.API_NAME, [
             {
@@ -357,7 +363,7 @@ export class JmxService {
                 mbean: auditTrailMBean.name,
                 operation: 'countAuditTrails(javax.management.openmbean.CompositeData)',
                 arguments: [ auditTrailFilter ],
-                target: { url: `service:jmx:rmi:///jndi/rmi://${auditTrailMBean.connectionSettings.host}:${auditTrailMBean.connectionSettings.port}/jmxrmi` },
+                target: this.getTarget(auditTrailMBean.connectionSettings),
             }
             ], {
                 auth: { username: user.name, password: user.password }
@@ -368,6 +374,7 @@ export class JmxService {
             });
     }
 
+    // TODO consider merge  base with getAuditTrails to have less code duplication
     getAuditTrailMessage(auditTrailMBean: MBean, user: User, id: number) { 
         return Axios.post(process.env.API_NAME, [
             {
@@ -375,7 +382,7 @@ export class JmxService {
                 mbean: auditTrailMBean.name,
                 operation: 'getMessageString',
                 arguments: [ id ],
-                target: { url: `service:jmx:rmi:///jndi/rmi://${auditTrailMBean.connectionSettings.host}:${auditTrailMBean.connectionSettings.port}/jmxrmi` },
+                target: this.getTarget(auditTrailMBean.connectionSettings),
             }
             ], {
                 auth: { username: user.name, password: user.password }
@@ -399,7 +406,7 @@ export class JmxService {
             mbean: mbean,
             operation: 'getWorkflowInfo',
             arguments: [classname],
-            target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
+            target: this.getTarget(connectionSettings)
         };
     }
 
@@ -407,7 +414,7 @@ export class JmxService {
         return {
             type: 'read',
             mbean: mbean,
-            target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
+            target: this.getTarget(connectionSettings)
         };
     }
     private createEngineInfoRequest(connectionSettings: ConnectionSettings, mbean: MBean) {
@@ -422,14 +429,22 @@ export class JmxService {
             type: 'read',
             mbean: mbean.name,
             attribute: attributes,
-            target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
+            target: this.getTarget(connectionSettings)
+        };
+    }
+
+    private getTarget( connectionSettings: ConnectionSettings ) {
+        return {
+            url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi`,
+            user: connectionSettings.username,
+            password: connectionSettings.password
         };
     }
 
     private createMBeansListRequest(connectionSettings: ConnectionSettings) {
         return {
             type: 'LIST',
-            target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
+            target: this.getTarget(connectionSettings)
         };
     }
 
@@ -439,7 +454,7 @@ export class JmxService {
             type: 'READ',
             mbean: mbean,
             attribute: attributes,
-            target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` }
+            target: this.getTarget(connectionSettings)
         };
     }
 
@@ -489,26 +504,14 @@ export class JmxService {
     }
 
     private createPoolExecRequest(connectionSettings, mbean, uniquePart: {}) {
-        return Object.assign(this.createPoolExecRequstBase(connectionSettings, mbean), uniquePart);
+        return Object.assign(this.createJmxExecRequstBase(connectionSettings, mbean), uniquePart);
     }
 
     private createJmxExecRequstBase(connectionSettings: ConnectionSettings, mbean: string) {
         return {
             type: 'EXEC',
             mbean: mbean,
-            target: {
-                url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi`
-            }
-        };
-    }
-
-    private createPoolExecRequstBase(connectionSettings: ConnectionSettings, mbean) {
-        return {
-            type: 'EXEC',
-            mbean: mbean,
-            target: {
-                url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi`
-            }
+            target: this.getTarget(connectionSettings)
         };
     }
 

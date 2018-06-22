@@ -5,7 +5,7 @@ import * as utils from '../../util/utils';
 import './dashboard.scss';
 import { EngineStatus } from '../../models/engine';
 import { User } from '../../models/user';
-import { MBeans, MBean } from '../../models/mbeans';
+import { MBean } from '../../models/mbeans';
 import * as _ from 'lodash';
 import { Mutations } from '../../store.vuex';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
@@ -116,7 +116,19 @@ export class DashboardComponent extends Vue {
                 parsed = parsed[1].split('|');
                 
                 if (parsed[0] && parsed[1]) {
-                    settings.push(new ConnectionSettings(parsed[0], parsed[1]));
+                    let username = this.$store.state.user.settings.defaultJmxUsername;
+                    let password = this.$store.state.user.settings.defaultJmxPass;
+                    let connection = new ConnectionSettings(parsed[0], parsed[1]);
+                    
+                    try {
+                        let lsConnection = JSON.parse(localStorage.getItem(this.$store.state.user.name + '_' + connection.toString()));
+                        if (lsConnection) {
+                            username = lsConnection.username;
+                            password = lsConnection.password;
+                        }
+                    } catch (err) {}
+
+                    settings.push(new ConnectionSettings(parsed[0], parsed[1], username, password));
                 }
             }
         });
@@ -193,6 +205,14 @@ export class DashboardComponent extends Vue {
                     this.sheduleFetchingStatus();
                 }, 3000);
             }
+
+            if (this.$store.state.appCriticalError) {
+                this.$store.commit(Mutations.setAppCriticalError, null);
+            }
+        }).catch((error: Error) => {
+            let errorMessage = 'Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error making JMX connection:' + error.message;
+            console.error(errorMessage);
+            this.$store.commit(Mutations.setAppCriticalError, errorMessage);
         });
     }
 

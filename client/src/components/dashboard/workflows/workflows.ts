@@ -7,7 +7,7 @@ import * as utils from '../../../util/utils';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import { ConnectionSettings } from '../../../models/connectionSettings';
 import { User } from '../../../models/user';
-import { MBeans, MBean } from '../../../models/mbeans';
+import { MBean } from '../../../models/mbeans';
 import { HighlitedLine } from '../../../models/highlited-line';
 
 import './workflows.scss';

@@ -12,7 +12,8 @@ const workflowsComponent = () => import('./components/dashboard/workflows').then
 const statisticsComponent = () => import('./components/dashboard/statistics').then(({ StatisticsComponent }) => StatisticsComponent);
 const workflowRepoComponent = () => import('./components/dashboard/workflow-repo').then(({ WorkflowRepository }) => WorkflowRepository);
 const processorPoolsComponent = () => import('./components/dashboard/processor-pools').then(({ ProcessorPools }) => ProcessorPools);
-const overviewComponent = () => import('./components/dashboard/overview').then(({ Overview }) => Overview);
+const overviewComponent = () => import('./components/dashboard/overview').then(({ OverviewComponent }) => OverviewComponent);
+const auditTrailComponent = () => import('./components/dashboard/auditTrail').then(({ AuditTrailComponent }) => AuditTrailComponent);
 
 if (process.env.ENV === 'development' && module.hot) {
   // first arguments for `module.hot.accept` and `require` methods have to be static strings
@@ -39,6 +40,14 @@ if (process.env.ENV === 'development' && module.hot) {
   const statisticsComponentId = './components/dashboard/statistics';
   makeHot(statisticsComponentId, statisticsComponent,
     module.hot.accept('./components/dashboard/statistics', () => reload(statisticsComponentId, (<any>require('./components/dashboard/statistics')).statisticsComponent)));
+  
+  const overviewComponentId = './components/dashboard/overview';
+  makeHot(overviewComponentId, overviewComponent,
+    module.hot.accept('./components/dashboard/overview', () => reload(overviewComponentId, (<any>require('./components/dashboard/overview')).overviewComponent)));
+
+  const auditTrailComponentId = './components/dashboard/auditTrail';
+  makeHot(auditTrailComponentId, auditTrailComponent,
+    module.hot.accept('./components/dashboard/auditTrail', () => reload(auditTrailComponentId, (<any>require('./components/dashboard/auditTrail')).auditTrailComponent)));
 }
 
 Vue.use(VueRouter);
@@ -103,6 +112,14 @@ export const createRoutes: () => RouteConfig[] = () => [
         name: 'overview',
         path: 'overview/',
         component: overviewComponent,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        name: 'audit-trail',
+        path: 'audit-trail/',
+        component: auditTrailComponent,
         meta: {
           requiresAuth: true
         }

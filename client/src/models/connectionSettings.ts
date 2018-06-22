@@ -4,7 +4,9 @@ export class ConnectionSettings {
     
     constructor(
         public host: string = 'localhost', 
-        public port: string = '1099') {
+        public port: string = '1099',
+        public username: string = null,
+        public password: string = null) {
     }
 
     toString() {
@@ -12,7 +14,7 @@ export class ConnectionSettings {
     }
 }
 export class ConnectionResult {    
-    constructor(public settings: ConnectionSettings, public mbeans: MBean[]) {}
+    constructor(public settings: ConnectionSettings, public mbeans: MBean[], public auditTrailsMBean: MBean = null, public error: string = null) {}
 
     isConnected() {
         return this.mbeans && this.mbeans.length > 0;

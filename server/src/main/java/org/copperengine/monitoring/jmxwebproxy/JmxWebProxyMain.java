@@ -143,6 +143,7 @@ public class JmxWebProxyMain {
         String auth = System.getenv("MONITORING_AUTH");
         if (auth == null || auth.length() == 0) {
             log.warn("No authentication credentials were set. Check if environment variable MONITORING_AUTH is set correct.");
+            auth = "";
         }
         authFilter.setInitParameter("auth", auth);
         authFilter.addMappingForServletNames(null, jolokiaServletName);
@@ -166,6 +167,7 @@ public class JmxWebProxyMain {
         String auth = System.getenv("MONITORING_AUTH");
         if (auth == null || auth.length() == 0) {
             log.warn("No authentication credentials were set. Check if environment variable MONITORING_AUTH is set correct.");
+            auth = "";
         }
         authFilter.setInitParameter("auth", auth);
         authFilter.addMappingForServletNames(null, servletName);

@@ -53,7 +53,6 @@ public class BasicAuthServletFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-//        httpServletResponse.addHeader("Content-Type", "application/json");
         if ("DEV".equals(ENVIRONMENT)) {
             httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
         }
@@ -87,7 +86,6 @@ public class BasicAuthServletFilter implements Filter {
         }
         String username = values[0];
         String password = values[1];
-        // Validate the extracted credentials
         if (username == null || password == null) {
             authError(httpServletResponse, UNAUTHORIZED, "Missing username or password");
             return;
@@ -103,18 +101,8 @@ public class BasicAuthServletFilter implements Filter {
     }
 
     private void authError(HttpServletResponse httpServletResponse, Response.Status status, String msg) throws IOException {
-//        httpServletResponse.setContentType("application/json");
-//        httpServletResponse.setCharacterEncoding("utf-8");
         httpServletResponse.addHeader("WWW-Authenticate", "xBasic realm=\"" + realm + "\"");
-
-//        httpServletResponse.setStatus(status.getStatusCode(), msg);
         httpServletResponse.sendError(status.getStatusCode(), msg);
-//        StringBuilder jsonBuilder = new StringBuilder();
-//        jsonBuilder.append("{ ");
-//        jsonBuilder.append("\"message\": ");
-//        jsonBuilder.append("\"" + msg+ "\"");
-//        jsonBuilder.append(" }");
-//        httpServletResponse.getWriter().println(jsonBuilder.toString());
     }
 
     @Override

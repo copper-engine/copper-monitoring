@@ -3,8 +3,10 @@ export class UserSettings {
     constructor(
         public defaultHost: string = 'localhost', 
         public defaultPort: string = '1099', 
-        public updatePeriod: number, 
-        public darkTheme: boolean) {}
+        public defaultJmxUsername: string = null, 
+        public defaultJmxPass: string = null, 
+        public updatePeriod: number = 10, 
+        public darkTheme: boolean = true) {}
 }
 
 export class InfluxConnection {

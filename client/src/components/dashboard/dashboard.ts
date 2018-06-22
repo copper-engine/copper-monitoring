@@ -116,7 +116,19 @@ export class DashboardComponent extends Vue {
                 parsed = parsed[1].split('|');
                 
                 if (parsed[0] && parsed[1]) {
-                    settings.push(new ConnectionSettings(parsed[0], parsed[1]));
+                    let username = this.$store.state.user.settings.defaultJmxUsername;
+                    let password = this.$store.state.user.settings.defaultJmxPass;
+                    let connection = new ConnectionSettings(parsed[0], parsed[1]);
+                    
+                    try {
+                        let lsConnection = JSON.parse(localStorage.getItem(this.$store.state.user.name + '_' + connection.toString()));
+                        if (lsConnection) {
+                            username = lsConnection.username;
+                            password = lsConnection.password;
+                        }
+                    } catch (err) {}
+
+                    settings.push(new ConnectionSettings(parsed[0], parsed[1], username, password));
                 }
             }
         });

@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import Axios, { AxiosResponse } from 'axios';
 import * as utils from '../../util/utils';
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { User, UserSettings, InfluxConnection, ChartSettings } from '../../models/user';
@@ -16,19 +16,11 @@ export class LoginComponent extends Vue {
     password: string= '';
     passwordRules = [ (v) => !!v || 'Password is required' ];
     error: string = null;
-    nextPath: string = null;
-    defaultURL: string = '';
-    defaultUsername: string = '';
-    defaultPassword: string = '';
-    
+    defaultInfluxURL: string = '';
+    defaultInfluxUsername: string = '';
+    defaultInfluxPassword: string = '';    
 
     submit () {
-        if ((this.$router as CopperRouter).nextPath === '/login') {
-            this.nextPath = '/dashboard';
-        } else {
-            this.nextPath = (this.$router as CopperRouter).nextPath;
-        }
-        
         if ((this.$refs.form as any).validate()) {
             Axios.get(process.env.USER_API_NAME, {
                 auth: {username: this.username, password: this.password}
@@ -36,17 +28,28 @@ export class LoginComponent extends Vue {
                 if (result.status === 401) {
                     this.error = 'Username & Password combination is incorect.';
                 } else {
-                    this.defaultURL = result.data.influxURL;
-                    this.defaultUsername = result.data.influxUsername;
-                    this.defaultPassword = result.data.influxPassword;                    
-                    this.$store.commit(Mutations.setUser, new User(this.username, this.password, new UserSettings(result.data.host, result.data.port, this.update, this.theme),
-                        new InfluxConnection(this.url, this.user, this.pass, this.use), new ChartSettings(this.chartInterval, this.chartLayout)));
-                    this.$router.push(this.nextPath);
+                    this.processLogin(result);
                 }
             }).catch(error => {
                 this.error = 'Username & Password combination is incorect.';
             });            
         }
+    }
+
+    private processLogin(result: AxiosResponse) {
+        this.defaultInfluxURL = result.data.influxURL;
+        this.defaultInfluxUsername = result.data.influxUsername;
+        this.defaultInfluxPassword = result.data.influxPassword;    
+
+        let user = new User(this.username, this.password, 
+            new UserSettings(result.data.host, result.data.port, result.data.jmxUsername, result.data.jmxPassword, this.update, this.theme), 
+            new InfluxConnection (this.url, this.user, this.pass, this.useInfluxDB), 
+            new ChartSettings(this.chartInterval, this.chartLayout));    
+
+        this.$store.commit(Mutations.setUser, user);
+
+        let nextPath = (this.$router as CopperRouter).nextPath;
+        this.$router.push(nextPath === '/login' ? '/dashboard' : nextPath);
     }
 
     get update() {
@@ -66,11 +69,11 @@ export class LoginComponent extends Vue {
 
     get url() {
         let storage = localStorage.getItem(this.username + ':influxURL');     
-        if (storage !== null && storage !== '' && storage !== undefined) {
+        if (storage) {
             return storage;
         }
-        if (this.defaultURL !== null && this.defaultURL !== '' && this.defaultURL !== undefined) {
-            return this.defaultURL;
+        if (this.defaultInfluxURL !== null && this.defaultInfluxURL !== '' && this.defaultInfluxURL !== undefined) {
+            return this.defaultInfluxURL;
         }
         else {
             return null;
@@ -79,54 +82,35 @@ export class LoginComponent extends Vue {
 
     get user() {
         let storage = localStorage.getItem(this.username + ':influxUser');
-        if (storage !== null && storage !== '' && storage !== undefined) {
+        if (storage) {
             return storage;
         }
-        if (this.defaultUsername !== null && this.defaultUsername !== '' && this.defaultUsername !== undefined) {
-            return this.defaultUsername;
-        }
-        else {
-            return null;
-        }
+
+        return this.defaultInfluxUsername ? this.defaultInfluxUsername : null;
     }
 
     get pass() {
         let storage = localStorage.getItem(this.username + ':influxPass');
-        if (storage !== null && storage !== '' && storage !== undefined) {
+        if (storage) {
             return storage;
         }
-        if (this.defaultPassword !== null && this.defaultPassword !== '' && this.defaultPassword !== undefined) {
-            return this.defaultPassword;
-        }
-        else {
-            return null;
-        }
-    }
 
-    get use() {
+        return this.defaultInfluxPassword ? this.defaultInfluxPassword : null;
+    }
+    
+    get useInfluxDB() {
         let storage = localStorage.getItem(this.username + ':useInfluxDB');
-        if (storage !== null && storage !== '' && storage !== undefined) {
-            return utils.parseBoolean(storage);
-        } else {
-            return null;
-        }
-    }
 
+        return storage ? utils.parseBoolean(storage) : null;
+    }
+    
     get chartInterval() {
         let storage = localStorage.getItem(this.username + ':chartInterval');
-        if (storage !== null && storage !== undefined) {
-            return parseInt(storage);
-        } else {
-            return null;
-        }
+        return storage ? parseInt(storage) : null;
     }
 
     get chartLayout() {
         let storage = localStorage.getItem(this.username + ':chartLayout');
-        if (storage !== null && storage !== undefined) {
-            return storage;
-        } else {
-            return null;
-        }
+        return storage ? storage : null;
     }
 }

@@ -12,7 +12,7 @@
                     {{ wfRepo.description }}                    
                 </v-flex>
             </v-layout>
-            <v-layout class="text">
+            <v-layout class="text" v-if="wfRepo.description !== 'ClasspathWorkflowRepository'">
                 <v-flex class="sub-heading">
                     Source:
                 </v-flex>
@@ -20,7 +20,7 @@
                     {{ wfRepo.sourceDir }}
                 </v-flex>
             </v-layout>
-            <v-layout class="text">
+            <v-layout class="text" v-if="wfRepo.description !== 'ClasspathWorkflowRepository'">
                 <v-flex class="sub-heading">
                     Last Build Result:
                 </v-flex>

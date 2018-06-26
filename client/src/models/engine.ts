@@ -97,6 +97,7 @@ export class WorkflowRepo {
     constructor(
         public description: string = '',
         public sourceDir: string = '',
+        public lastBuildResults: string = null,
         public workFlowInfo: Array<WorkflowClassInfo> = []
     ) {}
 }

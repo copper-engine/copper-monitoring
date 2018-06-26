@@ -43,7 +43,7 @@
                 </div>    
             </router-link>
         </div> -->
-        <div class="connection" v-show="!$store.state.appCriticalError">
+        <div class="connection">
             <v-layout row>
                 <v-flex class="connection-title">
                     Connections
@@ -74,7 +74,7 @@
                 @deleteSettings="deleteSettings(index)">
             </connection-status>
         </div>
-        <div class="engine-card" v-show="!$store.state.appCriticalError">
+        <div class="engine-card">
             <v-layout row>
                 <div class="engines-title">
                     Engines

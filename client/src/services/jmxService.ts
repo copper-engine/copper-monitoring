@@ -574,6 +574,7 @@ export class JmxService {
         let wfRepo = new WorkflowRepo(
             response.data[0].value.Description,
             response.data[0].value.SourceDirs[0],
+            response.data[0].value.LastBuildResults,
             wfArray
         );
         return wfRepo;

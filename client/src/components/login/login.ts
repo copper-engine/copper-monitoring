@@ -31,7 +31,11 @@ export class LoginComponent extends Vue {
                     this.processLogin(result);
                 }
             }).catch(error => {
-                this.error = error.response.status + ' : ' + error.response.statusText;
+                if (error.response) {
+                    this.error = error.response.status + ' : ' + error.response.statusText;
+                } else {
+                    this.error = 'Copper Monitoring Backend is not reachable';
+                }
                 if (!this.error) {
                     this.error = 'Username & Password combination is incorect.';
                 }

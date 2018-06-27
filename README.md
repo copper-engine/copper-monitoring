@@ -88,14 +88,16 @@ cd server
 
 
 # Copper Monitoring With Docker
-Quick creation of docker image can be done by running `./start.sh --dockerize`
+Quick creation of docker image can be done by running `./start.sh --prep-docker && ./start.sh --dockerize`
+You all also can download docker image from Docker Hub: `docker pull copperengine/copper-monitoring`
+And then run it with next command: `docker run -p 8080:8080 copper-monitoring`
 
 ## Notes for dockerized Copper Monitoring
 Port 8080 should be binded to hosts port 8080 due to internal mapping to jolokia
 `docker run -p 8080:8080 copper-monitoring`
 
 By default, inside Container we are not able to access localhost as host so we should 
-use ip of host in dockerland. We can get it like thar: 
+use ip of host in dockerland. We can get it like that: 
 `docker exec -it <container_id> ip route | awk '/default/ { print $3 }'`
 
 We should use this IP address instead of localhost in our copper monitoring GUI.

@@ -199,8 +199,7 @@ export class DashboardComponent extends Vue {
                             result.mbeans = []; 
                             return result; 
                         });
-                        
-                    console.log('setting empty connections');
+
                     this.$store.commit(Mutations.updateConnectionResults, emptyConResults);  
                 }
 

@@ -195,6 +195,13 @@ export class DashboardComponent extends Vue {
                 if (!results) {
                     console.error('Received no connection results in response. Perhaps issue with connection to server with Jolokia.\n Will schuedule refetching MBeans in three seccond');
                     this.$store.commit(Mutations.setAppCriticalError, 'Received no connection results in response. Perhaps issue with connection to server with Jolokia.');
+                    let emptyConResults: ConnectionResult[] = this.$store.state.connectionResults.map(result => { 
+                            result.mbeans = []; 
+                            return result; 
+                        });
+                        
+                    console.log('setting empty connections');
+                    this.$store.commit(Mutations.updateConnectionResults, emptyConResults);  
                 }
 
                 if (notConnected) {

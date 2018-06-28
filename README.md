@@ -90,7 +90,6 @@ cd server
 # Copper Monitoring With Docker
 Quick creation of docker image can be done by running `./start.sh --prep-docker && ./start.sh --dockerize`
 You all also can download docker image from Docker Hub: `docker pull copperengine/copper-monitoring`
-And then run it with next command: `docker run -p 8080:8080 copper-monitoring`
 
 ## Notes for dockerized Copper Monitoring
 Port 8080 should be binded to hosts port 8080 due to internal mapping to jolokia

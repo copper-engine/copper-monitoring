@@ -29,7 +29,7 @@
                 </div>    
             </router-link>
         </div>
-        <!-- <div class="link-container" v-show="!$store.state.appCriticalError">
+        <div class="link-container" v-show="!$store.state.appCriticalError">
             <router-link :to="getAuditTrailPath" active-class="activeLink" class="link">
                 <div class="link-background">
                     <v-layout row class="link-interior">
@@ -42,8 +42,8 @@
                     </v-layout> 
                 </div>    
             </router-link>
-        </div> -->
-        <div class="connection">
+        </div>
+        <div class="connection" v-show="!$store.state.appCriticalError">
             <v-layout row>
                 <v-flex class="connection-title">
                     Connections
@@ -74,7 +74,7 @@
                 @deleteSettings="deleteSettings(index)">
             </connection-status>
         </div>
-        <div class="engine-card">
+        <div class="engine-card" v-show="!$store.state.appCriticalError">
             <v-layout row>
                 <div class="engines-title">
                     Engines

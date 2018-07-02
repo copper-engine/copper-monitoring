@@ -24,20 +24,32 @@
                 :rules="portRules"
                 required
             ></v-text-field>
+            <v-text-field
+                label="username"
+                @keyup.enter="submit"
+                v-model="username"
+                required
+            ></v-text-field>
+            <v-text-field
+                label="password"
+                @keyup.enter="submit"
+                v-model="password"
+                required
+            ></v-text-field>
             <v-layout row class="button-container">
-            <v-btn
-                class="submit-btn"
-                @click="submit"
-                :disabled="!valid"
-            >
-                submit
-            </v-btn>
-            <v-btn
-                class="cancel"
-                @click="$emit('hideSettings')"
-            >
-                Cancel
-            </v-btn>
+                <v-btn
+                    class="submit-btn"
+                    @click="submit"
+                    :disabled="!valid"
+                >
+                    submit
+                </v-btn>
+                <v-btn
+                    class="cancel"
+                    @click="$emit('hideSettings')"
+                >
+                    Cancel
+                </v-btn>
             </v-layout>
         </v-form>
     </div>

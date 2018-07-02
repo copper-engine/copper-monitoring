@@ -4,8 +4,9 @@ import { State, EngineStatus, WorkflowInfo, WorkflowClassInfo, WorkflowRepo, Sta
 import { ConnectionSettings, ConnectionResult } from '../models/connectionSettings';
 import moment from 'moment';
 import { User } from '../models/user';
-import { MBeans, MBean } from '../models/mbeans';
+import { MBean } from '../models/mbeans';
 import * as _ from 'lodash';
+import { AuditTrailInstanceFilter } from '../models/auditTrail';
 
 export class JmxService {
     getEngineStatus(mbeans: MBean[], user: User) {
@@ -98,10 +99,9 @@ export class JmxService {
     }
 
     parseGroupWFCountResponse = (response, length) => {
-        let counter = length;
         let count = 0;
-        for (let i = 0; i < counter; i++) {
-            count = count + response.data[i].value;
+        for (let i = 0; i < length; i++) {
+            count += response.data[i].value;
         }
         return count;
     }
@@ -138,20 +138,37 @@ export class JmxService {
                 }
 
                 let connectionResults: ConnectionResult[] = connectionSettingsList.map((connectionSettings, i) => {
+                    let connectionResult: ConnectionResult; 
+
                     if (this.isSubResponseValid(response.data[i]) && response.data[i].value['copper.engine']) {
                         let engines = response.data[i].value['copper.engine'];
                         let mbeanNames = Object.keys(engines);
                         let mbeans = mbeanNames.map((mbean) => new MBean(mbean, Object.keys(engines[mbean].attr), connectionSettings));
 
-                        return new ConnectionResult(connectionSettings, mbeans);
+                        connectionResult = new ConnectionResult(connectionSettings, mbeans);
                     } else {
-                        return new ConnectionResult(connectionSettings, []);
+                        connectionResult = new ConnectionResult(connectionSettings, []);
+                        if (response.data[i].status === 403) {
+                            connectionResult.error = 'Authentication failed! Credentials required.';
+                        } else {
+                            connectionResult.error = response.data[i].error ? response.data[i].error : 'Unnable to connect';
+                        }
                     }
+
+                    if (this.isSubResponseValid(response.data[i]) && response.data[i].value['copper.audittrail']) {
+                        let auditTrails = response.data[i].value['copper.audittrail'];
+                        let mbeanNames = Object.keys(auditTrails);
+                        if (mbeanNames.length > 1) {
+                            console.log('more audit trails than we expected: ', mbeanNames.length);
+                        }
+                        
+                        connectionResult.auditTrailsMBean = new MBean('copper.audittrail:' + mbeanNames[0], [], connectionSettings);
+                    }
+
+                    return connectionResult;
                 });
+
                 return connectionResults;
-            })
-            .catch(error => {
-                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error makink JMX connection:', error);
             });
     }
 
@@ -319,6 +336,63 @@ export class JmxService {
         });
     }
 
+    getAuditTrails(auditTrailMBean: MBean, user: User, auditTrailFilter: AuditTrailInstanceFilter) { 
+        // console.log('auditTrailFilter', auditTrailFilter);
+        return Axios.post(process.env.API_NAME, [
+            {
+                type: 'EXEC',
+                mbean: auditTrailMBean.name,
+                operation: 'getAuditTrails(javax.management.openmbean.CompositeData)',
+                arguments: [ auditTrailFilter ],
+                target: this.getTarget(auditTrailMBean.connectionSettings),
+            }
+            ], {
+                auth: { username: user.name, password: user.password }
+            })
+            .then(this.parseAuditTrailResponse)
+            .catch(error => {
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
+            });
+    }
+
+    // TODO consider merge  base with getAuditTrails to have less code duplication
+    countAuditTrails(auditTrailMBean: MBean, user: User, auditTrailFilter: AuditTrailInstanceFilter) { 
+        return Axios.post(process.env.API_NAME, [
+            {
+                type: 'EXEC',
+                mbean: auditTrailMBean.name,
+                operation: 'countAuditTrails(javax.management.openmbean.CompositeData)',
+                arguments: [ auditTrailFilter ],
+                target: this.getTarget(auditTrailMBean.connectionSettings),
+            }
+            ], {
+                auth: { username: user.name, password: user.password }
+            })
+            .then(this.parseAuditTrailResponse)
+            .catch(error => {
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
+            });
+    }
+
+    // TODO consider merge  base with getAuditTrails to have less code duplication
+    getAuditTrailMessage(auditTrailMBean: MBean, user: User, id: number) { 
+        return Axios.post(process.env.API_NAME, [
+            {
+                type: 'EXEC',
+                mbean: auditTrailMBean.name,
+                operation: 'getMessageString',
+                arguments: [ id ],
+                target: this.getTarget(auditTrailMBean.connectionSettings),
+            }
+            ], {
+                auth: { username: user.name, password: user.password }
+            });
+            // .then(this.parseAuditTrailResponse)
+            // .catch(error => {
+            //     console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
+            // });
+    }
+
     private buildRestartAllRequest = (connectionSettings: ConnectionSettings, mbean: string) => [
         this.createJmxExecRequest(connectionSettings, mbean, {
             operation: 'restartAll()',
@@ -332,7 +406,7 @@ export class JmxService {
             mbean: mbean,
             operation: 'getWorkflowInfo',
             arguments: [classname],
-            target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
+            target: this.getTarget(connectionSettings)
         };
     }
 
@@ -340,7 +414,7 @@ export class JmxService {
         return {
             type: 'read',
             mbean: mbean,
-            target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
+            target: this.getTarget(connectionSettings)
         };
     }
     private createEngineInfoRequest(connectionSettings: ConnectionSettings, mbean: MBean) {
@@ -355,14 +429,22 @@ export class JmxService {
             type: 'read',
             mbean: mbean.name,
             attribute: attributes,
-            target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
+            target: this.getTarget(connectionSettings)
+        };
+    }
+
+    private getTarget( connectionSettings: ConnectionSettings ) {
+        return {
+            url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi`,
+            user: connectionSettings.username,
+            password: connectionSettings.password
         };
     }
 
     private createMBeansListRequest(connectionSettings: ConnectionSettings) {
         return {
             type: 'LIST',
-            target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` },
+            target: this.getTarget(connectionSettings)
         };
     }
 
@@ -372,7 +454,7 @@ export class JmxService {
             type: 'READ',
             mbean: mbean,
             attribute: attributes,
-            target: { url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi` }
+            target: this.getTarget(connectionSettings)
         };
     }
 
@@ -422,26 +504,14 @@ export class JmxService {
     }
 
     private createPoolExecRequest(connectionSettings, mbean, uniquePart: {}) {
-        return Object.assign(this.createPoolExecRequstBase(connectionSettings, mbean), uniquePart);
+        return Object.assign(this.createJmxExecRequstBase(connectionSettings, mbean), uniquePart);
     }
 
     private createJmxExecRequstBase(connectionSettings: ConnectionSettings, mbean: string) {
         return {
             type: 'EXEC',
             mbean: mbean,
-            target: {
-                url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi`
-            }
-        };
-    }
-
-    private createPoolExecRequstBase(connectionSettings: ConnectionSettings, mbean) {
-        return {
-            type: 'EXEC',
-            mbean: mbean,
-            target: {
-                url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi`
-            }
+            target: this.getTarget(connectionSettings)
         };
     }
 
@@ -504,9 +574,21 @@ export class JmxService {
         let wfRepo = new WorkflowRepo(
             response.data[0].value.Description,
             response.data[0].value.SourceDirs[0],
+            response.data[0].value.LastBuildResults,
             wfArray
         );
         return wfRepo;
+    }
+
+    private parseAuditTrailResponse = (response) => {
+        if (!response || !response.data 
+            || response.data.length < 1
+            || response.data[0].error) {
+            console.log('Invalid responce for Audit Trail:', response); 
+            throw new Error('invalid response for Audit Trail!');
+        }
+        console.log('parsing responce for trail:', response);
+        return response.data[0].value;
     }
 
     private parseVoidResponse = (response): boolean => {

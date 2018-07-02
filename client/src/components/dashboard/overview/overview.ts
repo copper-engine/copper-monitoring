@@ -22,7 +22,7 @@ const Stats = () => import('./stats').then(({ Stats }) => Stats);
         'stats': Stats
     }
 })
-export class Overview extends Vue {
+export class OverviewComponent extends Vue {
     private eventHub: Vue = this.$services.eventHub;
     private statisticsService: StatisticsService = this.$services.statisticsService;
     private influxService: InfluxDBService = this.$services.influxService;
@@ -386,7 +386,7 @@ export class Overview extends Vue {
 
     private parseInfluxResposne(response) {
         let telegraf = false;
-        if (response !== undefined && response !== null) {
+        if (response) {
             response[0].series[0].values.map((result) => {
                 result.map((db) => {
                     if (db === 'telegraf') {

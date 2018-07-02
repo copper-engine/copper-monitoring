@@ -30,15 +30,23 @@ export class SidebarComponent extends Vue {
     selectConnectionsToClose = [];
     clickAllowed = true;
     collectingData: boolean = false;
-    emptyConnectionSettings = new ConnectionSettings();
+    emptyConnectionSettings = null;
+    
     private statisticsService: StatisticsService = this.$services.statisticsService;
 
-    private get getOverviewPath() {
-        let params = '?' + this.$store.getters.connectionsAsParams;
-        return ('/dashboard/overview/' + params);
+    get getOverviewPath() {
+        return ('/dashboard/overview/' + '?' + this.$store.getters.connectionsAsParams);
+    }
+    get getAuditTrailPath() {
+        return ('/dashboard/audit-trail/' + '?' + this.$store.getters.connectionsAsParams);
     }
 
-    private showSettings() {
+    mounted() {
+        let settings = this.$store.state.user.settings;
+        this.emptyConnectionSettings = new ConnectionSettings(settings.defaultHost, settings.defaultPort, settings.defaultJmxUsername, settings.defaultJmxPass);
+    }
+    
+    showSettings() {
         if (this.clickAllowed === true) {
             this.settingsShowed = !this.settingsShowed;
             if (this.settingsShowed === true) {

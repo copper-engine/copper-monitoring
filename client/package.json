@@ -2,7 +2,7 @@
   "name": "copper-monitoring-gui",
   "description": "Web GUI for copper engine",
   "version": "1.0.0",
-  "author": "Vladyslav Gutsul <vladyslav.gutsul@scoop-software.cz>",
+  "author": "Vladyslav Gutsul <vladyslav.gutsul@scoop-software.cz>, Hayden Hodge <hayden.hodge@scoop-software.cz>",
   "private": true,
   "engines": {
     "node": ">=6",

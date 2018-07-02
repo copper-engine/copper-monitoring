@@ -9,21 +9,35 @@
                     Repository Type:
                 </v-flex>
                 <v-flex>
-                    {{ this.repoType }}                    
+                    {{ wfRepo.description }}                    
                 </v-flex>
             </v-layout>
-            <v-layout class="text">
+            <v-layout class="text" v-if="wfRepo.description !== 'ClasspathWorkflowRepository'">
                 <v-flex class="sub-heading">
                     Source:
                 </v-flex>
                 <v-flex>
-                    {{ this.wfRepo.sourceDir }}
+                    {{ wfRepo.sourceDir }}
+                </v-flex>
+            </v-layout>
+            <v-layout class="text" v-if="wfRepo.description !== 'ClasspathWorkflowRepository'">
+                <v-flex class="sub-heading">
+                    Last Build Result:
+                </v-flex>
+                <v-flex class="compilation-info">
+                    <span v-if="!wfRepo.lastBuildResults" >Successfully Completed</span>
+                    <v-layout column>
+                        <v-flex><span v-if="wfRepo.lastBuildResults" >Compilation Failed</span> </v-flex>
+                        <v-flex>
+                            <code v-show="wfRepo.lastBuildResults">
+                                {{ wfRepo.lastBuildResults ? wfRepo.lastBuildResults : "Successfully Completed" }}
+                            </code>
+                        </v-flex>
+                    </v-layout>
                 </v-flex>
             </v-layout>
         </v-layout>
-
         <v-layout class="header">
-            
             <v-flex class="number">
                 #
             </v-flex>  
@@ -75,12 +89,12 @@
                             class="squareButton"
                             @click="toggleOpen(i)"
                             :disabled="workflow.sourceCode === undefined || workflow.sourceCode === null || 
-                                (workflow.sourceCode.trim()).toLowerCase() === 'na' || repoType === 'ClasspathWorkflowRepository'"
+                                (workflow.sourceCode.trim()).toLowerCase() === 'na' || wfRepo.description === 'ClasspathWorkflowRepository'"
                             slot="activator">
                                 <v-icon :class="{ 'close-details-icon': workflow.open }" >details</v-icon>
                             </v-btn>
-                            <span v-show="workflow.sourceCode != null && (workflow.sourceCode.trim()).toLowerCase() !== 'na' && repoType !== 'ClasspathWorkflowRepository'">Show Source Code</span>
-                            <span v-show="workflow.sourceCode === null || (workflow.sourceCode.trim()).toLowerCase() === 'na' || repoType === 'ClasspathWorkflowRepository'">No Source Code</span>
+                            <span v-show="workflow.sourceCode != null && (workflow.sourceCode.trim()).toLowerCase() !== 'na' && wfRepo.description !== 'ClasspathWorkflowRepository'">Show Source Code</span>
+                            <span v-show="workflow.sourceCode === null || (workflow.sourceCode.trim()).toLowerCase() === 'na' || wfRepo.description === 'ClasspathWorkflowRepository'">No Source Code</span>
                         </v-tooltip>
                     </v-flex>
                 </v-layout>

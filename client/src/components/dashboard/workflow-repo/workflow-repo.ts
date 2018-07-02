@@ -17,7 +17,6 @@ export class WorkflowRepository extends Vue {
     private jmxService: JmxService = this.$services.jmxService;
     newComponent = false;
     wfRepo: WorkflowRepo = new WorkflowRepo();
-    repoType: string = '';
     page: number = 1;
     perPage: number = 10;
     perPageItems: number[] = [10, 15, 25, 50];
@@ -39,7 +38,6 @@ export class WorkflowRepository extends Vue {
         // this.wfRepo =  new WorkflowRepo();
         this.jmxService.getWfRepo(mbean.connectionSettings, engine.wfRepoMXBean, this.$store.state.user).then((response: WorkflowRepo) => {
             this.wfRepo = response;
-            this.repoType = response.description;
         });
     }
     

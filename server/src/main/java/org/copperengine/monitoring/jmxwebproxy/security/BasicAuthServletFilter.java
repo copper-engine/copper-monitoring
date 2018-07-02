@@ -7,6 +7,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Response;
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 
 /**
@@ -40,7 +42,7 @@ public class BasicAuthServletFilter implements Filter {
                     if (credentials.length == 2) {
                         credentialMap.put(credentials[0], credentials[1]);
                     } else {
-                        System.out.println("Found no password for " + credentials[0]);
+                        log.debug("Found no password for {}", credentials[0]);
                     }
                 });
         }
@@ -56,17 +58,21 @@ public class BasicAuthServletFilter implements Filter {
         }
         if ("OPTIONS".equals(httpServletRequest.getMethod())) {
 //            log.warn("Setting Access-Control-Allow headers. Consider to not use it in production.");
-
             httpServletResponse.addHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
             httpServletResponse.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
             httpServletResponse.addHeader("Access-Control-Allow-Credentials", "true");
             return;
         }
 
+        if (credentialMap.isEmpty()) {
+            authError(httpServletResponse, INTERNAL_SERVER_ERROR,"Users are not set. Administrator should setup users throw environment variable: MONITORING_AUTH");
+            return;
+        }
+
         // Extract authentication credentials
         String authentication = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         if (authentication == null) {
-            authError(httpServletResponse, "Authentication credentials are required");
+            authError(httpServletResponse, UNAUTHORIZED, "Authentication credentials are required");
             return;
         }
         if (!authentication.startsWith("Basic ")) {
@@ -75,30 +81,29 @@ public class BasicAuthServletFilter implements Filter {
         authentication = authentication.substring("Basic ".length());
         String[] values = new String(DatatypeConverter.parseBase64Binary(authentication), Charset.forName("ASCII")).split(":");
         if (values.length < 2) {
-            httpServletResponse.sendError(UNAUTHORIZED.getStatusCode(), "Invalid syntax for username and password");
+            authError(httpServletResponse, UNAUTHORIZED, "Invalid syntax for username and password");
             return;
         }
         String username = values[0];
         String password = values[1];
         if (username == null || password == null) {
-            authError(httpServletResponse, "Missing username or password");
+            authError(httpServletResponse, UNAUTHORIZED, "Missing username or password");
             return;
         }
 
         // Validate the extracted credentials
         if (!password.equals(credentialMap.get(username))) {
-            authError(httpServletResponse, "Invalid username or password");
+            authError(httpServletResponse, UNAUTHORIZED,"Invalid username or password");
             return;
         }
 
         chain.doFilter(request, response);
     }
 
-    private void authError(HttpServletResponse httpServletResponse, String msg) throws IOException {
+    private void authError(HttpServletResponse httpServletResponse, Response.Status status, String msg) throws IOException {
         httpServletResponse.addHeader("WWW-Authenticate", "xBasic realm=\"" + realm + "\"");
-        httpServletResponse.sendError(UNAUTHORIZED.getStatusCode(), msg);
+        httpServletResponse.sendError(status.getStatusCode(), msg);
     }
-
 
     @Override
     public void destroy() {

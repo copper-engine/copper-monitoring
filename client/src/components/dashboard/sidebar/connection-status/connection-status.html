@@ -19,6 +19,14 @@
                 </v-flex>
                 <v-spacer></v-spacer>
                 <v-tooltip top content-class="tooltip-text">
+                    <v-icon  slot="activator"
+                        v-show="connection.error"
+                        class="error-icon">
+                        error
+                    </v-icon> 
+                    <span> {{connection.error}} </span>
+                </v-tooltip>
+                <v-tooltip top content-class="tooltip-text">
                     <v-btn dark icon @click.stop="openSettings" slot="activator">
                         <v-icon v-html="'settings'" class="control-icon active"></v-icon>
                     </v-btn>

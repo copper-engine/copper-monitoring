@@ -21,9 +21,18 @@ export class WorkflowRepository extends Vue {
     perPage: number = 10;
     perPageItems: number[] = [10, 15, 25, 50];
     clickAllowed: boolean = true;
+    fetchInterval;
 
     created() {
         this.loadRepo();
+    }
+
+    mounted() {
+        this.scheduleFetchingInterval();
+    }
+
+    beforeDestroy() {
+        clearInterval(this.fetchInterval);
     }
     
     @Watch('$route.params')
@@ -39,6 +48,17 @@ export class WorkflowRepository extends Vue {
         this.jmxService.getWfRepo(mbean.connectionSettings, engine.wfRepoMXBean, this.$store.state.user).then((response: WorkflowRepo) => {
             this.wfRepo = response;
         });
+    }
+
+    @Watch('$store.state.connectionSettings')
+    scheduleFetchingInterval() {
+        if (this.fetchInterval) {
+            clearInterval(this.fetchInterval);
+        }
+        this.loadRepo();
+        this.fetchInterval = setInterval(() => {
+            this.loadRepo();
+        }, 2 * 1000);
     }
     
     private toggleOpen(index) {

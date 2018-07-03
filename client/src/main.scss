@@ -627,3 +627,83 @@ body {
         }
     }
 }
+.extend-connection-header-enter-active {
+    animation: extend-connection-header 1s;
+}
+.extend-connection-header-leave-active {
+    animation: extend-connection-header 1s reverse;
+}
+@keyframes extend-connection-header {
+    0% {height: 0px}
+    100% {height: 48px}
+}
+
+.extend-config-enter-active {
+    animation: extend-config 1s;
+}
+.extend-config-leave-active {
+    animation: extend-config 1s reverse;
+}
+@keyframes extend-config {
+    0% {max-height: 0px}
+    100% {max-height: 410px}
+}
+
+.extend-group-links-enter-active {
+    animation: extend-group-links .75s;
+}
+.extend-group-links-leave-active {
+    animation: extend-group-links .75s reverse;
+}
+@keyframes extend-group-links {
+    0% {max-height: 0px;}
+    100% {max-height: 205px;}
+}
+
+.extend-group-enter-active {
+    animation: extend-group 0.75s;
+}
+.extend-group-leave-active {
+    animation: extend-group 0.75s reverse;
+}
+
+@keyframes extend-group {
+    0% {max-height: 0px;}
+    100% {max-height: 500px;}
+}
+
+.extend-engine-persistent-enter-active {
+    animation: extend-engine-persistent 0.75s;
+}
+.extend-engine-persistent-leave-active {
+    animation: extend-engine-persistent 0.75s reverse;
+}
+
+@keyframes extend-engine-persistent {
+    0% {max-height: 0px;}
+    100% {max-height: 365px;}
+}
+
+.extend-engine-tranzient-enter-active {
+    animation: extend-engine-tranzient 0.75s;
+}
+.extend-engine-tranzient-leave-active {
+    animation: extend-engine-tranzient 0.75s reverse;
+}
+
+@keyframes extend-engine-tranzient {
+    0% {max-height: 0px;}
+    100% {max-height: 315px;}
+}
+
+.extend-engine-limited-enter-active {
+    animation: extend-engine-limited 0.75s;
+}
+.extend-engine-limited-leave-active {
+    animation: extend-engine-limited 0.75s reverse;
+}
+
+@keyframes extend-engine-limited {
+    0% {max-height: 0px;}
+    100% {max-height: 198px;}
+}

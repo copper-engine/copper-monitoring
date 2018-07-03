@@ -298,11 +298,6 @@ export class WorkflowsComponent extends Vue {
             wfContext.deleting = true;
             this.workflowsContext.set(id, wfContext);
             this.$forceUpdate();
-            setTimeout(() => { 
-                wfContext.deleting = false; 
-                this.workflowsContext.set(id, wfContext);
-                this.$forceUpdate();
-            }, 1800);
         }
     }
 

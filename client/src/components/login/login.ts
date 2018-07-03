@@ -19,6 +19,7 @@ export class LoginComponent extends Vue {
     defaultInfluxURL: string = '';
     defaultInfluxUsername: string = '';
     defaultInfluxPassword: string = '';    
+    result: AxiosResponse;
 
     submit () {
         if ((this.$refs.form as any).validate()) {
@@ -28,7 +29,8 @@ export class LoginComponent extends Vue {
                 if (result.status === 401) {
                     this.error = 'Username & Password combination is incorect.';
                 } else {
-                    this.processLogin(result);
+                    this.result = result;
+                    this.processLogin();
                 }
             }).catch(error => {
                 if (error.response) {
@@ -43,14 +45,14 @@ export class LoginComponent extends Vue {
         }
     }
 
-    private processLogin(result: AxiosResponse) {
-        this.defaultInfluxURL = result.data.influxURL;
-        this.defaultInfluxUsername = result.data.influxUsername;
-        this.defaultInfluxPassword = result.data.influxPassword;    
+    private processLogin() {
+        this.defaultInfluxURL = this.result.data.influxURL;
+        this.defaultInfluxUsername = this.result.data.influxUsername;
+        this.defaultInfluxPassword = this.result.data.influxPassword;    
 
         let user = new User(this.username, this.password, 
-            new UserSettings(result.data.host, result.data.port, result.data.jmxUsername, result.data.jmxPassword, this.update, this.theme), 
-            new InfluxConnection (this.url, this.user, this.pass, this.useInfluxDB), 
+            new UserSettings(this.result.data.host, this.result.data.port, this.jmxUser, this.jmxPass, this.update, this.theme), 
+            new InfluxConnection (this.influxUrl, this.influxUser, this.influxPass, this.useInfluxDB), 
             new ChartSettings(this.chartInterval, this.chartLayout));    
 
         this.$store.commit(Mutations.setUser, user);
@@ -74,7 +76,7 @@ export class LoginComponent extends Vue {
         }
     }
 
-    private get url() {
+    private get influxUrl() {
         let storage = localStorage.getItem(this.username + ':influxURL');     
         if (storage) {
             return storage;
@@ -87,22 +89,38 @@ export class LoginComponent extends Vue {
         }
     }
 
-    private get user() {
+    private get influxUser() {
         let storage = localStorage.getItem(this.username + ':influxUser');
         if (storage) {
             return storage;
         }
 
-        return this.defaultInfluxUsername ? this.defaultInfluxUsername : null;
+        return this.defaultInfluxUsername ? this.defaultInfluxUsername : '';
     }
 
-    private get pass() {
+    private get influxPass() {
         let storage = localStorage.getItem(this.username + ':influxPass');
         if (storage) {
             return storage;
         }
 
-        return this.defaultInfluxPassword ? this.defaultInfluxPassword : null;
+        return this.defaultInfluxPassword ? this.defaultInfluxPassword : '';
+    }
+
+    get jmxUser() {
+        if (this.result.data.jmxUsername !== null && this.result.data.jmxUsername !== undefined && this.result.data.jmxUsername !== 'null') {
+            return this.result.data.jmxUsername;
+        } else {
+            return '';
+        }
+    }
+
+    get jmxPass() {
+        if (this.result.data.jmxPass !== null && this.result.data.jmxPass !== undefined && this.result.data.jmxPass !== 'null') {
+            return this.result.data.jmxPass;
+        } else {
+            return '';
+        }
     }
     
     get useInfluxDB() {

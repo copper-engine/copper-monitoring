@@ -14,8 +14,8 @@ export class ConfigComponent extends Vue {
 
     host: string = '';
     port: string = '1099';
-    username: string = null;
-    password: string = null;
+    username: string = '';
+    password: string = '';
     valid = true;
     dialogDeleteOpen: boolean = false;
 

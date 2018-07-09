@@ -33,7 +33,7 @@
             </v-flex>
         </v-layout>
 
-        <transition name="extend-filter">
+        <transition name="extend-audit-filter">
             <v-layout v-show="openFilterMenu" class="filter-menu" column>
                 <v-flex class="filter-label">
                 <h3>Filter By:</h3>        
@@ -109,7 +109,7 @@
             </v-layout>
             </transition>
         
-            <transition name="extend-chip">
+            <transition name="extend-audit-chip">
             <v-layout v-show="filterApplied && !openFilterMenu" class="chip-menu" row>
                 <v-layout row class="filter-chip-container">
                     <v-flex class="stop-grow">

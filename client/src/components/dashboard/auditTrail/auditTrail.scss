@@ -465,13 +465,13 @@
         100% {max-height: 120px;
             padding-bottom: 24px;}
     }
-    .extend-filter-enter-active {
-        animation: extend-filter 0.5s;
+    .extend-audit-filter-enter-active {
+        animation: extend-audit-filter 0.5s;
     }
-    .extend-filter-leave-active {
-        animation: extend-filter 0.5s reverse;
+    .extend-audit-filter-leave-active {
+        animation: extend-audit-filter 0.5s reverse;
     }
-    @keyframes extend-filter {
+    @keyframes extend-audit-filter {
         0% {height: 0px;
             padding-top: 0px;
             padding-bottom: 0px;}
@@ -479,13 +479,13 @@
             padding-top: 20px;
             padding-bottom: 20px;}
     }
-    .extend-chip-enter-active {
-        animation: extend-chip 0.75s;
+    .extend-audit-chip-enter-active {
+        animation: extend-audit-chip 0.75s;
     }
-    .extend-chip-leave-active {
-        animation: extend-chip 0.75s reverse;
+    .extend-audit-chip-leave-active {
+        animation: extend-audit-chip 0.75s reverse;
     }
-    @keyframes extend-chip {
+    @keyframes extend-audit-chip {
         0% {max-height: 0px;
             padding-top: 0px;
             padding-bottom: 0px;}

@@ -1,16 +1,154 @@
-<div class="audit-trail">
-    <v-layout class="workflows-cont" column>
+<div class="audit-trails">
+    <v-layout class="audit-cont" column>
         <h2>Audit Trail</h2>
+
+        <v-layout class="summary" row>
+            <v-flex class="sub-heading">
+                Number of Audit Trail logs: {{ auditTrailCount }}                    
+            </v-flex>
+            <v-spacer></v-spacer>
+            <v-flex class="stop-grow heading-buttons">
+                <v-menu offset-y :nudge-bottom="10">
+                    <v-tooltip top content-class="tooltip-text" slot="activator">
+                        <v-btn
+                        class="longButton connection-button"
+                        slot="activator">
+                        <v-icon left>mdi-access-point</v-icon>
+                        {{ getName(selectedConnection) }}
+                        </v-btn>
+                        <span>Select Connection</span>
+                    </v-tooltip>
+                    <v-list>
+                        <v-list-tile v-for="selection in mbeans" :key="selection.host" @click="selectConnection(selection)">
+                        <v-list-tile-title>{{ getName(selection) }}</v-list-tile-title>                        
+                        </v-list-tile>
+                    </v-list>
+                </v-menu>
+                <v-btn
+                    class="longButton details-button"
+                    @click="triggerFilterMenu">
+                    <v-icon left>mdi-filter</v-icon>
+                    Filter
+                </v-btn>
+            </v-flex>
+        </v-layout>
+
+        <transition name="extend-filter">
+            <v-layout v-show="openFilterMenu" class="filter-menu" column>
+                <v-flex class="filter-label">
+                <h3>Filter By:</h3>        
+                </v-flex>
+                <v-layout class="filter-layout" column>
+                    <v-layout row class="filter-header">
+                        <v-flex class="select-container stopGrow">
+                            <v-select class="select"
+                            label="Log Level:"
+                            :items="possibleLogLevels"
+                            v-model="userFilter.level">
+                            </v-select>
+                        </v-flex>
+                        <v-layout class="time-field-container">
+                            <v-flex class="stopGrow time-field" >
+                                <v-text-field
+                                v-model="timestamp.fromType"
+                                label="Occurred - From"
+                                mask="####-##-## ##:##"
+                                hint="YYYY-MM-DD HH:MM"
+                                :rules="[dateCheck]"
+                                append-icon="event">
+                                </v-text-field>
+                                <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="timestamp.fromSelect" ref="from"></datetime>
+                                <div class="date-click-decorator date-time-picker" @click="clickedFromDate('timestamp', 'from')"></div>
+                            </v-flex>
+                            <v-flex class="stopGrow time-field">
+                                <v-text-field
+                                v-model="timestamp.toType"
+                                label="To"
+                                mask="####-##-## ##:##"
+                                hint="YYYY-MM-DD HH:MM"
+                                :rules="[dateCheck]"
+                                append-icon="event">
+                            </v-text-field>
+                            <datetime type="datetime" class="date-time-picker" value-zone="local" v-model="timestamp.toSelect" ref="to"></datetime>
+                            <div class="date-click-decorator date-time-picker" @click="clickedToDate('timestamp', 'to')"></div>
+                            </v-flex>
+                        </v-layout>         
+                    </v-layout>
+                    <v-layout row class="filter-header">
+                        <v-flex class="id-container stopGrow">
+                            <v-text-field class="text-input"
+                            label="Workflow ID:"
+                            v-model="userFilter.instanceId">
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex class="id-container stopGrow">
+                            <v-text-field class="text-input"
+                            label="Conversation ID:"
+                            v-model="userFilter.conversationId">
+                            </v-text-field>
+                        </v-flex>        
+                    </v-layout>
+                    <v-layout row class="filter-header">    
+                        <v-flex class="id-container stopGrow">
+                            <v-text-field class="text-input"
+                            label="Correlation ID:"
+                            v-model="userFilter.correlationId">
+                            </v-text-field>
+                        </v-flex>    
+                        <v-flex class="id-container stopGrow">
+                            <v-text-field class="text-input"
+                            label="Transaction ID:"
+                            v-model="userFilter.transactionId">
+                            </v-text-field>
+                        </v-flex>    
+                        <v-spacer></v-spacer>
+                        <v-btn depressed @click="applyFilter" class="longButton"><v-icon left>mdi-check</v-icon>Apply</v-btn>
+                        <v-btn depressed @click="clearFilter" class="longButton"><v-icon left>mdi-cancel</v-icon>Clear</v-btn>                        
+                    </v-layout>
+                </v-layout>      
+            </v-layout>
+            </transition>
+        
+            <transition name="extend-chip">
+            <v-layout v-show="filterApplied && !openFilterMenu" class="chip-menu" row>
+                <v-layout row class="filter-chip-container">
+                    <v-flex class="stop-grow">
+                        <h3>Filtered By:</h3>
+                    </v-flex>
+                    <v-flex v-for="filter in currentFilters" :key="filter.id" class="stop-grow filter-chip-flex">
+                        <v-chip class="filter-chip">
+                            <v-chip class="inner-chip">
+                                {{ filter[0] }}
+                            </v-chip>
+                            {{ filter[1] }}
+                        </v-chip>
+                    </v-flex>
+                </v-layout>
+                <v-flex class="stop-grow">
+                    <v-btn dark
+                    depressed
+                    color="primary"
+                    class="longButton"
+                    @click="clearChips">
+                    <v-icon left>mdi-close</v-icon>
+                    Clear
+                    </v-btn>
+                </v-flex>
+            </v-layout>
+            </transition>
 
         <v-layout class="header">
             <v-flex class="id">
                 ID
+            </v-flex>
+            <v-flex class="preview">
+                Preview
             </v-flex>  
             <v-flex class="logLevel">
                 Log Level
             </v-flex>  
-            <v-flex class="occurence">
-                Occurence
+            <v-flex class="occurrence">
+                Occurrence
             </v-flex>
             <v-flex class="conversationId">
                 Conversation Id          
@@ -27,71 +165,84 @@
             <v-flex class="messageType">
                 Message Type
             </v-flex>
+            <v-spacer></v-spacer> 
             <v-flex class="actions">
-                Show Message
+                Actions
             </v-flex>
         </v-layout>
 
-        <!-- <v-card v-show="!wfRepo.workFlowInfo || wfRepo.workFlowInfo.length === 0" class="error" v-if="wfRepo">
+        <v-card v-show="!auditTrail || auditTrail.length === 0" class="error">
             <v-card-text>
                 <v-alert class="error-message" icon="info" value="true" >
-                    Cannot Load Workflow Class Information
+                    Cannot Load Audit Trail Information
                 </v-alert>
             </v-card-text>
-        </v-card> -->
+        </v-card>
 
-        <!-- <v-layout class="workflow" v-for="(workflow, i) in wfRepo.workFlowInfo" :key="workflow.id" column v-if="wfRepo">
+        <v-layout class="trail" v-for="(log, i) in auditTrail" :key="log.id" column>
 
-            <v-layout class="workflow-layout" column>
+            <v-layout class="trail-layout" column>
                 <v-layout>
-                    <v-flex class="number">
-                        {{ i + 1 }}
+                    <v-flex class="id">
+                        {{ log.id }}
                     </v-flex>  
-                    <v-flex class="alias">
-                        {{ workflow.alias }}
+                    <v-flex class="preview">
+                        {{ getPreview(log.message) }}
                     </v-flex>  
-                    <v-flex class="classname">
-                        {{ workflow.classname }}
+                    <v-flex class="logLevel">
+                        {{ log.logLevel }}
                     </v-flex>
-                    <v-flex class="version">
-                        Version: {{ workflow.majorVersion }}.{{ workflow.minorVersion }}.{{ workflow.patchLevel }}
-                    </v-flex>                  
+                    <v-flex class="occurrence">
+                        {{ getTimestamp(log.occurrence) | moment("HH:mm DD/MM/YYYY") }}
+                    </v-flex>  
+                    <v-flex class="conversationId">
+                        {{ log.conversationId }}
+                    </v-flex>
+                    <v-flex class="wfInstanceId">
+                        {{ log.workflowInstanceId }}
+                    </v-flex>  
+                    <v-flex class="correlationId">
+                        {{ log.correlationId }}
+                    </v-flex>
+                    <v-flex class="transactionId">
+                        {{ log.transactionId }}
+                    </v-flex>  
+                    <v-flex class="messageType">
+                        {{ log.messageType }}
+                    </v-flex>
+                    <v-spacer></v-spacer>                 
                     <v-flex class="actions">
                         <v-tooltip top content-class="tooltip-text">
                             <v-btn
                             depressed
                             dark
-                            class="squareButton"
+                            class="squareButton details-button"
                             @click="toggleOpen(i)"
-                            :disabled="workflow.sourceCode === undefined || workflow.sourceCode === null || (workflow.sourceCode.trim()).toLowerCase() === '1.na'"
                             slot="activator">
-                                <v-icon :class="{ 'close-details-icon': workflow.open }" >details</v-icon>
+                                <v-icon :class="{ 'close-details-icon': log.open }" >details</v-icon>
                             </v-btn>
-                            <span v-show="workflow.sourceCode != null && (workflow.sourceCode.trim()).toLowerCase() !== 'na'">Show Source Code</span>
-                            <span v-show="workflow.sourceCode === null || (workflow.sourceCode.trim()).toLowerCase() === 'na'">No Source Code</span>
+                            <span>Show Message</span>
                         </v-tooltip>
                     </v-flex>
                 </v-layout>
             </v-layout>
 
-            <v-layout class="workflow-info-layout">
-            <transition name="extend">
-                <div class="details" v-show="workflow.open">
-                    <v-layout class="workflow-detail stacktrace" row>
-                        <v-flex class="detail-label">Source Code:</v-flex>
+            <v-layout class="message-layout">
+                <transition name="extend-message">
+                    <v-layout class="details" v-show="log.open" column>
+                        <v-flex class="detail-label">Full Message:</v-flex>
                         <v-flex class="text">
-                            <source-code :sourceCode="workflow.sourceCode" ></source-code>
+                            {{log.message}}
                         </v-flex>
                     </v-layout>
-                </div>
-            </transition>
+                </transition>
             </v-layout>
 
-        </v-layout> -->
+        </v-layout>
         
     </v-layout>
 
-    <!-- <v-card flat class="footer-card">
+    <v-card flat class="footer-card">
         <v-card-text>
             <v-layout justify-center class="pagination-cont">
                     <v-flex class="text-xs-center">
@@ -114,5 +265,5 @@
                 </v-flex>
             </v-layout>
         </v-card-text>
-    </v-card> -->
+    </v-card>
 </div>

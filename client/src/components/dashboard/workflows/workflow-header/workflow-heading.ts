@@ -21,7 +21,6 @@ export class WorkflowHeading extends Vue {
     clickAllowed = true;
     openFilterMenu: boolean = false;
     dialogDeleteOpen: boolean = false;
-    hideOverflow: boolean = true;
     filterApplied: boolean = false;
     currentFilters: string[][] = [];
     currentFilterObject: WorkflowFilter;
@@ -198,12 +197,6 @@ export class WorkflowHeading extends Vue {
                 this.getPossibleClassNames();
             }
             this.openFilterMenu = !this.openFilterMenu;
-            if (this.openFilterMenu === true) {
-                setTimeout(() => { this.hideOverflow = false; }, 250);
-            } else {
-                this.hideOverflow = true;
-                setTimeout(() => { this.hideOverflow = true; }, 250);
-            }
             this.clickAllowed = false;
             setTimeout(() => { this.clickAllowed = true; }, 750);
         }
@@ -227,7 +220,6 @@ export class WorkflowHeading extends Vue {
             this.getEpochTime(this.modTime.from),
             this.getEpochTime(this.modTime.to)
         );
-        this.hideOverflow = true;
         this.openFilterMenu = false;
         this.filterApplied = this.isFiltered(this.currentFilterObject);
         this.$emit('triggerApplyFilter', this.currentFilterObject);

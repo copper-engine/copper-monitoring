@@ -1,12 +1,14 @@
 @import 'variables';
 
 html {
-    min-width: 900px;
+    // min-width: 900px;
+    min-width: 1600px;
     overflow-x: auto
 }
 
 body {
-    min-width: 900px;
+    // min-width: 900px;
+    min-width: 1600px;    
 }
 
 body .vdatetime-year-picker__item--selected,

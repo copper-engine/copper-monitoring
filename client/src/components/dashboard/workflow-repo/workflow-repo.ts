@@ -15,7 +15,6 @@ const sourceCodeComponent = () => import('./../../core/source-code').then(({ Sou
 export class WorkflowRepository extends Vue {
 
     private jmxService: JmxService = this.$services.jmxService;
-    newComponent = false;
     wfRepo: WorkflowRepo = new WorkflowRepo();
     page: number = 1;
     perPage: number = 10;
@@ -34,14 +33,9 @@ export class WorkflowRepository extends Vue {
     beforeDestroy() {
         clearInterval(this.fetchInterval);
     }
-    
-    @Watch('$route.params')
+
     loadRepo() {
-        this.newComponent = true;
-        setTimeout(() => {
-            this.newComponent = false;
-        }, 200);
-        this.wfRepo = new WorkflowRepo();
+        // this.wfRepo = new WorkflowRepo();
         let engine: EngineStatus = this.$store.state.engineStatusList[this.$route.params.id];
         let mbean = this.$store.getters.engineMBeans[this.$route.params.id];
         // this.wfRepo =  new WorkflowRepo();
@@ -58,7 +52,7 @@ export class WorkflowRepository extends Vue {
         this.loadRepo();
         this.fetchInterval = setInterval(() => {
             this.loadRepo();
-        }, 2 * 1000);
+        }, 120 * 1000);
     }
     
     private toggleOpen(index) {

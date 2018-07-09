@@ -9,10 +9,6 @@
         color: $dark-text-color;
     }
 
-    .alert {
-        margin: 20px;
-    }
-
     .summary {
         .text {
             font-size: 1.2em;
@@ -57,6 +53,10 @@
             color: $dark-text-color;
             background-color: $light-tertiary !important;
         }
+        .alert {
+            margin: 20px;
+        }
+    
     }
 
     .workflows-cont {

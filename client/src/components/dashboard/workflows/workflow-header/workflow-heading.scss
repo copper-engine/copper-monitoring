@@ -25,9 +25,6 @@
             min-width: 810px;
         }
     }
-    .overflow-hidden {
-        overflow: hidden;
-    }
     .filter-menu,
     .chip-menu {
         flex-wrap: wrap; 
@@ -38,6 +35,7 @@
         min-width: 986px;
     }
     .filter-menu {
+        overflow: hidden;
         flex-wrap: nowrap;
         background-color: $light-tertiary;
         h3 {
@@ -136,7 +134,7 @@
             }
             .input-group:hover {
                 .input-group__details::before {
-                    background-color: $light-tertiary !important;
+                    background-color: $light-primary !important;
                 }
             }
             .input-group--focused {

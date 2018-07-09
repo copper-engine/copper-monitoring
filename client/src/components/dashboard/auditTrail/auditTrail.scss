@@ -1,118 +1,339 @@
 @import '../../../variables';
 
-.audit-trail {
+.audit-trails {
     width: 100%;
     max-width: 1650px;
     margin: auto;
 
-    h2 {
-        color: $dark-text-color;
-    }
-
-    .alert {
-        margin: 20px;
-    }
-
-    .summary {
-        .text {
-            font-size: 1.2em;
-            font-weight: 400;
-            padding-top: 8px;
-            padding-right: 20px;
-            color: $dark-text-color;
-        }
-        .stopGrow {
-            flex-grow: 0;
-        }
-        .sub-heading {
-            width: 150px;
-            min-width: 150px;
-            max-width: 150px;
-        }
-    }
-
-    .header {
-        background-color: $light-primary;
-        color: $light-text-color !important;
-        margin-top: 16px;
-        padding: 30px 16px 30px 16px;
-        align-items: center;
-        font-weight: 700;
-        font-size: 1.1em;
-        border-top-left-radius: 2px;
-        border-top-right-radius: 2px;
-    }
-
-    .error {
-        background-color: $light-secondary !important;
-        .error-message {
-            border: 2px solid;
-            border-color: $light-border;
-            color: $dark-text-color;
-            background-color: $light-tertiary !important;
-        }
-    }
-
-    .workflows-cont {
+    .audit-cont {
         border-bottom: 1px solid;
         border-color: $light-border;
         overflow: hidden;
+
+        .stop-grow {
+            flex-grow: 0;
+        }
+
+        .longButton {
+            height: 36px !important;
+            width: 185px !important;
+        }
+
+        h2 {
+            color: $dark-text-color;
+        }
+
+        .connection-button {
+            background-color: $green !important;
+            color: $light-text-color;
+        }
+        .details-button {
+            background-color: $blue !important;
+            color: $light-text-color;
+        }
+
+        .summary {
+            align-items: center;
+            .sub-heading {
+                width: 225px;
+                min-width: 225px;
+                max-width: 225px;
+                font-size: 1.2em;
+                font-weight: 400;
+                margin-top: 2px;
+                margin-right: 20px;
+                color: $dark-text-color;
+            }
+            .heading-buttons {
+                padding-right: 10px;
+            }
+        }
+
+        .filter-menu,
+        .chip-menu {
+            flex-wrap: wrap; 
+            border-radius: 2px;
+            margin-top: 10px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            min-width: 986px;
+        }
+        .filter-menu {
+            overflow: hidden;
+            flex-wrap: nowrap;
+            background-color: $light-tertiary;
+            h3 {
+                align-items: center;
+                padding-left: 35px;
+                padding-right: 0px;
+                color: $dark-text-color;
+            }
+            .filter-layout {
+                padding-left: 10px;
+                padding-right: 10px;
+
+                .filter-header {
+                    min-height: 65px;
+                    align-items: center;
+                    padding-left: 15px;
+                    padding-right: 0px;
+                    label {
+                        color: $dark-text-color !important;
+                    }
+                }
+
+                .id-container {
+                    max-width: 380px;
+                    min-width:380px;
+                    padding-top: 0px;
+                    padding-bottom: 3px;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    .text-input {
+                        max-width: 380px;
+                        .icon {
+                            color: $light-primary !important;
+                        }
+                    }
+                }
+
+                .select-container {
+                    max-width: 130px;
+                    min-width: 130px;
+                    padding-top: 0px;
+                    padding-bottom: 3px;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    .select {
+                        max-width: 130px;
+                        .icon {
+                            color: $light-primary !important;
+                        }
+                    }
+                }
+    
+                .time-field-container {
+                    height: 65px;
+                    padding-left: 5px;
+                    padding-right: 5px;
+                    .time-field {
+                        position: relative;
+                        width: 190px;
+                        max-width: 190px;
+                        min-width: 190px;
+                        padding: 5px;
+                        .icon {
+                            color: $light-primary !important;
+                        }
+                    }
+                }
+                .date-time-picker {
+                    position: absolute;
+                    padding-top: 7px;
+                    padding-left: 5px;
+                    padding-right: 5px;
+                    width: 50px;
+                    height: 100%;
+                    bottom: -7px;
+                    left: 142px;
+                    button, input, select, textarea {
+                        background-color: transparent;
+                        height: 75%;
+                        width: 100%;
+                        opacity: 0;
+                    }
+                }
+    
+                .date-click-decorator{
+                    cursor: pointer;
+                }
+                .input-group {
+                    color: $light-primary !important;
+                    .input-group__input {
+                        input {
+                            color: $dark-text-color !important;
+                            caret-color: $light-primary !important;
+                        }
+                        .input-group__selections {
+                            .input-group__selections__comma {
+                                color: $dark-text-color !important;
+                            }
+                        }
+                    }
+                    .input-group__details {
+                        min-height: 0px !important;
+                        .input-group__hint {
+                            color: $dark-text-color !important;
+                        }
+                    }
+                    .input-group__details::before {
+                        background-color: $light-primary;
+                    }
+                }
+                .input-group:hover {
+                    .input-group__details::before {
+                        background-color: $light-primary !important;
+                    }
+                }
+                .input-group--focused {
+                    color: $light-primary !important;
+                    .input-group__details::before {
+                        background-color: $light-primary;
+                    }
+                    .input-group__details::after {
+                        background-color: $light-primary;
+                    }
+                }
+                button {
+                    height: 36px;
+                    width: 150px;
+                    min-width: 150px;
+                    margin-bottom: -15px;
+                    background-color: $light-primary !important;
+                    color: $light-text-color;
+                }
+            }
+            
+        }
+        .chip-menu {
+            padding: 15px;
+            overflow: hidden;
+            flex-wrap: nowrap;
+            background-color: $light-tertiary;
+            .filter-chip-container {
+                align-items: center;
+                flex-wrap: wrap;
+                h3 {
+                    color: $dark-text-color;
+                    min-width: 85px;
+                }
+                .filter-chip-flex {
+                    padding: 5px;
+                    .filter-chip {
+                        background-color: $light-tertiary !important;
+                        color: $dark-text-color;
+                        .inner-chip { 
+                            background-color: $light-primary;
+                            color: $light-text-color;
+                            margin-left: -7px !important;
+                        }
+                        .chip__content {
+                            padding: 5px;
+                        }
+                    }
+                }
+            }
+            button {
+                margin-right: 5px;
+                background-color: $light-primary !important;
+                color: $light-text-color;
+            }
+        }
+
+        .header {
+            background-color: $light-primary;
+            color: $light-text-color !important;
+            margin-top: 16px;
+            padding: 30px 16px 30px 16px;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.1em;
+            border-top-left-radius: 2px;
+            border-top-right-radius: 2px;
+        }
+
+        .error {
+            background-color: $light-secondary !important;
+            .error-message {
+                border: 2px solid;
+                border-color: $light-border;
+                color: $dark-text-color;
+                background-color: $light-tertiary !important;
+            }
+            .alert {
+                margin: 20px;
+            }
+        }
     }
 
-    .workflow {
+    .trail {
         border-top: 1px solid;
         border-left: 1px solid;
         border-right: 1px solid;
         border-color: $light-border;
+
+        .trail-layout >* {
+            background-color: $light-wf;
+            color: $dark-text-color;
+            padding: 8px 16px;
+            align-items: center;
+            padding: 20px;
+        }
+
     }
 
-    .workflow-layout >* {
-        background-color: $light-wf;
-        color: $dark-text-color;
-        padding: 8px 16px;
-        align-items: center;
-        padding: 20px;
-    }
-    
-    .number,
-    .alias,
-    .classname,
-    .version,
+    .id,
+    .preview,
+    .logLevel,
+    .occurence,
+    .conversationId,
+    .wfInstanceId,
+    .correlationId,
+    .transactionId,
+    .messageType,
     .actions {
         word-wrap: break-word;
         padding: 0 10px;
     }
-    .number {
-        width: 35px;
-        min-width: 35px;
-        max-width: 35px;
+    .id {
+        width: 45px;
+        min-width: 45px;
+        max-width: 45px;
     }
-    .version {
-        width: 350px;
+    .preview {
+        width: 300px;
+        min-width: 300px;
+        max-width: 300px;
+    }
+    .logLevel {
+        width: 85px;
+        min-width: 85px;
+        max-width: 85px;
+    }
+    .occurrence {
+        width: 150px;
+        min-width: 150px;
+        max-width: 150px;
+    }
+    .conversationId {
+        width: 135px;
+        min-width: 135px;
+        max-width: 135px;
+    }
+    .wfInstanceId {
+        width: 300px;
+        min-width: 300px;
+        max-width: 300px;
+    }
+    .correlationId {
+        width: 120px;
+        min-width: 120px;
+        max-width: 120px;
+    }
+    .transactionId {
+        width: 125px;
         min-width: 125px;
-        max-width: 350px;
+        max-width: 125px;
     }
-
-    .classname {
-        width: 550px;
-        min-width: 240px;
-        max-width: 550px;
-    }
-    .alias {
-        width: 550px;
-        min-width: 240px;
-        max-width: 550px;
+    .messageType {
+        width: 85px;
+        min-width: 85px;
+        max-width: 85px;
     }
     .actions {
         width: 110px;
         max-width: 110px;
         min-width: 110px;
-
-        button {
-            background-color: $blue !important;
-            margin-left: 12px;
-            border-radius: 20%;
-        }
 
         .close-details-icon {
             transform: rotate(180deg);
@@ -120,42 +341,35 @@
 
     }
 
-    .workflow-info-layout {
+    .message-layout {
         padding: 0px;
-
+        overflow: hidden;
         .details {
+            color: $dark-text-color;
             background-color: $light-tertiary;
             padding-left: 32px;
             padding-right: 32px;
             padding-bottom: 24px;
             padding-top: 0px;
             width: 100%;
-
-            .workflow-detail {
-                padding: 4px;
-            }
-
             .detail-label {
                 font-weight: 700;
                 padding-top: 20px;
-                padding-bottom: 20px;
+                padding-bottom: 10px;
                 padding-right: 10px;
                 min-width: 100px;
                 max-width: 100px;
                 margin-right: 75px;
             }
-
-            .stacktrace .text {
+            .text {
                 overflow-x: auto;
-                padding-top: 20px;
-                padding-left: 5px;
+                padding: 5px;
+                margin-right: 150px;
+                border: 1px solid;
+                border-color: $light-border;
+                background-color: $light-background;
             }
         }
-    }
-
-    .custom-loader {
-        animation: loader 1s infinite;
-        display: flex;
     }
 
     .pagination-cont {
@@ -228,7 +442,7 @@
         display: inline-block;
         margin-right: 10px;
     }
-    
+
     .extend-enter-active {
         animation: extend 0.75s;
     }
@@ -239,53 +453,196 @@
         0% {max-height: 0px;}
         100% {max-height: 1000px;}
     }
+    .extend-message-enter-active {
+        animation: extend-message 1s;
+    }
+    .extend-message-leave-active {
+        animation: extend-message 0.8s reverse;
+    }
+    @keyframes extend-message {
+        0% {max-height: 0px;
+            padding-bottom: 0px;}
+        100% {max-height: 120px;
+            padding-bottom: 24px;}
+    }
+    .extend-filter-enter-active {
+        animation: extend-filter 0.5s;
+    }
+    .extend-filter-leave-active {
+        animation: extend-filter 0.5s reverse;
+    }
+    @keyframes extend-filter {
+        0% {height: 0px;
+            padding-top: 0px;
+            padding-bottom: 0px;}
+        100% {height: 259px;
+            padding-top: 20px;
+            padding-bottom: 20px;}
+    }
+    .extend-chip-enter-active {
+        animation: extend-chip 0.75s;
+    }
+    .extend-chip-leave-active {
+        animation: extend-chip 0.75s reverse;
+    }
+    @keyframes extend-chip {
+        0% {max-height: 0px;
+            padding-top: 0px;
+            padding-bottom: 0px;}
+        100% {max-height: 129px;
+            padding-top: 15px;
+            padding-bottom: 15px;}
+    }
 
 }
 
 .dark {
-    .audit-trail {
-        h2 {
-            color: $light-text-color;
-        }
-        .summary {
-            .text {
+    .audit-trails {
+
+        .audit-cont {
+            border-color: $dark-border;
+            h2 {
                 color: $light-text-color;
             }
-        }
-        .header {
-            background-color: $dark-primary;
-        }
-        .error {
-            background-color: $dark-secondary !important;
-            .error-message {
-                border-color: $dark-border;
+            .connection-button {
+                background-color: $dark-primary !important;
                 color: $light-text-color;
-                background-color: $dark-tertiary !important;
             }
-        }
-        .workflows-cont {
-            border-color: $dark-border;
-        }
-    
-        .workflow {
-            border-left: 0px solid;
-            border-right: 0px solid;
-            border-color: $dark-border;
-        }
-        .workflow-layout >* {
-            background-color: $dark-wf;
-            color: $light-text-color;
-            .actions {
+            .details-button {
+                background-color: $dark-primary !important;
+                color: $light-text-color;
+            }
+            .summary {
+                .sub-heading {
+                    color: $light-text-color;
+                }
+            }
+            
+            .filter-menu {
+                background-color: $dark-secondary;
+                h3 {
+                    color: $light-text-color;  
+                }
+                .filter-header {
+                    label {
+                        color: $light-text-color !important;
+                    }
+                }
+                .filter-layout {
+                    .time-field-container {
+                        .time-field {
+                            .icon {
+                                color: $dark-primary !important;
+                            }
+                        }
+                    }
+                }
+                .select-container {
+                    .select {
+                        .icon {
+                            color: $dark-primary !important;
+                        }
+                    }
+                }
+                .input-group {
+                    color: $dark-primary !important;
+                    .input-group__input {
+                        input {
+                            color: $light-text-color !important;
+                            caret-color: $dark-primary !important;
+                        }
+                        .input-group__selections {
+                            .input-group__selections__comma {
+                                color: $light-text-color !important;
+                            }
+                        }
+                    }
+                    .input-group__details {
+                        .input-group__hint {
+                            color: $light-text-color !important;
+                        }
+                    }
+                    .input-group__details::before {
+                        background-color: $dark-primary;
+                    }
+                }
+                .input-group--focused {
+                    color: $light-primary !important;
+                    .input-group__details::before {
+                        background-color: $dark-primary;
+                    }
+                    .input-group__details::after {
+                        background-color: $dark-primary;
+                    }
+                }
+                .input-group:hover {
+                    .input-group__details::before {
+                        background-color: $dark-tertiary !important;
+                    }
+                }
                 button {
                     background-color: $dark-primary !important;
                     color: $light-text-color;
                 }
             }
+            .chip-menu {
+                background-color: $dark-secondary;
+                .filter-chip-container {
+                    h3 {
+                        color: $light-text-color;
+                        min-width: 85px;
+                    }
+                    .filter-chip-flex {
+                        .filter-chip {
+                        background-color: $dark-tertiary !important;
+                            color: $light-text-color;
+                            .inner-chip { 
+                                background-color: $dark-primary;
+                                color: $light-text-color;
+                            }
+                        }
+                    }
+                }
+                button {
+                    background-color: $dark-primary !important;
+                    color: $light-text-color;
+                }
+            }
+
+            .header {
+                background-color: $dark-primary;
+            }
+            .error {
+                background-color: $dark-secondary !important;
+                .error-message {
+                    border-color: $dark-border;
+                    color: $light-text-color;
+                    background-color: $dark-tertiary !important;
+                }
+            }
         }
-        .workflow-info-layout {
-            .details {
-                background-color: $dark-tertiary; 
+
+        .trail {
+            border-color: $dark-border;
+            .trail-layout >* {
+                background-color: $dark-wf;
                 color: $light-text-color;
+                .actions {
+                    button {
+                        background-color: $dark-primary !important;
+                        color: $light-text-color;
+                    }
+                }
+            }
+        }
+        .message-layout {
+            .details {
+                color: $light-text-color;
+                background-color: $dark-tertiary;
+                .text {
+                    border-color: $dark-border;
+                    background-color: $dark-wf;
+                }
             }
         }
         .footer-card {

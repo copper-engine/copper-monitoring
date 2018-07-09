@@ -587,7 +587,7 @@ export class JmxService {
             console.log('Invalid responce for Audit Trail:', response); 
             throw new Error('invalid response for Audit Trail!');
         }
-        console.log('parsing responce for trail:', response);
+        // console.log('parsing responce for trail:', response);
         return response.data[0].value;
     }
 

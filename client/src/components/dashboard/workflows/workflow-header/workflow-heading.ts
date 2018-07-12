@@ -271,9 +271,9 @@ export class WorkflowHeading extends Vue {
     }
     
     private getPossibleClassNames() {
-        this.jmxService.getWfRepo(this.$store.getters.engineMBeans[this.engineStatus.id].connectionSettings, this.engineStatus.wfRepoMXBean, this.$store.state.user).then((response: WorkflowRepo) => {
-            this.possibleClassnames = response.workFlowInfo.map((workflow, index) => {
-                return response.workFlowInfo[index].classname;
+        this.jmxService.getWfRepo(this.$store.getters.engineMBeans[this.engineStatus.id].connectionSettings, this.engineStatus.wfRepoMXBean, this.$store.state.user, -1, 0).then((response) => {
+            this.possibleClassnames = response.map((workflow) => {
+                return workflow.classname;
             });
         });
     }

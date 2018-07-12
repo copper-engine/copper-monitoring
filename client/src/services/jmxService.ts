@@ -46,7 +46,7 @@ export class JmxService {
             })
             .then((response) => this.parseGroupWFCountResponse(response, length))
             .catch(error => {
-                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error counting Groups:', error);
             });
     }
 
@@ -63,7 +63,7 @@ export class JmxService {
             })
             .then(this.parseChartCountResponse)
             .catch(error => {
-                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error counting Charts:', error);
             });
     }
 
@@ -87,7 +87,7 @@ export class JmxService {
             })
             .then((response) => this.parseGroupChartCountResponse(response, length))
             .catch(error => {
-                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error);
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error counting group charts:', error);
             });
     }
 
@@ -185,15 +185,27 @@ export class JmxService {
             });
     }
 
-    getWfRepo(connectionSettings: ConnectionSettings, mbean: string, user: User) {
+    getWfRepoDetails(connectionSettings: ConnectionSettings, mbean: string, user: User) {
         return Axios.post(process.env.API_NAME, [
-            this.createWfRepoRequest(connectionSettings, mbean)
+            this.createWfRepoInfoRequest(connectionSettings, mbean)
+            ], {
+                auth: { username: user.name, password: user.password }
+            })
+            .then(this.parseWfRepoInfoResponse)
+            .catch(error => {
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Workflow Repo details:', error);
+            });
+    }
+
+    getWfRepo(connectionSettings: ConnectionSettings, mbean: string, user: User, max: number, offset: number) {
+        return Axios.post(process.env.API_NAME, [
+            this.createWfRepoRequest(connectionSettings, mbean, max, offset)
             ], {
                 auth: { username: user.name, password: user.password }
             })
             .then(this.parseWfRepoResponse)
             .catch(error => {
-                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Workflow Repo:', error);
             });
     }
 
@@ -205,7 +217,7 @@ export class JmxService {
             })
             .then(this.parseSourceCodeResponse)
             .catch(error => {
-                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Source Code:', error);
             });
     }
 
@@ -216,7 +228,7 @@ export class JmxService {
                 })
             .then((response) => this.parseProcessorPoolsResponse(response, mbeans))
             .catch(error => {
-                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflow:', error);
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Processor Pools:', error);
             });
     }
 
@@ -228,7 +240,7 @@ export class JmxService {
         })
         .then(this.parseVoidResponse)
         .catch(error => {
-            console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflows:', error);
+            console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error resuming:', error);
         });
     }
 
@@ -252,7 +264,7 @@ export class JmxService {
         })
         .then(this.parseVoidResponse)
         .catch(error => {
-            console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflows:', error);
+            console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error suspending:', error);
         });
     }
 
@@ -264,7 +276,7 @@ export class JmxService {
         })
         .then(this.parseVoidResponse)
         .catch(error => {
-            console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflows:', error);
+            console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting resuming dequed:', error);
         });
     }
 
@@ -276,7 +288,7 @@ export class JmxService {
         })
         .then(this.parseVoidResponse)
         .catch(error => {
-            console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflows:', error);
+            console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error suspending dequed:', error);
         });
     }
 
@@ -299,7 +311,7 @@ export class JmxService {
                 })
             .then(this.parseVoidResponse)
             .catch(error => {
-                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflow:', error);
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error deleting broken workflow:', error);
             });
         } else {
             return Axios.post(process.env.API_NAME, 
@@ -308,7 +320,7 @@ export class JmxService {
                     })
                 .then(this.parseVoidResponse)
                 .catch(error => {
-                    console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflow:', error);
+                    console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error deleting broken workflow:', error);
                 });
         }
     }
@@ -320,7 +332,7 @@ export class JmxService {
             })
         .then(this.parseVoidResponse)
         .catch(error => {
-            console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error restarting broken workflow:', error);
+            console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error deleting filtered workflows:', error);
         });    
     }   
 
@@ -351,7 +363,7 @@ export class JmxService {
             })
             .then(this.parseAuditTrailResponse)
             .catch(error => {
-                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Audit Trails:', error);
             });
     }
 
@@ -370,7 +382,7 @@ export class JmxService {
             })
             .then(this.parseAuditTrailResponse)
             .catch(error => {
-                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
+                console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error counting Audit Trails:', error);
             });
     }
 
@@ -410,10 +422,21 @@ export class JmxService {
         };
     }
 
-    private createWfRepoRequest(connectionSettings: ConnectionSettings, mbean: string) {
+    private createWfRepoRequest(connectionSettings: ConnectionSettings, mbean: string, max: number, offset: number) {
+        return {
+            type: 'EXEC',
+            mbean: mbean,
+            operation: 'queryWorkflowsSubset',
+            arguments: [max, offset],
+            target: this.getTarget(connectionSettings)
+        };
+    }
+
+    private createWfRepoInfoRequest(connectionSettings: ConnectionSettings, mbean: string) {
         return {
             type: 'read',
             mbean: mbean,
+            attribute: ['Description', 'LastBuildResults', 'SourceArchiveUrls', 'SourceDirs', 'WorkflowRepoSize'],            
             target: this.getTarget(connectionSettings)
         };
     }
@@ -553,6 +576,23 @@ export class JmxService {
         return pools;
     }
 
+    private parseWfRepoInfoResponse = (response) => {
+        if (!response || !response.data 
+            || response.data.length < 1
+            || response.data[0].error) {
+            console.log('Invalid responce:', response); 
+            throw new Error('invalid response!');
+        }
+        let wfRepo = new WorkflowRepo(
+            response.data[0].value.Description,
+            response.data[0].value.SourceDirs[0],
+            response.data[0].value.LastBuildResults,
+            response.data[0].value.WorkflowRepoSize,
+            []
+        );
+        return wfRepo;
+    }
+
     private parseWfRepoResponse = (response) => {
         if (!response || !response.data 
             || response.data.length < 1
@@ -560,7 +600,7 @@ export class JmxService {
             console.log('Invalid responce:', response); 
             throw new Error('invalid response!');
         }
-        let wfArray: Array<WorkflowClassInfo> = response.data[0].value.Workflows.map((workflow) => {
+        return response.data[0].value.map((workflow) => {
             return new WorkflowClassInfo(
                 workflow.classname,
                 workflow.alias,
@@ -571,13 +611,6 @@ export class JmxService {
                 workflow.sourceCode
             );
         });
-        let wfRepo = new WorkflowRepo(
-            response.data[0].value.Description,
-            response.data[0].value.SourceDirs[0],
-            response.data[0].value.LastBuildResults,
-            wfArray
-        );
-        return wfRepo;
     }
 
     private parseAuditTrailResponse = (response) => {

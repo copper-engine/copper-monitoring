@@ -102,6 +102,7 @@ export class WorkflowRepo {
         public description: string = '',
         public sourceDir: string = '',
         public lastBuildResults: string = null,
+        public repoSize: number = 0,
         public workFlowInfo: Array<WorkflowClassInfo> = []
     ) {}
 }

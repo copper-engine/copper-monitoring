@@ -35,14 +35,27 @@ export class WorkflowRepository extends Vue {
     }
 
     loadRepo() {
-        // this.wfRepo = new WorkflowRepo();
         let engine: EngineStatus = this.$store.state.engineStatusList[this.$route.params.id];
         let mbean = this.$store.getters.engineMBeans[this.$route.params.id];
-        // this.wfRepo =  new WorkflowRepo();
-        this.jmxService.getWfRepo(mbean.connectionSettings, engine.wfRepoMXBean, this.$store.state.user).then((response: WorkflowRepo) => {
+        this.jmxService.getWfRepoDetails(mbean.connectionSettings, engine.wfRepoMXBean, this.$store.state.user).then((response: WorkflowRepo) => {
             this.wfRepo = response;
         });
+        this.jmxService.getWfRepo(mbean.connectionSettings, engine.wfRepoMXBean, this.$store.state.user, this.perPage, (this.page - 1) * this.perPage).then((response) => {
+            this.wfRepo.workFlowInfo = response;
+        });
     }
+
+    @Watch('page')
+    @Watch('perPage')
+    updatePaganation() {
+        // before calling loadRepo() to update results based on a new 'perpage', we must
+        // wait to make sure that 'page' has updated as per 'totalPages()', otherwise 
+        // the query will fail. Once 'page' is updated this function will be re-called
+        if (this.page <= Math.ceil(this.wfRepo.repoSize / this.perPage)) {
+            this.scheduleFetchingInterval();
+        }
+    }
+
 
     @Watch('$store.state.connectionSettings')
     scheduleFetchingInterval() {
@@ -67,8 +80,8 @@ export class WorkflowRepository extends Vue {
     }
 
     private get totalPages() {
-        if (this.wfRepo.workFlowInfo.length > 0) {
-             let total = Math.ceil(this.wfRepo.workFlowInfo.length / this.perPage);
+        if (this.wfRepo && this.wfRepo.repoSize > 0) {
+             let total = Math.ceil(this.wfRepo.repoSize / this.perPage);
              if (this.page > total) {
                  this.page = 1;
              }

@@ -141,15 +141,12 @@
             <v-flex class="id">
                 ID
             </v-flex>
-            <v-flex class="preview">
-                Preview
-            </v-flex>  
-            <v-flex class="logLevel">
-                Log Level
-            </v-flex>  
             <v-flex class="occurrence">
                 Occurrence
             </v-flex>
+            <v-flex class="logLevel">
+                Level
+            </v-flex>  
             <v-flex class="conversationId">
                 Conversation Id          
             </v-flex>
@@ -165,7 +162,9 @@
             <v-flex class="messageType">
                 Message Type
             </v-flex>
-            <v-spacer></v-spacer> 
+            <v-flex class="preview">
+                Message Preview
+            </v-flex>
             <v-flex class="actions">
                 Actions
             </v-flex>
@@ -186,15 +185,12 @@
                     <v-flex class="id">
                         {{ log.id }}
                     </v-flex>  
-                    <v-flex class="preview">
-                        {{ getPreview(log.message) }}
-                    </v-flex>  
-                    <v-flex class="logLevel">
-                        {{ log.logLevel }}
-                    </v-flex>
                     <v-flex class="occurrence">
                         {{ getTimestamp(log.occurrence) | moment("HH:mm DD/MM/YYYY") }}
                     </v-flex>  
+                    <v-flex class="logLevel">
+                        {{ log.logLevel }}
+                    </v-flex> 
                     <v-flex class="conversationId">
                         {{ log.conversationId }}
                     </v-flex>
@@ -210,7 +206,9 @@
                     <v-flex class="messageType">
                         {{ log.messageType }}
                     </v-flex>
-                    <v-spacer></v-spacer>                 
+                    <v-flex class="preview">
+                        {{ getPreview(log.message) }}
+                    </v-flex>
                     <v-flex class="actions">
                         <v-tooltip top content-class="tooltip-text">
                             <v-btn

@@ -292,9 +292,9 @@
         max-width: 45px;
     }
     .preview {
-        width: 300px;
         min-width: 300px;
-        max-width: 300px;
+        max-width: 420px;
+        flex-grow: 1;
     }
     .logLevel {
         width: 85px;
@@ -327,9 +327,9 @@
         max-width: 125px;
     }
     .messageType {
-        width: 85px;
-        min-width: 85px;
-        max-width: 85px;
+        width: 125px;
+        min-width: 125px;
+        max-width: 125px;
     }
     .actions {
         width: 110px;

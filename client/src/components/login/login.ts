@@ -29,7 +29,7 @@ export class LoginComponent extends Vue {
                 if (result.status === 401) {
                     this.error = 'Username & Password combination is incorect.';
                 } else {
-                    this.result = result;
+                    this.result = result;             
                     this.processLogin();
                 }
             }).catch(error => {
@@ -115,9 +115,9 @@ export class LoginComponent extends Vue {
         }
     }
 
-    get jmxPass() {
-        if (this.result.data.jmxPass !== null && this.result.data.jmxPass !== undefined && this.result.data.jmxPass !== 'null') {
-            return this.result.data.jmxPass;
+    get jmxPass() {  
+        if (this.result.data.jmxPassword !== null && this.result.data.jmxPassword !== undefined && this.result.data.jmxPassword !== 'null') {        
+            return this.result.data.jmxPassword;
         } else {
             return '';
         }

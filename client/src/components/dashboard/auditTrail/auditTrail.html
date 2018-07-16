@@ -219,7 +219,7 @@
                             class="squareButton details-button"
                             @click="toggleOpen(log.id, i)"
                             slot="activator">
-                                <v-icon :class="{ 'close-details-icon': log.open }" >details</v-icon>
+                                <v-icon :class="{ 'close-details-icon' : (auditTrailContext.get(log.id) === true) }" >details</v-icon>
                             </v-btn>
                             <span>Show Message</span>
                         </v-tooltip>

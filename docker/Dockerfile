@@ -16,8 +16,4 @@ ENV JMX_PORT "1099"
 ENV JMX_USERNAME ""
 ENV JMX_PASS ""
 
-<<<<<<< HEAD
-CMD [ "./bin/jmxwebproxy" ]
-=======
 CMD ["./jmxwebproxy"]
->>>>>>> master

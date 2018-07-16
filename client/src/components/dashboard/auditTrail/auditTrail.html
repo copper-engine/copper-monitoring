@@ -145,22 +145,23 @@
                 Occurrence
             </v-flex>
             <v-flex class="logLevel">
-                Level
-            </v-flex>  
-            <v-flex class="conversationId">
-                Conversation Id          
+                Log Level
             </v-flex>
-            <v-flex class="wfInstanceId">
-                WF Instance Id
-            </v-flex>
-            <v-flex class="correlationId">
-                Correlation Id
-            </v-flex>
-            <v-flex class="transactionId">
-                Transaction Id
-            </v-flex>
-            <v-flex class="messageType">
-                Message Type
+            <v-flex class="id-group">
+                <v-flex class="wfInstanceId">
+                    WF Instance Id
+                </v-flex>
+                <v-flex class="conversationId">
+                    Conversation Id          
+                </v-flex> 
+            </v-flex> 
+            <v-flex class="id-group">
+                <v-flex class="correlationId">
+                    Correlation Id
+                </v-flex>
+                <v-flex class="transactionId">
+                    Transaction Id
+                </v-flex>
             </v-flex>
             <v-flex class="preview">
                 Message Preview
@@ -191,20 +192,21 @@
                     <v-flex class="logLevel">
                         {{ log.logLevel }}
                     </v-flex> 
-                    <v-flex class="conversationId">
-                        {{ log.conversationId }}
-                    </v-flex>
-                    <v-flex class="wfInstanceId">
-                        {{ log.workflowInstanceId }}
-                    </v-flex>  
-                    <v-flex class="correlationId">
-                        {{ log.correlationId }}
-                    </v-flex>
-                    <v-flex class="transactionId">
-                        {{ log.transactionId }}
-                    </v-flex>  
-                    <v-flex class="messageType">
-                        {{ log.messageType }}
+                    <v-flex class="id-group">
+                        <v-flex class="wfInstanceId">
+                            {{ log.workflowInstanceId }}
+                        </v-flex>
+                        <v-flex class="conversationId">
+                            {{ log.conversationId }}          
+                        </v-flex> 
+                    </v-flex> 
+                    <v-flex class="id-group">
+                        <v-flex class="correlationId">
+                            {{ log.correlationId }} 
+                        </v-flex>
+                        <v-flex class="transactionId">
+                            {{ log.transactionId }}
+                        </v-flex>
                     </v-flex>
                     <v-flex class="preview">
                         {{ getPreview(log.message) }}

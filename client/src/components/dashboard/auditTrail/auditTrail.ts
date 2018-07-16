@@ -140,11 +140,12 @@ export class AuditTrailComponent extends Vue {
     }
 
     private getPreview(message: string) {
+        let length = 140;
         // message = message + 'asfjakl gjl akjdga hlkjfhlak... ...da gsd ...ah.a fdh.da gddgadsh adfha hdfha lak.. ....dagsd ...ah. afdh. dagdd gadsh adfhahlak. .....dag sd...a h.afdh.d agddgad shadfhah';
-        if (message.length > 85) {
-            return message.substr(0, 85) + '...';
+        if (message.length > length) {
+            return message.substr(0, length) + '...';
         } else {
-            return message.substr(0, 85);
+            return message.substr(0, length);
         }
     }
 

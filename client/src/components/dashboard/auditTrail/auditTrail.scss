@@ -293,13 +293,17 @@
     }
     .preview {
         min-width: 300px;
-        max-width: 420px;
         flex-grow: 1;
     }
     .logLevel {
         width: 85px;
         min-width: 85px;
         max-width: 85px;
+    }
+    .id-group {
+        width: 300px;
+        min-width: 300px;
+        max-width: 300px;
     }
     .occurrence {
         width: 150px;
@@ -322,11 +326,6 @@
         max-width: 120px;
     }
     .transactionId {
-        width: 125px;
-        min-width: 125px;
-        max-width: 125px;
-    }
-    .messageType {
         width: 125px;
         min-width: 125px;
         max-width: 125px;

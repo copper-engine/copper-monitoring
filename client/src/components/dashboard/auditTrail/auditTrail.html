@@ -217,7 +217,7 @@
                             depressed
                             dark
                             class="squareButton details-button"
-                            @click="toggleOpen(i)"
+                            @click="toggleOpen(log.id, i)"
                             slot="activator">
                                 <v-icon :class="{ 'close-details-icon': log.open }" >details</v-icon>
                             </v-btn>
@@ -229,7 +229,7 @@
 
             <v-layout class="message-layout">
                 <transition name="extend-message">
-                    <v-layout class="details" v-show="log.open" column>
+                    <v-layout class="details" v-show="(auditTrailContext.get(log.id) === true)" column>
                         <v-flex class="detail-label">Full Message:</v-flex>
                         <v-flex class="text">
                             {{log.message}}

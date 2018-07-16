@@ -16,6 +16,7 @@ import { Datetime } from 'vue-datetime';
 export class AuditTrailComponent extends Vue {
     private jmxService: JmxService = this.$services.jmxService;
     private auditTrail: AuditTrail[] = [];
+    private auditTrailContext: Map<number, boolean> = new Map<number, boolean>(); 
     private auditTrailCount: number = 0;
     private mbeans: MBean[] = null;
     private page: number = 1;
@@ -62,6 +63,7 @@ export class AuditTrailComponent extends Vue {
         if (this.fetchInterval) {
             clearInterval(this.fetchInterval);
         }
+        this.auditTrailContext = new Map<number, boolean>(); 
         this.getAuditTrails(this.filter);
         this.countAuditTrails(this.filter);
         this.fetchInterval = setInterval(() => {
@@ -111,7 +113,7 @@ export class AuditTrailComponent extends Vue {
             .then(result => {
                 this.auditTrail = result.map((log) => {
                     return new AuditTrail(log.context, log.conversationId, log.correlationId, log.id, log.loglevel, 
-                        log.message, log.messageType, log.occurrence, log.transactionId, log.workflowInstanceId, false);
+                        log.message, log.messageType, log.occurrence, log.transactionId, log.workflowInstanceId);
                 });
                 this.getClickAllowedList(this.auditTrail.length);
                 // if (result && result.length > 0) {
@@ -210,10 +212,17 @@ export class AuditTrailComponent extends Vue {
         this.scheduleFetch();
     }
 
-    private toggleOpen(index: number) {
+    private toggleOpen(id: number, index: number) {
         if (this.clickAllowed[index] === true) {
+            let context = this.auditTrailContext.get(id);
+            if (!context) {
+                this.auditTrailContext.set(id, false);
+                context = false;
+            }
             this.clickAllowed[index] = false;
-            this.auditTrail[index].open = !this.auditTrail[index].open;
+            let newState = !this.auditTrailContext.get(id);
+            this.auditTrailContext.set(id, newState);
+            this.$forceUpdate();
             setTimeout(() => {
                 this.clickAllowed[index] = true;
             }, 750);

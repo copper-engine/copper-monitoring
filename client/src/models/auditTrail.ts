@@ -7,6 +7,6 @@ export class AuditTrailInstanceFilter {
 export class AuditTrail {
     constructor(public context: string, public conversationId: string, public correlationId: string, public id: number,
         public logLevel: number, public message: string, public messageType: string, public occurrence: number, 
-        public transactionId: number, public workflowInstanceId: string, public open: boolean) {
+        public transactionId: number, public workflowInstanceId: string) {
     } 
 }

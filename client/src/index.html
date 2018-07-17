@@ -71,8 +71,7 @@
     <div class="initialHide" id="appCover">
       <v-app :class="{ 'dark' : (((this.$store.state.user ? this.$store.state.user.settings.darkTheme : this.$store.state.initialTheme)) === true) }" id="app">
         <notifications></notifications>
-        <router-view>
-        </router-view>
+        <router-view></router-view>
       </v-app>
     </div>
     

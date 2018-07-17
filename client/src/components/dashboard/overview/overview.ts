@@ -1,5 +1,5 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import { StatesPrint, ChartStates, EngineGroup, EngineStatus, EngineStatData } from '../../../models/engine';
+import { StatesPrint, ChartStates, EngineGroup, EngineStatus, EngineStatData, StatePromiseWrapper } from '../../../models/engine';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import { Notification } from '../../../models/notification';
 import { InfluxDBService } from '../../../services/influxDBService';
@@ -49,7 +49,6 @@ export class OverviewComponent extends Vue {
     states = new ChartStates(true, true, true, true, true, true);
     chartData: any[] = [];
     useInfluxDB: boolean = false;
-    promiseStack = [];
 
     created() {
         this.timeSelect = this.statisticsService.intervals.map((interval) => {
@@ -79,7 +78,6 @@ export class OverviewComponent extends Vue {
     @Watch('useInfluxDB')
     checkStatService() {
         localStorage.setItem(this.$store.state.user.name + ':useInfluxDB', String(this.useInfluxDB));
-        // this.$store.state.user.influx.useInfluxDB = this.useInfluxDB;
         this.$store.commit(Mutations.setUseInfluxDB, this.useInfluxDB);
         if (this.useInfluxDB) {
             this.statisticsService.stop();
@@ -87,24 +85,9 @@ export class OverviewComponent extends Vue {
         } else {
             this.statisticsService.start();       
         }
+        // this.switchedModes = true;
         this.getData();
      }
-
-    private getDataFromInflux() {
-        // this.groups = this.$store.getters.groupsOfEngines;
-        let names = [];
-        this.$store.getters.groupsOfEngines.forEach( group => {
-            names = names.concat(group.engines.map( engine => engine.engineId + '@' + this.getConnectionName(engine.id)));
-        });
-        // this.influx.testInfluxDB();
-
-        this.influxService.getData(this.currentTimeSelection.time, names).then( result => {
-            console.log('influx overview result', result);
-        });
-        // this.statisticsService.getData(this.currentTimeSelection.time, names).then( result => {
-        //     console.log('satistics overview result', result);
-        // });
-    }
 
     get getRow() {
         return (this.currentLayout === 'Row');
@@ -115,7 +98,7 @@ export class OverviewComponent extends Vue {
         this.username = influxSettings.username ? influxSettings.username : '';
         this.password = influxSettings.password ? influxSettings.password : '';
         this.url = influxSettings.url ? influxSettings.url : '';
-        this.useInfluxDB = influxSettings.useInfluxDB ? influxSettings.useInfluxDB : '';
+        this.useInfluxDB = influxSettings.useInfluxDB ? influxSettings.useInfluxDB : false;
     }
 
     private storeInfluxConnection() {
@@ -123,18 +106,12 @@ export class OverviewComponent extends Vue {
         localStorage.setItem(this.$store.state.user.name + ':influxUser', this.username);
         localStorage.setItem(this.$store.state.user.name + ':influxPass', this.password);
         this.$store.commit(Mutations.setInfluxSettings, new InfluxConnection(this.url, this.username, this.password, null));        
-        // let connection = new InfluxConnection(this.url, this.username, this.password, null);
-        // this.$store.state.user.influx.url = this.url;
-        // this.$store.state.user.influx.username = this.username;
-        // this.$store.state.user.influx.password = this.password;
     }
 
     private getChartSettings() {
         let chartSettings = this.$store.state.user.chart;
-        // if (chartSettings !== null && chartSettings !== undefined) {
-            this.currentTimeSelection = chartSettings.interval ? this.parseIntoTimeSelection(chartSettings.interval) : this.timeSelect[3];
-            this.currentLayout = chartSettings.layout ? chartSettings.layout : 'Row';
-        // }
+        this.currentTimeSelection = chartSettings.interval ? this.parseIntoTimeSelection(chartSettings.interval) : this.timeSelect[3];
+        this.currentLayout = chartSettings.layout ? chartSettings.layout : 'Row';
     }
 
     private parseIntoTimeSelection(interval: number) {
@@ -151,16 +128,21 @@ export class OverviewComponent extends Vue {
 
     @Watch('states', { deep: true })
     getData() {
-        this.promiseStack.push([]);
-        let fetchingDataPromise: Promise<void | Map<String, StatesPrint[]>>;
+            let fetchingDataPromise: StatePromiseWrapper;
+    
+            if (this.useInfluxDB) {
+                fetchingDataPromise = this.influxService.getData(this.currentTimeSelection.time, this.getNames());
+            } else {             
+                fetchingDataPromise = this.statisticsService.getData(this.currentTimeSelection.time, this.getNames());
+            }
+    
+            fetchingDataPromise.promise.then( (resultMap: Map<String, StatesPrint[]>) => {
+                this.parseResultMap(resultMap, fetchingDataPromise.type);
+            });
+    }
 
-        if (this.useInfluxDB) {
-            fetchingDataPromise = this.influxService.getData(this.currentTimeSelection.time, this.getNames());
-        } else {
-            fetchingDataPromise = this.statisticsService.getData(this.currentTimeSelection.time, this.getNames());
-        }
-
-        fetchingDataPromise.then( (resultMap: Map<String, StatesPrint[]>) => {
+    private parseResultMap(resultMap: Map<String, StatesPrint[]>, type: string) {
+        if (this.desiredData(type) === true) {
             this.statMap = resultMap ? this.groupDataResult(resultMap) : [];
             this.chartName = [];
             this.chartData = [];
@@ -170,8 +152,19 @@ export class OverviewComponent extends Vue {
                     this.chartData.push(this.getChartData(this.states, value));
                 });
             }
-            this.promiseStack.pop();    
-        });
+        }
+    }
+
+    private desiredData(type: string) {
+        if (type === 'influx' && this.useInfluxDB === true) {
+            return true;
+        }
+        if (type === 'statService' && this.useInfluxDB === false) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     private groupDataResult(resultMap: Map<String, StatesPrint[]>) {
@@ -273,7 +266,9 @@ export class OverviewComponent extends Vue {
 
         this.$store.state.connectionResults.map((connection) => {
             this.configText += '[[inputs.jolokia2_proxy.target]]\n' +
-                '     url = "service:jmx:rmi:///jndi/rmi://' + connection.settings.host + ':' + connection.settings.port + '/jmxrmi"\n';
+                '     url = "service:jmx:rmi:///jndi/rmi://' + connection.settings.host + ':' + connection.settings.port + '/jmxrmi"\n' +
+                '     username = "' + connection.settings.username + '"\n' +
+                '     password = "' + connection.settings.password + '"\n';
         });
 
         this.configText += '\n#From engines. Name made from connection name and engine name to prevent collisions\n';

@@ -1,4 +1,4 @@
-import { StatesPrint, ChartStates, EngineGroup, EngineStatus } from '../models/engine';
+import { StatesPrint, ChartStates, EngineGroup, EngineStatus, StatePromiseWrapper } from '../models/engine';
 import { Store } from 'vuex';
 import Vue from 'vue';
 import { StoreState } from '../store.vuex';
@@ -62,7 +62,7 @@ export class StatisticsService {
         this.running = false;
     }
     
-    getData(interval: number, engineNames: String[]): Promise<void | Map<String, StatesPrint[]>> {
+    getData(interval: number, engineNames: String[]): StatePromiseWrapper {
         let index = this.intervals.indexOf(interval);
         if (index === -1) {
             console.error(`Illegal interval:  ${interval}. Interval expected to be one of thouse: ${this.intervals}`);
@@ -91,7 +91,7 @@ export class StatisticsService {
             resultsPerEngine.set(engineName, engineResult);
         });
 
-        return Promise.resolve(resultsPerEngine);
+        return new StatePromiseWrapper(Promise.resolve(resultsPerEngine), 'statService');
     }
 
     private createLSKeys() {

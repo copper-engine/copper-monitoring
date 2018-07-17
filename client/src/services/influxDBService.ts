@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import moment from 'moment';
-import { StatesPrint } from '../models/engine';
+import { StatesPrint, StatePromiseWrapper } from '../models/engine';
 import { Store } from 'vuex';
 import { StoreState } from '../store.vuex';
 import { User } from '../models/user';
@@ -12,7 +12,7 @@ export class InfluxDBService {
 
 
     // interval is in seconds
-    getData(interval: number, engineNames: string[]): Promise<void | Map<String, StatesPrint[]>> { 
+    getData(interval: number, engineNames: string[]): StatePromiseWrapper { 
 
         let timeUntil = moment().subtract(interval * 30, 'seconds').unix() * 1000000000;
 
@@ -29,8 +29,8 @@ export class InfluxDBService {
 
             return Axios.get(this.requestBase() + query);
         });
-       
-        return Promise.all(allRequests).then( responsesArr => {
+
+        let promise = Promise.all(allRequests).then( responsesArr => {
             let dataMap: Map<String, StatesPrint[]> = new Map<String, StatesPrint[]>();
 
             responsesArr.forEach( (response, index) => {
@@ -46,6 +46,9 @@ export class InfluxDBService {
         .catch(error => {
             console.error('Can\'t connect to InfluxDB. Checkout if it\'s running. Error fetching Engine Status:', error);
         });
+
+        return new StatePromiseWrapper(promise, 'influx');
+       
     }
 
     public testInfluxDB() {

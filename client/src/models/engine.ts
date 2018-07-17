@@ -43,6 +43,10 @@ export class StatesPrint {
     // }
 }
 
+export class StatePromiseWrapper {
+    constructor(public promise: Promise<void | Map<String, StatesPrint[]>>, public type: string) {}
+}
+
 export class EngineStatData {
     constructor(public name: string, public data: any[]) {}
 }

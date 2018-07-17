@@ -51,8 +51,8 @@ export class DashboardComponent extends Vue {
         (this.$services.eventHub as Vue).$on('forceStatusFetch', this.forceFetchingStatus);
     }
 
-    private mounted() {  
-        this.parseRoute();
+    private mounted() {
+        this.$store.commit(Mutations.setConnectionSettings, this.resolveRoute());
         this.sheduleFetchingStatus();
         this.statisticsService.init();
     }
@@ -85,17 +85,19 @@ export class DashboardComponent extends Vue {
     }
 
     // @Watch('$route')
-    private parseRoute() {
+    private resolveRoute() {
+        let defaultSettings = this.$store.state.user.settings;
+        let defaultConnection = new ConnectionSettings(defaultSettings.defaultHost, defaultSettings.defaultPort, defaultSettings.defaultJmxUsername, defaultSettings.defaultJmxPass);
         if (this.$route.fullPath.split('?').length <= 1 ) 
-            return;
+            return [defaultConnection];
 
         let params = this.$route.fullPath.split('?');
         if (!params || !params[1]) 
-            return;
+            return [defaultConnection];
         
         params = decodeURI(params[1]).split('&');
         if (!params)
-            return;
+            return [defaultConnection];
         
         let settings: ConnectionSettings[] = [];
         params.forEach(connection => {
@@ -116,14 +118,13 @@ export class DashboardComponent extends Vue {
                             password = lsConnection.password;
                         }
                     } catch (err) {}
-
                     settings.push(new ConnectionSettings(parsed[0], parsed[1], username, password));
                 }
             }
         });
 
         if (settings.length > 0) {
-            this.$store.commit(Mutations.setConnectionSettings, settings);
+            return settings;
         }
     }
 

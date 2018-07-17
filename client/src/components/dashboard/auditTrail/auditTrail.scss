@@ -148,43 +148,7 @@
                 .date-click-decorator{
                     cursor: pointer;
                 }
-                .input-group {
-                    color: $light-primary !important;
-                    .input-group__input {
-                        input {
-                            color: $dark-text-color !important;
-                            caret-color: $light-primary !important;
-                        }
-                        .input-group__selections {
-                            .input-group__selections__comma {
-                                color: $dark-text-color !important;
-                            }
-                        }
-                    }
-                    .input-group__details {
-                        min-height: 0px !important;
-                        .input-group__hint {
-                            color: $dark-text-color !important;
-                        }
-                    }
-                    .input-group__details::before {
-                        background-color: $light-primary;
-                    }
-                }
-                .input-group:hover {
-                    .input-group__details::before {
-                        background-color: $light-primary !important;
-                    }
-                }
-                .input-group--focused {
-                    color: $light-primary !important;
-                    .input-group__details::before {
-                        background-color: $light-primary;
-                    }
-                    .input-group__details::after {
-                        background-color: $light-primary;
-                    }
-                }
+
                 button {
                     height: 36px;
                     width: 150px;
@@ -544,42 +508,7 @@
                         }
                     }
                 }
-                .input-group {
-                    color: $dark-primary !important;
-                    .input-group__input {
-                        input {
-                            color: $light-text-color !important;
-                            caret-color: $dark-primary !important;
-                        }
-                        .input-group__selections {
-                            .input-group__selections__comma {
-                                color: $light-text-color !important;
-                            }
-                        }
-                    }
-                    .input-group__details {
-                        .input-group__hint {
-                            color: $light-text-color !important;
-                        }
-                    }
-                    .input-group__details::before {
-                        background-color: $dark-primary;
-                    }
-                }
-                .input-group--focused {
-                    color: $light-primary !important;
-                    .input-group__details::before {
-                        background-color: $dark-primary;
-                    }
-                    .input-group__details::after {
-                        background-color: $dark-primary;
-                    }
-                }
-                .input-group:hover {
-                    .input-group__details::before {
-                        background-color: $dark-tertiary !important;
-                    }
-                }
+                
                 button {
                     background-color: $dark-primary !important;
                     color: $light-text-color;

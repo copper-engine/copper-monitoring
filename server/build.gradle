@@ -71,12 +71,17 @@ jar {
 apply plugin: 'application'
 mainClassName = "org.copperengine.monitoring.jmxwebproxy.JmxWebProxyMain"
 
+distributions {
+    main {
+        contents {
+            from('static') {
+                into 'bin/static'
+            }
+        }
+    }
+}
 distZip {
     archiveName 'copper-monitoring.zip'
-    into('copper-monitoring') {
-        from '.'
-        include 'static/**/*'
-    }
 }
 
 apply plugin: 'maven'

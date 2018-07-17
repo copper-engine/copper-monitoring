@@ -29,8 +29,19 @@ public class JmxWebProxyMain {
 
     private static final Logger log = LoggerFactory.getLogger(JmxWebProxyMain.class);
 
+    /**
+     * The name of the system property used to configure the monitoring port
+     */
+    public static final String COPPER_MONITORING_PORT = "copper.monitoring.port";
+
+    /**
+     * The prefix of the system property names used to configure the jolokia servlet
+     */
+    public static final String JOLOKIA_SERVLET_PREFIX = "jolokia.servlet.";
+
     public static void main(String[] args) throws IOException {
-        new JmxWebProxyMain().run(8080);
+        int port = Integer.parseInt(System.getProperty(COPPER_MONITORING_PORT, "8080"));
+        new JmxWebProxyMain().run(port);
     }
 
     public void run(int port) throws IOException {
@@ -78,47 +89,47 @@ public class JmxWebProxyMain {
         // Init parameters:
 
         // Class names (comma separated) of RequestDispatcher used in addition to the LocalRequestDispatcher
-        servlet.setInitParameter("dispatcherClasses", "org.jolokia.jsr160.Jsr160RequestDispatcher");
+        jolokiaInit(servlet, "dispatcherClasses", "org.jolokia.jsr160.Jsr160RequestDispatcher");
         // Debugging state after startup. Can be changed via the Config MBean during runtime
-        servlet.setInitParameter("debug", "false");
+        jolokiaInit(servlet, "debug", "false");
         // Entries to keep in the history. Can be changed during runtime via the config MBean
-        servlet.setInitParameter("historyMaxEntries", "10");
+        jolokiaInit(servlet, "historyMaxEntries", "10");
         // Maximum number of entries to keed in the local debug history if switched on. Can be change via the config MBean during runtime.
-        servlet.setInitParameter("debugMaxEntries", "100");
+        jolokiaInit(servlet, "debugMaxEntries", "100");
         // Maximum depth when traversing bean properties. If set to 0, depth checking is disabled
-        servlet.setInitParameter("maxDepth", "15");
+        jolokiaInit(servlet, "maxDepth", "15");
         // Maximum size of collections returned when serializing to JSON. When set to 0, not collections are truncated.
-        servlet.setInitParameter("maxCollectionSize", "1000");
+        jolokiaInit(servlet, "maxCollectionSize", "1000");
         // Maximum number of objects which is traversed when serializing a single response.
         // Use this as airbag to avoid boosting your memory and network traffic.
         // Nevertheless, when set to 0 not limit is used.
-        servlet.setInitParameter("maxObjects", "0");
+        jolokiaInit(servlet, "maxObjects", "0");
         // Options specific for certain application server detectors. Detectors
         // can evaluate these options and perform a specific initialization based
         // on these options. The value is a JSON object with the detector's name
         // as key and the options as value. E.g. '{glassfish: {bootAmx: false}}'
         // would prevent the booting of the AMX subsystem on a glassfish with
         // is done by default.
-        servlet.setInitParameter("detectorOptions", "{}");
+        jolokiaInit(servlet, "detectorOptions", "{}");
         // This option specifies in which order the key-value properties within
         // ObjectNames as returned by "list" or "search" are returned. By default
         // this is the so called 'canonical order' in which the keys are sorted
         // alphabetically. If this option is set to "false", then the natural
         // order is used, i.e. the object name as it was registered. This option
         // can be overridden with a query parameter of the same name.
-        servlet.setInitParameter("canonicalNaming", "true");
+        jolokiaInit(servlet, "canonicalNaming", "true");
         // Whether to include a stacktrace of an exception in case
         // of an error. By default it it set to "true" in which case
         // the stacktrace is always included. If set to "false", no
         // stacktrace is included. If the value is "runtime" a stacktrace
         // is only included for RuntimeExceptions. This global option
         // can be overridden with a query parameter.
-        servlet.setInitParameter("includeStackTrace", "true");
+        jolokiaInit(servlet, "includeStackTrace", "true");
         // When this parameter is set to "true", then an exception thrown
         // will be serialized as JSON and included in the response
         // under the key "error_value". By default it is "false". This global
         // option can be overridden by a query parameter of the same name.
-        servlet.setInitParameter("serializeException", "false");
+        jolokiaInit(servlet, "serializeException", "false");
         // If discoveryEnabled is set to true, then this servlet will listen
         // for multicast discovery request and responds with its agent URL and
         // other server specific information. Instead of setting this confog variable,
@@ -131,7 +142,7 @@ public class JmxWebProxyMain {
         // is especially useful if the WAR is used in a proxy setup. Instead of setting the URL
         // here, it can be set also either via the system property "jolokia.discoveryAgentUrl" or the
         // environment variable "JOLOKIA_DISCOVERY_AGENT_URL".
-        servlet.setInitParameter("discoveryEnabled", "false");
+        jolokiaInit(servlet, "discoveryEnabled", "false");
 
         servlet.setLoadOnStartup(1);
 
@@ -183,5 +194,11 @@ public class JmxWebProxyMain {
                 log.info("--- Server stopped.");
             }
         };
+    }
+
+    private static String jolokiaInit(ServletRegistration servlet, String parameter, String defaultValue) {
+        String value = System.getProperty(JOLOKIA_SERVLET_PREFIX + parameter, defaultValue);
+        servlet.setInitParameter(parameter, value);
+        return value;
     }
 }

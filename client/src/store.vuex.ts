@@ -63,9 +63,6 @@ export const store = new Vuex.Store<StoreState>({
       },
       [Mutations.setUser](state, user: User) {
         state.user = user;
-        if (user) {
-          state.connectionSettings.push(new ConnectionSettings(user.settings.defaultHost, user.settings.defaultPort));
-        }
       },
       [Mutations.setUseInfluxDB](state, input: boolean) {
         state.user.influx.useInfluxDB = input;      

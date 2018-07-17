@@ -36,35 +36,11 @@
     }
 
     .config-input {
-        .input-group {
-            label {
-                color: $dark-text-color !important;
-            }
-            .input-group__input {
-                input {
-                    color: $dark-text-color !important;
-                    caret-color: $light-primary !important;
-                }
-            }
-            .input-group__details::before {
-                background-color: $light-primary !important;
-            }
-        }
-        .input-group--focused {
-            color: $light-primary !important;
-            .input-group__details::before {
-                background-color: $light-primary;
-            }
-            .input-group__details::after {
-                background-color: $light-primary;
-            }
-        }
-        .input-group:hover {
-            .input-group__details::before {
-                background-color: $light-secondary !important;
-            }
+        .input-group__details {
+            min-height: 20px !important;
         }
     }
+
 }
 
 .dark {
@@ -88,35 +64,5 @@
             }
         }
     
-        .config-input {
-            .input-group {
-                label {
-                    color: $light-text-color !important;
-                }
-                .input-group__input {
-                    input {
-                        color: $light-text-color !important;
-                        caret-color: $dark-primary !important;
-                    }
-                }
-                .input-group__details::before {
-                    background-color: $dark-primary !important;
-                }
-            }
-            .input-group--focused {
-                color: $dark-primary !important;
-                .input-group__details::before {
-                    background-color: $dark-primary;
-                }
-                .input-group__details::after {
-                    background-color: $dark-primary;
-                }
-            }
-            .input-group:hover {
-                .input-group__details::before {
-                    background-color: $dark-secondary !important;
-                }
-            }
-        }
     }
 }

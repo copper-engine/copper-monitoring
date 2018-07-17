@@ -47,7 +47,7 @@
     </v-layout>
 
     <transition name="extend-filter">
-    <v-layout v-show="openFilterMenu" class="filter-menu" column>
+    <v-layout v-show="openFilterMenu" class="filter-menu input-style" column>
         <v-flex class="filter-label">
         <h3>Filter By:</h3>        
         </v-flex>
@@ -86,7 +86,6 @@
                     <div class="date-click-decorator date-time-picker" @click="clickedToDate('createTime', 'createTo')"></div>
                     </v-flex>
                 </v-layout>
-                <v-btn depressed @click="clearFilter" class="longButton"><v-icon left>mdi-cancel</v-icon>Clear</v-btn>         
             </v-layout>
             <v-layout row class="filter-header">
                 <v-flex class="select-container stopGrow" :class="{ 'hide-state-select' :(wfType === 'waiting')}">
@@ -124,8 +123,10 @@
                         <div class="date-click-decorator date-time-picker" @click="clickedToDate('modTime', 'modTo')"></div>
                     </v-flex>
                 </v-layout>
+                <v-spacer></v-spacer>
                 <v-btn depressed @click="applyFilter" class="longButton"><v-icon left>mdi-check</v-icon>Apply</v-btn>
-            </v-layout>
+                <v-btn depressed @click="clearFilter" class="longButton"><v-icon left>mdi-cancel</v-icon>Clear</v-btn> 
+            </v-layout>                   
         </v-layout>      
     </v-layout>
     </transition>

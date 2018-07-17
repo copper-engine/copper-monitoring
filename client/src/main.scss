@@ -556,26 +556,27 @@ body {
                     }
                 }
                 .input-group__details {
+                    min-height: 0px;
                     .input-group__hint {
                         color: $dark-text-color !important;
                     }
                 }
                 .input-group__details::before {
-                    background-color: $light-primary;
+                    background-color: $light-primary !important;
                 }
             }
             .input-group--focused {
                 color: $light-primary !important;
                 .input-group__details::before {
-                    background-color: $light-primary;
+                    background-color: $light-primary !important;
                 }
                 .input-group__details::after {
-                    background-color: $light-primary;
+                    background-color: $light-primary !important;
                 }
             }
             .input-group:hover {
                 .input-group__details::before {
-                    background-color: $dark-text-color !important;
+                    background-color: $light-primary !important;
                 }
             }
         }
@@ -597,26 +598,27 @@ body {
                         }
                     }
                     .input-group__details {
+                        min-height: 0px;
                         .input-group__hint {
                             color: $light-text-color !important;
                         }
                     }
                     .input-group__details::before {
-                        background-color: $dark-primary;
+                        background-color: $dark-primary !important;
                     }
                 }
                 .input-group--focused {
                     color: $dark-primary !important;
                     .input-group__details::before {
-                        background-color: $dark-primary;
+                        background-color: $dark-primary !important;
                     }
                     .input-group__details::after {
-                        background-color: $dark-primary;
+                        background-color: $dark-primary !important;
                     }
                 }
                 .input-group:hover {
                     .input-group__details::before {
-                    background-color: $dark-border !important;
+                        background-color: $dark-primary !important;
                     }
                 }
             }

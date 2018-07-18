@@ -114,14 +114,10 @@
                 cursor: pointer;
             }
 
-            // button {
-            //     // height: 36px;
-            //     // width: 150px;
-            //     // min-width: 150px;
-            //     // margin-bottom: -15px;
-            //     background-color: $light-primary !important;
-            //     color: $light-text-color;
-            // }
+            button {
+                background-color: $light-primary !important;
+                color: $light-text-color;
+            }
         }
         
     }

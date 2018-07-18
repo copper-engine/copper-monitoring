@@ -1,17 +1,14 @@
-import { Component, Vue, Watch, Prop } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import { ConnectionSettings, ConnectionResult } from '../../models/connectionSettings';
 import { JmxService } from '../../services/jmxService';
-import * as utils from '../../util/utils';
 import './dashboard.scss';
 import { EngineStatus } from '../../models/engine';
 import { User } from '../../models/user';
 import { MBean } from '../../models/mbeans';
-import * as _ from 'lodash';
 import { Mutations } from '../../store.vuex';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
-import { Notification } from '../../models/notification';
 import { StatisticsService } from '../../services/statisticsService';
-import { BeanConflict, BeanContext } from '../../models/mbeans';
+import { cookiePolicyomponent } from '../../router';
 
 const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) => SidebarComponent);
 
@@ -20,7 +17,8 @@ const sidebarComponent = () => import('./sidebar').then(({ SidebarComponent }) =
     services: ['jmxService', 'eventHub', 'statisticsService'],
     components: {
         'sidebar': sidebarComponent,
-        'scroll': VuePerfectScrollbar
+        'scroll': VuePerfectScrollbar,
+        'cookie-policy': cookiePolicyomponent     
     }
 })
 export class DashboardComponent extends Vue {

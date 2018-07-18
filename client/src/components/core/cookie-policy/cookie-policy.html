@@ -1,0 +1,34 @@
+<div class="cookie-policy" v-show="showCookiesPolicy">
+    <v-layout>
+        <v-flex>
+            <div class="title">Cookies</div>
+            <div class="short-info">
+                To make this site work properly, we sometimes place small data files called cookies on your device. Most big websites do this too.
+                <span class="policy-btn" @click="showMore = true" v-show="!showMore">show more</span>
+            </div>
+            <div class="full-info" v-show="showMore">
+                    <h3>What are cookies?</h3>
+                    <p>
+                        A cookie is a small text file that a website saves on your computer or mobile device when you visit the site. It enables the website to remember your actions and preferences (such as login, language, font size and other display preferences) over a period of time, so you don’t have to keep re-entering them whenever you come back to the site or browse from one page to another. 
+                    </p>   
+                    <h3>How do we use cookies?</h3>
+                    <p>
+                        We use cookies for storing user preferences and connection settings, also we store data from connected engines to provide user statistics over a time(it can be disabled in statistics page). We don’t read or store any third party cookies.
+                    </p>
+                    <p>
+                        We don’t use stored data for any other purposes and not providing this data to any third-party organization. 
+                    </p>
+                   
+                    <h3>How to control cookies</h3>
+                    <p>
+                        You can control and/or delete cookies as you wish in your browser settings. You can delete all cookies that are already on your computer and you can set most browsers to prevent them from being placed. If you do this, however, you may have to manually adjust some preferences every time you visit a site and some services and functionalities may not work.
+                    </p>
+                <span class="policy-btn" @click="showMore = false" >show less</span>
+            </div>
+        </v-flex>
+        <v-spacer></v-spacer>
+        <v-flex class="btn-cont">
+            <v-btn @click="acceptCookies()">Accept cookies</v-btn>
+        </v-flex>
+    </v-layout>
+</div>

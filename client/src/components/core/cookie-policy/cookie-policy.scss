@@ -1,0 +1,40 @@
+@import '../../../variables';
+
+.cookie-policy {
+    max-width: 1600px;
+    margin: auto;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #333;
+    z-index: 10;
+    padding: 15px 30px;
+    color: #fff;
+    opacity: 0.8;
+    border: 1px solid #43474e;
+    
+    .title {
+        padding: 5px 0;
+    }
+
+    .policy-btn {
+        text-decoration: underline;
+        cursor: pointer;
+        font-weight: 700;
+    }
+
+    .btn-cont {
+        width: 150px;
+        max-width: 150px;
+
+        button {
+            background-color: $dark-primary !important;
+            color: $light-text-color !important;
+        }
+    }
+    
+    .full-info {
+        padding-top: 15px;    
+    }
+}

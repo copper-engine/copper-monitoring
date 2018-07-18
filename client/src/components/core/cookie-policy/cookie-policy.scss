@@ -7,12 +7,13 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: #333;
     z-index: 10;
     padding: 15px 30px;
-    color: #fff;
+    color: $light-text-color;
     opacity: 0.8;
-    border: 1px solid #43474e;
+    background: #555555;    
+    border: 1px solid;
+    border-color: $light-border;
     
     .title {
         padding: 5px 0;
@@ -29,12 +30,25 @@
         max-width: 150px;
 
         button {
-            background-color: $dark-primary !important;
+            background-color: $light-primary !important;
             color: $light-text-color !important;
         }
     }
     
     .full-info {
         padding-top: 15px;    
+    }
+}
+
+.dark {
+    .cookie-policy {
+        background: #333;        
+        border: 1px solid #43474e;
+        .btn-cont {
+            button {
+                background-color: $dark-primary !important;
+                color: $light-text-color !important;
+            }
+        }
     }
 }

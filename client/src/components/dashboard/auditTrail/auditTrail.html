@@ -76,13 +76,17 @@
                     </v-layout>
                     <v-layout row class="filter-header">
                         <v-flex class="id-container stopGrow">
-                            <v-text-field class="text-input"
+                            <v-text-field 
+                            clearable
+                            class="text-input"
                             label="Workflow ID:"
                             v-model="userFilter.instanceId">
                             </v-text-field>
                         </v-flex>
                         <v-flex class="id-container stopGrow">
-                            <v-text-field class="text-input"
+                            <v-text-field 
+                            clearable
+                            class="text-input"
                             label="Conversation ID:"
                             v-model="userFilter.conversationId">
                             </v-text-field>
@@ -90,13 +94,17 @@
                     </v-layout>
                     <v-layout row class="filter-header">    
                         <v-flex class="id-container stopGrow">
-                            <v-text-field class="text-input"
+                            <v-text-field 
+                            clearable
+                            class="text-input"
                             label="Correlation ID:"
                             v-model="userFilter.correlationId">
                             </v-text-field>
                         </v-flex>    
                         <v-flex class="id-container stopGrow">
-                            <v-text-field class="text-input"
+                            <v-text-field 
+                            clearable
+                            class="text-input"
                             label="Transaction ID:"
                             v-model="userFilter.transactionId">
                             </v-text-field>

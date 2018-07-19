@@ -51,7 +51,6 @@ export class DashboardComponent extends Vue {
 
     private mounted() {
         this.$store.commit(Mutations.setConnectionSettings, this.resolveRoute());
-        // this.sheduleFetchingStatus();
         this.statisticsService.init();
     }
     

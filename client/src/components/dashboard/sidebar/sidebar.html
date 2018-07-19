@@ -6,7 +6,7 @@
     mobile-break-point="1800" app>
     
     <scroll class="scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 600}">
-        <div class="link-container" v-show="!$store.state.appCriticalError">
+        <div class="link-container">
             <router-link :to="getOverviewPath" active-class="activeLink" class="link">
                 <!-- <v-btn class="overview-link"> <v-icon>mdi-chart-bar</v-icon> Overview </v-btn>      -->
                 <div class="link-background">
@@ -29,7 +29,7 @@
                 </div>    
             </router-link>
         </div>
-        <div class="link-container" v-show="!$store.state.appCriticalError">
+        <div class="link-container">
             <router-link :to="getAuditTrailPath" active-class="activeLink" class="link">
                 <div class="link-background">
                     <v-layout row class="link-interior">
@@ -43,7 +43,7 @@
                 </div>    
             </router-link>
         </div>
-        <div class="connection" v-show="!$store.state.appCriticalError">
+        <div class="connection">
             <v-layout row>
                 <v-flex class="connection-title">
                     Connections
@@ -74,7 +74,7 @@
                 @deleteSettings="deleteSettings(index)">
             </connection-status>
         </div>
-        <div class="engine-card" v-show="!$store.state.appCriticalError">
+        <div class="engine-card">
             <v-layout row>
                 <div class="engines-title">
                     Engines

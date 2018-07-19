@@ -10,6 +10,7 @@
         <v-form v-model="valid" ref="form" light lazy-validation>
 
             <v-text-field
+                class="alt-color-field"
                 label="Username"
                 v-model="username"
                 :rules="usernameRules"
@@ -17,6 +18,7 @@
                 required
             ></v-text-field>
             <v-text-field
+                class="alt-color-field"
                 type="password"
                 label="Password"
                 v-model="password"

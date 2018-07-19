@@ -25,13 +25,10 @@
             color: $dark-text-color !important;
         }
         button {
+            margin-left: 135px;
             background-color: $light-primary !important;
             color: $light-text-color !important;
         }
-        .input-group__details {
-            min-height: 20px !important;
-        }
-
     }
 }
 

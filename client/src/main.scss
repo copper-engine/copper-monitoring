@@ -60,12 +60,12 @@ body .dark .list__tile:hover {
 
 body {
     #appCover {
-        .dialog__content {
-            .dialog {
+        .v-dialog__content {
+            .v-dialog {
                 border-radius: 0px !important;
-                .card {
+                .v-card {
                     max-height: 845px;
-                    .divider {
+                    .v-divider {
                         background-color: $light-border;
                     }
                     .dialog-title {
@@ -77,7 +77,7 @@ body {
                         }
                     }
                 }
-                .card__text  {
+                .v-card__text  {
                     padding: 0px;
                     width: 100%;
                     color: $dark-text-color;
@@ -186,7 +186,7 @@ body {
                                 .submit-btn-container {
                                     position: absolute;
                                     right: 60px;
-                                    top: 175px;
+                                    top: 195px;
                                     z-index: 2;
                                     button {
                                         border: 1px solid;
@@ -211,7 +211,7 @@ body {
                                         padding-top: 0px;
                                         padding-left: 10px;
                                         padding-right: 10px;
-                                        padding-bottom: 10px;
+                                        padding-bottom: 45px;
                                         background-color: $light-background;
                                         color: $dark-text-color;
                                         position: relative;
@@ -261,7 +261,7 @@ body {
                         font-weight: 400;
                     }
                 }
-                .card__actions {
+                .v-card__actions {
                     background-color: $light-tertiary;
                     button {
                         background-color: $light-background;
@@ -279,10 +279,10 @@ body {
 body {
     #appCover {
         .dark {
-            .dialog__content {
-                .dialog {
-                    .card {
-                        .divider {
+            .v-dialog__content {
+                .v-dialog {
+                    .v-card {
+                        .v-divider {
                             background-color: $dark-border;
                         }
                         .dialog-title {
@@ -294,7 +294,7 @@ body {
                             }
                         }
                     }
-                    .card__text  {
+                    .v-card__text  {
                         color: $light-text-color;
                         .workflow-details {
                             background-color: $dark-tertiary;
@@ -369,7 +369,7 @@ body {
                             color: $light-text-color;
                         }
                     }
-                    .card__actions {
+                    .v-card__actions {
                         background-color: $dark-background;
                         button {
                             background-color: $dark-tertiary;
@@ -393,29 +393,17 @@ body .notifications {
     }
 }
 
-body .footer {
-    border-color: $light-border !important;
-    background-color: $light-sidebar !important;
-    color: $dark-text-color;
-}
-body .dark .footer {
-    border-color: $dark-border !important;
-    background-color: $dark-secondary !important;
-    color: $light-text-color;
-}
-
-
 body {
     #appCover {
-        .menu__content {
+        .v-menu__content {
             background-color: $light-tertiary;
-            .menu-header {
+            .v-menu-header {
                 padding: 15px;
                 background-color: $light-tertiary;
                 color: $dark-error;
                 font-size: 0.8em;
             }
-            .menu-info {
+            .v-menu-info {
                 padding-left: 15px;
                 padding-top: 15px;
                 padding-right: 15px;
@@ -423,7 +411,7 @@ body {
                 color: $dark-text-color;
                 font-size: 0.6em;
             }
-            .menu-details {
+            .v-menu-details {
                 padding-left: 15px;
                 padding-top: 10px;
                 padding-bottom: 15px;
@@ -441,11 +429,17 @@ body {
                     font-weight: 700;
                 }
             }
-            .list {
+            .v-list {
                 color: $dark-text-color;
-                .icon {
-                    color: $dark-text-color;
+                background-color: $light-background;
+                .v-icon {
+                    color: $light-primary !important;
                     padding-right: 10px;
+                }
+                .v-list__tile__title {
+                    .v-list__tile__title {
+                        color: $dark-text-color;
+                    }
                 }
             }
             .state-filter {
@@ -461,24 +455,30 @@ body {
 body {
     #appCover {
         .dark {
-            .menu__content {
+            .v-menu__content {
                 background-color: $dark-tertiary;
-                .menu-header {
+                .v-menu-header {
                     background-color: $dark-tertiary;
                     color: $dark-error;
                 }
-                .menu-info {
+                .v-menu-info {
                     background-color: $dark-background;
                     color: $light-text-color;
                 }
-                .menu-details {
+                .v-menu-details {
                     background-color: $dark-background;
                     color: $light-text-color;
                 }
-                .list {
+                .v-list {
                     color: $light-text-color;
-                    .icon {
-                        color: $light-text-color;
+                    background-color: $dark-tertiary;
+                    .v-icon {
+                        color: $dark-primary !important;
+                    }
+                    .v-list__tile__title {
+                        .v-list__tile__title {
+                            color: $light-text-color;
+                        }
                     }
                 }
                 .state-filter {
@@ -491,8 +491,8 @@ body {
 
 body {
     #appCover {
-        .btn--disabled {
-            .icon {
+        .v-btn--disabled {
+            .v-icon {
                 color: #9b9b9b !important;
             }
         }
@@ -501,8 +501,8 @@ body {
 body {
     #appCover {
         .dark {
-            .btn--disabled {
-                .icon {
+            .v-btn--disabled {
+                .v-icon {
                     color: #575757 !important;
                 }
             }
@@ -544,39 +544,64 @@ body {
 body {
     #appCover {
         .input-style {
-            .input-group {
+            .v-input,
+            .v-text-field,
+            .v-input--is-label-active,
+            .v-input--is-focused{
                 color: $light-primary !important;
-                label {
-                    color: $dark-border;
-                }
-                .input-group__input {
-                    input {
+                .v-input__control {
+                    .v-input__slot {
+                        .v-text-field__slot {
+                            label {
+                                color: $dark-text-color !important;
+                            }
+                            input {
+                                color: $dark-text-color !important;
+                                caret-color: $light-primary !important;                                
+                            }
+                        }
+                        .v-input--selection-controls__input {
+                            color: $light-primary !important;                                
+                            .accent--text {
+                                color: $light-primary !important;
+                            }
+                        }
+                        label {
+                            color: $dark-text-color;
+                        }
+                    }
+                    .v-input__slot:before {
+                        border-color: $light-primary !important;
+                    }
+                    .v-input__append-inner {
+                        .v-input__icon {
+                            .v-icon {
+                                color: $light-primary !important;
+                            }
+                        }
+                    }
+                    .v-select__selections {
+                        overflow: hidden;
                         color: $dark-text-color !important;
-                        caret-color: $light-primary !important;
+                    }
+                    .v-text-field__details {
+                        .v-messages {
+                            color: $dark-text-color;
+                        }
                     }
                 }
-                .input-group__details {
-                    min-height: 0px;
-                    .input-group__hint {
-                        color: $dark-text-color !important;
-                    }
-                }
-                .input-group__details::before {
-                    background-color: $light-primary !important;
-                }
             }
-            .input-group--focused {
+            .alt-color-field {
                 color: $light-primary !important;
-                .input-group__details::before {
-                    background-color: $light-primary !important;
-                }
-                .input-group__details::after {
-                    background-color: $light-primary !important;
-                }
-            }
-            .input-group:hover {
-                .input-group__details::before {
-                    background-color: $light-primary !important;
+                .v-input__control {
+                    .v-input__slot {
+                        .v-text-field__slot {
+                            label {
+                                color: $dark-text-color !important;
+                            }
+
+                        }
+                    }
                 }
             }
         }
@@ -586,45 +611,263 @@ body {
     #appCover {
         .dark {
             .input-style {
-                .input-group {
+                .v-input,
+                .v-text-field,
+                .v-input__switch,
+                .v-input--is-label-active,
+                .v-input--is-focused{
                     color: $dark-primary !important;
-                    label {
-                        color: $light-text-color;
-                    }
-                    .input-group__input {
-                        input {
+                    .v-input__control {
+                        .v-input__slot {
+                            .v-text-field__slot {
+                                label {
+                                    color: $light-text-color !important;
+                                }
+                                input {
+                                    color: $light-text-color !important;
+                                    caret-color: $dark-primary !important;                                
+                                }
+                            }
+                            .v-input--selection-controls__input {
+                                color: $dark-primary !important;                                
+                                .accent--text {
+                                    color: $dark-primary !important;
+                                }
+                            }
+                            label {
+                                color: $light-text-color;
+                            }
+                        }
+                        .v-input__slot:before {
+                            border-color: $dark-primary !important;
+                        }
+                        .v-select__selections {
                             color: $light-text-color !important;
-                            caret-color: $dark-primary !important;
+                        }
+                        .v-input__append-inner {
+                            .v-input__icon {
+                                .v-icon {
+                                    color: $dark-primary !important;
+                                }
+                            }
+                        }
+                        .v-text-field__details {
+                            .v-messages {
+                                color: $light-text-color;
+                            }
                         }
                     }
-                    .input-group__details {
-                        min-height: 0px;
-                        .input-group__hint {
-                            color: $light-text-color !important;
-                        }
-                    }
-                    .input-group__details::before {
-                        background-color: $dark-primary !important;
-                    }
                 }
-                .input-group--focused {
+                .alt-color-field {
                     color: $dark-primary !important;
-                    .input-group__details::before {
-                        background-color: $dark-primary !important;
-                    }
-                    .input-group__details::after {
-                        background-color: $dark-primary !important;
-                    }
-                }
-                .input-group:hover {
-                    .input-group__details::before {
-                        background-color: $dark-primary !important;
+                    .v-input__control {
+                        .v-input__slot {
+                            .v-text-field__slot {
+                                label {
+                                    color: $dark-text-color !important;
+                                }
+
+                            }
+                        }
                     }
                 }
             }
         }
     }
 }
+body {
+    #appCover {
+        .v-menu__content {
+            .v-select-list {
+                color: $dark-text-color !important;
+                .v-list {
+                    color: $dark-text-color !important;
+                    .v-list__tile--active {
+                        color: $light-primary !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+body {
+    #appCover {
+        .dark {
+            .v-menu__content {
+                .v-select-list {
+                    color: $light-text-color !important;
+                    .v-list {
+                        color: $light-text-color !important;
+                        background-color: $dark-tertiary !important;
+                        .v-list__tile--active {
+                            color: $dark-primary !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+body {
+    #appCover {
+        .pagination-cont {
+            align-items: center;
+            .v-pagination__item {
+                background-color: $light-wf !important;
+                color: $dark-text-color;
+            }
+            .v-pagination__item--active {
+                background-color: $light-primary !important;
+                color: $light-text-color;
+            }
+            .v-pagination__item:hover {
+                background-color: $light-link-active !important;
+                color: $light-text-color !important;
+            }
+            .v-pagination__navigation {
+                background-color: $light-wf !important;
+                color: $dark-text-color;
+                .v-icon {
+                    background-color: $light-wf !important;
+                    color: $dark-text-color !important;
+                }
+            }
+            .v-pagination__navigation:hover {
+                .v-icon {
+                    background-color: $light-link-active !important;
+                    color: $dark-text-color;
+                }
+            }
+            .pagin-config {
+                align-items: center;
+                .per-page-label {
+                    font-size: 1.1em;
+                    font-weight: 700;
+                    padding-left: 16px;
+                    padding-bottom: 8px;
+                    color: $dark-text-color;
+                }
+                .per-page,
+                .v-input,
+                .v-input--is-label-active,
+                .v-input--is-focused {
+                    width: 60px;
+                    color: $light-primary !important;
+                    .v-icon {
+                        color: $dark-text-color !important;
+                    }
+                    .v-input__control {
+                        .v-input__slot {
+                            .v-select__selections {
+                                color: $dark-text-color;
+                            }
+                            .v-input__append-inner {
+                                .v-input__icon {
+                                    .v-icon {
+                                        color: $light-primary !important;
+                                    }
+                                }
+                            }
+                        }
+                        .v-input__slot:before {
+                            border-color: $dark-text-color;
+                        }
+                    }
+                }
+            }
+            .v-pagination li span {
+                float: none;
+                color: $dark-text-color;
+            }
+            button {
+                background-color: $light-background;
+            }
+        }
+    }
+}
+
+body {
+    #appCover {
+        .dark {
+            .pagination-cont {
+                .v-pagination__item {
+                    background-color: $dark-wf!important;
+                    color: $light-text-color;
+                }
+                .v-pagination__item--active {
+                    background-color: $dark-primary !important;
+                    color: $light-text-color;
+                }
+                .v-pagination__item:hover{
+                    background-color: $dark-tertiary !important;
+                    color: $light-text-color;
+                }
+                .v-pagination__navigation {
+                    background-color: $dark-wf !important;
+                    color: $light-text-color;
+                    .v-icon {
+                        background-color: $dark-wf !important;
+                        color: $light-text-color !important;
+                    }
+                }
+                .v-pagination__navigation:hover {
+                    .v-icon {
+                        background-color: $dark-tertiary !important;
+                        color: $light-text-color !important;
+                    }
+                }
+                .pagin-config {
+                    .per-page-label {
+                        color: $light-text-color !important;
+                    }
+                    .per-page,
+                    .v-input,
+                    .v-input--is-label-active,
+                    .v-input--is-focused {
+                        color: $dark-primary !important;
+                        .input-group__selections__comma {
+                            color: $light-text-color !important;
+                        }
+                        .icon {
+                            color: $light-text-color !important;
+                        }
+                        .input-group__details::before {
+                            background-color: $light-text-color !important;
+                        }
+                        .v-input__control {
+                            .v-input__slot {
+                                .v-select__selections {
+                                    color: $light-text-color;
+                                }
+                                .v-input__append-inner {
+                                    .v-input__icon {
+                                        .v-icon {
+                                            color: $dark-primary !important;
+                                        }
+                                    }
+                                }
+                            }
+                            .v-input__slot:before {
+                                border-color: $light-text-color;
+                            }
+                        }
+                    }
+                }
+                .v-pagination li span {
+                    float: none;
+                    color: $light-text-color;
+                }
+                button {
+                    background-color: $dark-background;
+                    color: $light-text-color;
+                }
+            }
+        }
+    }
+}
+
 .extend-connection-header-enter-active {
     animation: extend-connection-header 1s;
 }

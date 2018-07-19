@@ -34,6 +34,9 @@
                 label="password"
                 @keyup.enter="submit"
                 v-model="password"
+                :type="showPass ? 'text' : 'password'"
+                @click:append="showPass = !showPass"
+                :append-icon="showPass ? 'visibility_off' : 'visibility'"
                 required
             ></v-text-field>
             <v-layout row class="button-container">

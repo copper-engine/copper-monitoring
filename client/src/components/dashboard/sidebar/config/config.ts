@@ -18,6 +18,7 @@ export class ConfigComponent extends Vue {
     password: string = '';
     valid = true;
     dialogDeleteOpen: boolean = false;
+    showPass: boolean = false;
 
     // Form Validation Rules
     hostRules = [ (v) => !!v || 'Host is required' ];

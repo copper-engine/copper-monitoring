@@ -107,7 +107,7 @@
                     padding-right: 10px;
                     .select {
                         max-width: 130px;
-                        .icon {
+                        .v-icon {
                             color: $light-primary !important;
                         }
                     }
@@ -117,13 +117,14 @@
                     height: 65px;
                     padding-left: 5px;
                     padding-right: 5px;
+                    margin-top: -16px;
                     .time-field {
                         position: relative;
                         width: 190px;
                         max-width: 190px;
                         min-width: 190px;
                         padding: 5px;
-                        .icon {
+                        .v-icon {
                             color: $light-primary !important;
                         }
                     }
@@ -182,7 +183,7 @@
                             color: $light-text-color;
                             margin-left: -7px !important;
                         }
-                        .chip__content {
+                        .v-chip__content {
                             padding: 5px;
                         }
                     }
@@ -336,66 +337,6 @@
         }
     }
 
-    .pagination-cont {
-        align-items: center;
-        .pagination__item {
-            background-color: $light-wf !important;
-            color: $dark-text-color;
-        }
-        .pagination__item--active {
-            background-color: $light-primary !important;
-            color: $light-text-color;
-        }
-        .pagination__item:hover {
-            background-color: $light-link-active !important;
-            color: $light-text-color;
-        }
-        .pagination__navigation {
-            background-color: $light-wf !important;
-            color: $dark-text-color;
-            .icon {
-                background-color: $light-wf !important;
-                color: $dark-text-color;
-            }
-        }
-        .pagination__navigation:hover {
-            .icon {
-                background-color: $light-link-active !important;
-                color: $dark-text-color;
-            }
-        }
-        .pagin-config {
-            align-items: center;
-            .per-page-label {
-                font-size: 1.1em;
-                font-weight: 700;
-                padding-left: 16px;
-                padding-bottom: 8px;
-                color: $dark-text-color;
-            }
-            .per-page {
-                width: 60px;
-                color: $light-primary !important;
-                .input-group__selections__comma {
-                    color: $dark-text-color !important;
-                }
-                .icon {
-                    color: $dark-text-color !important;
-                }
-                .input-group__details::before {
-                    background-color: $dark-text-color !important;
-                }
-            }
-        }
-        .pagination li span {
-            float: none;
-            color: $dark-text-color;
-        }
-        button {
-            background-color: $light-background;
-        }
-    }
-
     .footer-card {
         background-color: $light-tertiary;
         border-bottom-left-radius: 2px;
@@ -430,16 +371,16 @@
             padding-bottom: 24px;}
     }
     .extend-audit-filter-enter-active {
-        animation: extend-audit-filter 0.5s;
+        animation: extend-audit-filter 0.65s;
     }
     .extend-audit-filter-leave-active {
-        animation: extend-audit-filter 0.5s reverse;
+        animation: extend-audit-filter 0.65s reverse;
     }
     @keyframes extend-audit-filter {
-        0% {height: 0px;
+        0% {max-height: 0px;
             padding-top: 0px;
             padding-bottom: 0px;}
-        100% {height: 259px;
+        100% {max-height: 278px;
             padding-top: 20px;
             padding-bottom: 20px;}
     }
@@ -495,7 +436,7 @@
                 .filter-layout {
                     .time-field-container {
                         .time-field {
-                            .icon {
+                            .v-icon {
                                 color: $dark-primary !important;
                             }
                         }
@@ -503,7 +444,7 @@
                 }
                 .select-container {
                     .select {
-                        .icon {
+                        .v-icon {
                             color: $dark-primary !important;
                         }
                     }
@@ -528,6 +469,9 @@
                             .inner-chip { 
                                 background-color: $dark-primary;
                                 color: $light-text-color;
+                            }
+                            .v-chip__content {
+                                padding: 5px;
                             }
                         }
                     }
@@ -576,59 +520,6 @@
         }
         .footer-card {
             background-color: $dark-secondary;
-        }
-        .pagination-cont {
-            .pagination__item {
-                background-color: $dark-wf!important;
-                color: $light-text-color;
-            }
-            .pagination__item--active {
-                background-color: $dark-primary !important;
-                color: $light-text-color;
-            }
-            .pagination__item:hover{
-                background-color: $dark-tertiary !important;
-                color: $light-text-color;
-            }
-            .pagination__navigation {
-                background-color: $dark-wf !important;
-                color: $light-text-color;
-                .icon {
-                    background-color: $dark-wf !important;
-                    color: $light-text-color;
-                }
-            }
-            .pagination__navigation:hover {
-                .icon {
-                    background-color: $dark-tertiary !important;
-                    color: $light-text-color;
-                }
-            }
-            .pagin-config {
-                .per-page-label {
-                    color: $light-text-color !important;
-                }
-                .per-page {
-                    color: $dark-primary !important;
-                    .input-group__selections__comma {
-                        color: $light-text-color !important;
-                    }
-                    .icon {
-                        color: $light-text-color !important;
-                    }
-                    .input-group__details::before {
-                        background-color: $light-text-color !important;
-                    }
-                }
-            }
-            .pagination li span {
-                float: none;
-                color: $light-text-color;
-            }
-            button {
-                background-color: $dark-background;
-                color: $light-text-color;
-            }
         }
     }
 }

@@ -51,7 +51,7 @@ export class DashboardComponent extends Vue {
 
     private mounted() {
         this.$store.commit(Mutations.setConnectionSettings, this.resolveRoute());
-        this.sheduleFetchingStatus();
+        // this.sheduleFetchingStatus();
         this.statisticsService.init();
     }
     
@@ -155,16 +155,17 @@ export class DashboardComponent extends Vue {
                 .getConnectionResults(this.$store.state.connectionSettings, this.$store.state.user)
                 .then((results: ConnectionResult[]) => {
             let notConnected: ConnectionResult;
+
+            if (this.interval) {
+                clearInterval(this.interval);
+            }
+
             if (results) {
                 if (this.$store.state.appCriticalError) {
                     this.$store.commit(Mutations.setAppCriticalError, null);
                 }
                 this.$store.commit(Mutations.updateConnectionResults, results);
-                
-                if (this.interval) {
-                    clearInterval(this.interval);
-                }
-                
+                                
                 if (this.$store.getters.engineMBeans && this.$store.getters.engineMBeans.length > 0) {
                     this.getEngineStatus(this.$store.getters.engineMBeans, this.$store.state.user);
                     this.interval = setInterval(() => {
@@ -177,6 +178,10 @@ export class DashboardComponent extends Vue {
                 notConnected = results.find((conResult: ConnectionResult) => {
                     return !conResult.mbeans || conResult.mbeans.length === 0;
                 });
+                let allNotConnected: boolean = results.every((conResult: ConnectionResult) => !conResult.mbeans || conResult.mbeans.length === 0);
+                if ( allNotConnected ) {
+                    this.$router.replace('/dashboard'); 
+                }
             }
                 
             if (!results || notConnected) {
@@ -184,17 +189,17 @@ export class DashboardComponent extends Vue {
                     console.error('Received no connection results in response. Perhaps issue with connection to server with Jolokia.\n Will schuedule refetching MBeans in three seccond');
                     this.$store.commit(Mutations.setAppCriticalError, 'Received no connection results in response. Perhaps issue with connection to server with Jolokia.');
                     let emptyConResults: ConnectionResult[] = this.$store.state.connectionResults.map(result => { 
-                            result.mbeans = []; 
-                            return result; 
-                        });
-
+                        result.mbeans = []; 
+                        return result; 
+                    });
+                    
                     this.$store.commit(Mutations.updateConnectionResults, emptyConResults);  
                 }
-
+                
                 if (notConnected) {
                     console.error(`Received no connection to ${notConnected.settings.host}:${notConnected.settings.port}. Will schuedule refetching MBeans in three seccond`);
                 }
-
+                
                 setTimeout(() => {
                     this.sheduleFetchingStatus();
                 }, 3000);
@@ -238,8 +243,11 @@ export class DashboardComponent extends Vue {
                 errorMessage = 'You probably haven\'t set DBStorage MBean correctly in JMXExporter of your application. JMX error: ' + error.message;
             } else {
                 errorMessage = 'Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error.message;
+                // It makes retry inside of sheduleFetchingStatus every 3 seconds in case there are some errors.
+                this.sheduleFetchingStatus();
             }
             this.$store.commit(Mutations.setAppCriticalError, errorMessage);
+            // geting connection to check if it's connection issue or engine
             console.error(errorMessage);
         });
     }

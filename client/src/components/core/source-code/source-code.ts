@@ -20,6 +20,7 @@ export class SourceCodeComponent extends Vue {
 
     mounted() {
         this.parseSourceCode();
+        this.parseHighlits();
     }
 
     @Watch('sourceCode')

@@ -14,7 +14,7 @@ export class ConnectionSettings {
     }
 }
 export class ConnectionResult {    
-    constructor(public settings: ConnectionSettings, public mbeans: MBean[], public auditTrailsMBean: MBean = null, public error: string = null) {}
+    constructor(public settings: ConnectionSettings, public mbeans: MBean[], public auditTrailsMBean: MBean[] = null, public error: string = null) {}
 
     isConnected() {
         return this.mbeans && this.mbeans.length > 0;

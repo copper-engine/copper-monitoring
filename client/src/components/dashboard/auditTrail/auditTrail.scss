@@ -20,6 +20,11 @@
             width: 185px !important;
         }
 
+        .beanNameButton {
+            height: 36px !important;
+            width: 325px !important;
+        }
+
         h2 {
             color: $dark-text-color;
         }
@@ -36,9 +41,9 @@
         .summary {
             align-items: center;
             .sub-heading {
-                width: 225px;
-                min-width: 225px;
-                max-width: 225px;
+                width: 245px;
+                min-width: 245px;
+                max-width: 245px;
                 font-size: 1.2em;
                 font-weight: 400;
                 margin-top: 2px;
@@ -252,9 +257,9 @@
         padding: 0 10px;
     }
     .id {
-        width: 45px;
-        min-width: 45px;
-        max-width: 45px;
+        width: 60px;
+        min-width: 60px;
+        max-width: 60px;
     }
     .preview {
         min-width: 300px;

@@ -20,6 +20,7 @@ export class WorkflowRepository extends Vue {
     perPage: number = 10;
     perPageItems: number[] = [10, 15, 25, 50];
     clickAllowed: boolean = true;
+    newComponent: boolean = false;
     fetchInterval;
 
     created() {
@@ -54,6 +55,15 @@ export class WorkflowRepository extends Vue {
         if (this.page <= Math.ceil(this.wfRepo.repoSize / this.perPage)) {
             this.scheduleFetchingInterval();
         }
+    }
+
+    @Watch('$route')
+    newPage() {
+        this.newComponent = true;
+        setTimeout(() => {
+            this.newComponent = false;
+        }, 200);
+        this.scheduleFetchingInterval();
     }
 
 

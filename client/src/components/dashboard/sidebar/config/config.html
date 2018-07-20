@@ -39,20 +39,31 @@
                 :append-icon="showPass ? 'visibility_off' : 'visibility'"
                 required
             ></v-text-field>
-            <v-layout row class="button-container">
-                <v-btn
-                    class="submit-btn"
-                    @click="submit"
-                    :disabled="!valid"
-                >
-                    submit
-                </v-btn>
-                <v-btn
-                    class="cancel"
-                    @click="$emit('hideSettings')"
-                >
-                    Cancel
-                </v-btn>
+            <v-layout column class="actions-container">
+                <v-tooltip top content-class="tooltip-text">
+                    <v-checkbox
+                        slot='activator'
+                        label='Save Password'
+                        v-model='savePass'>
+                    </v-checkbox>
+                    <span>This will save your password in plain text to your browser's local storage.
+                        <br>It will be automatically applied to this connection in the future.</span>
+                </v-tooltip>
+                <v-layout row class="button-container">
+                    <v-btn
+                        class="submit-btn"
+                        @click="submit"
+                        :disabled="!valid"
+                    >
+                        submit
+                    </v-btn>
+                    <v-btn
+                        class="cancel"
+                        @click="$emit('hideSettings')"
+                    >
+                        Cancel
+                    </v-btn>
+                </v-layout>
             </v-layout>
         </v-form>
     </div>

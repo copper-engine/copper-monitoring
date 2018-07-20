@@ -22,15 +22,23 @@
         padding-left: 10px;
         padding-bottom: 5px;
         width: 275px;
-        .button-container {
+        .actions-container {
             padding-left: 30px;
-            .submit-btn {
-                background-color: $light-primary !important;
-                color: $light-text-color;
+            .v-input--checkbox {
+                padding-left: 10px;
+                margin-top: 0px;
+                max-height: 35px;
             }
-            .cancel {
-                background-color: $light-secondary !important;
-                color: $dark-text-color;
+            .button-container {
+                padding-bottom: 5px;
+                .submit-btn {
+                    background-color: $light-primary !important;
+                    color: $light-text-color;
+                }
+                .cancel {
+                    background-color: $light-secondary !important;
+                    color: $dark-text-color;
+                }
             }
         }
     }

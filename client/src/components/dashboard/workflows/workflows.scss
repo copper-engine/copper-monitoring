@@ -46,11 +46,11 @@
         border-right: 1px solid;        
         border-color: $light-border;
         overflow: hidden;
-        .card {
+        .v-card {
             background-color: $light-secondary !important;
-            .card__text {
+            .v-card__text {
                 background-color: $light-secondary !important;
-                .alert {
+                .v-alert {
                     border: 2px solid;
                     margin: 20px;
                     background-color: $light-tertiary !important;
@@ -152,66 +152,6 @@
         width: 75px;
         min-width: 75px;
         max-width: 75px;
-    }
-
-    .pagination-cont {
-        align-items: center;
-        .pagination__item {
-            background-color: $light-wf !important;
-            color: $dark-text-color;
-        }
-        .pagination__item--active {
-            background-color: $light-primary !important;
-            color: $light-text-color;
-        }
-        .pagination__item:hover {
-            background-color: $light-link-active !important;
-            color: $light-text-color;
-        }
-        .pagination__navigation {
-            background-color: $light-wf !important;
-            color: $dark-text-color;
-            .icon {
-                background-color: $light-wf !important;
-                color: $dark-text-color;
-            }
-        }
-        .pagination__navigation:hover {
-            .icon {
-                background-color: $light-link-active !important;
-                color: $dark-text-color;
-            }
-        }
-        .pagin-config {
-            align-items: center;
-            .per-page-label {
-                font-size: 1.1em;
-                font-weight: 700;
-                padding-left: 16px;
-                padding-bottom: 8px;
-                color: $dark-text-color;
-            }
-            .per-page {
-                width: 60px;
-                color: $light-primary !important;
-                .input-group__selections__comma {
-                    color: $dark-text-color !important;
-                }
-                .icon {
-                    color: $dark-text-color !important;
-                }
-                .input-group__details::before {
-                    background-color: $dark-text-color !important;
-                }
-            }
-        }
-        .pagination li span {
-            float: none;
-            color: $dark-text-color;
-        }
-        button {
-            background-color: $light-background;
-        }
     }
 
     .footer-card {
@@ -341,68 +281,15 @@
         .footer-card {
             background-color: $dark-secondary;
         }
-        .pagination-cont {
-            .pagination__item {
-                background-color: $dark-wf!important;
-                color: $light-text-color;
-            }
-            .pagination__item--active {
-                background-color: $dark-primary !important;
-                color: $light-text-color;
-            }
-            .pagination__item:hover{
-                background-color: $dark-tertiary !important;
-                color: $light-text-color;
-            }
-            .pagination__navigation {
-                background-color: $dark-wf !important;
-                color: $light-text-color;
-                .icon {
-                    background-color: $dark-wf !important;
-                    color: $light-text-color;
-                }
-            }
-            .pagination__navigation:hover {
-                .icon {
-                    background-color: $dark-tertiary !important;
-                    color: $light-text-color;
-                }
-            }
-            .pagin-config {
-                .per-page-label {
-                    color: $light-text-color !important;
-                }
-                .per-page {
-                    color: $dark-primary !important;
-                    .input-group__selections__comma {
-                        color: $light-text-color !important;
-                    }
-                    .icon {
-                        color: $light-text-color !important;
-                    }
-                    .input-group__details::before {
-                        background-color: $light-text-color !important;
-                    }
-                }
-            }
-            .pagination li span {
-                float: none;
-                color: $light-text-color;
-            }
-            button {
-                background-color: $dark-background;
-                color: $light-text-color;
-            }
-        }
         .workflows-cont {
             border-left: 0px solid;
             border-right: 0px solid; 
             border-color: $dark-border;
-            .card {
+            .v-card {
                 background-color: $dark-secondary !important;
-                .card__text {
+                .v-card__text {
                     background-color: $dark-secondary !important;
-                    .alert {
+                    .v-alert {
                         background-color: $dark-tertiary !important;
                         border-color: $dark-tertiary !important;
                         color: $light-text-color;

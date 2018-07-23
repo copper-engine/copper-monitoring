@@ -46,7 +46,7 @@
     "vue-perfect-scrollbar": "^0.1.0",
     "vue-property-decorator": "~6.0.0",
     "vue-router": "^3.0.1",
-    "vuetify": "1.0.16",
+    "vuetify": "1.1.6",
     "vuex": "^3.0.1",
     "weekstart": "^1.0.0"
   },

@@ -7,7 +7,7 @@
         <v-spacer></v-spacer>
         <v-flex class="stopGrow heading-buttons" 
                 :class="{ 'less-heading-buttons' :  (wfType === 'waiting') }">
-            <v-btn dark
+            <v-btn
                 v-if="(wfType === 'broken')"
                 class="longButton restart-button"
                 :loading="restartingAll"
@@ -20,7 +20,7 @@
                     <v-icon light>cached</v-icon>
                 </span>
             </v-btn>
-            <v-btn dark
+            <v-btn
                 class="longButton delete-button"
                 :class="{ 'less-buttons' :  (wfType === 'waiting') }"                
                 :loading="deletingAll"
@@ -32,7 +32,7 @@
                     <v-icon light>cached</v-icon>
                 </span>
             </v-btn>
-            <v-btn dark
+            <v-btn
                 class="longButton details-button"
                 :loading="deletingAll"
                 :disabled="deletingAll || restartingAll || (wfCount < 1)"

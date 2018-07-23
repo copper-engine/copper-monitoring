@@ -68,13 +68,14 @@
                 height: 65px;
                 padding-left: 5px;
                 padding-right: 5px;
+                margin-top: -16px;
                 .time-field {
                     position: relative;
                     width: 190px;
                     max-width: 190px;
                     min-width: 190px;
                     padding: 5px;
-                    .icon {
+                    .v-icon {
                         color: $light-primary !important;
                     }
                 }
@@ -88,7 +89,7 @@
                 padding-right: 10px;
                 .select {
                     max-width: 380px;
-                    .icon {
+                    .v-icon {
                         color: $light-primary !important;
                     }
                 }
@@ -143,7 +144,7 @@
                         color: $light-text-color;
                         margin-left: -7px !important;
                     }
-                    .chip__content {
+                    .v-chip__content {
                         padding: 5px;
                     }
                 }
@@ -169,16 +170,16 @@
     }
 
     .extend-filter-enter-active {
-        animation: extend-filter 0.5s;
+        animation: extend-filter 0.65s;
     }
     .extend-filter-leave-active {
-        animation: extend-filter 0.5s reverse;
+        animation: extend-filter 0.65s reverse;
     }
     @keyframes extend-filter {
         0% {height: 0px;
             padding-top: 0px;
             padding-bottom: 0px;}
-        100% {height: 194px;
+        100% {height: 206px;
             padding-top: 20px;
             padding-bottom: 20px;}
     }
@@ -227,7 +228,7 @@
             .filter-layout {
                 .time-field-container {
                     .time-field {
-                        .icon {
+                        .v-icon {
                             color: $dark-primary !important;
                         }
                     }
@@ -235,7 +236,7 @@
             }
             .select-container {
                 .select {
-                    .icon {
+                    .v-icon {
                         color: $dark-primary !important;
                     }
                 }
@@ -260,6 +261,9 @@
                         .inner-chip { 
                             background-color: $dark-primary;
                             color: $light-text-color;
+                        }
+                        .v-chip__content {
+                            padding: 5px;
                         }
                     }
                 }

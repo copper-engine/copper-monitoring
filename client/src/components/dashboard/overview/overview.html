@@ -187,7 +187,7 @@
                         </div>
                         <v-layout row class="section-header">
                             <v-tooltip top content-class="tooltip-text" slot="activator">
-                                <v-btn dark icon slot="activator" :disabled="clickAllowed === false" @click="triggerTelegrafInput">
+                                <v-btn icon slot="activator" :disabled="clickAllowed === false" @click="triggerTelegrafInput">
                                     <v-icon :class="{ 'close-details-icon': openTelegrafInput }" class="control-icon">details</v-icon>
                                 </v-btn>
                                 <span>Open Details</span>
@@ -215,7 +215,7 @@
                         </transition>
                         <v-layout row class="section-header">
                             <v-tooltip top content-class="tooltip-text" slot="activator">
-                                <v-btn dark icon slot="activator" :disabled="clickAllowed === false" @click="triggerSampleQueries">
+                                <v-btn icon slot="activator" :disabled="clickAllowed === false" @click="triggerSampleQueries">
                                     <v-icon :class="{ 'close-details-icon': openSampleQueries }" class="control-icon">details</v-icon>
                                 </v-btn>
                                 <span>Open Details</span>

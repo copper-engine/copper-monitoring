@@ -22,7 +22,7 @@
             max-width: 111px;
             background-color: $light-tertiary !important;
             color: $dark-text-color;
-            .icon {
+            .v-icon {
                 color: $dark-text-color;
                 margin-right: 10px;
             }
@@ -109,7 +109,7 @@
             button {
                 background-color: $dark-tertiary !important;
                 color: $light-text-color;
-                .icon {
+                .v-icon {
                     color: $light-text-color;
                 }
             }

@@ -18,6 +18,8 @@ export class ConfigComponent extends Vue {
     password: string = '';
     valid = true;
     dialogDeleteOpen: boolean = false;
+    showPass: boolean = false;
+    savePass: boolean = false;
 
     // Form Validation Rules
     hostRules = [ (v) => !!v || 'Host is required' ];
@@ -41,9 +43,13 @@ export class ConfigComponent extends Vue {
         if (this.connectionExists(newConnection)) {
             this.$services.eventHub.$emit('showNotification', new Notification('Connection is a duplicate', 'error'));
         } else {
-            let lsConnectionKey = this.$store.state.user.name + '_' + newConnection.toString();
-            localStorage.setItem(lsConnectionKey, JSON.stringify(newConnection));
-            this.$emit('updateTarget', newConnection);
+            let lsConnectionKey = this.$store.state.user.name + '_' + newConnection.toString();            
+            if (this.savePass === true) {
+                localStorage.setItem(lsConnectionKey, JSON.stringify(newConnection)); 
+            } else {
+                localStorage.removeItem(lsConnectionKey);
+            }
+            this.$emit('updateTarget', newConnection);  
         }
     }
 

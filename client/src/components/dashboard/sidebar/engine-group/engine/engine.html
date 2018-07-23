@@ -25,7 +25,7 @@
         </v-layout>
         <v-spacer></v-spacer>
         <v-tooltip top content-class="tooltip-text">
-            <v-btn dark icon @click="openEngine" slot="activator" :disabled="clickAllowed === false">
+            <v-btn icon @click="openEngine" slot="activator" :disabled="clickAllowed === false">
                 <v-icon :class="{ 'close-details-icon': open }" class="control-icon">details</v-icon>
             </v-btn>
             <span>Show Details</span>

@@ -34,14 +34,6 @@
             font-weight: 700;
             padding-top: 15px;
         }
-        .switch-container {
-            padding-top: 15px;
-            max-height: 55px;
-            .switch-label {
-                flex-grow: 0;
-                padding-right: 108px;
-            }
-        }
         .input-container {
             padding-top: 15px;
             padding-right: 15px;
@@ -50,20 +42,30 @@
                 flex-grow: 0;
                 padding-right: 25px;   
             }
-        }
-        // .input-group {
-        //     color: $light-primary !important;
-        // }
-        .input {
-            max-width: 35px;
-            margin-top: -10px;
-            label {
+            .v-input {
+                max-width: 35px;
                 margin-top: -10px;
-            }
-            .input-group {
-                padding: 0px;
+                label {
+                    margin-top: -10px;
+                }
             }
         }
+        .switch-container {
+            padding-top: 15px;
+            max-height: 55px;
+            .switch-label {
+                flex-grow: 0;
+                padding-right: 99px;
+            }
+            .v-input {
+                max-width: 35px;
+                margin-top: -5px;
+                label {
+                    margin-top: -10px;
+                }
+            }
+        }
+
     }
     .card__actions {
         padding-left: 10px;
@@ -86,7 +88,7 @@
         min-width: 420px;
         background-color: $light-primary;
         color: $light-text-color;
-        .icon {
+        .v-toolbar__side-icon {
             color: $light-text-color;
         }
         .menu {
@@ -124,7 +126,9 @@
         font-size: 1.2em;
     }
     footer {
-        border-top: 1px solid $base-border-color;
+        background-color: $light-tertiary !important;
+        border-top: 1px solid $light-border;
+        color: $dark-text-color;                    
         span {
             padding-right: 24px;
         }
@@ -142,51 +146,13 @@
                 color: $light-text-color;
             }
         }
-        .card-content {
-            .input-group {
-                color: $dark-primary !important;
-            }
-            .input {
-                .input-group {
-                    color: $dark-primary !important;
-                    .input-group__input {
-                        input {
-                            color: $light-text-color !important;
-                            caret-color: $dark-primary !important;
-                        }
-                    }
-                    .input-group__details {
-                        .input-group__hint {
-                            color: $light-text-color !important;
-                        }
-                    }
-                    .input-group__details::before {
-                        background-color: $dark-primary;
-                    }
-                }
-                .input-group--focused {
-                    color: $dark-primary !important;
-                    .input-group__details::before {
-                        background-color: $dark-primary;
-                    }
-                    .input-group__details::after {
-                        background-color: $dark-primary;
-                    }
-                }
-                .input-group:hover {
-                    .input-group__details::before {
-                        background-color: $dark-tertiary !important;
-                    }
-                }
-            }
-        }
     }
 
     .dashboard {
         .toolbar {
             background-color: $dark-secondary;
             color: $light-text-color;
-            .icon {
+            .v-toolbar__side-icon {
                 color: $light-text-color;
             }
             .menu {
@@ -211,6 +177,11 @@
         }
         .content {
             background-color: $dark-background;
+        }
+        footer {
+            background-color: $dark-tertiary !important;
+            border-top: 1px solid $dark-border;
+            color: $light-text-color;            
         }
     }
 }

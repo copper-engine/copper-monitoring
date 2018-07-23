@@ -44,10 +44,11 @@ export class AuditTrailComponent extends Vue {
     @Watch('$store.getters.auditTrailMBeans')
     init() {
         this.mbeans = [];
-        this.$store.getters.auditTrailMBeans.map((bean) => {
-            if (bean !== null) {
-                this.mbeans.push(bean);
-            }
+        this.$store.getters.auditTrailMBeans.map((beans) => {
+            if (beans !== null) {
+                beans.map((bean) => {
+                    this.mbeans.push(bean);
+                });            }
         });
         this.selectedConnection = this.mbeans[0];
         this.timestamp = new FilterTime;
@@ -203,7 +204,8 @@ export class AuditTrailComponent extends Vue {
         if (bean === null || bean === undefined) {
             return 'Connection';
         } else {
-            return bean.connectionSettings.host + ':' + bean.connectionSettings.port; 
+            let startIndex = bean.name.indexOf('=');
+            return bean.name.substr(startIndex + 1) + ' (' + bean.connectionSettings.host + ':' + bean.connectionSettings.port + ')'; 
         }
     }
 
@@ -240,8 +242,8 @@ export class AuditTrailComponent extends Vue {
     }
 
     get totalPages() {
-        if (this.auditTrail.length > 0) {
-            let total = Math.ceil(Number(this.auditTrailCount) / this.perPage);
+        if (this.auditTrailCount > 0) {
+            let total = Math.ceil(Number(this.auditTrailCount) / this.perPage);          
             if (this.page > total) {
                 this.page = 1; 
             }
@@ -250,7 +252,7 @@ export class AuditTrailComponent extends Vue {
             } else {
                 return 1;
             }
-        } else {
+        } else {           
             this.page = 1;
             return 1;
         }

@@ -77,7 +77,7 @@
                 .link-icon {
                     flex-grow: 0;
                     padding-right: 15px;
-                    .icon {
+                    .v-icon {
                         display: block;
                         color: $dark-text-color;
                     }
@@ -85,7 +85,7 @@
                 .link-name {
                     font-size: 1.4em;
                     font-weight: 500;
-                    .icon {
+                    .v-icon {
                         color: $dark-text-color;
                         padding-left: 10px;
                     }
@@ -179,12 +179,12 @@
                 .link-interior {
                     color: $light-text-color;
                     .link-icon {
-                        .icon {
+                        .v-icon {
                             color: $light-text-color;
                         }
                     }
                     .link-name {
-                        .icon {
+                        .v-icon {
                             color: $light-text-color;
                             padding-left: 10px;
                         }

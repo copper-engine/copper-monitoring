@@ -158,11 +158,11 @@ export class JmxService {
                     if (this.isSubResponseValid(response.data[i]) && response.data[i].value['copper.audittrail']) {
                         let auditTrails = response.data[i].value['copper.audittrail'];
                         let mbeanNames = Object.keys(auditTrails);
-                        if (mbeanNames.length > 1) {
-                            console.log('more audit trails than we expected: ', mbeanNames.length);
-                        }
-                        
-                        connectionResult.auditTrailsMBean = new MBean('copper.audittrail:' + mbeanNames[0], [], connectionSettings);
+
+                        connectionResult.auditTrailsMBean = mbeanNames.map((bean) => {
+                        return new MBean('copper.audittrail:' + bean, [], connectionSettings);
+                        });
+
                     }
 
                     return connectionResult;
@@ -348,8 +348,7 @@ export class JmxService {
         });
     }
 
-    getAuditTrails(auditTrailMBean: MBean, user: User, auditTrailFilter: AuditTrailInstanceFilter) { 
-        // console.log('auditTrailFilter', auditTrailFilter);
+    getAuditTrails(auditTrailMBean: MBean, user: User, auditTrailFilter: AuditTrailInstanceFilter) {
         return Axios.post(process.env.API_NAME, [
             {
                 type: 'EXEC',

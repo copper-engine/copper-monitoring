@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "author": "Vladyslav Gutsul <vladyslav.gutsul@scoop-software.cz>, Hayden Hodge <hayden.hodge@scoop-software.cz>",
   "private": true,
+  "license": "Apache-2.0",
   "engines": {
     "node": ">=6",
     "npm": ">=3"

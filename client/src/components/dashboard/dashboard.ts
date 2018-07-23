@@ -73,14 +73,6 @@ export class DashboardComponent extends Vue {
         this.$store.state.user.settings.updatePeriod = this.update;
     }
 
-    private forceInt(data: any) {
-        if (typeof data === 'number') {
-            return data;
-        } else {
-            return parseInt(data);
-        }
-    }
-
     // @Watch('$route')
     private resolveRoute() {
         let defaultSettings = this.$store.state.user.settings;

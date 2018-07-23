@@ -6,6 +6,9 @@ import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.grizzly.servlet.FilterRegistration;
 import org.glassfish.grizzly.servlet.ServletRegistration;
 import org.glassfish.grizzly.servlet.WebappContext;
+import org.glassfish.grizzly.ssl.SSLContextConfigurator;
+import org.glassfish.grizzly.ssl.SSLEngineConfigurator;
+import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.jolokia.http.AgentServlet;
 import org.slf4j.Logger;
@@ -35,6 +38,16 @@ public class JmxWebProxyMain {
     public static final String COPPER_MONITORING_PORT = "copper.monitoring.port";
 
     /**
+     * The names of the system enviroment variables used to configure https
+     */
+    private static final String KEYSTORE_LOC = "KEYSTORE_LOC";
+    private static final String KEYSTORE_PASS = "KEYSTORE_PASS";
+    private static final String TRUSTSTORE_LOC = "TRUSTSTORE_LOC";
+    private static final String TRUSTSTORE_PASS = "TRUSTSTORE_PASS";
+    private static final String HTTPS_ENABLED = "HTTPS_ENABLED";
+
+
+    /**
      * The prefix of the system property names used to configure the jolokia servlet
      */
     public static final String JOLOKIA_SERVLET_PREFIX = "jolokia.servlet.";
@@ -55,9 +68,27 @@ public class JmxWebProxyMain {
             throw new IllegalStateException("Directory 'static' not found. Maybe you started the process from the wrong directory?!?");
         }
 
+        boolean httpsEnabled = Boolean.parseBoolean(System.getenv(HTTPS_ENABLED));
+        URI baseUri = UriBuilder.fromUri((httpsEnabled ? "https" : "http")+ "://0.0.0.0/").port(port).build();
+        HttpServer server;
         // create webserver
-        URI baseUri = UriBuilder.fromUri("http://0.0.0.0/").port(port).build();
-        HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri);
+        if (httpsEnabled) {
+            SSLContextConfigurator sslCon = new SSLContextConfigurator();
+            sslCon.setKeyStoreFile(System.getenv(KEYSTORE_LOC));
+            sslCon.setKeyStorePass(System.getenv(KEYSTORE_PASS));
+
+            sslCon.setTrustStoreFile(System.getenv(TRUSTSTORE_LOC));
+            sslCon.setTrustStorePass(System.getenv(TRUSTSTORE_PASS));
+
+
+            log.info("    - starting server in https mode");
+            server = GrizzlyHttpServerFactory.createHttpServer(baseUri,(GrizzlyHttpContainer) null,
+                    true, new SSLEngineConfigurator(sslCon).setClientMode(false).setNeedClientAuth(false), true);
+        } else {
+            log.info("    - starting server in http mode");
+            server = GrizzlyHttpServerFactory.createHttpServer(baseUri);
+        }
+
         Runtime.getRuntime().addShutdownHook(createShutdownHook(server));
 
         // deploy Jolokia servlet

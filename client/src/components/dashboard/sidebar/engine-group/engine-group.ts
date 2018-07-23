@@ -3,6 +3,7 @@ import { EngineGroup, EngineStatus, WorkflowFilter, State } from '../../../../mo
 import { JmxService } from '../../../../services/jmxService';
 import { Link } from '../../../../models/link';
 import './engine-group.scss';
+import { MBean } from '../../../../models/mbeans';
 
 const EngineComponent = () => import('./engine').then(({ EngineComponent }) => EngineComponent);
 
@@ -20,11 +21,17 @@ export class EngineGroupComponent extends Vue {
     wfCount = 0;
     open: boolean = false;
     multiEngine: boolean = false;
-    mbean = null;
+    mbean: MBean = null;
     clickAllowed = true;
 
     created() {
+        this.updateBean();
         this.checkGroupInfo();
+    }
+
+    @Watch('$route')
+    updateBean() {
+        this.mbean = this.$store.getters.engineMBeans[this.group.engines[0].id];
     }
     
     @Watch('group')
@@ -54,7 +61,7 @@ export class EngineGroupComponent extends Vue {
     }
     
     private getBrokenWFCount() {
-        this.mbean = this.$store.getters.engineMBeans[this.group.engines[0].id];
+        // this.mbean = this.$store.getters.engineMBeans[this.group.engines[0].id];
         this.jmxService.countWFRequest(this.mbean.connectionSettings, this.mbean.name, this.$store.state.user, new WorkflowFilter).then((response: number) => {
             this.brokenWFCount = response;
         });
@@ -71,12 +78,16 @@ export class EngineGroupComponent extends Vue {
      }
 
      private get links(): Link[] {
-        let params = '?' + this.$store.getters.connectionsAsParams;
+        let params = this.getName(this.mbean) + '/' + this.group.engines[0].id + '?' + this.$store.getters.connectionsAsParams;
         
         return [
             // new Link('Statistics', '/dashboard/statistics/' + ('group:' + this.group.name) + '/' + this.group.engines[0].id + params, 'mdi-chart-bar'),
-            new Link('Broken Workflows', '/dashboard/workflows/broken/' + this.group.engines[0].id + params, 'mdi-image-broken'),
-            new Link('Waiting Workflows', '/dashboard/workflows/waiting/' + this.group.engines[0].id + params, 'mdi-timer-sand-empty')
+            new Link('Broken Workflows', '/dashboard/workflows/broken/' + params, 'mdi-image-broken'),
+            new Link('Waiting Workflows', '/dashboard/workflows/waiting/' + params, 'mdi-timer-sand-empty')
         ];
+    }
+
+    getName(mbean: MBean) {
+            return mbean.connectionSettings.host + mbean.connectionSettings.port;
     }
 }

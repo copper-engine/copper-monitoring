@@ -20,12 +20,19 @@ export class EngineComponent extends Vue {
     filter: WorkflowFilter;
     mbean: MBean;
 
+    created() {
+        this.updateBean();
+    }
+
     mounted() {
         this.filter = new WorkflowFilter;
         this.filter.states = [State.RUNNING];                
-        this.mbean = this.$store.getters.engineMBeans[this.status.id];  
         this.getWFCount();
+    }
 
+    @Watch('$route')
+    updateBean() {
+        this.mbean = this.$store.getters.engineMBeans[this.status.id];
     }
 
     @Watch('closing')
@@ -68,7 +75,7 @@ export class EngineComponent extends Vue {
 
     private get links(): Link[] {
         let linkArray = [];
-        let params = this.status.id + '?' + this.$store.getters.connectionsAsParams;
+        let params = this.getName(this.mbean) + '/' + this.status.id + '?' + this.$store.getters.connectionsAsParams;
 
         if (!this.multiEngine) {
             if (this.status.type === 'persistent') {
@@ -85,5 +92,9 @@ export class EngineComponent extends Vue {
             new Link('Workflow Repository', '/dashboard/workflow-repo/' + params, 'mdi-file'),
             new Link('Processor Pools', '/dashboard/processor-pools/' + params, 'mdi-server')
         ]);
+    }
+
+    getName(mbean: MBean) {
+            return mbean.connectionSettings.host + mbean.connectionSettings.port;
     }
 }

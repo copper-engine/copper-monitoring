@@ -79,7 +79,7 @@ export const createRoutes: () => RouteConfig[] = () => [
         // WokflowsComponent will be rendered inside Dashboards's <router-view>
         // when /dashboard/workflows is matched
         name: 'workflows',
-        path: 'workflows/:wfType/:id',
+        path: 'workflows/:wfType/:connection/:id',
         component: workflowsComponent,
         meta: {
           requiresAuth: true
@@ -95,7 +95,7 @@ export const createRoutes: () => RouteConfig[] = () => [
       },
       {
         name: 'workflow-repo',
-        path: 'workflow-repo/:id',
+        path: 'workflow-repo/:connection/:id',
         component: workflowRepoComponent,
         meta: {
           requiresAuth: true
@@ -103,7 +103,7 @@ export const createRoutes: () => RouteConfig[] = () => [
       },
       {
         name: 'processor-pools',
-        path: 'processor-pools/:id',
+        path: 'processor-pools/:connection/:id',
         component: processorPoolsComponent,
         meta: {
           requiresAuth: true

@@ -59,19 +59,13 @@ export class OverviewComponent extends Vue {
 
     mounted() {
         this.getInfluxConnection();
-        // if (this.url !== null && this.url !== '') {
-        //     this.useInfluxDB = true;
-        //     this.testConnection();
-        // }
+
         this.getChartSettings();
         this.checkStatService();
-        // this.getDataFromInflux();
         this.scheduleFetch();
-        // this.checkCollecting();
     }
 
     beforeDestroy() {
-        // this.statisticsService.stop();
         clearInterval(this.fetchInterval);
     }
 
@@ -85,7 +79,6 @@ export class OverviewComponent extends Vue {
         } else {
             this.statisticsService.start();       
         }
-        // this.switchedModes = true;
         this.getData();
      }
 
@@ -202,24 +195,8 @@ export class OverviewComponent extends Vue {
         return engine.engineId + '@' + this.getConnectionName(engine.id);
     }
 
-    private groupMergeStates(to: StatesPrint, from: StatesPrint) {
-        to.running += from.running; 
-        to.dequeued += from.dequeued; 
-    }
-
     private getNames() {
         return this.$store.state.engineStatusList.map((engine) => engine.engineId + '@' + this.getConnectionName(engine.id));
-    }
-
-    private getGroupNames() {
-        let nameArray = this.$store.getters.groupsOfEngines.map((group) => {
-            if (group.engines.length > 1) {
-                return group.name;
-            } else {
-                return group.engines[0].engineId + '@' + this.getConnectionName(group.engines[0].id);
-            }
-        });
-        return nameArray;
     }
 
     private getConnectionName(id: number) {
@@ -275,7 +252,6 @@ export class OverviewComponent extends Vue {
         this.$store.state.engineStatusList.map((engine, index) => {
             let bean = this.$store.getters.engineMBeans[engine.id];
             let name = this.parseBeanName(bean.name);
-            // beanNames[index] = [bean.name, engine.engineId];
             beanNames[index] = new BeanContext(bean.name, engine.engineId);
             this.configText += '[[inputs.jolokia2_proxy.metric]]\n' +
                 '     name = "' + engine.engineId + '@' + bean.connectionSettings.host + ':' + bean.connectionSettings.port + '"\n' +

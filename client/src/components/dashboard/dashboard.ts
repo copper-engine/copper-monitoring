@@ -41,7 +41,7 @@ export class DashboardComponent extends Vue {
         return ('/dashboard/overview/' + params);
     }
 
-    private created() {
+    created() {
         this.initComplete = false;
         this.getTheme();
         this.getPeriodSettings();
@@ -49,12 +49,12 @@ export class DashboardComponent extends Vue {
         (this.$services.eventHub as Vue).$on('forceStatusFetch', this.forceFetchingStatus);
     }
 
-    private mounted() {
+    mounted() {
         this.$store.commit(Mutations.setConnectionSettings, this.resolveRoute());
         this.statisticsService.init();
     }
     
-    private beforeDestroy() {
+    beforeDestroy() {
         this.statisticsService.destroy();
         clearInterval(this.interval);
         (this.$services.eventHub as Vue).$off('forceStatusFetch', this.forceFetchingStatus);

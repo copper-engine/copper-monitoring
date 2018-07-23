@@ -117,9 +117,6 @@ export class AuditTrailComponent extends Vue {
                         log.message, log.messageType, log.occurrence, log.transactionId, log.workflowInstanceId);
                 });
                 this.getClickAllowedList(this.auditTrail.length);
-                // if (result && result.length > 0) {
-                //     this.getAuditMessage(result[0].id);
-                // }
             }).catch(error => {
                 console.error('Error getting audit trail', error);
             });
@@ -134,17 +131,8 @@ export class AuditTrailComponent extends Vue {
             });
     }
 
-    private getAuditMessage(id: number) {
-        this.jmxService.getAuditTrailMessage(this.selectedConnection, this.$store.state.user, id).then(result => {
-            // console.log('getting message for audit trail', result);
-        }).catch(error => {
-            console.error('Error getting audit trail', error);
-        });
-    }
-
     private getPreview(message: string) {
         let length = 140;
-        // message = message + 'asfjakl gjl akjdga hlkjfhlak... ...da gsd ...ah.a fdh.da gddgadsh adfha hdfha lak.. ....dagsd ...ah. afdh. dagdd gadsh adfhahlak. .....dag sd...a h.afdh.d agddgad shadfhah';
         if (message.length > length) {
             return message.substr(0, length) + '...';
         } else {

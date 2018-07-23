@@ -8,9 +8,6 @@ import { StatesPrint, EngineStatus, EngineGroup, ChartStates } from '../../../mo
 import { ConnectionSettings } from '../../../models/connectionSettings';
 import { MBean } from '../../../models/mbeans';
 
-const INT_15_MIN = 15 * 60 * 1000;
-const INT_1_MIN = 60 * 1000;
-
 @Component({
     template: require('./statistics.html'),
     services: ['jmxService', 'influxService'],
@@ -35,7 +32,6 @@ export class StatisticsComponent extends Vue {
     chartOptions = {
         animation: {
             duration: 0, // general animation time
-            // easing: 'easeInCirc'
         },
         elements: {
             line: {
@@ -64,27 +60,20 @@ export class StatisticsComponent extends Vue {
     testInt = null;
 
     mounted() { 
-        console.log('statistics mounted');
-
-        this.influx.testInfluxDB();
         this.initCharts();
     }
  
     @Watch('states', { deep: true })
     @Watch('$route.params')
     initCharts() {
-        // this.saveStates();
         this.getGroup();
         this.getId();
         this.mbean = this.$store.getters.engineMBeans[this.id];
         this.getKeySet();
-        // this.loadStates();
-        this.initSecondsChart();
-        // this.initMinutesChart();
-        // this.initQuoterMinChart();
+        this.initChartFetch();
     }
 
-    private destroyed() {
+    destroyed() {
         if (this.secondsInterval) {
             clearInterval(this.secondsInterval);
         }
@@ -94,21 +83,6 @@ export class StatisticsComponent extends Vue {
         if (this.quoterMinInterval) {
             clearInterval(this.quoterMinInterval);
         }
-    }
-
-    private saveStates() {
-        localStorage.setItem(this.secondsKey, JSON.stringify(this.secondsStates));
-        localStorage.setItem(this.minutesKey, JSON.stringify(this.minutesStates));
-        localStorage.setItem(this.quoterKey, JSON.stringify(this.quoterMinStates));
-        this.secondsStates = [];
-        this.minutesStates = [];
-        this.quoterMinStates = [];
-    }
-
-    private loadStates() {
-        this.secondsStates = this.getDataFromLS(this.secondsKey);
-        this.minutesStates = this.getDataFromLS(this.minutesKey);
-        this.quoterMinStates = this.getDataFromLS(this.quoterKey);  
     }
 
     private getKeySet() {
@@ -155,7 +129,6 @@ export class StatisticsComponent extends Vue {
 
     private parseGroupName(rawName: string) {
         if (rawName) {
-            // return rawName.substr(15);
             return rawName;            
         } else {
             return 'noname';
@@ -183,7 +156,7 @@ export class StatisticsComponent extends Vue {
         return emptySet;
     }
 
-    private initSecondsChart() {
+    private initChartFetch() {
         if (this.secondsInterval) {
             clearInterval(this.secondsInterval);
         }
@@ -195,34 +168,6 @@ export class StatisticsComponent extends Vue {
         this.secondsInterval = setInterval(() => {
             this.fetchingData(this.secondsStates, updateSecondsState);
         }, 2000);        
-    }
-
-    private initMinutesChart() {
-        if (this.minutesInterval) {
-            clearInterval(this.minutesInterval);
-        }
-        let updateMinutesState = (states) => {
-            localStorage.setItem(this.minutesKey, JSON.stringify(states));
-            this.minutesChartData = this.getChartData(states);
-        };
-        this.fetchingData(this.minutesStates, updateMinutesState);
-        this.minutesInterval = setInterval(() => {
-            this.fetchingData(this.minutesStates, updateMinutesState);
-        }, INT_1_MIN);
-    }
-
-    private initQuoterMinChart() {
-        if (this.quoterMinInterval) {
-            clearInterval(this.quoterMinInterval);
-        }
-        let updateQuoterMinState = (states) => {
-            localStorage.setItem(this.quoterKey, JSON.stringify(states));
-            this.quoterMinChartData = this.getChartData(states);
-        };
-        this.fetchingData(this.quoterMinStates, updateQuoterMinState);
-        this.quoterMinInterval = setInterval(() => {
-            this.fetchingData(this.quoterMinStates, updateQuoterMinState);
-        }, INT_15_MIN);
     }
 
     private fetchingData(states: StatesPrint[], updateFn) {

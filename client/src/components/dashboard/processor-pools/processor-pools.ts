@@ -64,7 +64,7 @@ export class ProcessorPools extends Vue {
         });
     }
 
-    private  suspend(mbean: string) {
+    private suspend(mbean: string) {
         this.jmxService.suspend(this.engineMbean.connectionSettings, this.$store.state.user, mbean).then((done) => {
             if (done) {
                 this.showSuccess('Workflows Suspended');

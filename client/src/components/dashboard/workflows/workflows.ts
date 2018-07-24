@@ -94,7 +94,7 @@ export class WorkflowsComponent extends Vue {
         setTimeout(() => {
             this.newComponent = false;
         }, 200);
-        this.mbean = this.$store.getters.engineMBeans[this.$route.params.id];
+        this.mbean = this.$store.getters.engineMBean(this.$route.params.id);
         this.workflows = [];
         this.wfCount = 0;
         this.init();
@@ -103,7 +103,7 @@ export class WorkflowsComponent extends Vue {
     private getWorkflowSettings() {
         this.wfType = this.$route.params.wfType;
         this.engineId = this.$route.params.id;
-        this.mbean = this.$store.getters.engineMBeans[this.engineId];
+        this.mbean = this.$store.getters.engineMBean(this.engineId);
     }
 
     private setFilterStates() {
@@ -317,7 +317,7 @@ export class WorkflowsComponent extends Vue {
     }
 
     private showSourceCode(workflow: WorkflowInfo) {
-        this.jmxService.getSourceCode(this.$store.getters.engineMBeans[this.status.id].connectionSettings,  this.$store.state.user, this.status.wfRepoMXBean, workflow.workflowClassInfo.classname)
+        this.jmxService.getSourceCode(this.$store.getters.engineMBean(this.engineId).connectionSettings,  this.$store.state.user, this.status.wfRepoMXBean, workflow.workflowClassInfo.classname)
         .then((sourceCode) => {
             if (sourceCode && (sourceCode as string).trim().toLowerCase() !== 'na') {  
                 this.dialogSourceCode = sourceCode;

@@ -200,7 +200,7 @@ export class OverviewComponent extends Vue {
     }
 
     private getConnectionName(id: number) {
-        let connection = this.$store.getters.engineMBeans[id].connectionSettings;
+        let connection = this.$store.getters.engineMBean(id).connectionSettings;
         return connection.host + ':' + connection.port;
     }
 
@@ -249,8 +249,8 @@ export class OverviewComponent extends Vue {
         });
 
         this.configText += '\n#From engines. Name made from connection name and engine name to prevent collisions\n';
-        this.$store.state.engineStatusList.map((engine, index) => {
-            let bean = this.$store.getters.engineMBeans[engine.id];
+        this.$store.state.engineStatusList.map((engine: EngineStatus, index) => {
+            let bean = engine.engineMXBean;
             let name = this.parseBeanName(bean.name);
             beanNames[index] = new BeanContext(bean.name, engine.engineId);
             this.configText += '[[inputs.jolokia2_proxy.metric]]\n' +
@@ -281,7 +281,7 @@ export class OverviewComponent extends Vue {
         this.$store.getters.groupsOfEngines.map((group) => {
 
             let engine = group.engines[0];
-            let bean = this.$store.getters.engineMBeans[engine.id];
+            let bean = engine.engineMXBean;
 
             if (group.engines.length > 1) {
                 this.queryText += '#Select Attributes for Group: ' + group.name + '@' + bean.connectionSettings.host + ':' + bean.connectionSettings.port + '\n';

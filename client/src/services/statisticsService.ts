@@ -166,8 +166,8 @@ export class StatisticsService {
         // can be improved by calling 1 jolokia request
         if (engines) {
             engines.forEach( (engine: EngineStatus) => {
-                let mbean: MBean = this.store.getters.engineMBeans[engine.id];
-                promises.push(this.jmxService.getChartCounts(this.store.getters.engineMBeans[engine.id], this.store.state.user).then((newStates: StatesPrint) => {   
+                let mbean: MBean = engine.engineMXBean;
+                promises.push(this.jmxService.getChartCounts(mbean, this.store.state.user).then((newStates: StatesPrint) => {   
                     // can be improved by getting connection settings & engine ID
                     // this.addNewState('' + engine.id, newStates);
                     newStates.engine = engine.engineId + '@' + mbean.connectionSettings.toString();

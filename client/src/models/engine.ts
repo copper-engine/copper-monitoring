@@ -1,5 +1,6 @@
 import { Vue } from 'vue-property-decorator';
 import { ConnectionResult } from './connectionSettings';
+import { MBean } from './mbeans';
 
 export enum State {
     RAW,        // Workflow was just initialized, nothing happened with it so far
@@ -66,6 +67,7 @@ export class EngineStatus {
         public instances: number,
         public state: string,
         public brokenWFCount: number,
+        public engineMXBean: MBean,
         public dbStorageMXBean: string,
         public wfRepoMXBean: string,
         public ppoolsMXBeans: string[]
@@ -133,8 +135,7 @@ export class WorkflowInfo {
     public lastModTS: Date;
     public creationTS: Date;
 
-    constructor(
-    ) {}
+    constructor() {}
 
 
     public getLastWaitingLineNum(): number {

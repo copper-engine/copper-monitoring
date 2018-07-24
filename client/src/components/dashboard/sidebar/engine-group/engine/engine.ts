@@ -18,21 +18,11 @@ export class EngineComponent extends Vue {
     wfCount: number = 0;
     clickAllowed = true;
     filter: WorkflowFilter;
-    mbean: MBean;
-
-    created() {
-        this.updateBean();
-    }
 
     mounted() {
         this.filter = new WorkflowFilter;
         this.filter.states = [State.RUNNING];                
         this.getWFCount();
-    }
-
-    @Watch('$route')
-    updateBean() {
-        this.mbean = this.$store.getters.engineMBeans[this.status.id];
     }
 
     @Watch('closing')
@@ -44,7 +34,7 @@ export class EngineComponent extends Vue {
 
     @Watch('status')
     getWFCount() {
-        this.jmxService.countWFRequest(this.mbean.connectionSettings, this.mbean.name, this.$store.state.user, this.filter).then((response: number) => {
+        this.jmxService.countWFRequest(this.status.engineMXBean.connectionSettings, this.status.engineMXBean.name, this.$store.state.user, this.filter).then((response: number) => {
             this.wfCount = response;
         });
      }
@@ -60,7 +50,7 @@ export class EngineComponent extends Vue {
     }
 
     private get connection() {
-        return this.$store.getters.engineMBeans[this.status.id].connectionSettings;
+        return this.status.engineMXBean.connectionSettings;
     }
 
     private get extendTypeOfEngine() {
@@ -75,7 +65,7 @@ export class EngineComponent extends Vue {
 
     private get links(): Link[] {
         let linkArray = [];
-        let params = this.getName(this.mbean) + '/' + this.status.id + '?' + this.$store.getters.connectionsAsParams;
+        let params = this.status.id + '?' + this.$store.getters.connectionsAsParams;
 
         if (!this.multiEngine) {
             if (this.status.type === 'persistent') {

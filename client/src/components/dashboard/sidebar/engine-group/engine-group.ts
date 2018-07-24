@@ -21,19 +21,12 @@ export class EngineGroupComponent extends Vue {
     wfCount = 0;
     open: boolean = false;
     multiEngine: boolean = false;
-    mbean: MBean = null;
     clickAllowed = true;
 
     created() {
-        this.updateBean();
         this.checkGroupInfo();
     }
 
-    @Watch('$route')
-    updateBean() {
-        this.mbean = this.$store.getters.engineMBeans[this.group.engines[0].id];
-    }
-    
     @Watch('group')
     checkGroupInfo() {
         if (this.group.engines.length > 1) {
@@ -61,15 +54,16 @@ export class EngineGroupComponent extends Vue {
     }
     
     private getBrokenWFCount() {
-        // this.mbean = this.$store.getters.engineMBeans[this.group.engines[0].id];
-        this.jmxService.countWFRequest(this.mbean.connectionSettings, this.mbean.name, this.$store.state.user, new WorkflowFilter).then((response: number) => {
+        let mbean = this.group.engines[0].engineMXBean;
+        this.jmxService.countWFRequest(mbean.connectionSettings, mbean.name, this.$store.state.user, new WorkflowFilter).then((response: number) => {
             this.brokenWFCount = response;
         });
     }
+    
     private getGroupWFCount() {
         let state = State.RUNNING;
         let beans = this.group.engines.map((engine) => {
-            return this.$store.getters.engineMBeans[engine.id];
+            return engine.engineMXBean;
         });
         this.jmxService.countGroupWFRequest(beans, beans.length, this.$store.state.user, state).then((response: any) => {
             this.wfCount = response;
@@ -78,7 +72,7 @@ export class EngineGroupComponent extends Vue {
      }
 
      private get links(): Link[] {
-        let params = this.getName(this.mbean) + '/' + this.group.engines[0].id + '?' + this.$store.getters.connectionsAsParams;
+        let params = this.group.engines[0].id + '?' + this.$store.getters.connectionsAsParams;
         
         return [
             // new Link('Statistics', '/dashboard/statistics/' + ('group:' + this.group.name) + '/' + this.group.engines[0].id + params, 'mdi-chart-bar'),

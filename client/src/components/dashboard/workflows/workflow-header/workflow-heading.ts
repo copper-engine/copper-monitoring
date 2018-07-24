@@ -12,7 +12,7 @@ import './workflow-heading.scss';
     }
 })
 export class WorkflowHeading extends Vue {
-    @Prop() engineStatus;
+    @Prop() engineStatus: EngineStatus;
     @Prop() wfType: string;
     @Prop() wfCount: number;
     @Prop() restartingAll: boolean;
@@ -271,7 +271,7 @@ export class WorkflowHeading extends Vue {
     }
     
     private getPossibleClassNames() {
-        this.jmxService.getWfRepo(this.$store.getters.engineMBeans[this.engineStatus.id].connectionSettings, this.engineStatus.wfRepoMXBean, this.$store.state.user, -1, 0).then((response) => {
+        this.jmxService.getWfRepo(this.engineStatus.engineMXBean.connectionSettings, this.engineStatus.wfRepoMXBean, this.$store.state.user, -1, 0).then((response) => {
             this.possibleClassnames = response.map((workflow) => {
                 return workflow.classname;
             });

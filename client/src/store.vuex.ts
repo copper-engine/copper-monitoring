@@ -97,12 +97,16 @@ export const store = new Vuex.Store<StoreState>({
           return mbean;
         })));
       },
+      engineMBean: state => (id: string) => {
+        let engine = state.engineStatusList.find(engine => engine.id === parseInt(id));
+        return engine ? engine.engineMXBean : null;
+      },
       auditTrailMBeans: state => {
         return state.connectionResults.map(result => result.auditTrailsMBean);
       },
       groupsOfEngines: state => {
         if (!state.engineStatusList) 
-            return null;
+          return null;
 
         let groups: EngineGroup[] = state.engineStatusList.filter((engine) => !engine.engineClusterId).map((engine) => new EngineGroup(null, [ engine ]));
         let appClusterGrouped = _(state.engineStatusList.filter((engine) => engine.engineClusterId))

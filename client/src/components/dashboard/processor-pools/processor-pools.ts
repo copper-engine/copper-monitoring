@@ -105,7 +105,7 @@ export class ProcessorPools extends Vue {
         }, 200);
         this.processorPools = [];
         this.engine = (this.$store.state as  StoreState).engineStatusList[this.$route.params.id];
-        this.engineMbean = this.$store.getters.engineMBeans[this.$route.params.id];
+        this.engineMbean = this.$store.getters.engineMBean(this.$route.params.id);
         this.scheduleFetchPools();
     }
 

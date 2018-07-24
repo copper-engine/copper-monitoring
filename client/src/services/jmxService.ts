@@ -14,7 +14,7 @@ export class JmxService {
         return Axios.post(process.env.API_NAME, requests, {
                 auth: { username: user.name, password: user.password }
             })
-            .then((response) => this.parseEngineStatusResponse(response, mbeans.length));
+            .then((response) => this.parseEngineStatusResponse(response, mbeans));
     }
 
     createEngineStatusRequest(mbean: MBean, user: User) {
@@ -633,15 +633,17 @@ export class JmxService {
         return response.data[0].status === 200;
     }
 
-    private parseEngineStatusResponse = (response, enginesCount: number): EngineStatus[] => {
+    private parseEngineStatusResponse = (response, mbeans: MBean[]): EngineStatus[] => {
         if (!response || !response.data || response.data.length < 3) {
             console.log('Invalid responce:', response);          
             throw new Error('invalid response from JMX!');
         }
 
-        return _.chunk(response.data, 3).map((data, index) => this.parseEngineStatusData(data, index));
+        return _.chunk(response.data, 3).map((data, index) => this.parseEngineStatusData(data, index, mbeans[index]));
     }
-    private parseEngineStatusData = (data, id: number): EngineStatus => {
+
+    enginesIdMap: Map<String, number> = new Map<String, number>(); 
+    private parseEngineStatusData = (data, id: number, mbean: MBean): EngineStatus => {
         if (data.length < 3
             || !this.isSubResponseValid(data[0])
             || !this.isSubResponseValid(data[1])
@@ -652,8 +654,16 @@ export class JmxService {
             throw new Error(errorInstance ? errorInstance.error : 'Engine Status data is Invalid');
         }
 
+        let key = mbean.name + '_' + mbean.connectionSettings.toString();
+        let engineId: number = this.enginesIdMap.get(key);
+        
+        if (engineId === undefined) {
+            engineId = this.enginesIdMap.size;
+            this.enginesIdMap.set(key, engineId);
+        }
+
         return new EngineStatus(
-            id,
+            engineId,
             data[1].value.startupTS,
             data[1].value.lastActivityTS,
             data[0].value.EngineClusterId,
@@ -662,6 +672,7 @@ export class JmxService {
             data[1].value.countWfiLastNMinutes,
             data[0].value.State.toLowerCase(),
             data[2].value,
+            mbean,
             data[0].value.DBStorage ? data[0].value.DBStorage.objectName : null,
             data[0].value.WorkflowRepository.objectName,
             data[0].value.ProcessorPools.map((mbean) => mbean.objectName)            

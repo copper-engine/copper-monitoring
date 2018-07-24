@@ -213,33 +213,34 @@ export class DashboardComponent extends Vue {
     }
 
     private getEngineStatus(mbeans: MBean[], user: User) {
-        (this.$services.jmxService as JmxService).getEngineStatus(mbeans, user).then((engineStatusList: EngineStatus[]) => {
-            if (!engineStatusList) {
-                engineStatusList = [];
-                if (this.interval) {
-                    clearInterval(this.interval);
+        (this.$services.jmxService as JmxService).getEngineStatus(mbeans, user)
+            .then((engineStatusList: EngineStatus[]) => {
+                if (!engineStatusList) {
+                    engineStatusList = [];
+                    if (this.interval) {
+                        clearInterval(this.interval);
+                    }
+                    
+                    this.sheduleFetchingStatus();
                 }
                 
-                this.sheduleFetchingStatus();
-            }
-            
-            if (this.$store.state.appCriticalError) {
-                this.$store.commit(Mutations.setAppCriticalError, null);
-            }
-            this.$store.commit(Mutations.updateEngineStatus, engineStatusList);
-            this.initComplete = true;
-        }).catch((error: Error) => {
-            let errorMessage;
-            if (error.message && error.message.indexOf('DBStorage') >= 0) {
-                errorMessage = 'You probably haven\'t set DBStorage MBean correctly in JMXExporter of your application. JMX error: ' + error.message;
-            } else {
-                errorMessage = 'Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error.message;
-                // It makes retry inside of sheduleFetchingStatus every 3 seconds in case there are some errors.
-                this.sheduleFetchingStatus();
-            }
-            this.$store.commit(Mutations.setAppCriticalError, errorMessage);
-            // geting connection to check if it's connection issue or engine
-            console.error(errorMessage);
-        });
+                if (this.$store.state.appCriticalError) {
+                    this.$store.commit(Mutations.setAppCriticalError, null);
+                }
+                this.$store.commit(Mutations.updateEngineStatus, engineStatusList);
+                this.initComplete = true;
+            }).catch((error: Error) => {
+                let errorMessage;
+                if (error.message && error.message.indexOf('DBStorage') >= 0) {
+                    errorMessage = 'You probably haven\'t set DBStorage MBean correctly in JMXExporter of your application. JMX error: ' + error.message;
+                } else {
+                    errorMessage = 'Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Engine Status:', error.message;
+                    // It makes retry inside of sheduleFetchingStatus every 3 seconds in case there are some errors.
+                    this.sheduleFetchingStatus();
+                }
+                this.$store.commit(Mutations.setAppCriticalError, errorMessage);
+                // geting connection to check if it's connection issue or engine
+                console.error(errorMessage);
+            });
     }
 }

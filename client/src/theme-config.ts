@@ -9,4 +9,4 @@ import Datetime from 'vue-datetime';
 import 'vue-datetime/dist/vue-datetime.css';
 
 Vue.use(require('vue-moment'));
-Vue.use(Vuetify);
+Vue.use(Vuetify, { theme: false });

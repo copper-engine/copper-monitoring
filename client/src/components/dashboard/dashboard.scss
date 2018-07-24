@@ -146,6 +146,28 @@
                 color: $light-text-color;
             }
         }
+        .card-content {
+            .switch-container {
+                .v-input {
+                    .v-input__control {
+                        .v-input__slot {
+                            .v-input--selection-controls__input {
+                                .v-input--selection-controls__ripple {
+                                    color: $dark-primary !important;
+                                }
+                                .v-input--switch__track {
+                                    color: $dark-primary !important;
+                                }
+                                .v-input--switch__thumb {
+                                    color: $dark-primary !important;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+    
+        }
     }
 
     .dashboard {
@@ -179,7 +201,7 @@
             background-color: $dark-background;
         }
         footer {
-            background-color: $dark-tertiary !important;
+            background-color: $dark-secondary !important;
             border-top: 1px solid $dark-border;
             color: $light-text-color;            
         }

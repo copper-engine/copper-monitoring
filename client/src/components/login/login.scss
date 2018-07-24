@@ -1,6 +1,6 @@
 @import '../../variables';
 
-.login {    
+body .login {    
     margin: auto;
 
     h2 {
@@ -32,7 +32,7 @@
     }
 }
 
-.dark {
+body .dark {
     .login {
         h2 {
             color: $light-text-color !important;

@@ -1,0 +1,36 @@
+passowrd for certs is: copper
+
+generation of certificate for https:
+keytool -genkey -keyalg RSA -keystore ./keystore_monitoring -alias copperMonitoring
+adding it to trust store:
+keytool -export -alias copperMonitoring -rfc -keystore ./keystore_monitoring > ./copperMonitoring.cert
+keytool -import -alias copperMonitoring -file ./copperMonitoring.cert -keystore ./truststore_monitoring
+
+generate certificate for copper application to have secure jmx connection:
+keytool -genkey -keystore ./keystore_cop_app -alias copperApp
+keytool -export -alias copperApp -rfc -keystore ./keystore_cop_app > ./copperApp.cert
+keytool -import -alias copperApp -file ./copperApp.cert -keystore ./truststore_copper_app
+
+Securing application
+    1) run copper application with VM options to have secure jmx connection: 
+        `-Dcom.sun.management.jmxremote=true 
+        -Dcom.sun.management.jmxremote.authenticate=true 
+        -Dcom.sun.management.jmxremote.port=1099 
+        -Dcom.sun.management.jmxremote.ssl=true 
+        -Djavax.net.ssl.keyStore={path to keystore_monitoring} 
+        -Djavax.net.ssl.keyStorePassword={password} 
+        -Djavax.net.ssl.trustStore={path to truststore_monitoring} 
+        -Djavax.net.ssl.trustStorePassword={password}` 
+
+    2) add Enviroment variables to copper monitoring server to enable HTTPS: 
+        KEYSTORE_LOC={path to keystore_monitoring}, 
+        KEYSTORE_PASS={password}, 
+        TRUSTSTORE_LOC={path to truststore_monitoring}, 
+        TRUSTSTORE_PASS={password}, 
+        HTTPS_ENABLED=true
+        
+    3) add VM options to copper monitoring to connect to secured jmx: 
+        `-Djavax.net.ssl.trustStore={path to truststore_copper_app} 
+        -Djavax.net.ssl.trustStorePassword={password}`
+
+

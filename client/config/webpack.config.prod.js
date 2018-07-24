@@ -90,7 +90,7 @@ webpackConfig.plugins = [...webpackConfig.plugins,
     minChunks: Infinity
   }),
   extractSass,
-  purifyCss,
+  // purifyCss,
   new HtmlWebpackPlugin({
     inject: true,
     template: helpers.root('/src/index.html'),

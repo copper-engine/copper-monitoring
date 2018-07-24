@@ -163,7 +163,7 @@ body {
                                 h1 {
                                     color: $dark-error;
                                 }
-                                .icon {
+                                .v-icon {
                                     color: $dark-error;
                                     padding-bottom: 10px;
                                     padding-left: 5px;
@@ -320,7 +320,7 @@ body {
                                     h1 {
                                         color: $dark-error;
                                     }
-                                    .icon {
+                                    .v-icon {
                                         color: $dark-error;
                                     }
                                 }
@@ -397,13 +397,13 @@ body {
     #appCover {
         .v-menu__content {
             background-color: $light-tertiary;
-            .v-menu-header {
+            .menu-header {
                 padding: 15px;
                 background-color: $light-tertiary;
                 color: $dark-error;
                 font-size: 0.8em;
             }
-            .v-menu-info {
+            .menu-info {
                 padding-left: 15px;
                 padding-top: 15px;
                 padding-right: 15px;
@@ -411,7 +411,7 @@ body {
                 color: $dark-text-color;
                 font-size: 0.6em;
             }
-            .v-menu-details {
+            .menu-details {
                 padding-left: 15px;
                 padding-top: 10px;
                 padding-bottom: 15px;
@@ -442,6 +442,15 @@ body {
                     }
                 }
             }
+            .v-select-list {
+                color: $dark-text-color !important;
+                .v-list {
+                    color: $dark-text-color !important;
+                    .v-list__tile--active {
+                        color: $light-primary !important;
+                    }
+                }
+            }
             .state-filter {
                 width: 150px;
                 padding: 10px;
@@ -457,15 +466,15 @@ body {
         .dark {
             .v-menu__content {
                 background-color: $dark-tertiary;
-                .v-menu-header {
+                .menu-header {
                     background-color: $dark-tertiary;
                     color: $dark-error;
                 }
-                .v-menu-info {
+                .menu-info {
                     background-color: $dark-background;
                     color: $light-text-color;
                 }
-                .v-menu-details {
+                .menu-details {
                     background-color: $dark-background;
                     color: $light-text-color;
                 }
@@ -478,6 +487,16 @@ body {
                     .v-list__tile__title {
                         .v-list__tile__title {
                             color: $light-text-color;
+                        }
+                    }
+                }
+                .v-select-list {
+                    color: $light-text-color !important;
+                    .v-list {
+                        color: $light-text-color !important;
+                        background-color: $dark-tertiary !important;
+                        .v-list__tile--active {
+                            color: $dark-primary !important;
                         }
                     }
                 }
@@ -547,7 +566,8 @@ body {
             .v-input,
             .v-text-field,
             .v-input--is-label-active,
-            .v-input--is-focused{
+            .v-input--is-focused,
+            .v-input--is-dirty{
                 color: $light-primary !important;
                 .v-input__control {
                     .v-input__slot {
@@ -599,7 +619,10 @@ body {
                             label {
                                 color: $dark-text-color !important;
                             }
-
+                            input {
+                                color: $dark-text-color !important;
+                                caret-color: $light-primary !important;                                
+                            }
                         }
                     }
                 }
@@ -614,8 +637,10 @@ body {
                 .v-input,
                 .v-text-field,
                 .v-input__switch,
+                .v-input--switch,
                 .v-input--is-label-active,
-                .v-input--is-focused{
+                .v-input--is-focused,
+                .v-input--is-dirty{
                     color: $dark-primary !important;
                     .v-input__control {
                         .v-input__slot {
@@ -630,7 +655,8 @@ body {
                             }
                             .v-input--selection-controls__input {
                                 color: $dark-primary !important;                                
-                                .accent--text {
+                                .accent--text,
+                                .v-input--selection-controls__ripple {
                                     color: $dark-primary !important;
                                 }
                             }
@@ -666,42 +692,11 @@ body {
                                 label {
                                     color: $dark-text-color !important;
                                 }
-
+                                input {
+                                    color: $dark-text-color !important;
+                                    caret-color: $dark-primary !important;                                
+                                }
                             }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-body {
-    #appCover {
-        .v-menu__content {
-            .v-select-list {
-                color: $dark-text-color !important;
-                .v-list {
-                    color: $dark-text-color !important;
-                    .v-list__tile--active {
-                        color: $light-primary !important;
-                    }
-                }
-            }
-        }
-    }
-}
-
-body {
-    #appCover {
-        .dark {
-            .v-menu__content {
-                .v-select-list {
-                    color: $light-text-color !important;
-                    .v-list {
-                        color: $light-text-color !important;
-                        background-color: $dark-tertiary !important;
-                        .v-list__tile--active {
-                            color: $dark-primary !important;
                         }
                     }
                 }

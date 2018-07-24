@@ -7,6 +7,29 @@ Server is simple proxy for jmx based on Jolokia and Grizly server. It uses jolok
 Note that your copper application should be running with turned on jmx. For example it can be runed with next parameters: 
 `-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=1099 -Dcom.sun.management.jmxremote.ssl=false` 
 
+* Securing application
+    * run copper application with VM options to have secure jmx connection: 
+        `-Dcom.sun.management.jmxremote=true 
+        -Dcom.sun.management.jmxremote.authenticate=true 
+        -Dcom.sun.management.jmxremote.port=1099 
+        -Dcom.sun.management.jmxremote.ssl=true 
+        -Djavax.net.ssl.keyStore={path to keystore_monitoring} 
+        -Djavax.net.ssl.keyStorePassword={password} 
+        -Djavax.net.ssl.trustStore={path to truststore_monitoring} 
+        -Djavax.net.ssl.trustStorePassword={password}` 
+
+   * add Enviroment variables to copper monitoring server to enable HTTPS: 
+        KEYSTORE_LOC={path to keystore_monitoring}, 
+        KEYSTORE_PASS={password}, 
+        TRUSTSTORE_LOC={path to truststore_monitoring}, 
+        TRUSTSTORE_PASS={password}, 
+        HTTPS_ENABLED=true
+        
+    * add VM options to copper monitoring to connect to secured jmx: 
+        `-Djavax.net.ssl.trustStore={path to truststore_copper_app} 
+        -Djavax.net.ssl.trustStorePassword={password}`
+
+
 ## Client 
 
 Monitoring GUI for Copper Engine is web application, that uses JMX to connect to application that use copper-engine to show current state of copper engines. Able to connect to few applications, that are in app cluster, in same time to show information about all engines. Groups engines that have same engineClusterId to engine cluster for better understanding.  

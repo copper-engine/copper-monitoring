@@ -10,7 +10,6 @@ export const dashboardComponent = () => import('./components/dashboard').then(({
 export const notificationsComponent = () => import('./components/core/notifications').then(({ NotificationsComponent }) => NotificationsComponent);
 export const cookiePolicyomponent = () => import('./components/core/cookie-policy').then(({ CookiePolicyComponent }) => CookiePolicyComponent);
 const workflowsComponent = () => import('./components/dashboard/workflows').then(({ WorkflowsComponent }) => WorkflowsComponent);
-const statisticsComponent = () => import('./components/dashboard/statistics').then(({ StatisticsComponent }) => StatisticsComponent);
 const workflowRepoComponent = () => import('./components/dashboard/workflow-repo').then(({ WorkflowRepository }) => WorkflowRepository);
 const processorPoolsComponent = () => import('./components/dashboard/processor-pools').then(({ ProcessorPools }) => ProcessorPools);
 const overviewComponent = () => import('./components/dashboard/overview').then(({ OverviewComponent }) => OverviewComponent);
@@ -38,10 +37,6 @@ if (process.env.ENV === 'development' && module.hot) {
   makeHot(workflowsModuleId, workflowsComponent,
     module.hot.accept('./components/dashboard/workflows', () => reload(workflowsModuleId, (<any>require('./components/dashboard/workflows')).WorkflowsComponent)));
 
-  const statisticsComponentId = './components/dashboard/statistics';
-  makeHot(statisticsComponentId, statisticsComponent,
-    module.hot.accept('./components/dashboard/statistics', () => reload(statisticsComponentId, (<any>require('./components/dashboard/statistics')).statisticsComponent)));
-  
   const overviewComponentId = './components/dashboard/overview';
   makeHot(overviewComponentId, overviewComponent,
     module.hot.accept('./components/dashboard/overview', () => reload(overviewComponentId, (<any>require('./components/dashboard/overview')).overviewComponent)));
@@ -79,23 +74,15 @@ export const createRoutes: () => RouteConfig[] = () => [
         // WokflowsComponent will be rendered inside Dashboards's <router-view>
         // when /dashboard/workflows is matched
         name: 'workflows',
-        path: 'workflows/:wfType/:connection/:id',
+        path: 'workflows/:wfType/:id',
         component: workflowsComponent,
         meta: {
           requiresAuth: true
         }
       },
       {
-        name: 'statistics',
-        path: 'statistics/:type/:id',
-        component: statisticsComponent,
-        meta: {
-          requiresAuth: true
-        }
-      },
-      {
         name: 'workflow-repo',
-        path: 'workflow-repo/:connection/:id',
+        path: 'workflow-repo/:id',
         component: workflowRepoComponent,
         meta: {
           requiresAuth: true
@@ -103,7 +90,7 @@ export const createRoutes: () => RouteConfig[] = () => [
       },
       {
         name: 'processor-pools',
-        path: 'processor-pools/:connection/:id',
+        path: 'processor-pools/:id',
         component: processorPoolsComponent,
         meta: {
           requiresAuth: true

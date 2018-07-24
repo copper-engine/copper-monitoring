@@ -15,7 +15,7 @@ IF "%1" == "--dockerize" (
     cd "%~dp0"/client
     npm install && npm run build && npm run deploy-win
     cd ../Server
-    call gradlew.bat distZip && copy ./build/distributions/copper-monitoring.zip ../docker
+    call gradlew.bat distZip && robocopy ./build/distributions ../docker copper-monitoring.zip
     pause
 )
 IF "%1" == "--help" (

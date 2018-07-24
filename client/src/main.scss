@@ -163,7 +163,7 @@ body {
                                 h1 {
                                     color: $dark-error;
                                 }
-                                .icon {
+                                .v-icon {
                                     color: $dark-error;
                                     padding-bottom: 10px;
                                     padding-left: 5px;
@@ -320,7 +320,7 @@ body {
                                     h1 {
                                         color: $dark-error;
                                     }
-                                    .icon {
+                                    .v-icon {
                                         color: $dark-error;
                                     }
                                 }
@@ -397,13 +397,13 @@ body {
     #appCover {
         .v-menu__content {
             background-color: $light-tertiary;
-            .v-menu-header {
+            .menu-header {
                 padding: 15px;
                 background-color: $light-tertiary;
                 color: $dark-error;
                 font-size: 0.8em;
             }
-            .v-menu-info {
+            .menu-info {
                 padding-left: 15px;
                 padding-top: 15px;
                 padding-right: 15px;
@@ -411,7 +411,7 @@ body {
                 color: $dark-text-color;
                 font-size: 0.6em;
             }
-            .v-menu-details {
+            .menu-details {
                 padding-left: 15px;
                 padding-top: 10px;
                 padding-bottom: 15px;
@@ -466,15 +466,15 @@ body {
         .dark {
             .v-menu__content {
                 background-color: $dark-tertiary;
-                .v-menu-header {
+                .menu-header {
                     background-color: $dark-tertiary;
                     color: $dark-error;
                 }
-                .v-menu-info {
+                .menu-info {
                     background-color: $dark-background;
                     color: $light-text-color;
                 }
-                .v-menu-details {
+                .menu-details {
                     background-color: $dark-background;
                     color: $light-text-color;
                 }

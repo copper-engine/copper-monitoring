@@ -6,7 +6,8 @@ export class ConnectionSettings {
         public host: string = 'localhost', 
         public port: string = '1099',
         public username: string = null,
-        public password: string = null) {
+        public password: string = null,
+        public passwordSaved: boolean = false) {
     }
 
     toString() {

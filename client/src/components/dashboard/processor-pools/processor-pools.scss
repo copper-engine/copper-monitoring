@@ -40,28 +40,27 @@
             border-color: $light-border;
             background-color: $light-wf;
             color: $dark-text-color;
-            .card-label {               
+            .pool-content {
                 font-size: 1.1em;
-                padding: 10px;
-                flex-grow: 0;
-                height: 340px;
-                width:175px;
-                div {
-                    flex-grow: 0;
-                    height: 26px;
+                padding-top: 10px;
+                padding-left: 10px;
+                padding-bottom: 10px;
+                padding-right: 0px;
+                margin-right: -10px;                
+            }
+            .label {
+                max-width: 160px;
+                min-width: 160px;
+                .flex {
+                    text-align: right;
                 }
             }
-            .card-info {
-                font-size: 1.1em;
-                padding: 10px;
-                margin-right: -10px;                
-                flex-grow: 0;
-                height: 340px;
-                max-width: 120px;                
-                div {
-                    flex-grow: 0;
-                    height: 26px;
-                }
+            .info {
+                max-width: 160px;
+                min-width: 160px;
+                padding-left: 10px;
+                max-height: 45px;
+                overflow: hidden;
             }
             .card-graph {
                 flex-grow: 0;

@@ -14,117 +14,151 @@
     </v-layout>
     <v-layout row class="pool-card-container">
         <v-layout class="pool-card" v-for="pool in this.processorPools" :key="pool.id" row>
-            <v-layout column class="card-label">
-                <v-layout>
-                    <v-spacer></v-spacer>
-                    <v-flex>
-                        ID: 
-                    </v-flex>
+            <v-layout column class='pool-content'>
+                <v-layout row>
+                    <div class='label'>
+                        <v-flex>
+                            ID: 
+                        </v-flex>  
+                    </div>
+                    <div class='info'>
+                        <v-flex>
+                            {{ pool.id }}
+                        </v-flex>
+                    </div>
                 </v-layout>
-                <v-layout>
-                    <v-spacer></v-spacer>
-                    <v-flex>
-                        State: 
-                    </v-flex>
+                <v-layout row>
+                    <div class='label'>
+                        <v-flex>
+                            State: 
+                        </v-flex>  
+                    </div>
+                    <div class='info'>
+                        <v-flex>
+                            {{ pool.state }}
+                        </v-flex>
+                    </div>
                 </v-layout>
-                <v-layout>
-                    <v-spacer></v-spacer>
-                    <v-flex>
-                        Priority: 
-                    </v-flex>
+                <v-layout row>
+                    <div class='label'>
+                        <v-flex>
+                            Priority: 
+                        </v-flex>  
+                    </div>
+                    <div class='info'>
+                        <v-flex>
+                            {{ pool.priority }}
+                        </v-flex>
+                    </div>
                 </v-layout>
-                <v-layout>
-                    <v-spacer></v-spacer>
-                    <v-flex>
-                        Queue Size: 
-                    </v-flex>
+                <v-layout row>
+                    <div class='label'>
+                        <v-flex>
+                            Queue Size: 
+                        </v-flex>  
+                    </div>
+                    <div class='info'>
+                        <v-flex>
+                            {{ pool.queueSize }}
+                        </v-flex>
+                    </div>
                 </v-layout>
-                <v-layout>
-                    <v-spacer></v-spacer>
-                    <v-flex>
-                        Memory Queue: 
-                    </v-flex>
+                <v-layout row>
+                    <div class='label'>
+                        <v-flex>
+                            Memory Queue: 
+                        </v-flex>  
+                    </div>
+                    <div class='info'>
+                        <v-flex>
+                            {{ pool.memoryQueueSize }}
+                        </v-flex>
+                    </div>
                 </v-layout>
-                <v-layout>
-                    <v-spacer></v-spacer>
-                    <v-flex>
-                        Deque Bulk: 
-                    </v-flex>
+                <v-layout row>
+                    <div class='label'>
+                        <v-flex>
+                            Deque Bulk: 
+                        </v-flex>  
+                    </div>
+                    <div class='info'>
+                        <v-flex>
+                            {{ pool.dequeBulkSize }}
+                        </v-flex>
+                    </div>
                 </v-layout>
-                <v-layout>
-                    <v-spacer></v-spacer>
-                    <v-flex>
-                        Empty Queue Wait: 
-                    </v-flex>
+                <v-layout row>
+                    <div class='label'>
+                        <v-flex>
+                            Empty Queue Wait: 
+                        </v-flex>  
+                    </div>
+                    <div class='info'>
+                        <v-flex>
+                            {{ pool.emptyQueueWait }}
+                        </v-flex>
+                    </div>
                 </v-layout>
-                <v-layout>
-                    <v-spacer></v-spacer>
-                    <v-flex>
-                        Threads: 
-                    </v-flex>
+                <v-layout row>
+                    <div class='label'>
+                        <v-flex>
+                            Threads: 
+                        </v-flex>  
+                    </div>
+                    <div class='info'>
+                        <v-flex>
+                            {{ pool.numThreads }}
+                        </v-flex>
+                    </div>
                 </v-layout>
-                <v-layout>
-                    <v-spacer></v-spacer>
-                    <v-flex>
-                        Active Threads: 
-                    </v-flex>
+                <v-layout row>
+                    <div class='label'>
+                        <v-flex>
+                            Active Threads: 
+                        </v-flex>  
+                    </div>
+                    <div class='info'>
+                        <v-flex>
+                            {{ pool.numActiveThreads }}
+                        </v-flex>
+                    </div>
                 </v-layout>
-                <v-layout>
-                    <v-spacer></v-spacer>
-                    <v-flex>
-                        Upper Threshold Wait: 
-                    </v-flex>
+                <v-layout row>
+                    <div class='label'>
+                        <v-flex>
+                            Upper Threshold Wait: 
+                        </v-flex>  
+                    </div>
+                    <div class='info'>
+                        <v-flex>
+                            {{ pool.upperThresholdWait }}
+                        </v-flex>
+                    </div>
                 </v-layout>
-                <v-layout>
-                    <v-spacer></v-spacer>
-                    <v-flex>
-                        Upper Threshold: 
-                    </v-flex>
+                <v-layout row>
+                    <div class='label'>
+                        <v-flex>
+                            Upper Threshold: 
+                        </v-flex>  
+                    </div>
+                    <div class='info'>
+                        <v-flex>
+                            {{ pool.upperThreshold }}
+                        </v-flex>
+                    </div>
                 </v-layout>
-                <v-layout>
-                    <v-spacer></v-spacer>
-                    <v-flex>
-                        Lower Threshold: 
-                    </v-flex>
+                <v-layout row>
+                    <div class='label'>
+                        <v-flex>
+                            Lower Threshold: 
+                        </v-flex>  
+                    </div>
+                    <div class='info'>
+                        <v-flex>
+                            {{ pool.lowerThreshold }}
+                        </v-flex>
+                    </div>
                 </v-layout>
-            </v-layout>
-            <v-layout column class="card-info">
-                <v-flex>
-                    {{ pool.id }}
-                </v-flex>
-                <v-flex>
-                    {{ pool.state }}
-                </v-flex>
-                <v-flex>
-                    {{ pool.priority }}
-                </v-flex>
-                <v-flex>
-                    {{ pool.queueSize }}
-                </v-flex>
-                <v-flex>
-                    {{ pool.memoryQueueSize }}
-                </v-flex>
-                <v-flex>
-                    {{ pool.dequeBulkSize }}
-                </v-flex>
-                <v-flex>
-                    {{ pool.emptyQueueWait }}
-                </v-flex>
-                <v-flex>
-                    {{ pool.numThreads }}
-                </v-flex>
-                <v-flex>
-                    {{ pool.numActiveThreads }}
-                </v-flex>
-                <v-flex>
-                    {{ pool.upperThresholdWait }}
-                </v-flex>
-                <v-flex>
-                    {{ pool.upperThreshold }}
-                </v-flex>
-                <v-flex>
-                    {{ pool.lowerThreshold }}
-                </v-flex>
             </v-layout>
             <v-flex class="card-graph">
                 <donut 

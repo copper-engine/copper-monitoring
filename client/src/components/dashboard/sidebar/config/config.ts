@@ -31,6 +31,7 @@ export class ConfigComponent extends Vue {
         this.port = this.connectionSettings.port;
         this.username = this.connectionSettings.username;
         this.password = this.connectionSettings.password;
+        this.savePass = this.connectionSettings.passwordSaved;
     }
 
     private deleteSettings() {

@@ -98,6 +98,7 @@ export class DashboardComponent extends Vue {
                 if (parsed[0] && parsed[1]) {
                     let username = this.$store.state.user.settings.defaultJmxUsername;
                     let password = this.$store.state.user.settings.defaultJmxPass;
+                    let savedPassword = false;
                     let connection = new ConnectionSettings(parsed[0], parsed[1]);
                     
                     try {
@@ -105,9 +106,10 @@ export class DashboardComponent extends Vue {
                         if (lsConnection) {
                             username = lsConnection.username;
                             password = lsConnection.password;
+                            savedPassword = true;
                         }
                     } catch (err) {}
-                    settings.push(new ConnectionSettings(parsed[0], parsed[1], username, password));
+                    settings.push(new ConnectionSettings(parsed[0], parsed[1], username, password, savedPassword));
                 }
             }
         });

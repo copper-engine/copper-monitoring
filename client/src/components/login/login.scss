@@ -7,9 +7,10 @@ body .login {
         color: $light-text-color !important;
     }
 
-    .alert {
+    .v-alert {
         margin: 0;
         max-width: 400px;
+        background-color: #f54949;
     }
 
     .login-header {

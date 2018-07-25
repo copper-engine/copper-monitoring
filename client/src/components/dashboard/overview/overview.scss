@@ -48,9 +48,9 @@
     .no-connection-card {
         margin-top: 30px;
         background-color: $light-background !important;
-        .card__text {
+        .v-card__text {
             background-color: $light-background !important;
-            .alert {
+            .v-alert {
                 border: 2px solid;
                 margin: 20px;
                 background-color: $light-tertiary !important;
@@ -119,9 +119,9 @@
         }
         .no-connection-card {
             background-color: $dark-background !important;
-            .card__text {
+            .v-card__text {
                 background-color: $dark-background !important;
-                .alert {
+                .v-alert {
                     background-color: $dark-wf !important;
                     border-color: $dark-tertiary !important;
                     color: $light-text-color;

@@ -118,12 +118,16 @@ You all also can download docker image from Docker Hub: `docker pull copperengin
 Port 8080 should be binded to hosts port 8080 due to internal mapping to jolokia
 `docker run -p 8080:8080 copper-monitoring`
 
-By default, inside Container we are not able to access localhost as host so we should 
-use ip of host in dockerland. We can get it like that: 
+By default, inside Container we are not able to access localhost as host. Instead, do the following:
+ 
+Linux:
+Use the ip of host in dockerland. We can get it like this: 
 `docker exec -it <container_id> ip route | awk '/default/ { print $3 }'`
 
-We should use this IP address instead of localhost in our copper monitoring GUI.
+Windows:
+Use `host.docker.internal`
 
+We should use this IP address instead of localhost in our copper monitoring GUI.
 
 License
 -----------------
@@ -145,6 +149,3 @@ To get check licenses of other third party libraries that we use in our client p
 you can use https://www.npmjs.com/package/license-checker or any other alternative.
 For server part you can use `gradle downloadLicenses` command and then see report at
 copper-monitoring/server/build/reports/license/dependency-license.html  
-
-
-

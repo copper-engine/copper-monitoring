@@ -29,6 +29,15 @@ Note that your copper application should be running with turned on jmx. For exam
         `-Djavax.net.ssl.trustStore={path to truststore_copper_app} 
         -Djavax.net.ssl.trustStorePassword={password}`
 
+* Securing with Docker
+
+    * The same Env. variables and VM options are required with Docker, however they can be applied
+    through a Dockerfile. Use the Dockerfile in /docker-secure. This can be done with the command
+    in 'Start.cmd', './start --dockerize-secure'
+    
+    * Place the appropriate files ( keystore, truststore, cert, ect. ) in Server/certs, and check to
+    make sure their names and locations match up with those detailed in the Dockerfile. Alter either the
+    files or the Dockerfile accordingly. 
 
 ## Client 
 
@@ -81,10 +90,19 @@ App uses Vue.js with TypeScript and Vuetify as base.
 
 # Getting started
 ## Using bash script
+Linux:
 * `./start.sh --install` for first use. It will install npm dependencies, build and ship gui to server
 * `./start.sh` for futher usages. It will start server with GUI and Backend
 * `./start.sh --prep-docker` for preparing files brfore creating docker image. It will build client & server parts
-* `./start.sh --dockerize` for creating docker image. It will createa docker image of copper-monitoring
+* `./start.sh --dockerize` for creating docker image. It will create a docker image of copper-monitoring
+
+Windows:
+* `./start.cmd --dockerize` for creating docker image. It will build a zipped application and store it in /docker
+                            from here build the image through Docker with 'docker build -t copper-monitor'
+* `./start.cmd --dockerize-secure` also for creating a docker image, however this build file enables SSL in the 
+                                    image. It requires security certificated to be placed in the Server/certs
+                                    folder. Stores zipped application and security files in /docker-secure.
+                                    Build image with 'docker build -t copper-monitor-secure'
 
 ## Manual instalation and start
 Preparations:
@@ -115,8 +133,9 @@ Quick creation of docker image can be done by running `./start.sh --prep-docker 
 You all also can download docker image from Docker Hub: `docker pull copperengine/copper-monitoring`
 
 ## Notes for dockerized Copper Monitoring
-Port 8080 should be binded to hosts port 8080 due to internal mapping to jolokia
-`docker run -p 8080:8080 copper-monitoring`
+You should bind a port of your choice 'nnnnn' to port 8080 due to internal mapping to jolokia
+`docker run -p nnnn:8080 copper-monitoring`
+example: `docker run -p 1234:8080 copper-monitoring`
 
 By default, inside Container we are not able to access localhost as host. Instead, do the following:
  

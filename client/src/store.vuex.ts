@@ -23,6 +23,7 @@ export const Mutations = {
   updateTheme: 'updateTheme',
   setConnectionSettings: 'setConnectionSettings',
   updateConnectionSettings: 'updateConnectionSettings',
+  updateConnectionResult: 'updateConnectionResult',
   deleteConnectionSettings: 'deleteConnectionSettings',
   updateConnectionResults: 'updateConnectionResults',
   updateEngineStatus: 'updateEngineStatus',
@@ -43,6 +44,7 @@ export const store = new Vuex.Store<StoreState>({
         state.appCriticalError = error;
       },
       [Mutations.setConnectionSettings](state, connectionSettings: ConnectionSettings[]) {
+        state.connectionResults = connectionSettings.map(settings => new ConnectionResult(settings, [], [], null, true));
         state.connectionSettings = connectionSettings;
       },
       [Mutations.updateConnectionSettings](state, { index: index, connectionSettings: connectionSettings }) {
@@ -52,10 +54,18 @@ export const store = new Vuex.Store<StoreState>({
             Vue.set(state.connectionSettings, index, connectionSettings);
           }
       },
-      [Mutations.deleteConnectionSettings](state, index: number) {
-        state.connectionSettings.splice(index, 1);
-      },
-      [Mutations.updateConnectionResults](state, connectionResults) {
+      [Mutations.updateConnectionResult](state, { index: index, connectionResult: connectionResult }) {
+          if (index === -1) {
+            // index = 
+            state.connectionResults.push(connectionResult);
+          } else {
+            Vue.set(state.connectionResults, index, connectionResult);
+          }
+        },
+        [Mutations.deleteConnectionSettings](state, index: number) {
+          state.connectionSettings.splice(index, 1);
+        },
+        [Mutations.updateConnectionResults](state, connectionResults) {
         state.connectionResults = connectionResults;
       },
       [Mutations.updateEngineStatus](state, engineStatusList: EngineStatus[]) {

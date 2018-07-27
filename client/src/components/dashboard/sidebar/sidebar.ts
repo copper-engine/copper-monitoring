@@ -1,5 +1,5 @@
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
-import { ConnectionSettings } from '../../../models/connectionSettings';
+import { ConnectionSettings, ConnectionResult } from '../../../models/connectionSettings';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import { setTimeout } from 'timers';
 import { StatisticsService } from '../../../services/statisticsService';
@@ -82,6 +82,8 @@ export class SidebarComponent extends Vue {
       
     private updateTarget(index: number, connectionSettings: ConnectionSettings) {
         this.settingsShowed = false;
+        let connectionResult: ConnectionResult = new ConnectionResult(connectionSettings, [], [], null, true);
+        this.$store.commit(Mutations.updateConnectionResult, {index: index, connectionResult: connectionResult});
         this.$store.commit(Mutations.updateConnectionSettings, {index: index, connectionSettings: connectionSettings});
         this.$router.push('/dashboard?' + this.$store.getters.connectionsAsParams);
     }

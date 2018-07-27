@@ -4,12 +4,17 @@
             <v-layout row>
                 <v-flex class="icon-container">
                     <v-icon 
+                        v-show="connection.loading"
+                        class="not-connected-icon">
+                        refresh
+                    </v-icon> 
+                    <v-icon 
                         v-show="connection.isConnected()"
                         class="connected-icon">
                         fiber_manual_record
                     </v-icon> 
                     <v-icon 
-                        v-show="!connection.isConnected()"
+                        v-show="!connection.loading && !connection.isConnected()"
                         class="not-connected-icon"> 
                         fiber_manual_record
                     </v-icon> 

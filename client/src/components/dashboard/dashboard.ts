@@ -145,8 +145,8 @@ export class DashboardComponent extends Vue {
         }
 
         (this.$services.jmxService as JmxService)
-                .getConnectionResults(this.$store.state.connectionSettings, this.$store.state.user)
-                .then((results: ConnectionResult[]) => {
+        .getConnectionResults(this.$store.state.connectionSettings, this.$store.state.user)
+        .then((results: ConnectionResult[]) => {
             let notConnected: ConnectionResult;
 
             if (this.interval) {

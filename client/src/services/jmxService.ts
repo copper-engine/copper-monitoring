@@ -169,6 +169,8 @@ export class JmxService {
                 });
 
                 return connectionResults;
+            }).catch(error => {
+                console.log('Error', error);
             });
     }
 
@@ -459,7 +461,8 @@ export class JmxService {
         return {
             url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi`,
             user: connectionSettings.username,
-            password: connectionSettings.password
+            password: connectionSettings.password,
+            timeout: 5000
         };
     }
 

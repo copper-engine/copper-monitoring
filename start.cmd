@@ -2,7 +2,7 @@
 IF "%1" == "" (
     ECHO Starting Server
     cd "%~dp0"/server
-    call gradlew.bat
+    call gradlew.bat run
 )
 IF "%1" == "--install" (
     ECHO Will install npm dependencies, build and ship gui to server, and then start server

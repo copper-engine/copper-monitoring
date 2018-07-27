@@ -2,9 +2,9 @@
 Monitoring GUI and server for COPPER
 
 ## Server
-Server is simple proxy for jmx based on Jolokia and Grizly server. It uses jolokia to handle jmx calls to your copper application.
+Server is simple proxy for JMX based on Jolokia and Grizzly server. It uses Jolokia to handle JMX calls to your Copper Application.
 
-Note that your copper application should be running with turned on jmx. For example it can be runed with next parameters: 
+Note that your Copper Application should be running with JMX and a JMX port exposed. Take the following VM parameters for example: 
 `-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=1099 -Dcom.sun.management.jmxremote.ssl=false` 
 
 * Securing application
@@ -40,9 +40,8 @@ Note that your copper application should be running with turned on jmx. For exam
     files or the Dockerfile accordingly. 
 
 ## Client 
-
-Monitoring GUI for Copper Engine is web application, that uses JMX to connect to application that use copper-engine to show current state of copper engines. Able to connect to few applications, that are in app cluster, in same time to show information about all engines. Groups engines that have same engineClusterId to engine cluster for better understanding.  
-
+The Copper Monitoring GUI is a web application that uses JMX to query real time statistics from an application using the Copper Engine.The monitoring application queries and displays this information, and offers the user some interactive functionality with the engine as well.
+The application is able to connect to more than one application in an app-cluster, and show information from all engines. Engines with the same 'engineClusterId' are grouped together visually for clarity.
 * Information about enginees current state
     * number of active/broken workflows
     * last activity times
@@ -97,6 +96,8 @@ Linux:
 * `./start.sh --dockerize` for creating docker image. It will create a docker image of copper-monitoring
 
 Windows:
+* `./start.cmd --install` for first use. It will install npm dependencies, build and ship gui to server
+* `./start.cmd` runs the server, now the user can connect and start with the application
 * `./start.cmd --dockerize` for creating docker image. It will build a zipped application and store it in /docker
                             from here build the image through Docker with 'docker build -t copper-monitor'
 * `./start.cmd --dockerize-secure` also for creating a docker image, however this build file enables SSL in the 
@@ -113,7 +114,8 @@ Install dependencies for client: `npm install`
 
 Build client gui: `npm run build`
 
-Ship client gui to server: `npm run deploy`
+Ship client gui to server: Linux: `npm run deploy`
+Ship client gui to server: Windows: `npm run deploy-win`
 
 Start server with GUI and Backend:
 ```
@@ -129,7 +131,10 @@ cd server
 
 
 # Copper Monitoring With Docker
-Quick creation of docker image can be done by running `./start.sh --prep-docker && ./start.sh --dockerize`
+Quick creation of docker image can be done by running the following:
+    Linux: `./start.sh --prep-docker && ./start.sh --dockerize`
+    Windows: `./start.cmd --dockerize`
+
 You all also can download docker image from Docker Hub: `docker pull copperengine/copper-monitoring`
 
 ## Notes for dockerized Copper Monitoring

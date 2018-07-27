@@ -128,3 +128,24 @@ Windows:
 Use `host.docker.internal`
 
 We should use this IP address instead of localhost in our copper monitoring GUI.
+
+License
+-----------------
+Copyright 2002-2016 Copper Engine Development Team
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+To get check licenses of other third party libraries that we use in our client part, 
+you can use https://www.npmjs.com/package/license-checker or any other alternative.
+For server part you can use `gradle downloadLicenses` command and then see report at
+copper-monitoring/server/build/reports/license/dependency-license.html  

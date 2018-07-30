@@ -154,7 +154,7 @@ export class WorkflowsComponent extends Vue {
     }
 
     private showError(message: String) {
-        this.eventHub.$emit('showNotification', new Notification(message, 'error'));
+        this.eventHub.$emit('showNotification', new Notification(message, 'red'));
     }
 
     private showSuccess(message: String) {

@@ -42,7 +42,7 @@ export class ConfigComponent extends Vue {
     submit() {
         let newConnection = new ConnectionSettings(this.host, this.port, this.username, this.password);
         if (this.connectionExists(newConnection)) {
-            this.$services.eventHub.$emit('showNotification', new Notification('Connection is a duplicate', 'error'));
+            this.$services.eventHub.$emit('showNotification', new Notification('Connection is a duplicate', 'red'));
         } else {
             let lsConnectionKey = this.$store.state.user.name + '_' + newConnection.toString();            
             if (this.savePass === true) {

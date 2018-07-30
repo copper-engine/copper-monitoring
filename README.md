@@ -18,22 +18,22 @@ Note that your Copper Application should be running with JMX and a JMX port expo
         -Djavax.net.ssl.trustStore={path to truststore_monitoring} 
         -Djavax.net.ssl.trustStorePassword={password}` 
 
+    * add VM options to copper monitoring to connect to secured jmx: 
+        `-Djavax.net.ssl.trustStore={path to truststore_copper_app} 
+        -Djavax.net.ssl.trustStorePassword={password}`
+
    * add Enviroment variables to copper monitoring server to enable HTTPS: 
         KEYSTORE_LOC={path to keystore_monitoring}, 
         KEYSTORE_PASS={password}, 
         TRUSTSTORE_LOC={path to truststore_monitoring}, 
         TRUSTSTORE_PASS={password}, 
         HTTPS_ENABLED=true
-        
-    * add VM options to copper monitoring to connect to secured jmx: 
-        `-Djavax.net.ssl.trustStore={path to truststore_copper_app} 
-        -Djavax.net.ssl.trustStorePassword={password}`
 
 * Securing with Docker
 
     * The same Env. variables and VM options are required with Docker, however they can be applied
-    through a Dockerfile. Use the Dockerfile in /docker-secure. This can be done with the command
-    in 'Start.cmd', './start --dockerize-secure'
+    through a Dockerfile. The appropriate Env. variables and other commands are commented out in the default Dockerfile.
+    Uncomment them for the Dockerfile to run with secured connections.
     
     * Place the appropriate files ( keystore, truststore, cert, ect. ) in Server/certs, and check to
     make sure their names and locations match up with those detailed in the Dockerfile. Alter either the
@@ -100,10 +100,6 @@ Windows:
 * `./start.cmd` runs the server, now the user can connect and start with the application
 * `./start.cmd --dockerize` for creating docker image. It will build a zipped application and store it in /docker
                             from here build the image through Docker with 'docker build -t copper-monitor'
-* `./start.cmd --dockerize-secure` also for creating a docker image, however this build file enables SSL in the 
-                                    image. It requires security certificated to be placed in the Server/certs
-                                    folder. Stores zipped application and security files in /docker-secure.
-                                    Build image with 'docker build -t copper-monitor-secure'
 
 ## Manual instalation and start
 Preparations:

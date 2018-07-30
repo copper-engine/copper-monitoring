@@ -22,10 +22,10 @@ IF "%1" == "--dockerize-secure" (
     ECHO Will create secure docker image copper-monitoring
     cd "%~dp0"/client
     npm install && npm run build && npm run deploy-win
-    cd ../docker-secure && mkdir certs
+    cd ../docker && mkdir certs
     cd ../Server
-    call gradlew.bat distZip && robocopy ./build/distributions ../docker-secure copper-monitoring.zip
-    robocopy ./certs ../docker-secure/certs
+    call gradlew.bat distZip && robocopy ./build/distributions ../docker copper-monitoring.zip
+    robocopy ./certs ../docker/certs
     pause
 )
 IF "%1" == "--help" (

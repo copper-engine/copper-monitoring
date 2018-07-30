@@ -64,7 +64,7 @@
                 </config>
             </transition>
             
-            <connection-status v-for="(connection, index) in $store.state.connectionResults" :key="connection.settings.host + connection.settings.port"
+            <connection-status v-for="(connection, index) in $store.state.connectionResults" :key="connection.id"
                 :connection="connection"
                 :index="index"
                 :closingConnections="selectConnectionsToClose"

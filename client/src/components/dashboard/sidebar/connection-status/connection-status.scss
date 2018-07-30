@@ -24,8 +24,21 @@
         .not-connected-icon{
             color: #c53332;
         }
+        .loading-icon {
+            color: $blue;
+        }
         .connected-icon{
             color: #69c57e;
+        }
+        .spin-load {
+            animation-name: spin-load;
+            animation-duration: 1s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
+        @keyframes spin-load {
+            from {transform:rotate(0deg);}
+            to {transform:rotate(360deg);}
         }
     }
     .error-icon {

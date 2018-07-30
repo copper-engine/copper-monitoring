@@ -350,7 +350,7 @@ export class OverviewComponent extends Vue {
                 this.eventHub.$emit('showNotification', new Notification('Connection Success'));
             } else {
                 this.connectionSuccess = false;
-                this.eventHub.$emit('showNotification', new Notification('Connection Failed', 'error'));
+                this.eventHub.$emit('showNotification', new Notification('Connection Failed', 'red'));
             }
         });
     }

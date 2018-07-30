@@ -126,6 +126,6 @@ export class ProcessorPools extends Vue {
     }
 
     private showError(message: string) {
-        this.eventHub.$emit('showNotification', new Notification(message, 'error'));
+        this.eventHub.$emit('showNotification', new Notification(message, 'red'));
     }
 }

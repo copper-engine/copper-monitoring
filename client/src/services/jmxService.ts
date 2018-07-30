@@ -148,7 +148,7 @@ export class JmxService {
                         connectionResult = new ConnectionResult(connectionSettings, mbeans);
                     } else {
                         connectionResult = new ConnectionResult(connectionSettings, []);
-                        if (response.data[i].status === 403) {
+                        if (response.data[i] !== undefined && response.data[i].status === 403) {
                             connectionResult.error = 'Authentication failed! Credentials required.';
                         } else {
                             connectionResult.error = response.data[i].error ? response.data[i].error : 'Unnable to connect';
@@ -462,14 +462,17 @@ export class JmxService {
             url: `service:jmx:rmi:///jndi/rmi://${connectionSettings.host}:${connectionSettings.port}/jmxrmi`,
             user: connectionSettings.username,
             password: connectionSettings.password,
-            timeout: 5000
+            // connectionTimeout: 5,
+            // socketTimeout: 5
         };
     }
 
     private createMBeansListRequest(connectionSettings: ConnectionSettings) {
         return {
             type: 'LIST',
-            target: this.getTarget(connectionSettings)
+            target: this.getTarget(connectionSettings),
+            // connectionTimeout: 5,
+            // socketTimeout: 5
         };
     }
 
@@ -723,6 +726,10 @@ export class JmxService {
     }
 
     private isSubResponseValid(subResponse) {
-        return !subResponse.error && (subResponse.value !== null ||  subResponse.value !== undefined);
+        if (subResponse !== undefined) {
+            return !subResponse.error && (subResponse.value !== null ||  subResponse.value !== undefined);
+        } else {
+            return false;
+        }
     }
 }

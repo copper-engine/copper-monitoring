@@ -99,11 +99,15 @@ export const store = new Vuex.Store<StoreState>({
         return state.connectionSettings.map((connection: ConnectionSettings) => 'connection=' + connection.host + '|' + connection.port).join('&');
       },
       engineMBeans: state => {
-        if (!state.connectionResults) 
+        if (!state.connectionResults) {
           return [];
+        }
 
         return _.flatMap(state.connectionResults.map(result => result.mbeans.map(mbean => {
-          mbean.name = 'copper.engine:' + mbean.name;
+          if (mbean.name.substr(0, 14) !== 'copper.engine:') {
+            mbean.name = 'copper.engine:' + mbean.name;
+          } else {
+          }
           return mbean;
         })));
       },

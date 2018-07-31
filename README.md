@@ -16,7 +16,7 @@ Download the Copper-Monitoring source code from GitHub here:
 https://github.com/copper-engine/copper-monitoring
 
 Or pull a Docker image with:
-docker pull copperengine/copper-monitoring
+`docker pull copperengine/copper-monitoring`
 
 ## Set up with Docker
 To build and zip the source code for Docker to use, simply run the following commands:

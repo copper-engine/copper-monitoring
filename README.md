@@ -104,12 +104,13 @@ https://docs.oracle.com/javase/8/docs/technotes/guides/management/agent.html
 * Securing with Docker
 
     * The same Env. variables and VM options are required with Docker, however they can be applied
-    through a Dockerfile or Enviorment Variable file. The appropriate Env. variables and other commands are commented out in the default Dockerfile and 
-    also commented out in the 'env.list' file in 'docker/env-vars'.
-    Uncomment them from the Dockerfile to create a new image, or build a new container from an existing image with the --env-file tag.
-    
-    * Place the appropriate files ( keystore, truststore, cert, ect. ) in Server/certs, and check to
-    make sure their names and locations match up with those detailed in the Dockerfile / env.list file. Alter either accordingly. 
+    through a Dockerfile or Enviorment Variable file. The appropriate Env. variables and other commands are commented out in the default Dockerfile and also commented out in the 'env.list' file in 'docker/env-vars'.
+    Uncomment them from the Dockerfile to build a new image, or create a new container from an existing image with the --env-file tag.
+
+    * The Dockerfile will make an internal directory /certs from where it will read your security files ( keystore, truststore, cert, ect. )
+    To bind your files to this directory, add the -v tag to your create command.
+
+    `docker create -p {nnnn}:8080 -v {path to your security files}:/app/certs --env-file {path to env.list} {img tag}`
 
 ## Client 
 The Copper Monitoring GUI is a web application that uses JMX to query real time statistics from an application using the Copper Engine.The monitoring application queries and displays this information, and offers the user some interactive functionality with the engine as well.

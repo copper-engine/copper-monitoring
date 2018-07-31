@@ -18,16 +18,6 @@ IF "%1" == "--dockerize" (
     call gradlew.bat distZip && robocopy ./build/distributions ../docker copper-monitoring.zip
     pause
 )
-IF "%1" == "--dockerize-secure" (
-    ECHO Will create secure docker image copper-monitoring
-    cd "%~dp0"/client
-    npm install && npm run build && npm run deploy-win
-    cd ../docker && mkdir certs
-    cd ../Server
-    call gradlew.bat distZip && robocopy ./build/distributions ../docker copper-monitoring.zip
-    robocopy ./certs ../docker/certs
-    pause
-)
 IF "%1" == "--help" (
     ECHO Script usage:
     ECHO Run without arguments to start copper monitoring. Will not fetch future client changes.

@@ -109,7 +109,7 @@ https://docs.oracle.com/javase/8/docs/technotes/guides/management/agent.html
     Uncomment them from the Dockerfile to create a new image, or build a new container from an existing image with the --env-file tag.
     
     * Place the appropriate files ( keystore, truststore, cert, ect. ) in Server/certs, and check to
-    make sure their names and locations match up with those detailed in the Dockerfile / env.list file. Alter eithe accordingly. 
+    make sure their names and locations match up with those detailed in the Dockerfile / env.list file. Alter either accordingly. 
 
 ## Client 
 The Copper Monitoring GUI is a web application that uses JMX to query real time statistics from an application using the Copper Engine.The monitoring application queries and displays this information, and offers the user some interactive functionality with the engine as well.

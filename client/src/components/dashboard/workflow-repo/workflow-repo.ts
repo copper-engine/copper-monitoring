@@ -35,11 +35,14 @@ export class WorkflowRepository extends Vue {
         clearInterval(this.fetchInterval);
     }
 
-    loadRepo() {
+    loadRepo() {              
         let engine: EngineStatus = this.$store.state.engineStatusList[this.$route.params.id];
         let mbean = this.$store.getters.engineMBean(this.$route.params.id);
         this.jmxService.getWfRepoDetails(mbean.connectionSettings, engine.wfRepoMXBean, this.$store.state.user).then((response: WorkflowRepo) => {
-            this.wfRepo = response;
+            this.wfRepo.description = response.description;
+            this.wfRepo.sourceDir = response.sourceDir;
+            this.wfRepo.lastBuildResults = response.lastBuildResults;
+            this.wfRepo.repoSize = response.repoSize;
         });
         this.jmxService.getWfRepo(mbean.connectionSettings, engine.wfRepoMXBean, this.$store.state.user, this.perPage, (this.page - 1) * this.perPage).then((response) => {
             this.wfRepo.workFlowInfo = response;
@@ -75,7 +78,7 @@ export class WorkflowRepository extends Vue {
         this.loadRepo();
         this.fetchInterval = setInterval(() => {
             this.loadRepo();
-        }, 120 * 1000);
+        }, 60 * 1000);
     }
     
     private toggleOpen(index) {

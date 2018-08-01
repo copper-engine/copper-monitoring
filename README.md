@@ -46,11 +46,17 @@ Where {nnnn} is a port of your choice to forward to your container.
 Finally run your container with your container id by:
 `docker start {id}`
 
-By default, inside Container we are not able to access localhost as host. Instead, do the following:
+NOTE on 'localhost':
+By default, inside a container we are not able to access localhost as host. If you would like to access
+services on your machine's localhost, take one of these approaches based on your OS:
  
 Linux:
-Use the ip of host in dockerland. We can get it like this: 
+Use the ip of host in dockerland in place of 'localhost'. We can get it like this: 
 `docker exec -it <container_id> ip route | awk '/default/ { print $3 }'`
+Or create your container with the --network="host" tag, and then use 'localhost'
+which will be directed to your host machine.
+`docker create --network="host" {image name}`
+Note, you can no longer forward ports in this network mode.
 
 Windows:
 Use `host.docker.internal`

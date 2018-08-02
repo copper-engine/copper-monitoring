@@ -16,12 +16,15 @@
             min-width: 200px;
             max-width: 200px;
         }
-        button {
+    }
+    .workflow-detail-buttons {
+        .v-btn {
             background-color: $light-primary !important;
             color: $light-text-color;
             border-radius: 5%;
             width: 185px;
             height: 36px;
+            margin-top: -40px;
         }
     }
     .stacktrace .text {
@@ -33,12 +36,12 @@
             min-width: 100%;
         }
     }
-    .workflow-id {
-        max-height: 24px;
+    .workflow-id,
+    .class-info,
+    .version {
+        max-width: 500px;
     }
-    .raise {
-        margin-top: -40px;
-    }
+
     .stopGrow {
         flex-grow: 0;
     }

@@ -263,16 +263,15 @@
         to {opacity: 0.4}
     }
 
-    .extend-enter-active {
-        animation: extend 0.75s;
+    .extend-wf-details-enter-active {
+        animation: extend-wf-details 1s;
     }
-    .extend-leave-active {
-        animation: extend 0.75s reverse;
+    .extend-wf-details-leave-active {
+        animation: extend-wf-details 1s reverse;
     }
-    @keyframes extend {
-        0% {max-height: 0px;
-            padding-top: 0px;}
-        100% {max-height: 900px;;}
+    @keyframes extend-wf-details {
+        0% {max-height: 0px;}
+        100% {max-height: 1500px;}
     } 
 }
 

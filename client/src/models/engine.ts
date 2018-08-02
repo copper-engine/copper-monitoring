@@ -129,7 +129,7 @@ export class WorkflowInfo {
     public processorPoolId: string;
     public timeout: Date;
     public workflowClassInfo: WorkflowClassInfo = new WorkflowClassInfo;
-    public dataAsstring: string;
+    public dataAsString: string;
     public lastWaitStackTrace: string;
     public errorData: ErrorData;
     public lastModTS: Date;

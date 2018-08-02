@@ -28,12 +28,12 @@
         }
     }
     .stacktrace .text {
-        overflow-x: auto;
         border-radius: 3px;
         code {
             border-radius: 3px 3px 0px 0px;
             padding: 10px 30px; 
             min-width: 100%;
+            word-break: break-all;
         }
     }
     .workflow-id,

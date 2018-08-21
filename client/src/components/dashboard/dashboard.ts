@@ -73,7 +73,6 @@ export class DashboardComponent extends Vue {
         this.$store.state.user.settings.updatePeriod = this.update;
     }
 
-    // @Watch('$route')
     private resolveRoute() {
         let defaultSettings = this.$store.state.user.settings;
         let defaultConnection = new ConnectionSettings(defaultSettings.defaultHost, defaultSettings.defaultPort, defaultSettings.defaultJmxUsername, defaultSettings.defaultJmxPass);

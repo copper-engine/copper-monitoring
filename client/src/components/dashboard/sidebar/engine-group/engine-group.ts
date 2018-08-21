@@ -75,7 +75,6 @@ export class EngineGroupComponent extends Vue {
         let params = this.group.engines[0].id + '?' + this.$store.getters.connectionsAsParams;
         
         return [
-            // new Link('Statistics', '/dashboard/statistics/' + ('group:' + this.group.name) + '/' + this.group.engines[0].id + params, 'mdi-chart-bar'),
             new Link('Broken Workflows', '/dashboard/workflows/broken/' + params, 'mdi-image-broken'),
             new Link('Waiting Workflows', '/dashboard/workflows/waiting/' + params, 'mdi-timer-sand-empty')
         ];

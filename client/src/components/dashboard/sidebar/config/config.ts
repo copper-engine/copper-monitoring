@@ -6,7 +6,6 @@ import { setTimeout } from 'timers';
 
 @Component({
     template: require('./config.html')
-    // dependencies : ['myService']
 })
 export class ConfigComponent extends Vue {
     @Prop() connectionSettings: ConnectionSettings;

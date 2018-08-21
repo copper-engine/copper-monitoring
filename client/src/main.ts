@@ -7,9 +7,6 @@ import { createRouter, dashboardComponent, notificationsComponent } from './rout
 
 import './main.scss';
 
-// import * as _ from 'lodash';
-// (window as any)._ = _;
-
 let store = (Vue.$ioc.resolve('store') as Store<StoreState>);
 let app = new Vue({
   el: '#app',

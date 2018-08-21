@@ -1,7 +1,7 @@
 import { Vue, Component, Prop} from 'vue-property-decorator';
-import { WorkflowInfo } from '../../../../models/engine';
+import { WorkflowInfo, EngineStatus } from '../../../../models/engine';
 import './workflow-details.scss';
-
+import { JmxService } from '../../../../services/jmxService';
 import * as moment from 'moment';
 import { create } from 'domain';
 
@@ -11,7 +11,9 @@ import { create } from 'domain';
 export class WorkflowDetails extends Vue {
     @Prop() workflow: WorkflowInfo;
     @Prop() wfType: string;
+    @Prop() engineStatus: EngineStatus;
     @Prop() inDialog: boolean;
+    private jmxService: JmxService = this.$services.jmxService;
 
     private openWorkflowDialog() {
         this.$emit('openWorkflowDialog', this.workflow);
@@ -19,6 +21,15 @@ export class WorkflowDetails extends Vue {
 
     private showSourceCode() {
         this.$emit('showSourceCode', this.workflow);        
+    }
+
+    private queryState() {
+        console.log('queryState Button Click Detected...');
+        this.jmxService.queryObjectState(this.engineStatus.engineMXBean.connectionSettings, this.engineStatus.engineMXBean, this.$store.state.user, this.workflow.id)
+        .then((state) => {
+            console.log(state.data[0].value);
+        });
+
     }
 
     private get creationTS() {

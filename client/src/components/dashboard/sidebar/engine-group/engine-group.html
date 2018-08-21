@@ -10,7 +10,7 @@
                     engines: {{ this.group.engines.length }}
                 </v-flex>
                 <v-tooltip top content-class="tooltip-text">
-                    <v-flex class="count-info" v-if="!open" slot="activator">
+                    <v-flex class="count-info" v-show="!open" slot="activator">
                         ( {{ wfCount }} / {{ brokenWFCount }} )
                     </v-flex>
                     <span>( Workflow Instances / Broken Workflows )</span>

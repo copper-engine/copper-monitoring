@@ -4,7 +4,7 @@
             Statistics Overview 
 
             <v-tooltip top content-class="tooltip-text">
-                <v-icon class="warning-icon" slot="activator" v-if="statisticsService.running && !statisticsService.holdingLock">warning</v-icon>
+                <v-icon class="warning-icon" slot="activator" v-show="statisticsService.running && !statisticsService.holdingLock">warning</v-icon>
                 <span>Warning: Collected data are not stored to Local Storage because another instance of Copper Monitoring with same user storing it's data.<br/> Close another window to store data, but note that you will lose data from another instance.</span>
             </v-tooltip>
         </h2>

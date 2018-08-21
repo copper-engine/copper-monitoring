@@ -10,13 +10,13 @@
                     {{status.type}}
                 </v-flex>
                 <v-tooltip top content-class="tooltip-text">
-                    <v-flex v-if="!open && !multiEngine" class="count-info" slot="activator">
+                    <v-flex v-show="!open && !multiEngine" class="count-info" slot="activator">
                         ( {{ wfCount }} / {{ status.brokenWFCount }} )
                     </v-flex>
                     <span>( Workflow Instances / Broken Workflows )</span>
                 </v-tooltip>
                 <v-tooltip top content-class="tooltip-text">
-                    <v-flex v-if="!open && multiEngine" class="count-info" slot="activator">
+                    <v-flex v-show="!open && multiEngine" class="count-info" slot="activator">
                         ( {{ wfCount }} )
                     </v-flex>
                     <span>( Workflow Instances )</span>

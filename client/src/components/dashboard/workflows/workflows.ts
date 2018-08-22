@@ -5,12 +5,15 @@ import { Notification } from '../../../models/notification';
 import { JmxService } from '../../../services/jmxService';
 import * as utils from '../../../util/utils';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
+import TreeView from 'vue-json-tree-view';
 import { ConnectionSettings } from '../../../models/connectionSettings';
 import { User } from '../../../models/user';
 import { MBean } from '../../../models/mbeans';
 import { HighlitedLine } from '../../../models/highlited-line';
 
 import './workflows.scss';
+
+Vue.use(TreeView);
 
 const sourceCodeomponent = () => import('./../../core/source-code').then(({ SourceCodeComponent }) => SourceCodeComponent);
 const WorkflowHeading = () => import('./workflow-header').then(({ WorkflowHeading }) => WorkflowHeading);
@@ -50,6 +53,8 @@ export class WorkflowsComponent extends Vue {
     dialogWF: WorkflowInfo = new WorkflowInfo;
     dialogWFOpen = false;
     dialogDeleteOpen = false;
+    dialogState: Object = null;
+    dialogStateOpen: boolean = false;
     sourceCodeAvailable = true;
     filter: WorkflowFilter = new WorkflowFilter();
     clickAllowed: boolean[] = [];
@@ -339,6 +344,11 @@ export class WorkflowsComponent extends Vue {
             }
             this.dialogSourceOpen = true;
         });
+    }
+
+    private showState(state: Object) {
+        this.dialogState = state;
+        this.dialogStateOpen = true;
     }
 
     private showDetails(workflow: WorkflowInfo, index: number) {

@@ -187,6 +187,22 @@ export class JmxService {
             });
     }
 
+    queryObjectState(connectionSettings: ConnectionSettings, bean: MBean, user: User, id: string) {
+        return Axios.post(process.env.API_NAME, [
+            this.createQueryObjectStateRequest(connectionSettings, bean.name, id)
+        ], {
+            auth: { username: user.name, password: user.password }
+        })
+        .then(this.parseObjectStateResponse)
+        .catch(error => {
+            console.error('Can\'t connect to Jolokia server or Copper Engine app. Checkout if it\'s running. Error fetching Broken Workflows:', error);
+        });
+    }
+
+    parseObjectStateResponse(response) {
+        return response.data[0].value;
+    }
+
     getWfRepoDetails(connectionSettings: ConnectionSettings, mbean: string, user: User) {
         return Axios.post(process.env.API_NAME, [
             this.createWfRepoInfoRequest(connectionSettings, mbean)
@@ -491,6 +507,17 @@ export class JmxService {
             operation: 'queryWorkflowInstances(javax.management.openmbean.CompositeData)',
             arguments: [this.createWorkflowFilter(connectionSettings, filter.states, max, offset, filter)], // get workflows with status Invalid
         });
+    }
+
+    private createQueryObjectStateRequest(connectionSettings: ConnectionSettings, bean: string, id: string) {
+
+        return {
+            type: 'EXEC',
+            mbean: bean,
+            operation: 'queryObjectState',
+            arguments: [id],
+            target: this.getTarget(connectionSettings)
+        };
     }
 
     private createCountWFRequest(connectionSettings: ConnectionSettings, mbean: string, states: State[], filter: WorkflowFilter = new WorkflowFilter) {

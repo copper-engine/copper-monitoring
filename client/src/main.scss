@@ -85,6 +85,18 @@ body {
                         background-color: $light-tertiary;
                         color: $dark-text-color;
                     }
+                    .tree-card {
+                        padding: 25px;
+                        background-color: $light-tertiary;
+                        color: $dark-text-color;
+                        .tree-view-item-hint,
+                        .tree-view-item-key-with-chevron::before {
+                            color: $dark-shade-text-color;
+                        }
+                        .tree-view-item-leaf {
+                            color: $dark-text-color;
+                        }
+                    }
                     .source-code-card-text {
                         padding: 15px;
                         background-color: $light-tertiary;
@@ -299,6 +311,18 @@ body {
                         .workflow-details {
                             background-color: $dark-tertiary;
                             color: $light-text-color;
+                        }
+                        .tree-card {
+                            padding: 25px;
+                            background-color: $dark-tertiary;
+                            color: $light-text-color;
+                            .tree-view-item-hint,
+                            .tree-view-item-key-with-chevron::before {
+                                color: $dark-sidebar-icon;
+                            }
+                            .tree-view-item-leaf {
+                                color: $light-text-color;
+                            }
                         }
                         .source-code-card-text {
                             padding: 15px;

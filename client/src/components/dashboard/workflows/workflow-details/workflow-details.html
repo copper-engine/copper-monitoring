@@ -59,7 +59,10 @@
             <v-btn depressed slot="activator" @click="showSourceCode(workflow)">Source Code</v-btn>
         </v-flex>
         <v-flex class="stopGrow raise" v-if="!inDialog">
-                <v-btn depressed slot="activator" @click="openWorkflowDialog(workflow)">Open in Pop Up</v-btn>
+            <v-btn depressed slot="activator" @click="queryState()">View State</v-btn>
+        </v-flex>
+        <v-flex class="stopGrow raise" v-if="!inDialog">
+            <v-btn depressed slot="activator" @click="openWorkflowDialog(workflow)">Open in Pop Up</v-btn>
         </v-flex>
     </v-layout>
     <v-layout class="workflow-detail stacktrace" v-if="(wfType === 'broken')">

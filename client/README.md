@@ -14,6 +14,7 @@ Currently provide user next features:
     * Show details(with stacktrace) of broken workflow
     * Show error and last wait Strack Traces
     * Show source code of workflow(with highliting of last waiting and error lines)
+    * Show deserialzed state of workflow
     * Open workflow in pop-up window
     * Filter workflows by class name, state or created and modification date 
     * Restart broken workflows(one, filtered or all)

@@ -35,10 +35,7 @@
                     </v-flex>  
                     <v-flex class="data">
                         {{ workflow.workflowClassInfo.alias }}
-                    </v-flex>  
-                    <!-- <v-flex class="engineId">
-                        {{ workflow.engineId }}
-                    </v-flex> -->
+                    </v-flex>
                     <v-flex class="processorPoolId">
                         {{ workflow.processorPoolId }}
                     </v-flex>
@@ -115,7 +112,8 @@
                         :engineStatus="status"
                         :inDialog="false"
                         @openWorkflowDialog="openWorkflowDialog($event)"
-                        @showSourceCode="showSourceCode($event)">
+                        @showSourceCode="showSourceCode($event)"
+                        @showState="showState($event)">
                         </workflow-details>
                     </v-layout>
                 </transition>
@@ -136,6 +134,24 @@
                     <div class='source-code-card-text'>
                         <source-code v-if="dialogSourceCode !== null" :sourceCode="dialogSourceCode" :highliteLines="dialogHighlitedlines"></source-code>
                         <h3 v-if="dialogSourceCode === null">No Source Code is available to show</h3>
+                    </div>
+                </v-card-text>
+            </scroll>
+        </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialogStateOpen" scrollable max-width="800px" position="absolute">
+        <v-card>
+            <v-card-title position="absolute" class="dialog-title">
+                <h2>Deserialized Workflow State</h2>
+                <v-spacer></v-spacer>               
+                    <v-btn depressed class="squareButton" @click="dialogStateOpen = false"><v-icon>mdi-close</v-icon></v-btn>      
+            </v-card-title>
+            <v-divider></v-divider>
+            <scroll class="scroll-area" :settings="{suppressScrollX: true, maxScrollbarLength: 400, wheelSpeed: 1}">
+                <v-card-text>
+                    <div class="tree-card">
+                        <tree-view :data="dialogState"></tree-view>                        
                     </div>
                 </v-card-text>
             </scroll>

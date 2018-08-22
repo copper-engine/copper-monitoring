@@ -24,12 +24,14 @@ export class WorkflowDetails extends Vue {
     }
 
     private queryState() {
-        console.log('queryState Button Click Detected...');
         this.jmxService.queryObjectState(this.engineStatus.engineMXBean.connectionSettings, this.engineStatus.engineMXBean, this.$store.state.user, this.workflow.id)
-        .then((state) => {
-            console.log(state.data[0].value);
+        .then((response) => {
+            this.$emit('showState', this.convertToState(response));
         });
+    }
 
+    private convertToState(str: String) {
+        return JSON.parse(str.replace(/=/g, ':'));
     }
 
     private get creationTS() {

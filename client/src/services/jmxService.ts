@@ -188,7 +188,6 @@ export class JmxService {
     }
 
     queryObjectState(connectionSettings: ConnectionSettings, bean: MBean, user: User, id: string) {
-        console.log('sending query from JMX service...');
         return Axios.post(process.env.API_NAME, [
             this.createQueryObjectStateRequest(connectionSettings, bean.name, id)
         ], {
@@ -201,9 +200,7 @@ export class JmxService {
     }
 
     parseObjectStateResponse(response) {
-        console.log('parsing response...');
-        console.log(response);
-        return response;
+        return response.data[0].value;
     }
 
     getWfRepoDetails(connectionSettings: ConnectionSettings, mbean: string, user: User) {

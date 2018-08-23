@@ -31,7 +31,11 @@ export class WorkflowDetails extends Vue {
     }
 
     private convertToState(str: String) {
-        return JSON.parse(str.replace(/=/g, ':'));
+        try {
+            return [JSON.parse(str.replace(/=/g, ':')), true];
+        } catch {
+            return ['Could not parse state information', false];
+        }
     }
 
     private get creationTS() {

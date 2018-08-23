@@ -54,6 +54,7 @@ export class WorkflowsComponent extends Vue {
     dialogWFOpen = false;
     dialogDeleteOpen = false;
     dialogState: Object = null;
+    dialogStateAvailable: boolean = false;
     dialogStateOpen: boolean = false;
     sourceCodeAvailable = true;
     filter: WorkflowFilter = new WorkflowFilter();
@@ -346,8 +347,9 @@ export class WorkflowsComponent extends Vue {
         });
     }
 
-    private showState(state: Object) {
-        this.dialogState = state;
+    private showState(state: any) {
+        this.dialogState = state[0];
+        this.dialogStateAvailable = state[1];
         this.dialogStateOpen = true;
     }
 

@@ -22,7 +22,7 @@
         </v-card>
         <v-flex class="workflow" v-for="(workflow, i) in workflows" :key="workflow.id"
         :class="{
-        'highlight-workflow-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting,
+        'highlight-workflow-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting && workflowsContext.get(workflow.id).open === false,
         'highlight-workflow-extended-deleting': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting && workflowsContext.get(workflow.id).open,
         'highlight-workflow-waiting-extended-deleting': wfType === 'waiting' && workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).deleting && workflowsContext.get(workflow.id).open,        
         'highlight-workflow-layout': workflowsContext.get(workflow.id) && workflowsContext.get(workflow.id).reloading, 
@@ -109,11 +109,10 @@
                         <workflow-details
                         :workflow="workflow"
                         :wfType="wfType"
-                        :engineStatus="status"
                         :inDialog="false"
                         @openWorkflowDialog="openWorkflowDialog($event)"
                         @showSourceCode="showSourceCode($event)"
-                        @showState="showState($event)">
+                        @queryState="queryState($event)">
                         </workflow-details>
                     </v-layout>
                 </transition>
@@ -164,7 +163,8 @@
             <v-card-title position="absolute" class="dialog-title">
                 <h2> Workflow: {{ dialogWF.id }}</h2>
                 <v-spacer></v-spacer>        
-                    <v-btn depressed @click="showSourceCode(dialogWF)">Source Code</v-btn>          
+                    <v-btn depressed @click="showSourceCode(dialogWF)">Source Code</v-btn>
+                    <v-btn depressed @click="queryState(dialogWF)">View State</v-btn>          
                     <v-btn depressed class="squareButton" @click="dialogWFOpen = false"><v-icon>mdi-close</v-icon></v-btn>      
             </v-card-title>
             <v-divider></v-divider>

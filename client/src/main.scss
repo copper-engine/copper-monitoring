@@ -58,6 +58,17 @@ body .dark .list__tile:hover {
     color: $dark-primary !important;
 }
 
+body .notifications {
+    .success {
+        background-color: #5bc456 !important;
+    }
+}
+body .notifications {
+    .warning {
+        background-color: #b71c1c !important;
+    }
+}
+
 body {
     #appCover {
         .v-dialog__content {
@@ -286,6 +297,224 @@ body {
                 }
             }
         }
+        .v-menu__content {
+            background-color: $light-tertiary;
+            .menu-header {
+                padding: 15px;
+                background-color: $light-tertiary;
+                color: $dark-error;
+                font-size: 0.8em;
+            }
+            .menu-info {
+                padding-left: 15px;
+                padding-top: 15px;
+                padding-right: 15px;
+                background-color: $light-background;
+                color: $dark-text-color;
+                font-size: 0.6em;
+            }
+            .menu-details {
+                padding-left: 15px;
+                padding-top: 10px;
+                padding-bottom: 15px;
+                background-color: $light-background;
+                color: $dark-text-color;
+                font-size: 1.1em;
+                p {
+                    margin: 0px;
+                }
+                .label {
+                    flex-grow: 0;
+                    padding-right: 15px;
+                }
+                .value {
+                    font-weight: 700;
+                }
+            }
+            .v-list {
+                color: $dark-text-color;
+                background-color: $light-background;
+                .v-icon {
+                    color: $light-primary !important;
+                    padding-right: 10px;
+                }
+                .v-list__tile__title {
+                    .v-list__tile__title {
+                        color: $dark-text-color;
+                    }
+                }
+            }
+            .v-select-list {
+                color: $dark-text-color !important;
+                .v-list {
+                    color: $dark-text-color !important;
+                    .v-list__tile--active {
+                        color: $light-primary !important;
+                    }
+                }
+            }
+            .state-filter {
+                width: 150px;
+                padding: 10px;
+                padding-top: 15px;
+                background-color: $light-background;
+            }
+        }
+        .v-btn--disabled {
+            color: #9b9b9b !important;
+            .v-icon {
+                color: #9b9b9b !important;
+            }
+        }
+        .workflow-header {
+            .summary {
+                .heading-buttons {
+                    .btn--disabled {
+                        background-color: $light-tertiary !important;
+                        color: #9B9B9B !important;
+                    }
+                }
+            }
+        }
+        .input-style {
+            .v-input,
+            .v-text-field,
+            .v-input--is-label-active,
+            .v-input--is-focused,
+            .v-input--is-dirty{
+                color: $light-primary !important;
+                .v-input__control {
+                    .v-input__slot {
+                        .v-text-field__slot {
+                            label {
+                                color: $dark-text-color !important;
+                            }
+                            input {
+                                color: $dark-text-color !important;
+                                caret-color: $light-primary !important;                                
+                            }
+                        }
+                        .v-input--selection-controls__input {
+                            color: $light-primary !important;                                
+                            .accent--text {
+                                color: $light-primary !important;
+                            }
+                        }
+                        label {
+                            color: $dark-text-color;
+                        }
+                    }
+                    .v-input__slot:before {
+                        border-color: $light-primary !important;
+                    }
+                    .v-input__append-inner {
+                        .v-input__icon {
+                            .v-icon {
+                                color: $light-primary !important;
+                            }
+                        }
+                    }
+                    .v-select__selections {
+                        overflow: hidden;
+                        color: $dark-text-color !important;
+                    }
+                    .v-text-field__details {
+                        .v-messages {
+                            color: $dark-text-color;
+                        }
+                    }
+                }
+            }
+            .alt-color-field {
+                color: $light-primary !important;
+                .v-input__control {
+                    .v-input__slot {
+                        .v-text-field__slot {
+                            label {
+                                color: $dark-text-color !important;
+                            }
+                            input {
+                                color: $dark-text-color !important;
+                                caret-color: $light-primary !important;                                
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .pagination-cont {
+            align-items: center;
+            .v-pagination__item {
+                background-color: $light-wf !important;
+                color: $dark-text-color;
+            }
+            .v-pagination__item--active {
+                background-color: $light-primary !important;
+                color: $light-text-color;
+            }
+            .v-pagination__item:hover {
+                background-color: $light-link-active !important;
+                color: $light-text-color !important;
+            }
+            .v-pagination__navigation {
+                background-color: $light-wf !important;
+                color: $dark-text-color;
+                .v-icon {
+                    background-color: $light-wf !important;
+                    color: $dark-text-color !important;
+                }
+            }
+            .v-pagination__navigation:hover {
+                .v-icon {
+                    background-color: $light-link-active !important;
+                    color: $dark-text-color;
+                }
+            }
+            .pagin-config {
+                align-items: center;
+                .per-page-label {
+                    font-size: 1.1em;
+                    font-weight: 700;
+                    padding-left: 16px;
+                    padding-bottom: 8px;
+                    color: $dark-text-color;
+                }
+                .per-page,
+                .v-input,
+                .v-input--is-label-active,
+                .v-input--is-focused {
+                    width: 60px;
+                    color: $light-primary !important;
+                    .v-icon {
+                        color: $dark-text-color !important;
+                    }
+                    .v-input__control {
+                        .v-input__slot {
+                            .v-select__selections {
+                                color: $dark-text-color;
+                            }
+                            .v-input__append-inner {
+                                .v-input__icon {
+                                    .v-icon {
+                                        color: $light-primary !important;
+                                    }
+                                }
+                            }
+                        }
+                        .v-input__slot:before {
+                            border-color: $dark-text-color;
+                        }
+                    }
+                }
+            }
+            .v-pagination li span {
+                float: none;
+                color: $dark-text-color;
+            }
+            button {
+                background-color: $light-background;
+            }
+        }
     }
 }
 body {
@@ -402,92 +631,6 @@ body {
                     }
                 }
             }
-        }
-    }
-}
-
-body .notifications {
-    .success {
-        background-color: #5bc456 !important;
-    }
-}
-body .notifications {
-    .warning {
-        background-color: #b71c1c !important;
-    }
-}
-
-body {
-    #appCover {
-        .v-menu__content {
-            background-color: $light-tertiary;
-            .menu-header {
-                padding: 15px;
-                background-color: $light-tertiary;
-                color: $dark-error;
-                font-size: 0.8em;
-            }
-            .menu-info {
-                padding-left: 15px;
-                padding-top: 15px;
-                padding-right: 15px;
-                background-color: $light-background;
-                color: $dark-text-color;
-                font-size: 0.6em;
-            }
-            .menu-details {
-                padding-left: 15px;
-                padding-top: 10px;
-                padding-bottom: 15px;
-                background-color: $light-background;
-                color: $dark-text-color;
-                font-size: 1.1em;
-                p {
-                    margin: 0px;
-                }
-                .label {
-                    flex-grow: 0;
-                    padding-right: 15px;
-                }
-                .value {
-                    font-weight: 700;
-                }
-            }
-            .v-list {
-                color: $dark-text-color;
-                background-color: $light-background;
-                .v-icon {
-                    color: $light-primary !important;
-                    padding-right: 10px;
-                }
-                .v-list__tile__title {
-                    .v-list__tile__title {
-                        color: $dark-text-color;
-                    }
-                }
-            }
-            .v-select-list {
-                color: $dark-text-color !important;
-                .v-list {
-                    color: $dark-text-color !important;
-                    .v-list__tile--active {
-                        color: $light-primary !important;
-                    }
-                }
-            }
-            .state-filter {
-                width: 150px;
-                padding: 10px;
-                padding-top: 15px;
-                background-color: $light-background;
-            }
-        }
-    }
-}
-
-body {
-    #appCover {
-        .dark {
             .v-menu__content {
                 background-color: $dark-tertiary;
                 .menu-header {
@@ -528,48 +671,12 @@ body {
                     background-color: $dark-background;
                 }
             }
-        }
-    }
-}
-
-body {
-    #appCover {
-        .v-btn--disabled {
-            .v-icon {
-                color: #9b9b9b !important;
-            }
-        }
-    }
-}
-body {
-    #appCover {
-        .dark {
             .v-btn--disabled {
+                color: #575757 !important;
                 .v-icon {
                     color: #575757 !important;
                 }
             }
-        }
-    }
-}
-
-body {
-    #appCover {
-        .workflow-header {
-            .summary {
-                .heading-buttons {
-                    .btn--disabled {
-                        background-color: $light-tertiary !important;
-                        color: #9B9B9B !important;
-                    }
-                }
-            }
-        }
-    }
-}
-body {
-    #appCover {
-        .dark {
             .workflow-header {
                 .summary {
                     .heading-buttons {
@@ -580,83 +687,6 @@ body {
                     }
                 }
             }
-        }
-    }
-}
-
-body {
-    #appCover {
-        .input-style {
-            .v-input,
-            .v-text-field,
-            .v-input--is-label-active,
-            .v-input--is-focused,
-            .v-input--is-dirty{
-                color: $light-primary !important;
-                .v-input__control {
-                    .v-input__slot {
-                        .v-text-field__slot {
-                            label {
-                                color: $dark-text-color !important;
-                            }
-                            input {
-                                color: $dark-text-color !important;
-                                caret-color: $light-primary !important;                                
-                            }
-                        }
-                        .v-input--selection-controls__input {
-                            color: $light-primary !important;                                
-                            .accent--text {
-                                color: $light-primary !important;
-                            }
-                        }
-                        label {
-                            color: $dark-text-color;
-                        }
-                    }
-                    .v-input__slot:before {
-                        border-color: $light-primary !important;
-                    }
-                    .v-input__append-inner {
-                        .v-input__icon {
-                            .v-icon {
-                                color: $light-primary !important;
-                            }
-                        }
-                    }
-                    .v-select__selections {
-                        overflow: hidden;
-                        color: $dark-text-color !important;
-                    }
-                    .v-text-field__details {
-                        .v-messages {
-                            color: $dark-text-color;
-                        }
-                    }
-                }
-            }
-            .alt-color-field {
-                color: $light-primary !important;
-                .v-input__control {
-                    .v-input__slot {
-                        .v-text-field__slot {
-                            label {
-                                color: $dark-text-color !important;
-                            }
-                            input {
-                                color: $dark-text-color !important;
-                                caret-color: $light-primary !important;                                
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-body {
-    #appCover {
-        .dark {
             .input-style {
                 .v-input,
                 .v-text-field,
@@ -725,91 +755,6 @@ body {
                     }
                 }
             }
-        }
-    }
-}
-
-body {
-    #appCover {
-        .pagination-cont {
-            align-items: center;
-            .v-pagination__item {
-                background-color: $light-wf !important;
-                color: $dark-text-color;
-            }
-            .v-pagination__item--active {
-                background-color: $light-primary !important;
-                color: $light-text-color;
-            }
-            .v-pagination__item:hover {
-                background-color: $light-link-active !important;
-                color: $light-text-color !important;
-            }
-            .v-pagination__navigation {
-                background-color: $light-wf !important;
-                color: $dark-text-color;
-                .v-icon {
-                    background-color: $light-wf !important;
-                    color: $dark-text-color !important;
-                }
-            }
-            .v-pagination__navigation:hover {
-                .v-icon {
-                    background-color: $light-link-active !important;
-                    color: $dark-text-color;
-                }
-            }
-            .pagin-config {
-                align-items: center;
-                .per-page-label {
-                    font-size: 1.1em;
-                    font-weight: 700;
-                    padding-left: 16px;
-                    padding-bottom: 8px;
-                    color: $dark-text-color;
-                }
-                .per-page,
-                .v-input,
-                .v-input--is-label-active,
-                .v-input--is-focused {
-                    width: 60px;
-                    color: $light-primary !important;
-                    .v-icon {
-                        color: $dark-text-color !important;
-                    }
-                    .v-input__control {
-                        .v-input__slot {
-                            .v-select__selections {
-                                color: $dark-text-color;
-                            }
-                            .v-input__append-inner {
-                                .v-input__icon {
-                                    .v-icon {
-                                        color: $light-primary !important;
-                                    }
-                                }
-                            }
-                        }
-                        .v-input__slot:before {
-                            border-color: $dark-text-color;
-                        }
-                    }
-                }
-            }
-            .v-pagination li span {
-                float: none;
-                color: $dark-text-color;
-            }
-            button {
-                background-color: $light-background;
-            }
-        }
-    }
-}
-
-body {
-    #appCover {
-        .dark {
             .pagination-cont {
                 .v-pagination__item {
                     background-color: $dark-wf!important;

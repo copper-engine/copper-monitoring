@@ -11,7 +11,6 @@ import { create } from 'domain';
 export class WorkflowDetails extends Vue {
     @Prop() workflow: WorkflowInfo;
     @Prop() wfType: string;
-    @Prop() engineStatus: EngineStatus;
     @Prop() inDialog: boolean;
     private jmxService: JmxService = this.$services.jmxService;
 
@@ -24,18 +23,7 @@ export class WorkflowDetails extends Vue {
     }
 
     private queryState() {
-        this.jmxService.queryObjectState(this.engineStatus.engineMXBean.connectionSettings, this.engineStatus.engineMXBean, this.$store.state.user, this.workflow.id)
-        .then((response) => {
-            this.$emit('showState', this.convertToState(response));
-        });
-    }
-
-    private convertToState(str: String) {
-        try {
-            return [JSON.parse(str.replace(/=/g, ':')), true];
-        } catch {
-            return ['Could not parse state information', false];
-        }
+        this.$emit('queryState', this.workflow);
     }
 
     private get creationTS() {

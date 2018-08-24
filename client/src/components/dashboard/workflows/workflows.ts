@@ -347,10 +347,25 @@ export class WorkflowsComponent extends Vue {
         });
     }
 
+    private queryState(workflow: WorkflowInfo) {
+        this.jmxService.queryObjectState(this.status.engineMXBean.connectionSettings, this.status.engineMXBean, this.$store.state.user, workflow.id)
+        .then((response) => {
+            this.showState(this.convertToState(response));
+        });
+    }
+
     private showState(state: any) {
         this.dialogState = state[0];
         this.dialogStateAvailable = state[1];
         this.dialogStateOpen = true;
+    }
+
+    private convertToState(str: String) {
+        try {
+            return [JSON.parse(str.replace(/=/g, ':')), true];
+        } catch {
+            return ['Could not parse state information', false];
+        }
     }
 
     private showDetails(workflow: WorkflowInfo, index: number) {

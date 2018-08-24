@@ -115,7 +115,6 @@ export class ProcessorPools extends Vue {
             clearInterval(this.fetchPoolInterval);
         }
         this.getProcessorPools();
-        // TODO get time from usersettings
         this.fetchPoolInterval = setInterval(() => {
             this.getProcessorPools();
         }, 10 * 1000);

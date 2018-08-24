@@ -26,7 +26,6 @@ export class OverviewComponent extends Vue {
     private eventHub: Vue = this.$services.eventHub;
     private statisticsService: StatisticsService = this.$services.statisticsService;
     private influxService: InfluxDBService = this.$services.influxService;
-    // groups: EngineGroup[] = [];
     timeSelect: TimeSelection[];
     currentTimeSelection: TimeSelection = null;
     layoutSelect: string[]= ['Row', 'Column'];
@@ -59,7 +58,6 @@ export class OverviewComponent extends Vue {
 
     mounted() {
         this.getInfluxConnection();
-
         this.getChartSettings();
         this.checkStatService();
         this.scheduleFetch();

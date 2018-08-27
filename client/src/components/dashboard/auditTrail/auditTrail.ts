@@ -133,10 +133,14 @@ export class AuditTrailComponent extends Vue {
 
     private getPreview(message: string) {
         let length = 140;
-        if (message.length > length) {
-            return message.substr(0, length) + '...';
+        if (message !== null && message !== undefined) {
+            if (message.length > length) {
+                return message.substr(0, length) + '...';
+            } else {
+                return message.substr(0, length);
+            }
         } else {
-            return message.substr(0, length);
+            return 'Unable to retrieve AuditTrail Message';
         }
     }
 

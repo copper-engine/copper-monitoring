@@ -1,5 +1,5 @@
 # copper-monitoring
-Monitoring GUI and server for use with COPPER 5.0.0
+Monitoring GUI and server for use with COPPER 5
 
 ## Feature Overview
 * Visualize overall state of your application:
@@ -167,7 +167,7 @@ App uses Vue.js with TypeScript and Vuetify as base.
 
 License
 -----------------
-Copyright 2002-2016 Copper Engine Development Team
+Copyright 2002-2018 Copper Engine Development Team
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

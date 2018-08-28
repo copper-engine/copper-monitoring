@@ -1,5 +1,5 @@
 # copper-monitoring
-Monitoring GUI and server for COPPER
+Monitoring GUI and server for use with COPPER 5.0.0
 
 ## Feature Overview
 * Visualize overall state of your application:

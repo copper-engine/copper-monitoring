@@ -1,5 +1,5 @@
 # copper-monitoring
-Monitoring GUI and server for COPPER
+Monitoring GUI and server for use with COPPER 5
 
 ## Feature Overview
 * Visualize overall state of your application:
@@ -26,13 +26,16 @@ This will build and store the zipped source code in the /docker folder.
 
 Next, check the default Dockerfile, as you may want to change certain enviornmental variables such as 
 which credentials are required to log into the GUI, or what the default JMX credentials are.
+Note: The Environment Variable `MONITORING_AUTH` sets the required credentials to log into the GUI. 
+The default username / password is ‘admin’ : ‘admin’.
 
 To create a Docker image from the zipped source code, run the following command from inside the /docker folder:
 `docker build -t copper-monitoring ./`
 
 To create a container from your image run the following command:
 `docker create -p {nnnn}:8080 copper-monitoring`
-Where {nnnn} is a port of your choice to forward to your container.
+Where {nnnn} is a port of your choice to forward to your container. 'copper-monitoring'
+is a user defined name. 
 
 Alternativley, if you have pulled an image from Dockerhub, you can edit the enviornmental variables when creating a container.
 A default enviornmental variable file can be found here:
@@ -167,7 +170,7 @@ App uses Vue.js with TypeScript and Vuetify as base.
 
 License
 -----------------
-Copyright 2002-2016 Copper Engine Development Team
+Copyright 2002-2018 Copper Engine Development Team
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -184,4 +187,4 @@ limitations under the License.
 To get check licenses of other third party libraries that we use in our client part, 
 you can use https://www.npmjs.com/package/license-checker or any other alternative.
 For server part you can use `gradle downloadLicenses` command and then see report at
-copper-monitoring/server/build/reports/license/dependency-license.html  
+copper-monitoring/server/build/reports/license/dependency-license.html

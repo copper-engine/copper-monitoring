@@ -24,7 +24,7 @@ Linux: `./start.sh --prep-docker && ./start.sh --dockerize`
 Windows: `./start.cmd --dockerize`
 This will build and store the zipped source code in the /docker folder.
 
-Next, check the default Dockerfile, as you may want to chang certainer enviornmental variables such as 
+Next, check the default Dockerfile, as you may want to change certain enviornmental variables such as 
 which credentials are required to log into the GUI, or what the default JMX credentials are.
 
 To create a Docker image from the zipped source code, run the following command from inside the /docker folder:
@@ -41,7 +41,8 @@ Or in the source code at docker/env-vars.
 
 Edit the variables as you wish, and build the container with the following command:
 `docker create -p {nnnn}:8080 --env-file {path to env.list} copper-monitoring`
-Where {nnnn} is a port of your choice to forward to your container.
+Where {nnnn} is a port of your choice to forward to your container. 'copper-monitoring'
+is a user defined name. 
 
 Finally run your container with your container id by:
 `docker start {id}`
@@ -51,12 +52,11 @@ By default, inside a container we are not able to access localhost as host. If y
 services on your machine's localhost, take one of these approaches based on your OS:
  
 Linux:
-Use the ip of host in dockerland in place of 'localhost'. We can get it like this: 
-`docker exec -it <container_id> ip route | awk '/default/ { print $3 }'`
-Or create your container with the --network="host" tag, and then use 'localhost'
+Create your container with the --network="host" tag, and then use 'localhost'
 which will be directed to your host machine.
 `docker create --network="host" {image name}`
-Note, you can no longer forward ports in this network mode.
+Note, you can no longer forward ports in this network mode. Access the Copper Monitoring application
+through it's default port, '8080'.
 
 Windows:
 Use `host.docker.internal`

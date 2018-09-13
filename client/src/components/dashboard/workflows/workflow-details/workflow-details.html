@@ -68,27 +68,21 @@
     <v-layout class="workflow-detail stacktrace" v-if="(wfType === 'broken')">
         <v-flex class="detail-label">Workflow Data:</v-flex>
         <v-flex class="text">
-            <code v-show="workflow.dataAsString">
-                {{ workflow.dataAsString }}
-            </code>
+            <code v-show="workflow.dataAsString">{{workflow.dataAsString}}</code>
             <span v-show="!workflow.dataAsString">There is no available data</span>
         </v-flex>
     </v-layout>
     <v-layout class="workflow-detail stacktrace" v-if="(wfType === 'broken')">
         <v-flex class="detail-label">Last waiting Stack Trace:</v-flex>
         <v-flex class="text">
-            <code v-show="workflow.lastWaitStackTrace">
-                {{ workflow.lastWaitStackTrace }}
-            </code>
+            <code v-show="workflow.lastWaitStackTrace">{{workflow.lastWaitStackTrace}}</code>
             <span v-show="!workflow.lastWaitStackTrace">There is no waiting stack trace</span>
         </v-flex>
     </v-layout>
     <v-layout class="workflow-detail stacktrace" v-if="(wfType === 'broken')">
         <v-flex class="detail-label">Error Stack Trace:</v-flex>
         <v-flex class="text">
-            <code>
-                {{ workflow.errorData ? workflow.errorData.exceptionStackTrace : '' }}
-            </code>
+            <code>{{workflow.errorData ? workflow.errorData.exceptionStackTrace : ''}}</code>
         </v-flex>
     </v-layout>
 </div>

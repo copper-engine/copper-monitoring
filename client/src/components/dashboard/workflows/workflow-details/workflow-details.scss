@@ -35,6 +35,9 @@
             min-width: 100%;
             word-break: break-all;
         }
+        code::before {
+            display: none;
+        }
     }
     .workflow-id,
     .class-info,

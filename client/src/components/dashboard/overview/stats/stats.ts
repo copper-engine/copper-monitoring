@@ -1,7 +1,5 @@
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
-import { StatesPrint, ChartStates, EngineGroup, EngineStatus } from '../../../../models/engine';
-import { VueCharts, Bar, Line, mixins } from 'vue-chartjs';
-import { EngineStatData } from '../../../../models/engine';
+import { Line, mixins } from 'vue-chartjs';
 import './stats.scss';
 
 @Component({
@@ -20,7 +18,6 @@ import './stats.scss';
 
 export class Stats extends Vue {
     @Prop() dataset;
-    private eventHub: Vue = this.$services.eventHub;
     chartData = null;
     // the order of values in chartOptions seems to have an effect
     // on the rendering of charts, search for official documentation
